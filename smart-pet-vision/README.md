@@ -33,9 +33,12 @@ src/spv/data.py         M1: cleaning, MD5 + pHash duplicate groups, group-aware 
 src/spv/classify.py     M2-M3: models, training, temperature scaling, ECE, per-breed errors
 src/spv/common.py       configuration, seeding, W&B tracking, JSON helpers
 src/spv/supplement.py   checkpoint hashes, learning-curve plots, image-similarity sensitivity analysis, team-set audit
-notebooks/              01, 02 and corrected 02b source; notebooks/executed/ holds historical runs of 01, 02 and 02b
-docs/                   dataset card, REPRODUCE.md
-runs/                   Phase 1 results: data split and audits (runs/data), classification with best checkpoints (runs/classification), supplement (runs/supplement)
+notebooks/              Source notebooks; executed notebooks with stored outputs
+                        are not included in the current public package.
+docs/                   Dataset card and reproduction documentation.
+runs/                   Restore data/, classification/ and verification_2026-10-28/
+                        from Phase1_Results_v2.zip. The archive does not include
+                        runs/supplement/ or runs/team_evaluation/.
 ```
 
 ## Design decisions worth reviewing
@@ -61,12 +64,18 @@ Status (24 Oct 2026): both reviews are complete (`runs/data/review/labels/review
 
 Checkpoint reload checks establish agreement of aggregate test accuracy, not identical predictions on every image. `correct_count_difference` replaces the misleading historical field `images_different`; underlying values are unchanged. Shared training-loss and validation-accuracy/F1 histories agree within 1e-12; epoch times differ. Training accuracy and validation loss are from the logging rerun. See `docs/REVIEW_CHANGES_28OCT.md`.
 
-The 401 team-collected and team-annotated photos remain one dataset, as confirmed by Mohammed on 28 October. Existing source records are retained; this is not a claim that the team personally captured every photo. The set has already been evaluated. Future model improvements require a new independent final test set. Saved pipeline predictions and a metric verification script are included in `runs/team_evaluation/`.
+The 401 team-collected and team-annotated photos remain one dataset, as confirmed by Mohammed on 28 October. Existing source records are retained; this is not a claim that the team personally captured every photo. The set has already been evaluated. Future model improvements require a new independent final test set. Historical documentation refers to pipeline evaluation evidence under
+`runs/team_evaluation/`. That directory is not included in the current
+public repository or release. Integrated-pipeline evaluation is outside
+the Phase 1 classification scope.
 
 ## Repository and Version Control
 
 - **GitHub Repository:** https://github.com/Yasser-20-alhajlah/smart-pet-vision
-- **Final Commit Hash:** `faf05893291e9c1209cd07d63d891bc0b8acc2de`
+- **Version identification:** use the Git commit of the downloaded
+  checkout. Published source revisions are not necessarily the revision
+  used during the original training.
+- **Current submission instructions:** [README_SUBMISSION.md](../README_SUBMISSION.md)
 
 ## Model Weights and Checkpoints
 
