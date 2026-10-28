@@ -62,3 +62,15 @@ Status (24 Oct 2026): both reviews are complete (`runs/data/review/labels/review
 Checkpoint reload checks establish agreement of aggregate test accuracy, not identical predictions on every image. `correct_count_difference` replaces the misleading historical field `images_different`; underlying values are unchanged. Shared training-loss and validation-accuracy/F1 histories agree within 1e-12; epoch times differ. Training accuracy and validation loss are from the logging rerun. See `docs/REVIEW_CHANGES_28OCT.md`.
 
 The 401 team-collected and team-annotated photos remain one dataset, as confirmed by Mohammed on 28 October. Existing source records are retained; this is not a claim that the team personally captured every photo. The set has already been evaluated. Future model improvements require a new independent final test set. Saved pipeline predictions and a metric verification script are included in `runs/team_evaluation/`.
+
+## Repository and Version Control
+
+- **GitHub Repository:** https://github.com/Yasser-20-alhajlah/smart-pet-vision
+- **Final Commit Hash:** `faf05893291e9c1209cd07d63d891bc0b8acc2de`
+
+## Model Weights and Checkpoints
+
+Due to GitHub file size limits, the model weights (`.pt` files) and raw result files are not hosted in the main repository.
+They have been uploaded to **GitHub Releases**.
+
+Download them from the [release page](https://github.com/Yasser-20-alhajlah/smart-pet-vision/releases).

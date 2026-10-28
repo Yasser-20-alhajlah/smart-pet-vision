@@ -1,7 +1,7 @@
 # Final improvement pass - 28 October 2026
 
 ## Report rebuild
-`report_source/build_report.py` and its preserved base PDF recreate the corrected 16-page report. All 16 pages were compared: extracted text and rendered pixels match. This provides current rebuildable revision source; it is not the missing original LaTeX project. The instructor template was directly inspected from the user's downloaded Capstone_Phase1_Template_Overleaf.zip and confirms M1 12, classification 20 and reproducibility 8, including repository/commit and teammate reproduction fields.
+The corrected PDF is not currently reproducible from a clean clone: the documented `report_source/build_report.py` and its required base PDF are absent. A local `tools/build_report.py` is untracked, and its required `tools/assets/base_report.pdf` is also absent. The report should be treated as a separately supplied deliverable until the authorized inputs are included in the repository or a versioned release. The instructor template was directly inspected from the user's downloaded Capstone_Phase1_Template_Overleaf.zip and confirms M1 12, classification 20 and reproducibility 8, including repository/commit and teammate reproduction fields.
 
 ## Version provenance
 A new review-time Git commit/bundle identifies current tracked source. It is not a historical training commit. Generated run outputs, weights and personal team photographs remain excluded from Git; release manifests link the delivered evidence. Teacher acceptance of a downloadable Git bundle versus a hosted repository remains outside this review.
