@@ -1,0 +1,50 @@
+[
+  {
+    "check": "Stable softmax is finite and normalized",
+    "passed": true
+  },
+  {
+    "check": "Softmax invariant to constant shift",
+    "passed": true
+  },
+  {
+    "check": "Perfect confidence included in ECE bins",
+    "passed": true
+  },
+  {
+    "check": "Confident incorrect ECE equals one",
+    "passed": true
+  },
+  {
+    "check": "Half confidence balanced ECE equals zero",
+    "passed": true
+  },
+  {
+    "check": "Trimap foreground includes boundary only",
+    "passed": true
+  },
+  {
+    "check": "Box uses exclusive upper coordinates",
+    "passed": true
+  },
+  {
+    "check": "Empty mask returns no box",
+    "passed": true
+  },
+  {
+    "check": "Leakage audit detects group and MD5 crossing",
+    "passed": true
+  },
+  {
+    "check": "scratch five full finite curve series",
+    "passed": true
+  },
+  {
+    "check": "frozen five full finite curve series",
+    "passed": true
+  },
+  {
+    "check": "finetune five full finite curve series",
+    "passed": true
+  }
+]

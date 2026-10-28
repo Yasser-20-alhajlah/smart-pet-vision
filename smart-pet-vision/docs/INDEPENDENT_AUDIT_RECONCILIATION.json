@@ -1,0 +1,82 @@
+[
+  [
+    "Review warning / filename",
+    "True for old copy; resolved in final",
+    "8-page REVIEW has warning. Current 16-page SmartPetVision_Phase1.pdf has no review-copy banner."
+  ],
+  [
+    "Student IDs / contributions",
+    "Resolved in final; factual verification limited",
+    "Four IDs and specific contributions present. Personal work cannot be independently established solely from report text."
+  ],
+  [
+    "Topic approval / prior targets",
+    "Not yet approved",
+    "Mohammed confirms approval will be requested after submission. Approval-by-19-October claim withdrawn; original-topic bonus is not established."
+  ],
+  [
+    "Missing core implementation",
+    "Not true of current final folder",
+    "data.py, classify.py, common.py, supplement.py, config, 19 pinned requirements and notebooks 01/02 exist."
+  ],
+  [
+    "Missing data/audit evidence",
+    "Resolved in final folder",
+    "metadata, duplicate pairs, cleaning log and completed 200/300 audit CSVs are present and checked."
+  ],
+  [
+    "Missing train accuracy / val loss",
+    "Resolved with disclosed rerun evidence",
+    "All five series exist for 25/8/10 epochs. Added metrics come from logging reruns, not original historical runs."
+  ],
+  [
+    "Frozen 99.37% versus 99.91%",
+    "Current report published and verified",
+    "Published Phase 1 section states frozen 1105/1106 = 99.9096%; earlier 99.37% remains explicitly historical/superseded."
+  ],
+  [
+    "Frozen notes / evaluation trace",
+    "Report published; notes updated",
+    "Current scientific report and frozen notes link checkpoint, scores and fresh inference provenance. No new training/evaluation run was invented."
+  ],
+  [
+    "Git commit / fixed version",
+    "Current source identified",
+    "New source Git bundle restored; full commit in RELEASE_VERSION.json. Original historical training commit remains unavailable."
+  ],
+  [
+    "Clean reproduction",
+    "Team-reported; not independently executed",
+    "Yasser 23 October record and reproduction-group link exist. No new clean GPU training was run during this review."
+  ],
+  [
+    "Per-image logits / ECE",
+    "New inference evidence verified",
+    "Fresh test/validation logits and probabilities exported from submitted checkpoints. Independent ECE matches. Original historical per-image agreement remains unverifiable."
+  ],
+  [
+    "Identity leakage",
+    "Scientific limitation remains",
+    "No authoritative animal IDs. Group/MD5 crossings are zero; similarity filtering cannot prove identity independence."
+  ],
+  [
+    "Drive access",
+    "User-controlled; requirement risk unresolved",
+    "User instructs private Drive for four teammates and public W&B. Do not infer access failure from sign-in alone; formal requirement must be satisfied by the team."
+  ],
+  [
+    "Manifest / evidence synchronization",
+    "Corrected this pass",
+    "Uploaded previously local team-evaluation evidence, historical 02b, comparison audit and review log. Regenerated final manifests."
+  ],
+  [
+    "Report source synchronization",
+    "Current rebuild source verified",
+    "Current PDF revision source and redacted base restore all 16 pages with exact text/pixels. This is not recovered original LaTeX."
+  ],
+  [
+    "Submission / bonus",
+    "Outside completed verification",
+    "No Blackboard receipt, instructor topic approval or confirmed awarded bonus. No guaranteed score."
+  ]
+]

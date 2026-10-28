@@ -1,0 +1,11 @@
+data/
+runs/
+*.pt
+*.onnx
+__pycache__/
+.ipynb_checkpoints/
+wandb/
+
+notebooks/executed/
+report_source/SmartPetVision_Phase1.pdf
+report_source/pdf_changes.json

@@ -1,0 +1,326 @@
+[
+  {
+    "check": "Python syntax: classify.py",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Python syntax: common.py",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Python syntax: supplement.py",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Python syntax: data.py",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Cleaned images and split counts",
+    "passed": true,
+    "details": {
+      "train": 5123,
+      "val": 1106,
+      "test": 1106
+    }
+  },
+  {
+    "check": "No duplicate-group crossings",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "No MD5 crossings",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Unique images",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "37 breeds represented in every split",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Species counts",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "labels audit random sample",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "labels audit completion",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "boxes audit random sample",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "boxes audit completion",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "scratch test_raw accuracy and F1",
+    "passed": true,
+    "details": {
+      "accuracy": 0.9059674502712477,
+      "macro_f1": 0.8922996254681648,
+      "n": 1106
+    }
+  },
+  {
+    "check": "scratch test_raw cat",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "scratch test_raw dog",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "scratch test_calibrated accuracy and F1",
+    "passed": true,
+    "details": {
+      "accuracy": 0.9059674502712477,
+      "macro_f1": 0.8922996254681648,
+      "n": 1106
+    }
+  },
+  {
+    "check": "scratch test_calibrated cat",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "scratch test_calibrated dog",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "scratch rerun shared history",
+    "passed": true,
+    "details": {
+      "epoch": 0.0,
+      "train_loss": 0.0,
+      "val_acc": 0.0,
+      "val_macro_f1": 0.0
+    }
+  },
+  {
+    "check": "scratch best validation checkpoint",
+    "passed": true,
+    "details": {
+      "best_epoch": 25
+    }
+  },
+  {
+    "check": "scratch weight SHA256",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "frozen test_raw accuracy and F1",
+    "passed": true,
+    "details": {
+      "accuracy": 0.9990958408679927,
+      "macro_f1": 0.9989651820241077,
+      "n": 1106
+    }
+  },
+  {
+    "check": "frozen test_raw cat",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "frozen test_raw dog",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "frozen test_calibrated accuracy and F1",
+    "passed": true,
+    "details": {
+      "accuracy": 0.9990958408679927,
+      "macro_f1": 0.9989651820241077,
+      "n": 1106
+    }
+  },
+  {
+    "check": "frozen test_calibrated cat",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "frozen test_calibrated dog",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "frozen rerun shared history",
+    "passed": true,
+    "details": {
+      "epoch": 0.0,
+      "train_loss": 0.0,
+      "val_acc": 0.0,
+      "val_macro_f1": 0.0
+    }
+  },
+  {
+    "check": "frozen best validation checkpoint",
+    "passed": true,
+    "details": {
+      "best_epoch": 6
+    }
+  },
+  {
+    "check": "frozen weight SHA256",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "finetune test_raw accuracy and F1",
+    "passed": true,
+    "details": {
+      "accuracy": 0.9990958408679927,
+      "macro_f1": 0.9989651820241077,
+      "n": 1106
+    }
+  },
+  {
+    "check": "finetune test_raw cat",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "finetune test_raw dog",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "finetune test_calibrated accuracy and F1",
+    "passed": true,
+    "details": {
+      "accuracy": 0.9990958408679927,
+      "macro_f1": 0.9989651820241077,
+      "n": 1106
+    }
+  },
+  {
+    "check": "finetune test_calibrated cat",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "finetune test_calibrated dog",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "finetune rerun shared history",
+    "passed": true,
+    "details": {
+      "epoch": 0.0,
+      "train_loss": 0.0,
+      "val_acc": 0.0,
+      "val_macro_f1": 0.0
+    }
+  },
+  {
+    "check": "finetune best validation checkpoint",
+    "passed": true,
+    "details": {
+      "best_epoch": 6
+    }
+  },
+  {
+    "check": "finetune weight SHA256",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Stored notebook errors: notebooks/02b_phase1_supplement.ipynb",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Stored notebook errors: notebooks/01_data_preparation.ipynb",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Stored notebook errors: notebooks/02_classification.ipynb",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Stored notebook errors: notebooks/executed/01_data_preparation.ipynb",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Stored notebook errors: notebooks/executed/02_classification.ipynb",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Source/executed code: 01_data_preparation.ipynb",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "Source/executed code: 02_classification.ipynb",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "19 pinned dependencies",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "401 team labels",
+    "passed": true,
+    "details": {
+      "dog": 221,
+      "cat": 178,
+      "mixed": 2
+    }
+  },
+  {
+    "check": "503 boxes",
+    "passed": true,
+    "details": null
+  },
+  {
+    "check": "401 retained images covered by source map",
+    "passed": true,
+    "details": {
+      "all_source_rows": 414,
+      "retained": 401,
+      "provenance": {
+        "no_camera_metadata": 127,
+        "Apple iPhone 15 Pro Max": 117,
+        "owner_contributed_screenshot": 104,
+        "Apple iPhone 17 Pro": 46,
+        "Apple iPhone 12": 4,
+        "Apple iPhone 12 Pro": 3
+      }
+    }
+  }
+]

@@ -1,0 +1,11 @@
+Current Phase 1 submitted checkpoint — final-test evidence (updated 28 October 2026).
+
+ResNet-50 frozen backbone, 4,098 trainable parameters; seed 42, 224x224 whole-image input. Select the first maximum validation macro-F1 checkpoint: epoch 6, validation accuracy 0.9981916817359856, macro-F1 0.9979288389513108. The default Summary is the final epoch (8), not a dedicated retained-checkpoint test evaluation.
+
+Retained-checkpoint test: 1105/1106 correct, accuracy 0.9990958408679927, macro-F1 0.9989651820241077. Confusion matrix [[356,1],[0,749]], rows true / columns predicted, class order cat,dog; argmax decision. Temperature fitted only on validation: 0.4895465075969696. ECE (15 equal-width bins): raw 0.010966942603506188, calibrated 0.0012126884020689814.
+
+Checkpoint SHA-256: e6b11b82fa5fe84dc2a4247737683a75522c578cb1c52e51dcb3d0b7a8d911dd. Metadata SHA-256: f7c6771be2f521bceb169ec4ea35f3855958de5ca03f73d992bee7d54163c993.
+
+Fresh float32 MPS inference on 28 October reproduced test accuracy/confusion matrix exactly; ECE difference +1.24e-9. All validation/test JPEGs matched original MD5; independent CSV metric/ECE recomputation passed. New inference evidence is in runs/verification_2026-10-28/, source commit c43589ec6fa1042d9ce680326d42a018ebc2031c (review-time source snapshot, not historical training commit). This is not a new training run or recovered original logits. Earlier frozen 99.37% from superseded evaluation allez66m is not this submitted checkpoint result.
+
+Current consolidated report: https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/reports/Smart-Pet-Vision-A-Scientific-Report-on-Classification-Detection-and-Segmentation--VmlldzoxODE4NTQ1Mw
