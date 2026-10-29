@@ -32,7 +32,7 @@ Detection, segmentation and integrated deployment are outside the Phase 1 evalua
 - [W&B project](https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision)
 - [Phase 1 W&B report](https://forge.coreweave.com/wandb/yasser-alhajlah-kaust/smart-pet-vision/reports/Smart-Pet-Vision-Phase-1-Data-Foundations-CNN-Classification-and-Transfer-Learning--VmlldzoxODE4NTQ1Mw)
 
-The current PDF is the revised 15-page Phase 1 report. It distinguishes validation from test results and documents approval status, rerun provenance and reproducibility limitations.
+The linked PDF is the final Phase 1 submission report.
 
 ## Restoring the saved evidence
 
@@ -110,6 +110,14 @@ Do not run them over the only copy of the submitted evidence.
 
 The documented training environment is Colab T4. Identical results
 across different software and hardware environments are not guaranteed.
+
+## Retraining verification — 29 October 2026
+
+| Model | Run ID | Test accuracy | Test macro-F1 |
+|---|---|---:|---:|
+| [Scratch](https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/9fay48ne) | `9fay48ne` | 0.905967 | 0.892300 |
+| [Frozen](https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/qlzja26v) | `qlzja26v` | 0.999096 | 0.998965 |
+| [Fine-tuned](https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/2ptjc52f) | `2ptjc52f` | 0.999096 | 0.998965 |
 
 ## Reference results
 
