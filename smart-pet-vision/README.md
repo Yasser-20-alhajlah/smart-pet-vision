@@ -1,8 +1,9 @@
 # Smart Pet Vision
 
-AI251P Applied Computer Vision capstone. One photograph of a cat or dog goes in; the system returns
-the species with a temperature-scaled confidence, a full-body box, a body mask and cut-out, and a verdict:
-**ready for staff approval** or **refer to staff**. No automatic publishing is authorized.
+AI251P Applied Computer Vision capstone. The Phase 1 deliverable covers whole-image cat/dog
+classification: data foundations (M1), CNN training and evaluation (M2), and transfer learning
+with W&B experiment tracking (M3). Detection, segmentation, integrated deployment and staff-referral
+behavior are Phase 2 scope and are not evaluated as Phase 1 results.
 
 Data: [Oxford-IIIT Pet](https://www.robots.ox.ac.uk/~vgg/data/pets/) (Parkhi et al., CVPR 2012),
 CC BY-SA 4.0. Team-collected photos are used for external testing only.
@@ -10,16 +11,17 @@ CC BY-SA 4.0. Team-collected photos are used for external testing only.
 ## How to run (Google Colab, T4 GPU)
 
 1. Add this folder to My Drive (a shortcut is enough), at most two folders deep, e.g. `MyDrive/capstone /smart-pet-vision`.
-2. Open the notebooks in order. Each one starts with the same setup cell: it mounts Google Drive first, then finds the folder and checks that `configs/config.yaml` and `src/spv` exist; set `SPV_REPO` to the exact path if it finds none or more than one.
+2. For Phase 1 training, run notebooks 01 and 02 in order. Their setup cells mount Google Drive, find the project and check that `configs/config.yaml` and `src/spv` exist; set `SPV_REPO` to the exact path if no unique copy is found.
 3. Running a notebook end to end retrains and overwrites `runs/`. To reproduce without touching the submitted results, copy the folder without `runs/` and set `os.environ["SPV_REPO"]` to the copy (see `docs/REPRODUCE.md`).
 
 | Notebook | Milestone | Phase | Approximate T4 runtime (run-specific) |
 |---|---|---|---|
 | `01_data_preparation` | M1 cleaning, de-duplication, split, review sheets | 1 | about 4 min |
 | `02_classification` | M2-M3 scratch CNN vs. ResNet-50 frozen vs. fine-tuned | 1 | about 41 min |
-| `02b_phase1_supplement` | checkpoint check, full learning curves (training and validation loss and accuracy), image-similarity sensitivity analysis, team-set audit; numeric outputs in `runs/supplement/`, private review sheets in the team-data folder | 1 | about 45 min |
+| `02b_phase1_supplement` | Optional Phase 1 supplemental checks and reruns: checkpoint check, learning curves, image-similarity sensitivity analysis and team-set audit; outputs go to `runs/supplement/` | 1 | about 45 min |
+| `03_independent_checkpoint_verification` | Optional fresh checkpoint inference; not training reproduction | 1 | Run-specific |
 
-Notebooks 01 and 02 timings were recorded on 23 Oct 2026; notebook 02b was run on 28 Oct 2026. This copy is the Phase 1 submission: the Phase 2 notebooks (03-05) and modules (detection, segmentation, pipeline, service, deployment) and the model card are part of the Phase 2 submission. Every setting lives in `configs/config.yaml`. Results are
+Notebooks 01 and 02 timings were recorded on 23 Oct 2026; notebook 02b was run on 28 Oct 2026. Notebook 03 verifies restored checkpoints using fresh inference; it does not retrain the models or establish a teammate training reproduction. Every setting lives in `configs/config.yaml`. Results are
 written to `runs/` on Drive; images are re-downloaded to local disk each session, and the split is
 fixed by `runs/data/metadata.csv` after the first run of notebook 01.
 
@@ -37,8 +39,8 @@ notebooks/              Source notebooks; executed notebooks with stored outputs
                         are not included in the current public package.
 docs/                   Dataset card and reproduction documentation.
 runs/                   Restore data/, classification/ and verification_2026-10-28/
-                        from Phase1_Results_v2.zip. The archive does not include
-                        runs/supplement/ or runs/team_evaluation/.
+                        from Phase1_Results_v2.zip. The public archive does not
+                        include runs/supplement/ or runs/team_evaluation/.
 ```
 
 ## Design decisions worth reviewing
@@ -52,7 +54,7 @@ runs/                   Restore data/, classification/ and verification_2026-10-
 - **Body boxes.** The dataset has head boxes only. Body boxes are the tight box around trimap
   foreground + border, checked by eye on 300 images.
 - **Thresholds.** The classifier temperature is chosen on validation; the test split is read once per model.
-- **Refer to staff** (planned system behaviour, built in Phase 2) when: no animal, more than one animal, calibrated
+- **Refer to staff** (Phase 2 system behavior, outside the Phase 1 evaluation) when: no animal, more than one animal, calibrated
   confidence < 0.90, detector and classifier disagree, or the mask covers < 5% of the frame. The 0.90 threshold is
   provisional: the temperature fitted on the near-separable validation split is not a reliable probability scale,
   so the threshold will be fixed on a harder, independent calibration set.
@@ -64,10 +66,7 @@ Status (24 Oct 2026): both reviews are complete (`runs/data/review/labels/review
 
 Checkpoint reload checks establish agreement of aggregate test accuracy, not identical predictions on every image. `correct_count_difference` replaces the misleading historical field `images_different`; underlying values are unchanged. Shared training-loss and validation-accuracy/F1 histories agree within 1e-12; epoch times differ. Training accuracy and validation loss are from the logging rerun. See `docs/REVIEW_CHANGES_28OCT.md`.
 
-The 401 team-collected and team-annotated photos remain one dataset, as confirmed by Mohammed on 28 October. Existing source records are retained; this is not a claim that the team personally captured every photo. The set has already been evaluated. Future model improvements require a new independent final test set. Historical documentation refers to pipeline evaluation evidence under
-`runs/team_evaluation/`. That directory is not included in the current
-public repository or release. Integrated-pipeline evaluation is outside
-the Phase 1 classification scope.
+The 401 team-collected and team-annotated photos remain one dataset, as confirmed by Mohammed on 28 October. Existing source records are retained; this is not a claim that the team personally captured every photo. The set has already been evaluated. Future model improvements require a new independent final test set. Pipeline evaluation evidence under `runs/team_evaluation/` is supplemental Phase 2 evidence; it is not included in the public Results v2 archive and is outside the Phase 1 classification scope.
 
 ## Repository and Version Control
 

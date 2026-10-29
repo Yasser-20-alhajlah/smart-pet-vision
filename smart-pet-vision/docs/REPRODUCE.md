@@ -1,14 +1,17 @@
 # Reproducing Smart Pet Vision
 
-Scope: reproduce Phase 1 (M1-M3) only on a clean Colab T4 runtime.
+Scope: reproduce Phase 1 (M1-M3) whole-image classification on a clean Colab T4 runtime. Detection, segmentation and integrated-pipeline evaluation are outside this reproduction.
 
 ## Steps
 1. Open Colab, Runtime > Change runtime type > T4 GPU.
 2. Make W&B available: run `wandb login` once in the session, or store the key as a Colab secret named `WANDB_API_KEY` and load it with `import os; from google.colab import userdata; os.environ["WANDB_API_KEY"] = userdata.get("WANDB_API_KEY")` (never paste the key into a cell or a file).
-3. Add the shared folder `smart-pet-vision` to My Drive (a shortcut is enough), at most two folders deep, e.g. `MyDrive/capstone /smart-pet-vision`. The setup cell of every notebook mounts Google Drive first, then finds the folder and checks that `configs/config.yaml` and `src/spv` exist; if it finds no copy or more than one, it stops and asks you to set `SPV_REPO` to the exact path.
+3. Add the shared folder `smart-pet-vision` to My Drive (a shortcut is enough), at most two folders deep, e.g. `MyDrive/capstone /smart-pet-vision`. The setup cells of training notebooks 01, 02 and 02b mount Google Drive first, then find the folder and check that `configs/config.yaml` and `src/spv` exist; if no unique copy is found, set `SPV_REPO` to the exact path. Notebook 03 is a separate fresh-inference check and requires explicit `SPV_REPO` and `SPV_IMAGES` values.
 4. Running a notebook end to end retrains and overwrites `runs/`. To reproduce without touching the submitted results, copy the folder without `runs/` (for example to `/content/repro/smart-pet-vision`) and set `os.environ["SPV_REPO"]` to the copy before running. The 23 Oct 2026 reproduction was run this way.
-5. Run notebooks 01 and 02 in order. Measured on a T4 on 23 Oct 2026: 01 about 4 min; 02 about 41 min. Notebooks 03-05 belong to Phase 2 and are not required here.
-6. Compare the dataset metadata and classification files below. Use the selected checkpoint, not the final-epoch W&B Summary, for validation model selection.
+5. Run notebooks 01 and 02 in order for the Phase 1 training reproduction. Measured on a T4 on 23 Oct 2026: 01 about 4 min; 02 about 41 min.
+6. Notebook 02b is an optional Phase 1 supplement. It performs supplemental checks and full-logging training reruns; run it only in a separate copy because it writes new outputs under `runs/supplement/`. Notebook 03 is optional fresh checkpoint inference, not a training reproduction. Neither is required to reproduce the submitted baseline results.
+7. Compare the dataset metadata and classification files below. Use the selected checkpoint, not the final-epoch W&B Summary, for validation model selection.
+
+The public `Phase1_Results_v2.zip` contains saved data, classification results, checkpoints and `verification_2026-10-28/` per-image verification outputs. It does not contain `runs/supplement/` or `runs/team_evaluation/`. Executed notebooks with stored outputs are not part of the current public package.
 
 ## Expected values (run of 18-19 October 2026, seed 42)
 | File | Value | Tolerance |
@@ -25,7 +28,7 @@ GPU training is not guaranteed to be bit-exact across environments, so small dif
 ## Reproduction record
 | Reproduced by | Date | Environment | Result |
 |---|---|---|---|
-| Yasser Alhajlah | 2026-10-23 | Clean Colab Tesla T4, repository copy without runs/; split rebuilt | Phase 1 notebooks 01 and 02 completed; saved data/split and classification comparison match the submitted results. The original full-project record also includes Phase 2; it is not required to reproduce Phase 1. |
+| Yasser Alhajlah | 2026-10-23 | Clean Colab Tesla T4, repository copy without runs/; split rebuilt | Phase 1 notebooks 01 and 02 completed; saved data/split and classification comparison match the submitted results. This record covers Phase 1 only. |
 
 ## Changes after the reproduction (24 Oct 2026)
 These changes follow the internal technical review. None of them changes a model, a split or a metric.
@@ -50,7 +53,7 @@ The source notebook `notebooks/02_classification.ipynb` now uses the same error-
 
 Checkpoint reload checks establish agreement of aggregate test accuracy, not identical predictions on every image. `correct_count_difference` replaces the misleading historical field `images_different`; underlying values are unchanged. Shared training-loss and validation-accuracy/F1 histories agree within 1e-12; epoch times differ. Training accuracy and validation loss are from the logging rerun. See `docs/REVIEW_CHANGES_28OCT.md`.
 
-The 401 team-collected and team-annotated photos remain one dataset, as confirmed by Mohammed on 28 October. Existing source records are retained; this is not a claim that the team personally captured every photo. The set has already been evaluated. Future model improvements require a new independent final test set. Saved pipeline predictions and a metric verification script are included in `runs/team_evaluation/`.
+The 401 team-collected and team-annotated photos remain one dataset, as confirmed by Mohammed on 28 October. Existing source records are retained; this is not a claim that the team personally captured every photo. The set has already been evaluated. Future model improvements require a new independent final test set. Pipeline predictions and their metric verification script are supplemental Phase 2 evidence under `runs/team_evaluation/`; this directory is not included in the public Results v2 archive and is not part of the Phase 1 reproduction.
 
 ## New independent checkpoint verification (28 October 2026)
 Use the fixed release source and submitted checkpoint bytes. With original Oxford JPEGs available, run:

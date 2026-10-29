@@ -21,7 +21,7 @@ Detection, segmentation and integrated deployment are outside the Phase 1 evalua
 
 ## Public submission files
 
-- [Phase 1 PDF](./SmartPetVision_Phase1.pdf)
+- [Phase 1 PDF](./smart-pet-vision/SmartPetVision_Phase1.pdf)
 - [Source code and notebooks](./smart-pet-vision/)
 - [Dataset card](./smart-pet-vision/docs/dataset_card.md)
 - [Configuration](./smart-pet-vision/configs/config.yaml)
@@ -32,10 +32,7 @@ Detection, segmentation and integrated deployment are outside the Phase 1 evalua
 - [W&B project](https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision)
 - [Phase 1 W&B report](https://forge.coreweave.com/wandb/yasser-alhajlah-kaust/smart-pet-vision/reports/Smart-Pet-Vision-Phase-1-Data-Foundations-CNN-Classification-and-Transfer-Learning--VmlldzoxODE4NTQ1Mw)
 
-The PDF currently available in the repository still contains statements
-that need correction, including instructor approval and interpretation
-of the image-similarity analysis. It must not be described as the final
-corrected PDF until a revised file has been uploaded.
+The current PDF is the revised 15-page Phase 1 report. It distinguishes validation from test results and documents approval status, rerun provenance and reproducibility limitations.
 
 ## Restoring the saved evidence
 
