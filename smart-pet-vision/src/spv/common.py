@@ -58,7 +58,8 @@ class Tracker:
             import wandb
 
             self.run = wandb.init(
-                project=cfg["wandb"]["project"], name=name, config=config or {}, reinit=True
+                entity=cfg["wandb"].get("entity"), project=cfg["wandb"]["project"],
+                name=name, config=config or {}, reinit=True
             )
 
     def log(self, data: dict, step: int | None = None) -> None:

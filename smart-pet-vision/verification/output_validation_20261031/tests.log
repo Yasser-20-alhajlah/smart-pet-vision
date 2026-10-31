@@ -1,0 +1,8 @@
+/workspace/scratch/5ee01176baca/spv_audit/deps/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+[31m[1mrequirements:[0m Ultralytics requirement ['pi-heif'] not found, attempting AutoUpdate...
+WARNING ⚠️ [31m[1mrequirements:[0m ❌ AutoUpdate skipped (offline)
+----------------------------------------------------------------------
+Ran 62 tests in 1.323s
+
+OK

@@ -6,7 +6,7 @@ seed: 42
 paths:
   raw: data/raw              # Oxford-IIIT Pet is downloaded here
   processed: data/processed  # splits, masks, YOLO datasets
-  team: ../SmartPetVision_TeamData  # team-collected photos (external test only), kept next to the
+  team: ../SmartPetVision_TeamData  # team-captured photos (external test only), kept next to the
                                    # repository folder so that no data sits inside the repository
   runs: runs                 # checkpoints, metrics, figures
 
@@ -44,9 +44,13 @@ segmentation:
 pipeline:
   verify_threshold: 0.90     # classifier confidence below this => refer to staff
   min_mask_fraction: 0.05    # animal smaller than this share of frame => refer
-  detector_conf: 0.30        # replaced by the operating point chosen in notebook 03
-  detector_iou: 0.60
+  detector_conf: 0.40        # replaced by the operating point chosen in notebook 03
+  detector_iou: 0.50
+  segmenter_conf: 0.25       # explicit prior prediction default; not tuned on test
+  segmenter_iou: 0.70
+  mask_match_iou: 0.10
 
 wandb:
   enabled: true              # set true and run `wandb login` to log runs
   project: smart-pet-vision
+  entity: yasser-alhajlah-kaust  # historical project owner; requires authorized W&B access
