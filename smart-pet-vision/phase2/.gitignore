@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+*.pt
+*.onnx
+*.onnx.bin
+*.jpg
+*.jpeg
+*.png
+*.heic
+*.webp
+*.mp4
+*.zip
+*.env
+.env*
+wandb/
+data/
+review_runs/
+results_baseline/
+results_reexport_candidate/
+runs/*
+!runs/manifest.json
+
+# Explicit, source-controlled candidate manifests. Baseline manifest stays unchanged.
+!runs/manifest_multi_animal_candidate.json
+!runs/manifest_multi_animal_tiled_experimental.json

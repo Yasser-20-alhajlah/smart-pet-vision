@@ -1,0 +1,56 @@
+# Smart Pet Vision - single configuration file for every stage.
+# Paths are relative to the repository root unless absolute.
+
+seed: 42
+
+paths:
+  raw: data/raw              # Oxford-IIIT Pet is downloaded here
+  processed: data/processed  # splits, masks, YOLO datasets
+  team: ../SmartPetVision_TeamData  # team-captured photos (external test only), kept next to the
+                                   # repository folder so that no data sits inside the repository
+  runs: runs                 # checkpoints, metrics, figures
+
+data:
+  splits: {train: 0.70, val: 0.15, test: 0.15}
+  phash_threshold: 4         # Hamming distance <= this => near-duplicate group
+  audit_sample: 200          # images rendered for the manual label audit
+  box_review_sample: 300     # images rendered for the manual box review
+  min_side: 32               # images smaller than this are dropped
+
+classification:
+  image_size: 224
+  batch_size: 64
+  num_workers: 2
+  scratch:   {epochs: 25, lr: 1.0e-3, weight_decay: 1.0e-4}
+  frozen:    {epochs: 8,  lr: 1.0e-3, weight_decay: 1.0e-4}
+  finetune:  {epochs: 10, lr: 1.0e-4, weight_decay: 1.0e-4}
+  backbone: resnet50
+  pretrained: true           # set false only for offline smoke tests
+
+detection:
+  model: yolo11s.pt
+  epochs: 40
+  imgsz: 640
+  batch: 16
+  conf_grid: [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
+  iou_grid: [0.5, 0.6, 0.7]
+
+segmentation:
+  model: yolo11s-seg.pt
+  epochs: 40
+  imgsz: 640
+  batch: 16
+
+pipeline:
+  verify_threshold: 0.90     # classifier confidence below this => refer to staff
+  min_mask_fraction: 0.05    # animal smaller than this share of frame => refer
+  detector_conf: 0.40        # replaced by the operating point chosen in notebook 03
+  detector_iou: 0.50
+  segmenter_conf: 0.25       # explicit prior prediction default; not tuned on test
+  segmenter_iou: 0.70
+  mask_match_iou: 0.10
+
+wandb:
+  enabled: true              # set true and run `wandb login` to log runs
+  project: smart-pet-vision
+  entity: yasser-alhajlah-kaust  # historical project owner; requires authorized W&B access
