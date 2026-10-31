@@ -201,17 +201,19 @@ def build_annotations(root: Path, df: pd.DataFrame, out: Path) -> pd.DataFrame:
     """Write binary masks (0/255) and border masks; add body boxes to df."""
     (out / "masks").mkdir(parents=True, exist_ok=True)
     (out / "borders").mkdir(parents=True, exist_ok=True)
-    boxes = []
+    boxes, mask_fractions = [], []
     for name in df["image"]:
         tri = np.array(Image.open(root / "annotations" / "trimaps" / f"{name}.png"))
         body, border = trimap_to_masks(tri)
+        mask_fractions.append(float(body.mean()))
         Image.fromarray((body * 255).astype(np.uint8)).save(out / "masks" / f"{name}.png")
         Image.fromarray((border * 255).astype(np.uint8)).save(out / "borders" / f"{name}.png")
         box = mask_to_box(body)
         boxes.append(box if box else (np.nan,) * 4)
     df = df.copy()
     df[["x1", "y1", "x2", "y2"]] = np.array(boxes, dtype=float)
-    df["mask_fraction"] = ((df.x2 - df.x1) * (df.y2 - df.y1)) / (df.width * df.height)
+    df["box_fraction"] = ((df.x2 - df.x1) * (df.y2 - df.y1)) / (df.width * df.height)
+    df["mask_fraction"] = mask_fractions
     return df
 
 

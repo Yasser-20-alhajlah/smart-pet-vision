@@ -1,0 +1,11 @@
+{
+  "before": {
+    "verdict": "ready",
+    "confidence_is_finite": false
+  },
+  "after": {
+    "exception": "ModelOutputError",
+    "verdict_issued": false
+  },
+  "scope": "Synthetic invalid-probability reproduction; model accuracy is measured separately in summary.json."
+}

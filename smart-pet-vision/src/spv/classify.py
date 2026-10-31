@@ -12,8 +12,7 @@ from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 
 from .common import Tracker, save_json
-
-CLASSES = ["cat", "dog"]
+from .constants import CLASSES
 MEAN, STD = (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)
 
 
@@ -85,6 +84,8 @@ class ScratchCNN(nn.Module):
 
 def build_model(kind: str, cfg: dict) -> nn.Module:
     """kind: 'scratch' | 'frozen' | 'finetune'."""
+    if kind not in {"scratch", "frozen", "finetune"}:
+        raise ValueError(f"Unknown classifier kind: {kind}")
     if kind == "scratch":
         return ScratchCNN(len(CLASSES))
     from torchvision import models
@@ -121,14 +122,8 @@ def predict_logits(model: nn.Module, loader: DataLoader) -> tuple[np.ndarray, np
     return torch.cat(logits).numpy(), torch.cat(labels).numpy()
 
 
-def train(kind: str, data: dict, cfg: dict, out_dir: Path, max_batches: int | None = None,
-          run_name: str | None = None) -> dict:
-    """Train one variant; keeps the checkpoint with the best validation macro-F1.
-
-    Logs training loss and accuracy (running, on augmented batches in train mode) and
-    validation loss, accuracy and macro-F1 per epoch. The extra metrics reuse quantities that
-    are computed anyway, so they draw no random numbers and do not change training.
-    """
+def train(kind: str, data: dict, cfg: dict, out_dir: Path, max_batches: int | None = None) -> dict:
+    """Train one variant; keeps the checkpoint with the best validation macro-F1."""
     from sklearn.metrics import f1_score
 
     hp = cfg["classification"][kind]
@@ -139,7 +134,7 @@ def train(kind: str, data: dict, cfg: dict, out_dir: Path, max_batches: int | No
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=hp["epochs"])
     loss_fn = nn.CrossEntropyLoss()
     scaler = torch.amp.GradScaler(enabled=dev.type == "cuda")
-    tracker = Tracker(cfg, run_name or f"cls-{kind}", {"kind": kind, **hp, **count_params(model)})
+    tracker = Tracker(cfg, f"cls-{kind}", {"kind": kind, **hp, **count_params(model)})
 
     out_dir.mkdir(parents=True, exist_ok=True)
     best, history = -1.0, []
@@ -149,28 +144,23 @@ def train(kind: str, data: dict, cfg: dict, out_dir: Path, max_batches: int | No
             for m in model.modules():
                 if isinstance(m, nn.BatchNorm2d):
                     m.eval()
-        t0, run_loss, seen, correct = time.time(), 0.0, 0, 0
+        t0, run_loss, seen = time.time(), 0.0, 0
         for b, (x, y) in enumerate(data["train"]):
             if max_batches and b >= max_batches:
                 break
             x, y = x.to(dev), y.to(dev)
             opt.zero_grad(set_to_none=True)
             with torch.autocast(dev.type, enabled=dev.type == "cuda"):
-                out = model(x)
-                loss = loss_fn(out, y)
+                loss = loss_fn(model(x), y)
             scaler.scale(loss).backward()
             scaler.step(opt)
             scaler.update()
             run_loss += loss.item() * len(y)
             seen += len(y)
-            correct += int((out.argmax(1) == y).sum().item())
         sched.step()
         val_logits, val_y = predict_logits(model, data["val"])
         val_pred = val_logits.argmax(1)
-        val_loss = float(nn.functional.cross_entropy(torch.from_numpy(val_logits),
-                                                     torch.from_numpy(val_y).long()))
         rec = {"epoch": epoch + 1, "train_loss": run_loss / max(seen, 1),
-               "train_acc": correct / max(seen, 1), "val_loss": val_loss,
                "val_acc": float((val_pred == val_y).mean()),
                "val_macro_f1": float(f1_score(val_y, val_pred, average="macro")),
                "epoch_sec": time.time() - t0}
