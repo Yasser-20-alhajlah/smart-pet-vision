@@ -242,7 +242,7 @@ Detector raw head, re-check, 4 random inputs & 0.0020; not met & \code{M8_onnx_p
 Detector, 3 real images & raw 0.0013; same detections; box shift 0.0001 px & \code{M8_onnx_parity_real_images_3.json}\\
 Detector raw head, 50 real images & 0.0027 & \code{M8_onnx_parity_real_images.json}\\
 Detector final detections, 50 real images & 98\% same count and classes; max box shift 28.7 px & \code{M8_onnx_parity_real_images.json}\\\bottomrule\end{tabularx}}
-The 0.001 bound was set for the classifier before any Phase 2 run (A9) and was extended to the detector (A9b) no later than the first integration run on 17 October; it is not relaxed here. The three-image result is consistent with the 50-image result but too small to show the 2\% of images where the two runtimes disagree. Closing A9 would need an export change (for example FP32 graph without fused post-processing, or comparing at the decoded-box level with a pre-registered tolerance in a new phase) and a re-run.
+The 0.001 bound was set for the classifier before any Phase 2 run (A9) and was extended to the detector (A9b) no later than the first integration run on 17 October; it is not relaxed here. Closing A9b needs an export change and a re-run.
 \clearpage
 
 \subsection{Integrated decisions on the inspected 401-photo collection}
@@ -374,7 +374,7 @@ The reported team-collected images have documented team consent/provenance and m
 {\small\begin{tabularx}{\linewidth}{@{}P{3.4cm} Y@{}}\toprule
 Reference & Exact origin or location\\\midrule
 Official assessment & \emph{Capstone Project Guidelines UPDATED} (October 2026), Tables 2, 5, 6, pp.~3, 6, 7\\
-Acceptance criteria origin & Team code snapshot \code{smart-pet-vision.zip} (Drive, uploaded 15 October 2026), \code{notebooks/05_integration.ipynb}, table A1--A9; first Phase 2 W\&B runs created 17 October 2026\\
+Criteria origin & \code{smart-pet-vision.zip} (Drive, 15 Oct 2026), notebook 05, table A1--A9\\
 Submitted Phase 1 source & \code{SmartPetVision_Phase1_Overleaf_Source(2).zip}, \code{main.tex}; submitted 16-page PDF\\
 Phase 2 archive & \code{SmartPetVision_Phase2_Complete_Reviewed_30Oct2026.zip}; preserved \code{evidence/M4_*}, \code{M5_*}, \code{M8_*}\\
 Later real-weight CPU record & \code{Model_Repair_Verification_30Oct2026/summary.json}; source hash differences explicitly noted\\
