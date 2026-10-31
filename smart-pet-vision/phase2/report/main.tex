@@ -222,7 +222,7 @@ Referral reasons include no animal, more than one animal, insufficient species c
 \clearpage
 
 \subsection{HTTP service and observed historical benchmarks}
-The FastAPI service provides \code{POST /analyze} and \code{GET /health}, with upload and decoded-pixel size limits. Response fields identify the verdict, review reasons, class scores, geometry and per-stage timing. The archived T4 evaluation used 5 warm-up requests and 300 measured requests from a separate HTTP process: 300/300 returned HTTP 200, with p50/p95/p99 \textbf{46/135/178 ms}. Invalid and unreadable file responses were separately exercised.
+The FastAPI service provides \code{POST /analyze} and \code{GET /health}, with upload and decoded-pixel size limits. Response fields identify the verdict, review reasons, class scores, geometry and per-stage timing. The archived T4 evaluation used 5 warm-up and 300 measured requests from a separate HTTP process: 300/300 returned HTTP 200, p50/p95/p99 \textbf{46/135/178 ms}; invalid and unreadable files were also tested.
 
 
 {\small\begin{tabularx}{\linewidth}{@{}P{4.0cm} P{2.2cm} P{2.2cm} Y@{}}\toprule
@@ -243,7 +243,7 @@ Detector raw head, re-check, 4 random inputs & 0.0020; not met & \code{M8_onnx_p
 Detector, 3 real images & raw 0.0013; same detections; box shift 0.0001 px & \code{M8_onnx_parity_real_images_3.json}\\
 Detector raw head, 50 real images & 0.0027 & \code{M8_onnx_parity_real_images.json}\\
 Detector final detections, 50 real images & 98\% same count and classes; max box shift 28.7 px & \code{M8_onnx_parity_real_images.json}\\\bottomrule\end{tabularx}}
-The 0.001 bound was set for the classifier before any Phase 2 run (A9) and was extended to the detector (A9b) no later than the first integration run on 17 October; it is not relaxed here. Closing A9b needs an export change and a re-run.
+The 0.001 bound was set for the classifier before any Phase 2 run (A9) and was extended to the detector (A9b) no later than the first integration run on 17 October; it is not relaxed here. On the public YOLO11n model (a proxy), float32 PyTorch is itself 0.0014 from a float64 result, so the bound appears tighter than float32 precision. Notebook 09 repeats this on the team detector; until then A9b remains not met.
 \clearpage
 
 \subsection{Integrated decisions on the inspected 401-photo collection}
