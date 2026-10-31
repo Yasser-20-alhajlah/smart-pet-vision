@@ -169,12 +169,12 @@ The dog remains visible throughout the first clip. The cat is hidden behind a ba
 
 \section{Segmentation (M5)\pts{15}}
 \subsection{Masks, baseline and model training}
-The body-mask target is derived from the Oxford trimap foreground plus ambiguous border. A separate evaluation ignores border pixels, to show sensitivity to the trimap convention. A random subset of 300 Oxford test images was used for the \textbf{SAM 2.1-B} reference, prompted with each image's ground-truth box. This oracle-box input makes SAM a controlled reference, not a direct production alternative. The \textbf{YOLO11s-seg} model was fine-tuned for 40 epochs at 640 px, with confidence 0.25 for the archived mask evaluation.
+The body-mask target is derived from the Oxford trimap foreground plus ambiguous border. A separate evaluation ignores border pixels, to show sensitivity to the trimap convention. A random subset of 300 Oxford test images was used for the \textbf{SAM 2.1-B} reference, prompted with each image's ground-truth box. This oracle-box input makes SAM a controlled reference, not a direct production alternative. \textbf{Adaptation of the M5 deliverable} (masks generated or refined with SAM and verified visually): Oxford already provides pixel trimaps, so the training targets come from the trimaps (audited in Figure~\ref{fig:gtmask}); SAM generated the 300 reference masks, which were checked visually (Figure~\ref{fig:samfail}) and scored against the trimaps. The \textbf{YOLO11s-seg} model was fine-tuned for 40 epochs at 640 px, with confidence 0.25 for the archived mask evaluation.
 
 Training logs: \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/3ztpz2tc}{YOLO segmentation 3ztpz2tc}; \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/1jb5y453}{SAM reference 1jb5y453}.
 \begin{figure}[H]\centering
 \includegraphics[width=.88\linewidth,height=8.0cm,keepaspectratio]{figures/M5_gt_mask_check.jpg}
-\caption{Visual audit of Oxford body-mask targets. Split: Oxford test; resolution: native image / annotation coordinates; threshold: binary trimap foreground plus border. Gallery sampled from saved evidence, not newly annotated.}
+\caption{Visual audit of Oxford body-mask targets. Split: Oxford test; resolution: native image / annotation coordinates; threshold: binary trimap foreground plus border. Gallery sampled from saved evidence, not newly annotated.}\label{fig:gtmask}
 \end{figure}
 Mask IoU is $|P\cap G|/|P\cup G|$ and Dice is $2|P\cap G|/(|P|+|G|)$ for prediction $P$ and ground truth $G$. The report uses the mean of per-image binary foreground-union scores, while mask mAP is the instance-level class-aware metric.
 \clearpage
@@ -201,7 +201,7 @@ Differences in box prompts, image scaling and scoring protocol prevent interpret
 \subsection{Failure analysis and segmentation limitations}
 \begin{figure}[H]\centering
 \includegraphics[width=.90\linewidth,height=7cm,keepaspectratio]{figures/M5_sam_baseline_failures.jpg}
-\caption{Archived SAM baseline failure examples. Split: Oxford test sampled 300; input: native resolution with ground-truth box prompt; score: binary foreground-union IoU against trimap body masks. Some close-ups lead to background-like masks.}
+\caption{Archived SAM baseline failure examples. Split: Oxford test sampled 300; input: native resolution with ground-truth box prompt; score: binary foreground-union IoU against trimap body masks. Some close-ups lead to background-like masks.}\label{fig:samfail}
 \end{figure}
 \begin{itemize}[leftmargin=1.2em,itemsep=2pt]
 \item \textbf{SAM reference failure:} When an oracle box nearly fills the frame, the reference may select background rather than animal. The archive records 12 of 300 primary-mask cases with IoU below 0.5; the very different border-ignored scores show annotation-boundary sensitivity.
