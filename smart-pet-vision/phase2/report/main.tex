@@ -222,7 +222,7 @@ Referral reasons include no animal, more than one animal, insufficient species c
 \clearpage
 
 \subsection{HTTP service and observed historical benchmarks}
-The FastAPI service provides \code{POST /analyze} and \code{GET /health}, with upload and decoded-pixel size limits. Response fields identify the verdict, review reasons, class scores, geometry and per-stage timing. The archived T4 evaluation used 5 warm-up and 300 measured requests from a separate HTTP process: 300/300 returned HTTP 200, p50/p95/p99 \textbf{46/135/178 ms}; invalid and unreadable files were also tested.
+The FastAPI service provides \code{POST /analyze} and \code{GET /health}, with upload and decoded-pixel size limits. Response fields identify the verdict, review reasons, class scores, geometry and per-stage timing. The archived T4 evaluation used 5 warm-up and 300 measured requests from a separate HTTP process: 300/300 returned HTTP 200, p50/p95/p99 \textbf{46/135/178 ms}; invalid and unreadable files were also tested. A separate \emph{CPU-only} check on 31 October (source \code{051bd2c}, same weight hashes, local uvicorn with one worker, 5 warm-up and the first 300 sorted team photographs, W\&B \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/mu2tolkg}{mu2tolkg}) returned 300/300 HTTP 200 with the publication guard set on all 300 responses, p50/p95/p99 \textbf{383.8/430.8/690.1 ms}, HTTP 415 for a text file and HTTP 400 for an empty upload. These CPU figures are not comparable with the T4 figures and are not used for A8. Three illustrative requests made after timing are excluded from these numbers.
 
 
 {\small\begin{tabularx}{\linewidth}{@{}P{4.0cm} P{2.2cm} P{2.2cm} Y@{}}\toprule
@@ -244,14 +244,14 @@ Detector, 6 export/runtime settings (31 Oct) & 0.00198--0.00201; not met & \code
 Detector, 3 real images & raw 0.0013; same detections; box shift 0.0001 px & \code{M8_onnx_parity_real_images_3.json}\\
 Detector raw head, 50 real images & 0.0027 & \code{M8_onnx_parity_real_images.json}\\
 Detector final detections, 50 real images & 98\% same count and classes; max box shift 28.7 px & \code{M8_onnx_parity_real_images.json}\\\bottomrule\end{tabularx}}
-The 0.001 bound was set for the classifier before any Phase 2 run (A9) and was extended to the detector (A9b) no later than the first integration run on 17 October; it is not relaxed here. A re-check on 31 October (notebook 09, same weights and protocol) tried six export and runtime settings: 0.00198--0.00201, none within 0.001. On the same inputs float32 PyTorch itself is 0.0016 from a float64 computation (ONNX 0.0012), so the bound is tighter than float32 precision; A9b stays not met.
+The 0.001 bound was set for the classifier before any Phase 2 run (A9) and was extended to the detector (A9b) no later than the first integration run on 17 October; it is not relaxed here. A re-check on 31 October (notebook 09, same weights and protocol) tried six export and runtime settings: 0.00198--0.00201, none within 0.001. On the same inputs a float64 reference differed from float32 PyTorch by 0.0016 and from ONNX by 0.0012. These measurements show that differences of this size also arise between float32 and float64 execution of the same model, but they do not isolate the cause of the ONNX gap, and the bound is not changed; A9b stays not met.
 \clearpage
 
 \subsection{Integrated decisions on the inspected 401-photo collection}
-The full team set contains 399 single-species photos (which can contain multiple animals of one species) and two mixed cat/dog images. The most recent archived \emph{real-weight CPU run} recorded the following results, without retraining. This is regression on an already inspected dataset, not a fresh untouched final test.
+The full team set contains 399 single-species photos (which can contain multiple animals of one species) and two mixed cat/dog images. A real-weight CPU run on 31 October recorded the following results, without retraining (W\&B \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/f8manl0i}{f8manl0i}; source \code{051bd2c}, whose model code is identical to the submitted version; detector, segmenter and classifier SHA-256 checked before the run). Every row below was recomputed from that run's \code{predictions.csv}. This is regression on an already inspected dataset, not a fresh untouched final test.
 
 {\small\begin{tabularx}{\linewidth}{@{}P{7cm} Y@{}}\toprule
-Metric / population & Latest recorded CPU value\\\midrule
+Metric / population & CPU value (run f8manl0i)\\\midrule
 Single-species correct predictions & 386/399 (96.74\%)\\
 Referral decisions, all team photos & 81/401 (20.20\%)\\
 Technically ready, all team photos & 320/401\\
@@ -263,7 +263,7 @@ Staff approval required; automatic publication & 401/401 required; none permitte
 \includegraphics[width=.91\linewidth,height=5.3cm,keepaspectratio]{figures/M8_multi_animal_recorded.png}
 \caption{Comparison of two recorded CPU regression snapshots, \emph{not} a controlled one-change experiment: prior replay 27/52 technically ready, latest saved CPU run 17/52. Population: 52 multi-animal photos in the previously evaluated team set; baseline detector 640 px, conf 0.40, NMS 0.50. Different source/runtime snapshots prevent attributing the change to a single patch.}
 \end{figure}
-Because the referral rule counts \emph{detected} animals, a multi-animal photograph is marked technically ready only when the detector reports a single animal; the 17 such cases are therefore photographs in which secondary animals were missed (consistent with the low medium/small recall above), and staff review must catch them. The CPU run also counts 386/399 correct single-species predictions, one fewer than the 387/399 Phase 1 figure, because it is a later re-run with two changed modules. The CPU results are attributed to their saved runtime configuration, which predates the latest complete source snapshot for two modules. They remain a useful regression record; every technically ready photograph still requires explicit staff approval.
+Because the referral rule counts \emph{detected} animals, a multi-animal photograph is marked technically ready only when the detector reports a single animal; the 17 such cases are therefore photographs in which secondary animals were missed (consistent with the low medium/small recall above), and staff review must catch them. The CPU run counts 386/399 correct single-species predictions, one fewer than the 387/399 Phase 1 figure; the Phase 1 figure came from an earlier pipeline version and runtime, so the one-image difference is recorded rather than attributed to a single change. Every technically ready photograph still requires explicit staff approval.
 \clearpage
 
 \section{Acceptance criteria and go/no-go decision}
@@ -292,14 +292,11 @@ Dataset and partitions & Oxford-IIIT Pet; 7,335 retained; seed 42; group-aware 5
 Model configuration & \code{configs/config.yaml}, \code{runs/manifest.json}, pinned requirements and saved checkpoint paths\\
 Detection artifacts & W\&B \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/2seovilv}{2seovilv}; \code{M4_operating_point.json}, sweep CSV, test and team metrics\\
 Segmentation artifacts & W\&B \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/3ztpz2tc}{3ztpz2tc}; SAM \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/1jb5y453}{1jb5y453}; paired 300 image scores\\
-Runtime artifacts & W\&B \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/fqow5ly7}{fqow5ly7} (HTTP check, 300/300; a separate benchmark repetition); benchmark table values from \code{evidence/M8_benchmark_*.json}; pipeline manifest\\
-Current source provenance & 30 of 30 archived source files matched the saved SHA256 manifest\\
+Runtime artifacts & W\&B \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/fqow5ly7}{fqow5ly7} (T4 HTTP check, 300/300; a separate benchmark repetition); benchmark table values from \code{evidence/M8_benchmark_*.json}; pipeline manifest\\
+CPU regression (31 Oct) & W\&B \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/f8manl0i}{f8manl0i} (401 photos) and \href{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/mu2tolkg}{mu2tolkg} (HTTP, 300 requests); source \code{051bd2c}; notebook \code{06_release_validation.ipynb}\\
 Real-weight model versions & Detector \code{best.pt}, segmenter \code{best.pt}, classifier \code{finetune.pt}; model fingerprints recorded with the evaluation archive\\
-Reproduction workflow & \code{notebooks/03_detection.ipynb}, \code{04_segmentation.ipynb} and \code{05_integration.ipynb} in \code{smart-pet-vision/phase2/} of the GitHub repository; all 30 snapshot files were committed unchanged (SHA-256 match); the current version differs in two of them: \code{src/spv/pipeline.py} (opt-in v0.4 multi-animal review, off by default) and \code{notebooks/01_data_preparation.ipynb} (one wording change in a markdown cell) and the unit tests pass (49; 83 with the opt-in v0.4 multi-animal review)\\\bottomrule\end{tabularx}}
-\subsection*{What can and cannot be reproduced from this ZIP}
-The accompanying Overleaf ZIP is \emph{report source and selected, privacy-reviewed illustrations}, in the same style as the submitted Phase 1 ZIP. It also includes bounded CSV/JSON evidence and manifests. It does \textbf{not} redistribute Oxford image archives, private team photographs, 100+ MB weight files or full training outputs. The separate repository and private Drive evidence are needed to rerun inference.
-
-Saved-metric verification is distinct from model retraining. Source checks, trained-weight CPU observations and historical T4 logs provide complementary reproducibility evidence. The previously inspected team photos are treated as a supplementary regression dataset, separate from the held-out Oxford test split.
+Reproduction workflow & \code{notebooks/03_detection.ipynb}, \code{04_segmentation.ipynb}, \code{05_integration.ipynb} and \code{06_release_validation.ipynb} in \code{smart-pet-vision/phase2/}; the 30 snapshot files were committed unchanged except \code{src/spv/pipeline.py} (opt-in v0.4 review, off by default) and one markdown cell in notebook 01; unit tests pass\\
+Not in the source ZIP & Oxford archives, private team photographs, weights and training outputs; team photographs are a supplementary regression set, not the Oxford test split\\\bottomrule\end{tabularx}}
 \clearpage
 
 \section{Submission checklist}
@@ -379,7 +376,7 @@ Official assessment & \emph{Capstone Project Guidelines UPDATED} (October 2026),
 Criteria origin & \code{smart-pet-vision.zip} (Drive, 15 Oct 2026), notebook 05, table A1--A9\\
 Submitted Phase 1 source & \code{SmartPetVision_Phase1_Overleaf_Source(2).zip}, \code{main.tex}; submitted 16-page PDF\\
 Phase 2 archive & \code{SmartPetVision_Phase2_Complete_Reviewed_30Oct2026.zip}; preserved \code{evidence/M4_*}, \code{M5_*}, \code{M8_*}\\
-Later real-weight CPU record & \code{Model_Repair_Verification_30Oct2026/summary.json}; source hash differences explicitly noted\\
+Real-weight CPU records (31 Oct) & W\&B f8manl0i and mu2tolkg; \code{evidence/P2_cpu_release_validation_f8manl0i.json}, \code{P2_cpu_http_validation_mu2tolkg.json} (aggregates only)\\
 Recorded integration evidence & \code{evidence/M8_*}; HTTP, latency, model manifest and export comparisons\\
 Oxford dataset & \url{https://www.robots.ox.ac.uk/~vgg/data/pets/}\\
 Ultralytics metrics & \url{https://docs.ultralytics.com/guides/yolo-performance-metrics/}\\
