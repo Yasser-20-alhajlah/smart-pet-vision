@@ -1,0 +1,92 @@
+{
+  "criterion": "A9b detector ONNX max abs diff <= 0.001 (unchanged)",
+  "protocol": "seed 0, 4 random 640x640 inputs, CPU, same steps as spv.deploy.yolo_parity",
+  "weights": "/content/drive/MyDrive/capstone /smart-pet-vision/runs/detect/yolo11s_det/weights/best.pt",
+  "weights_sha256": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.31.0",
+    "ultralytics": "8.4.182",
+    "python": "3.13.18"
+  },
+  "results": [
+    {
+      "variant": "A_original_opset17",
+      "export": {
+        "opset": 17,
+        "simplify": false
+      },
+      "ort_graph_optimization": "all",
+      "ort_threads": "default",
+      "max_abs_diff": 0.001983642578125,
+      "tolerance": 0.001,
+      "passed_A9b": false
+    },
+    {
+      "variant": "B_opset17_ort_opt_off",
+      "export": {
+        "opset": 17,
+        "simplify": false
+      },
+      "ort_graph_optimization": "off",
+      "ort_threads": "default",
+      "max_abs_diff": 0.00201416015625,
+      "tolerance": 0.001,
+      "passed_A9b": false
+    },
+    {
+      "variant": "C_opset17_ort_basic",
+      "export": {
+        "opset": 17,
+        "simplify": false
+      },
+      "ort_graph_optimization": "basic",
+      "ort_threads": "default",
+      "max_abs_diff": 0.00201416015625,
+      "tolerance": 0.001,
+      "passed_A9b": false
+    },
+    {
+      "variant": "D_opset17_ort_opt_off_1thread",
+      "export": {
+        "opset": 17,
+        "simplify": false
+      },
+      "ort_graph_optimization": "off",
+      "ort_threads": 1,
+      "max_abs_diff": 0.00201416015625,
+      "tolerance": 0.001,
+      "passed_A9b": false
+    },
+    {
+      "variant": "E_opset12_simplified",
+      "export": {
+        "opset": 12,
+        "simplify": true
+      },
+      "ort_graph_optimization": "all",
+      "ort_threads": "default",
+      "max_abs_diff": 0.001983642578125,
+      "tolerance": 0.001,
+      "passed_A9b": false
+    },
+    {
+      "variant": "F_opset12_simplified_opt_off",
+      "export": {
+        "opset": 12,
+        "simplify": true
+      },
+      "ort_graph_optimization": "off",
+      "ort_threads": "default",
+      "max_abs_diff": 0.00201416015625,
+      "tolerance": 0.001,
+      "passed_A9b": false
+    }
+  ],
+  "float32_precision": {
+    "pytorch_fp32_vs_fp64": 0.001568357895621375,
+    "onnx_fp32_vs_fp64": 0.001207332312901599
+  },
+  "any_variant_passed": false
+}

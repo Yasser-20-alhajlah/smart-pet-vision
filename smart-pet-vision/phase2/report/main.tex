@@ -232,7 +232,7 @@ ONNX detector on CPU + other models on T4 & 281 / 364 / 702 ms & 3.3 img/s & 218
 Method: first 50 test images cycled, batch 1, 10 warm-up + 200 timed runs, one process per backend. The two backends do not share the same detector execution device. The selected service implementation uses \textbf{PyTorch}; ONNX is an evaluated diagnostic export, not the deployed detector. Table values come from \code{evidence/M8_benchmark_pytorch.json} and \code{M8_benchmark_onnx_detector.json}. W\&B run fqow5ly7 logged a separate repetition (PyTorch p50/p95/p99 41.9/58.3/92.8 ms, 22.0 img/s; ONNX-detector 286/318/342 ms, 3.4 img/s); both repetitions meet A8 for PyTorch.
 
 \subsection{Export and numerical parity record}
-The classifier ONNX numerical check recorded a maximum absolute difference of $2.98\times10^{-7}$, within the 0.001 bound set before the Phase 2 runs (criterion A9a: met). For the detector, the acceptance check recorded a maximum absolute difference of \textbf{0.0018 against the same 0.001 bound applied to the detector (criterion A9b): not met}. A later re-check on four random inputs recorded 0.0020 (also above the bound). On three real letterboxed images the raw-head maximum was 0.0013 and final boxes matched to 0.0001 px, but a wider comparison on 50 real letterboxed test images (CPU for both runtimes, conf 0.40, NMS 0.50) found a raw-head maximum of 0.0027, the same number of detections and the same classes on 98\% of images, and a largest final-box displacement of 28.7 px. The exported detector is therefore not interchangeable with the PyTorch detector at the operating point; the service uses PyTorch.
+The classifier ONNX numerical check recorded a maximum absolute difference of $2.98\times10^{-7}$, within the 0.001 bound set before the Phase 2 runs (criterion A9a: met). For the detector, the acceptance check recorded a maximum absolute difference of \textbf{0.0018 against the same 0.001 bound applied to the detector (criterion A9b): not met}. A later re-check recorded 0.0020. On 50 real letterboxed test images (CPU, conf 0.40, NMS 0.50), 98\% of images had the same detections and classes, but the largest final-box shift was 28.7 px (raw head 0.0027). The exported detector is therefore not interchangeable with the PyTorch detector at the operating point; the service uses PyTorch.
 
 
 {\small\begin{tabularx}{\linewidth}{@{}P{5.1cm} P{3cm} Y@{}}\toprule
@@ -240,10 +240,11 @@ ONNX verification item & Saved outcome & Evidence scope\\\midrule
 Classifier numerical parity & $2.98\times10^{-7}$; pass & Recorded classifier model / CPU\\
 Detector numerical parity (A9) & 0.0018 vs. $\le$0.001; \textbf{not met} & \code{M8_onnx_parity.json}, \code{M8_acceptance.csv}\\
 Detector raw head, re-check, 4 random inputs & 0.0020; not met & \code{M8_onnx_parity_recheck_4inputs.json}\\
+Detector, 6 export/runtime settings (31 Oct) & 0.00198--0.00201; not met & \code{M8_onnx_parity_recheck_variants.json}\\
 Detector, 3 real images & raw 0.0013; same detections; box shift 0.0001 px & \code{M8_onnx_parity_real_images_3.json}\\
 Detector raw head, 50 real images & 0.0027 & \code{M8_onnx_parity_real_images.json}\\
 Detector final detections, 50 real images & 98\% same count and classes; max box shift 28.7 px & \code{M8_onnx_parity_real_images.json}\\\bottomrule\end{tabularx}}
-The 0.001 bound was set for the classifier before any Phase 2 run (A9) and was extended to the detector (A9b) no later than the first integration run on 17 October; it is not relaxed here. On the public YOLO11n model (a proxy), float32 PyTorch is itself 0.0014 from a float64 result, so the bound appears tighter than float32 precision. Notebook 09 repeats this on the team detector; until then A9b remains not met.
+The 0.001 bound was set for the classifier before any Phase 2 run (A9) and was extended to the detector (A9b) no later than the first integration run on 17 October; it is not relaxed here. A re-check on 31 October (notebook 09, same weights and protocol) tried six export and runtime settings: 0.00198--0.00201, none within 0.001. On the same inputs float32 PyTorch itself is 0.0016 from a float64 computation (ONNX 0.0012), so the bound is tighter than float32 precision; A9b stays not met.
 \clearpage
 
 \subsection{Integrated decisions on the inspected 401-photo collection}
