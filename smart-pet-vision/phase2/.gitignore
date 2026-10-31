@@ -23,3 +23,8 @@ runs/*
 # Explicit, source-controlled candidate manifests. Baseline manifest stays unchanged.
 !runs/manifest_multi_animal_candidate.json
 !runs/manifest_multi_animal_tiled_experimental.json
+
+# Report figures (Oxford, licensed clips and charts only; reviewed for private photos)
+!report/figures/
+!report/figures/*.png
+!report/figures/*.jpg
