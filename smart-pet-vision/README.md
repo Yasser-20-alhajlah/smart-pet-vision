@@ -5,6 +5,8 @@ classification: data foundations (M1), CNN training and evaluation (M2), and tra
 with W&B experiment tracking (M3). Detection, segmentation, integrated deployment and staff-referral
 behavior are Phase 2 scope and are not evaluated as Phase 1 results.
 
+**Phase 2 (M4 detection, M5 segmentation, M8 integration)** is in [`phase2/`](phase2/README.md): code, tests, the Phase 2 report (`phase2/report/SmartPetVision_Phase2_Report.pdf`) and the requirements checklist.
+
 Data: [Oxford-IIIT Pet](https://www.robots.ox.ac.uk/~vgg/data/pets/) (Parkhi et al., CVPR 2012),
 CC BY-SA 4.0. Team-collected photos are used for external testing only.
 
