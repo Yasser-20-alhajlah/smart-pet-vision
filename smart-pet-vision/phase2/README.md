@@ -4,7 +4,7 @@ This folder holds the Phase 2 code. It is kept separate from the Phase 1 code in
 
 ## Version
 
-The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json` (30 files, 30 October 2026) are committed here; 29 of 30 are byte-identical to that snapshot, and `notebooks/01_data_preparation.ipynb` differs only by one wording change in a markdown cell. The later multi-animal development work (v0.4) is added in a separate commit so the two versions can be told apart.
+The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json` (30 files, 30 October 2026) were committed unchanged in the first Phase 2 commit (SHA-256 match 30/30). The current version differs in two of them: `src/spv/pipeline.py` (opt-in v0.4 multi-animal review, `review_mode` off by default) and `notebooks/01_data_preparation.ipynb` (one wording change in a markdown cell). The later multi-animal development work (v0.4) is added in a separate commit so the two versions can be told apart.
 
 ## Layout
 
