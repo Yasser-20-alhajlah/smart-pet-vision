@@ -1,0 +1,51 @@
+{
+  "summary": {
+    "runtime": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "environment": {
+      "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+      "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+      "cpu_model": "Intel(R) Xeon(R) CPU @ 2.00GHz",
+      "logical_cpus": 8,
+      "host_physical_ram_bytes": 54750392320,
+      "packages": {
+        "torch": "2.11.0+cu130",
+        "torchvision": "0.26.0+cu130",
+        "ultralytics": "8.4.182",
+        "numpy": "2.1.3",
+        "pandas": "2.2.3",
+        "pillow": "11.3.0",
+        "onnx": "1.23.2",
+        "onnxruntime": "1.31.0",
+        "fastapi": "0.141.1",
+        "uvicorn": "0.54.0",
+        "httpx": "0.28.1"
+      },
+      "torch_threads": 7,
+      "cuda_available": false
+    },
+    "device": "CPU",
+    "n": 401,
+    "referrals": 81,
+    "all_publication_guards_passed": true,
+    "independent_new_test": false,
+    "classification_n": 399,
+    "accuracy": 0.9674185463659147,
+    "multi_animal_ready": 17,
+    "wandb_run": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/f8manl0i"
+  },
+  "provenance": {
+    "source_revision": "051bd2cff8c362aabdca82b3a9189c54275368cc",
+    "weights_sha256": {
+      "detector": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+      "segmenter": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+      "classifier": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba"
+    },
+    "manifest_source": "<runs/manifest.json on private Drive>",
+    "label_sha256": "04921d428d2be17c373778d070bd15b5fc38048a18f4de05e1f458025adfd606",
+    "images": "<team image folder on private Drive>",
+    "source_snapshot_validation": true,
+    "fresh_independent_test": false,
+    "cpu_only": true,
+    "returncode": 0
+  }
+}

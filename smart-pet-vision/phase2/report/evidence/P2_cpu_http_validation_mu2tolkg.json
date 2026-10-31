@@ -1,0 +1,38 @@
+{
+  "device": "CPU",
+  "protocol": "local uvicorn, one worker, /analyze?images=false; first 300 sorted team JPEGs",
+  "warmup": 5,
+  "requests": 300,
+  "succeeded": 300,
+  "success_rate": 1.0,
+  "publication_guards_passed_requests": 300,
+  "status_codes": {
+    "200": 300
+  },
+  "health": {
+    "status": "ok",
+    "detector": "best.pt",
+    "segmenter": "best.pt",
+    "classifier": "finetune"
+  },
+  "startup_s": 4.927852726000083,
+  "http_latency_ms": {
+    "p50": 383.8246855000307,
+    "p95": 430.7872206000411,
+    "p99": 690.0890408002077
+  },
+  "non_image_status": 415,
+  "empty_upload_status": 400,
+  "source_revision": "051bd2cff8c362aabdca82b3a9189c54275368cc",
+  "weights_sha256": {
+    "detector": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+    "segmenter": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+    "classifier": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba"
+  },
+  "passed_service_check": true,
+  "independent_new_test": false,
+  "demo_images_count": 3,
+  "timing_includes_demo": false,
+  "wandb_run": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/mu2tolkg",
+  "demo_selection_note": "The 3 demo images were chosen from a placeholder predictions table written by the notebook cell when the real one was absent; they are illustrative only and are excluded from timing and from every accuracy figure."
+}
