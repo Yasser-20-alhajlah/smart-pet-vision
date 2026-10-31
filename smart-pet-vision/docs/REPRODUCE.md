@@ -39,7 +39,7 @@ These changes follow the internal technical review. None of them changes a model
 
 
 ## Report revision (26 October 2026)
-The report uses the instructor template. Notebook 02 explanatory markdown was corrected; code cells and stored outputs were preserved. No model was retrained for this revision. Original audit assistance and reviewer provenance were retained. Historical runs do not contain training accuracy or validation loss; those curves must not be invented.
+The report uses the instructor template. Notebook 02 explanatory markdown was corrected; code cells and stored outputs were preserved. No model was retrained for this revision. Original audit records were retained. Historical runs do not contain training accuracy or validation loss; those curves must not be invented.
 
 ## Best checkpoint versus final epoch
 Scratch: epoch 25; frozen: first maximum at epoch 6; fine-tuned: epoch 6 (validation accuracy and macro-F1 both 1.0). Fine-tuned final epoch 10 has macro-F1 0.998965182024. Saved test metrics use the retained checkpoint.

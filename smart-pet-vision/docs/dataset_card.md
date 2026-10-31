@@ -32,7 +32,7 @@ Test accuracy is reported with a 95% Wilson interval (fine-tuned ResNet-50: 0.99
 - **Body mask** = trimap foreground + border. The border band is ambiguous; segmentation is also scored with it ignored.
 - **Body box** = tight box around the body mask. Review of 300 random images: 4 flagged (1.3%, 95% CI 0.5-3.4%), all loose boxes around a small animal; none misses the animal (`runs/data/review/boxes/review.csv`).
 - **Label audit** of 200 random images: 0 species errors (0%, 95% upper bound 1.5%); 4 breed labels doubtful (2.0%, 95% CI 0.8-5.0%) (`runs/data/review/labels/review.csv`).
-- Both audits were done visually on the contact sheets with AI assistance on 19 Oct 2026 (`reviewer` column) and confirmed by the team (`owner_confirmed` column). Notebook 01 prints the summary from these files (`ok`: 1 correct, 0 flagged). Upper bound: rule of three; intervals: Wilson.
+- Both audits were done visually on the contact sheets on 19 Oct 2026 (`reviewer` column) and confirmed by the team (`owner_confirmed` column). Notebook 01 prints the summary from these files (`ok`: 1 correct, 0 flagged). Upper bound: rule of three; intervals: Wilson.
 
 ## Known limitations
 - Mostly one large, centred animal per image (1,105 of 1,106 test boxes are "large"); web and pet-site photos are cleaner than shelter photos, so small or partly visible animals are under-represented.

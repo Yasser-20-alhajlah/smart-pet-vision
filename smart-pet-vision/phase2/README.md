@@ -1,10 +1,10 @@
 # Smart Pet Vision — Phase 2 (M4 detection, M5 segmentation, M8 integration)
 
-This folder holds the Phase 2 code. It is kept separate from the Phase 1 code in the parent folder so that Phase 1, which was already submitted, stays unchanged. Some modules (`classify.py`, `common.py`, `data.py`, `config.yaml`) exist in both places and differ; the Phase 2 copies here are the ones the Phase 2 results use.
+This folder holds the Phase 2 code. It is kept separate from the Phase 1 code in the parent folder. Some modules (`classify.py`, `common.py`, `data.py`, `config.yaml`) exist in both places and differ; the Phase 2 copies here are the ones the Phase 2 results use.
 
 ## Version
 
-The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json` (30 files, 30 October 2026) are committed here unchanged; their SHA-256 hashes match that snapshot 30/30. The later multi-animal development work (v0.4) is added in a separate commit so the two versions can be told apart.
+The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json` (30 files, 30 October 2026) are committed here; 29 of 30 are byte-identical to that snapshot, and `notebooks/01_data_preparation.ipynb` differs only by one wording change in a markdown cell. The later multi-animal development work (v0.4) is added in a separate commit so the two versions can be told apart.
 
 ## Layout
 
