@@ -1,0 +1,10 @@
+[
+  {
+    "file": "detector.onnx",
+    "onnx_graph_check": "passed"
+  },
+  {
+    "file": "classifier_verified.onnx",
+    "onnx_graph_check": "passed"
+  }
+]

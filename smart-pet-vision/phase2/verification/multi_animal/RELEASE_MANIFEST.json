@@ -1,0 +1,93 @@
+{
+  "release": "candidate-v0.4",
+  "based_on": "Drive approved source snapshot 2026-10-30",
+  "validation_state": "synthetic-unit-verified, real-weight regression pending",
+  "baseline_manifest_unmodified": true,
+  "code_changes": [
+    {
+      "file": ".gitignore",
+      "operation": "modify",
+      "sha256_after": "b76111f6aff820e0807db1b0d1b291e928f0fe0fbeef7dd7781f36abffed74ec",
+      "sha256_before": "e64202e79596a0b89efe8fd7955d03ba07e7e0fe05749c9c12967120c39c6d35"
+    },
+    {
+      "file": "src/spv/pipeline.py",
+      "operation": "modify",
+      "sha256_after": "4c7b9893f5c5bb001d0978f61527d34d6235db42347a3b0027e7b5d3164a5007",
+      "sha256_before": "dfb1f3c443d1d313c2990006d44b6b49064f4c1ec548dfa31a14f3f6f225abe6"
+    },
+    {
+      "file": "src/spv/multi_animal_review.py",
+      "operation": "add",
+      "sha256_after": "e2c35c554892752e6259e7a3d0259e6bdc9ec94a6348c67a3387ba153f72493b",
+      "sha256_before": null
+    },
+    {
+      "file": "tools/evaluate_multi_animal_candidate.py",
+      "operation": "add",
+      "sha256_after": "fe9ea982d87232108c557220c387b6b01f2891a8552f5148bee5962e1c93acac",
+      "sha256_before": null
+    },
+    {
+      "file": "tests/test_multi_animal_review.py",
+      "operation": "add",
+      "sha256_after": "2aa1f581a79f753d102e85e81fdb2d6e993d18295c7b1c5bf77ee7597cc59f4c",
+      "sha256_before": null
+    },
+    {
+      "file": "tests/test_multi_animal_evaluator.py",
+      "operation": "add",
+      "sha256_after": "56814faf2eb9c939afac86408f67053d20f534fc7f1dfe7aa268b318f2eb519e",
+      "sha256_before": null
+    },
+    {
+      "file": "runs/manifest_multi_animal_candidate.json",
+      "operation": "add",
+      "sha256_after": "c0fa6c125a7444bab038794d5604c6a79d42e0c8ec83a7850a5cbb7971bafc27",
+      "sha256_before": null
+    },
+    {
+      "file": "runs/manifest_multi_animal_tiled_experimental.json",
+      "operation": "add",
+      "sha256_after": "303d4e68bf31c91359593a442ed31590c1a2342d29bfe3183abbfb1189cad420",
+      "sha256_before": null
+    },
+    {
+      "file": "notebooks/07_Multi_Animal_Validation_COLAB.ipynb",
+      "operation": "add",
+      "sha256_after": "07fb40eaedceedb786dc928042da1b25c3574607b24b201af4f7ea92db51d172",
+      "sha256_before": null
+    },
+    {
+      "file": "README_MULTIANIMAL_AR.md",
+      "operation": "add",
+      "sha256_after": "a0e8de35561a65de5a61bf3ab39c7398914139b1a8d948cc6ceb3a1d27581082",
+      "sha256_before": null
+    },
+    {
+      "file": "CHANGELOG_MULTIANIMAL_v0.4.md",
+      "operation": "add",
+      "sha256_after": "f36d3ee0579e3aa9b598a72c4549eab4158741399d33e9d055ad5ad608291852",
+      "sha256_before": null
+    },
+    {
+      "file": "Multiple_Animals_Engineering_Summary_AR_v0.4.pdf",
+      "operation": "add",
+      "sha256_after": "94b0ad2f8e0d434dd2a8a55801e4e652f11a1c08d3c40d34d2203424eff69e0b",
+      "sha256_before": null
+    },
+    {
+      "file": "verification/multi_animal/ALL_TESTS.log",
+      "operation": "add",
+      "sha256_after": "03674d85c155b59eac6f6b43a10a370ed5dd27acb82093caf889e2f9ded3207d",
+      "sha256_before": null
+    },
+    {
+      "file": "verification/multi_animal/COMPATIBLE_TESTS.log",
+      "operation": "add",
+      "sha256_after": "e3dd81e8409e51d2a64b2f1830972cd56aeca703a104c7db186170c136b095f9",
+      "sha256_before": null
+    }
+  ],
+  "weights_and_private_photos_included": false
+}

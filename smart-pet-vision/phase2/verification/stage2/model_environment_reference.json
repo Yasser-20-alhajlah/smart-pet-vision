@@ -1,0 +1,36 @@
+{
+  "Python": "3.13.5",
+  "current_runtime": {
+    "torch": "available",
+    "torchvision": "available",
+    "ultralytics": "NOT_INSTALLED",
+    "onnx": "NOT_INSTALLED",
+    "onnxruntime": "NOT_INSTALLED",
+    "fastapi": "available",
+    "numpy": "available",
+    "pandas": "available",
+    "PIL": "available"
+  },
+  "team_recorded_environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "logical_cpus": 9,
+    "host_physical_ram_bytes": 10451427328,
+    "packages": {
+      "torch": "2.11.0+cpu",
+      "torchvision": "0.26.0+cpu",
+      "ultralytics": "8.4.182",
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "pillow": "12.3.0",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.0",
+      "fastapi": "0.141.1",
+      "uvicorn": "0.54.0",
+      "httpx": "0.28.1"
+    },
+    "torch_threads": 9,
+    "cuda_available": false
+  }
+}

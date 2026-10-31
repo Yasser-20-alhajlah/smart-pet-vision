@@ -1,0 +1,157 @@
+{
+  "source_snapshot_file_count": 30,
+  "checked": 30,
+  "passed": 30,
+  "details": {
+    "src/spv/classify.py": {
+      "present": true,
+      "match": true,
+      "hash": "a0b4ca3a944bdae9bd46e44de201f137bf45bb4d3de74c6d8abde28e0d8cabad"
+    },
+    "src/spv/serve.py": {
+      "present": true,
+      "match": true,
+      "hash": "3c1b9b288bd793d3a55d030653f5b85047cd8d4e1f427826a0db9640c73c83e1"
+    },
+    "src/spv/detect.py": {
+      "present": true,
+      "match": true,
+      "hash": "31f7bc720ea9b899ec3089c21949986d58c973a33d5d0199a7c7f6a8d126da1a"
+    },
+    "src/spv/pipeline.py": {
+      "present": true,
+      "match": true,
+      "hash": "dfb1f3c443d1d313c2990006d44b6b49064f4c1ec548dfa31a14f3f6f225abe6"
+    },
+    "src/spv/segment.py": {
+      "present": true,
+      "match": true,
+      "hash": "9dbec7942e1b51430730641c3c23c12fdc1fd67c067a62e157cd88cadf517653"
+    },
+    "src/spv/instance_alignment.py": {
+      "present": true,
+      "match": true,
+      "hash": "f86940a606cc56868a8799447700fff5219ea6db6984e99b61f25d276ead02ae"
+    },
+    "src/spv/constants.py": {
+      "present": true,
+      "match": true,
+      "hash": "515435454065ad5770fcf7bb02af06db4ce22af028105d09cfc6a9604d8b14b8"
+    },
+    "src/spv/data.py": {
+      "present": true,
+      "match": true,
+      "hash": "7bd524515412a8d3056d1108ae6d682c2ddefa8b2599ae8c64ea12b6bd90312d"
+    },
+    "src/spv/deploy.py": {
+      "present": true,
+      "match": true,
+      "hash": "4666cdab3a99a1b80d81dfe3cc750e6d6a8f52e7ea6ead7c6cdad0c6a78d769f"
+    },
+    "src/spv/common.py": {
+      "present": true,
+      "match": true,
+      "hash": "1868210f502414067ed097bfb3505e474170ced561236bde2a2d0818efc5f395"
+    },
+    "src/spv/runtime.py": {
+      "present": true,
+      "match": true,
+      "hash": "ce1ac4887df022cfd34c30922051ef629a0de3d89057bc90eea1cda9879f2ec3"
+    },
+    "tests/test_release_inputs.py": {
+      "present": true,
+      "match": true,
+      "hash": "f061b16359c06c1110dec8e80ad8570c936edca40030f13f34745d6d8cfb8c02"
+    },
+    "tests/test_execution_review.py": {
+      "present": true,
+      "match": true,
+      "hash": "3d7acdefb32db0b7157ca6de4ea39e48e15a37d04fc4b856c7c422f6334f1ca6"
+    },
+    "tests/test_evidence_redaction.py": {
+      "present": true,
+      "match": true,
+      "hash": "1a92df83d6e2aa6096f5704e513d9558c649a0629e81c5946c566a311bfe415d"
+    },
+    "tests/test_review_regressions.py": {
+      "present": true,
+      "match": true,
+      "hash": "e920108dd5caa4babfb233a35c8cafa8551198ba1fa3f39ed1dc3d62bff916ab"
+    },
+    "tests/test_instance_alignment.py": {
+      "present": true,
+      "match": true,
+      "hash": "aeb8878449389ba793bc6e6da5a902ad0e95bbe5918ae3283778ee2e681459e5"
+    },
+    "tests/test_pipeline_release_policy.py": {
+      "present": true,
+      "match": true,
+      "hash": "732fc1b4b7b11583789139e26082cb4873d59bb595daf450c9f3504679825475"
+    },
+    "tests/test_model_repair.py": {
+      "present": true,
+      "match": true,
+      "hash": "b866394bb9f6b4d43a29201a239e21a3585d18d51a4a0e2c818b6797c159714b"
+    },
+    "tools/validate_release.py": {
+      "present": true,
+      "match": true,
+      "hash": "b6483e0d3a386566049b394427b3cee91829263d6530453f744cb04892c3450b"
+    },
+    "tools/audit_saved_evidence.py": {
+      "present": true,
+      "match": true,
+      "hash": "c2ba19afe27e5dd473eabf22ef0e343b8f8d98a62a8141857e74a39fb47b6862"
+    },
+    "tools/redact_evidence_gallery.py": {
+      "present": true,
+      "match": true,
+      "hash": "877d334676a20ea9a920c7a347abcd54eb8050fa2fc7b7662aeb3cd910ea8476"
+    },
+    "notebooks/06_release_validation_executed.ipynb": {
+      "present": true,
+      "match": true,
+      "hash": "85a17dcee4a8fbc56d20dcae5b829c38dec9507f82d67bbdeb5547bea27d03ee"
+    },
+    "notebooks/01_data_preparation.ipynb": {
+      "present": true,
+      "match": true,
+      "hash": "b18290bf7c5d74e6ddca846f066ecd09228c5860f89cdf3037b3392d9ba5f286"
+    },
+    "notebooks/06_release_validation.ipynb": {
+      "present": true,
+      "match": true,
+      "hash": "1b8eabbdcb0b5d9706fb9044f3ebf768159ae12aaae6a61daa5e2940411b07e1"
+    },
+    "notebooks/04_segmentation.ipynb": {
+      "present": true,
+      "match": true,
+      "hash": "bde05c45475ae776ffaf753e612bac6da147b00a07d1f087d99dc65fc3530cac"
+    },
+    "notebooks/02_classification.ipynb": {
+      "present": true,
+      "match": true,
+      "hash": "15fb129b8ba1274aa2cd75d7e2884476a119976464012af956d8e0a16f298355"
+    },
+    "notebooks/05_integration.ipynb": {
+      "present": true,
+      "match": true,
+      "hash": "5e7891a0fc07228b7561b1c0546c8199e6f95b3d9e42cfb8f4d0222691edf61a"
+    },
+    "notebooks/03_detection.ipynb": {
+      "present": true,
+      "match": true,
+      "hash": "b1a99fd3c6dfcde264da40d3282dcb526f277d2e55590c3b87185be034d3b23c"
+    },
+    "configs/config.yaml": {
+      "present": true,
+      "match": true,
+      "hash": "162ff47f0c1b0993f553393d69dc3e2bede71b78f3bb9de86ad4d34844505277"
+    },
+    "runs/manifest.json": {
+      "present": true,
+      "match": true,
+      "hash": "fc45e4492aa27d2a845f096d201a9423aa3596f06b25e5e04c8f1cf9f30cd776"
+    }
+  }
+}

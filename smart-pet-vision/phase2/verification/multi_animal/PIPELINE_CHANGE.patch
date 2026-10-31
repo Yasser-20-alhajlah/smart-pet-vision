@@ -1,0 +1,145 @@
+--- baseline/src/spv/pipeline.py
++++ v0.4/src/spv/pipeline.py
+@@ -13,6 +13,8 @@
+ from .constants import CLASSES
+ from .common import load_json, save_json
+ from .instance_alignment import best_mask_index
++from .multi_animal_review import (ReviewProposal, additional_animal_cues,
++                                  map_tile_boxes, review_tiles, validate_boxes)
+ 
+ REASONS = {
+     "no_animal": "No cat or dog was detected.",
+@@ -22,6 +24,8 @@
+     "animal_too_small": "The animal covers too little of the frame; retake the photo.",
+     "segmentation_unmatched": "The segmenter could not match a reliable animal mask to the selected detection.",
+     "segmentation_disagreement": "The segmenter and the selected detector disagree on the animal species.",
++    "secondary_animal_candidate": "A second, lower-threshold pass found an additional or ambiguous animal candidate; staff review required.",
++    "secondary_review_failed": "The additional-animal safety check could not be completed; staff review required.",
+ }
+ 
+ 
+@@ -58,6 +62,14 @@
+     segmenter_conf: float = 0.25
+     segmenter_iou: float = 0.70
+     mask_match_iou: float = 0.10
++    # Opt-in candidate only. Historical manifests and weights remain unchanged.
++    review_mode: str = "off"  # off | audit | enforce
++    review_conf: float = 0.10
++    review_imgsz: int = 960
++    review_match_iou: float = 0.55
++    review_include_segmenter: bool = True
++    review_tiles_enabled: bool = False
++    review_tiles_conf: float = 0.10
+ 
+     @classmethod
+     def load(cls, path: str | Path, project_root: str | Path | None = None) -> "Manifest":
+@@ -84,6 +96,18 @@
+                 raise ValueError(f"Manifest {name} must be a positive integer.")
+         if manifest.classifier_kind not in {"scratch", "frozen", "finetune"}:
+             raise ValueError("Manifest classifier_kind is not supported.")
++        if manifest.review_mode not in {'off', 'audit', 'enforce'}:
++            raise ValueError('Manifest review_mode must be off, audit or enforce.')
++        if type(manifest.review_include_segmenter) is not bool or type(manifest.review_tiles_enabled) is not bool:
++            raise ValueError('Review switches must be booleans.')
++        for key in ('review_conf', 'review_match_iou', 'review_tiles_conf'):
++            value = getattr(manifest, key)
++            if not np.isfinite(value) or not 0 < value <= 1:
++                raise ValueError(f'{key} must be finite and in (0,1].')
++        if manifest.review_conf > manifest.detector_conf:
++            raise ValueError('Secondary review confidence must be <= primary confidence.')
++        if type(manifest.review_imgsz) is not int or manifest.review_imgsz < manifest.imgsz:
++            raise ValueError('Secondary review resolution must be >= primary image size.')
+         return manifest
+ 
+     def save(self, path: str | Path) -> None:
+@@ -155,6 +179,55 @@
+             return SegmentationEvidence(empty, False, count)
+         return SegmentationEvidence(mask, True, count, CLASSES[int(classes[index])])
+ 
++    # --------------------------------------- opt-in multi-animal safety probe
++    def audit_additional_animals(self, im: Image.Image, primary_boxes: np.ndarray) -> dict:
++        """Reconsider a *single-animal* image with high-res and optional tiled views.
++
++        This function only proposes reasons for human referral, never asserts
++        the exact number of animals. The original detector and weights are reused.
++        """
++        image_size = (im.width, im.height)
++        proposals = []
++        settings = {'imgsz': int(self.m.review_imgsz), 'conf': float(self.m.review_conf),
++                    'iou': float(self.m.detector_iou), 'rect': False, 'verbose': False}
++        def collect(model, source, source_image, *, tile=None, override=None):
++            options = dict(settings)
++            if override:
++                options.update(override)
++            result_list = model.predict(source_image, **options)
++            if len(result_list) != 1:
++                raise ValueError('Secondary model did not return exactly one image result.')
++            result = result_list[0]
++            expected_shape = (source_image.height, source_image.width)
++            if result.boxes is None or tuple(result.orig_shape) != (expected_shape[0], expected_shape[1]):
++                raise ValueError('Secondary model has missing/misaligned boxes.')
++            boxes = result.boxes.xyxy.cpu().numpy()
++            scores = result.boxes.conf.cpu().numpy()
++            if tile is not None:
++                boxes = map_tile_boxes(boxes, tile, image_size)
++            else:
++                validate_boxes(boxes, scores, bounds=image_size)
++            proposals.append(ReviewProposal(source, boxes, scores))
++
++        collect(self.detector, 'detector_high_resolution', im)
++        if self.m.review_include_segmenter:
++            collect(self.segmenter, 'segmenter_high_resolution', im)
++        if self.m.review_tiles_enabled:
++            for idx, tile in enumerate(review_tiles(im.width, im.height)):
++                crop = im.crop(tile)
++                collect(self.detector, f'detector_tile_{idx}', crop, tile=tile,
++                        override={'imgsz': int(self.m.imgsz), 'conf': float(self.m.review_tiles_conf)})
++        cues = additional_animal_cues(primary_boxes, proposals,
++                    confidence_floor=min(self.m.review_conf, self.m.review_tiles_conf)
++                                     if self.m.review_tiles_enabled else self.m.review_conf,
++                    same_instance_iou=self.m.review_match_iou, image_size=image_size)
++        return {'status': 'evaluated', 'candidate_count': len(cues),
++                'candidates': cues, 'pass_count': len(proposals),
++                'settings': {'confidence': self.m.review_conf, 'imgsz': self.m.review_imgsz,
++                             'match_iou': self.m.review_match_iou,
++                             'include_segmenter': self.m.review_include_segmenter,
++                             'tiles_enabled': self.m.review_tiles_enabled}}
++
+     # ------------------------------------------------------------ main
+     def analyze(self, im: Image.Image, with_images: bool = True) -> dict:
+         im = ImageOps.exif_transpose(im).convert("RGB")
+@@ -202,6 +275,26 @@
+         fraction = float(mask.mean())
+         if "no_animal" not in reasons and fraction < self.m.min_mask_fraction:
+             reasons.append("animal_too_small")
++        # Run only on images that would otherwise be provisionally READY.
++        # Any probe failure is fail-closed in 'enforce', and auditable in 'audit'.
++        review = {'status': 'disabled', 'candidate_count': 0, 'candidates': []}
++        mode = getattr(self.m, 'review_mode', 'off')
++        if mode in {'audit', 'enforce'}:
++            if reasons or len(boxes) != 1:
++                review = {'status': 'skipped_already_referred',
++                          'candidate_count': 0, 'candidates': []}
++            else:
++                review_started = time.perf_counter()
++                try:
++                    review = self.audit_additional_animals(im, boxes)
++                    if mode == 'enforce' and review['candidate_count'] > 0:
++                        reasons.append('secondary_animal_candidate')
++                except Exception as exc:
++                    review = {'status': 'failed', 'candidate_count': None, 'candidates': [],
++                              'error_type': type(exc).__name__}
++                    if mode == 'enforce':
++                        reasons.append('secondary_review_failed')
++                timings['secondary_review_ms'] = (time.perf_counter()-review_started)*1e3
+         timings["total_ms"] = sum(timings.values())
+ 
+         result = {
+@@ -221,6 +314,7 @@
+             "segmentation_matched": bool(seg_matched),
+             "segmentation_animal_count": segmentation_count,
+             "segmentation_species": segmentation_species,
++            "secondary_review": review,
+             "image_size": [im.width, im.height],
+             "timings": timings,
+         }

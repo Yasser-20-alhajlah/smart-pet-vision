@@ -1,0 +1,26 @@
+{
+  "status": "BLOCKED",
+  "phase1_modified": false,
+  "deployment_allowed": false,
+  "original_project_tolerance": 0.001,
+  "source": {
+    "approved_file_count": 30,
+    "matched": 30,
+    "mismatches": [],
+    "passed": true
+  },
+  "environment": {
+    "python": "3.13.5"
+  },
+  "variants": [],
+  "pt_sha": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+  "baseline_onnx_sha": "e8b55114d0163f36638d14c4a634b9b4823ad1f467272b0a337558d35b934862",
+  "cohort": {
+    "count": 50,
+    "manifest_sha256": "da18e1b17632acc7f8ec601068d715cf8855488aa91312c6e511ff16277d823c"
+  },
+  "error": {
+    "type": "ModuleNotFoundError",
+    "detail": "No module named 'onnxruntime'"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "model": "detector",
+  "max_abs_diff": 0.00201416015625,
+  "seed": 0,
+  "inputs": 4,
+  "imgsz": 640,
+  "tolerance": 0.001,
+  "max_rel_diff": 3.1544691946009253e-06,
+  "passed_A9": false
+}

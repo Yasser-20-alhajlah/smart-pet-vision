@@ -1,0 +1,82 @@
+{
+  "candidate": "v0.4",
+  "baseline": "Drive source 2026-10-30, Stage2 v0.3 working copy",
+  "scope": "multiple animals; no weights, Phase1, ONNX code or historical results modified",
+  "independent_model_accuracy_test": "not run",
+  "trained_weight_regression": "not run",
+  "reason": "Ultralytics not installed in local evaluation runtime",
+  "new_tests": 18,
+  "new_tests_passed": 18,
+  "full_suite_collected": 83,
+  "full_suite_passed": 80,
+  "dependency_import_errors": 3,
+  "compatible_suite": 80,
+  "evaluation_data_use": "401 previously inspected team images are regression only",
+  "reference_old_multi_ready": 17,
+  "reference_old_multi_total": 52,
+  "changed_files": [
+    {
+      "file": ".gitignore",
+      "change": "modified",
+      "previous_sha256": "e64202e79596a0b89efe8fd7955d03ba07e7e0fe05749c9c12967120c39c6d35",
+      "candidate_sha256": "b76111f6aff820e0807db1b0d1b291e928f0fe0fbeef7dd7781f36abffed74ec"
+    },
+    {
+      "file": "CHANGELOG_MULTIANIMAL_v0.4.md",
+      "change": "added",
+      "previous_sha256": null,
+      "candidate_sha256": "f36d3ee0579e3aa9b598a72c4549eab4158741399d33e9d055ad5ad608291852"
+    },
+    {
+      "file": "README_MULTIANIMAL_AR.md",
+      "change": "added",
+      "previous_sha256": null,
+      "candidate_sha256": "d24042d5ede7cc4ceadd3b0e3854de052031bdd2acdebed29d8dbf69c9b5ca50"
+    },
+    {
+      "file": "runs/manifest_multi_animal_candidate.json",
+      "change": "added",
+      "previous_sha256": null,
+      "candidate_sha256": "c0fa6c125a7444bab038794d5604c6a79d42e0c8ec83a7850a5cbb7971bafc27"
+    },
+    {
+      "file": "runs/manifest_multi_animal_tiled_experimental.json",
+      "change": "added",
+      "previous_sha256": null,
+      "candidate_sha256": "303d4e68bf31c91359593a442ed31590c1a2342d29bfe3183abbfb1189cad420"
+    },
+    {
+      "file": "src/spv/multi_animal_review.py",
+      "change": "added",
+      "previous_sha256": null,
+      "candidate_sha256": "e2c35c554892752e6259e7a3d0259e6bdc9ec94a6348c67a3387ba153f72493b"
+    },
+    {
+      "file": "src/spv/pipeline.py",
+      "change": "modified",
+      "previous_sha256": "dfb1f3c443d1d313c2990006d44b6b49064f4c1ec548dfa31a14f3f6f225abe6",
+      "candidate_sha256": "4c7b9893f5c5bb001d0978f61527d34d6235db42347a3b0027e7b5d3164a5007"
+    },
+    {
+      "file": "tests/test_multi_animal_evaluator.py",
+      "change": "added",
+      "previous_sha256": null,
+      "candidate_sha256": "56814faf2eb9c939afac86408f67053d20f534fc7f1dfe7aa268b318f2eb519e"
+    },
+    {
+      "file": "tests/test_multi_animal_review.py",
+      "change": "added",
+      "previous_sha256": null,
+      "candidate_sha256": "2aa1f581a79f753d102e85e81fdb2d6e993d18295c7b1c5bf77ee7597cc59f4c"
+    },
+    {
+      "file": "tools/evaluate_multi_animal_candidate.py",
+      "change": "added",
+      "previous_sha256": null,
+      "candidate_sha256": "fe9ea982d87232108c557220c387b6b01f2891a8552f5148bee5962e1c93acac"
+    }
+  ],
+  "original_manifest_sha256": "fc45e4492aa27d2a845f096d201a9423aa3596f06b25e5e04c8f1cf9f30cd776",
+  "candidate_manifest_sha256": "c0fa6c125a7444bab038794d5604c6a79d42e0c8ec83a7850a5cbb7971bafc27",
+  "change_count": 10
+}

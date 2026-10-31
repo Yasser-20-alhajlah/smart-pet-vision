@@ -1,0 +1,105 @@
+test_changed_input_or_invalid_rectangle_requires_review (test_evidence_redaction.EvidenceRedaction.test_changed_input_or_invalid_rectangle_requires_review) ... ok
+test_only_requested_pixels_change_and_prior_output_is_preserved (test_evidence_redaction.EvidenceRedaction.test_only_requested_pixels_change_and_prior_output_is_preserved) ... ok
+test_candidate_cannot_be_reused_for_two_references (test_execution_review.DetectionParityAssociation.test_candidate_cannot_be_reused_for_two_references) ... ok
+test_empty_sets (test_execution_review.DetectionParityAssociation.test_empty_sets) ... ok
+test_invalid_shapes_or_coordinates_are_not_parity (test_execution_review.DetectionParityAssociation.test_invalid_shapes_or_coordinates_are_not_parity) ... ok
+test_reordered_identical_boxes_have_zero_displacement (test_execution_review.DetectionParityAssociation.test_reordered_identical_boxes_have_zero_displacement) ... ok
+test_body_fraction_differs_from_box_area (test_execution_review.EvaluationIntegrity.test_body_fraction_differs_from_box_area) ... ok
+test_mask_alignment_error_is_not_resized_into_a_score (test_execution_review.EvaluationIntegrity.test_mask_alignment_error_is_not_resized_into_a_score) ... ok
+test_missing_or_duplicate_records_fail_explicitly (test_execution_review.EvaluationIntegrity.test_missing_or_duplicate_records_fail_explicitly) ... ok
+test_release_cohort_must_cover_every_image_exactly_once (test_execution_review.EvaluationIntegrity.test_release_cohort_must_cover_every_image_exactly_once) ... ok
+test_release_cohort_rejects_invalid_truth_schema (test_execution_review.EvaluationIntegrity.test_release_cohort_rejects_invalid_truth_schema) ... ok
+test_actual_asgi_validation_statuses (test_execution_review.HTTPIntegrity.test_actual_asgi_validation_statuses) ... ok
+test_decoding_preserves_exif_for_pipeline_orientation (test_execution_review.HTTPIntegrity.test_decoding_preserves_exif_for_pipeline_orientation) ... ok
+test_inference_does_not_block_event_loop_and_shared_models_are_serial (test_execution_review.HTTPIntegrity.test_inference_does_not_block_event_loop_and_shared_models_are_serial) ... ok
+test_lock_released_after_model_failure (test_execution_review.HTTPIntegrity.test_lock_released_after_model_failure) ... ok
+test_legacy_defaults_and_new_explicit_values (test_execution_review.ManifestIntegrity.test_legacy_defaults_and_new_explicit_values) ... ok
+test_empty_masks_none (test_instance_alignment.InstanceAlignment.test_empty_masks_none) ... ok
+test_fallback_different_class_when_only_overlap (test_instance_alignment.InstanceAlignment.test_fallback_different_class_when_only_overlap) ... ok
+test_mask_and_box_instance_count_mismatch_is_referred (test_instance_alignment.InstanceAlignment.test_mask_and_box_instance_count_mismatch_is_referred) ... ok
+test_matched_mask_species_conflict_is_referred (test_instance_alignment.InstanceAlignment.test_matched_mask_species_conflict_is_referred) ... ok
+test_mismatched_mask_shape_referred (test_instance_alignment.InstanceAlignment.test_mismatched_mask_shape_referred) ... ok
+test_missing_instance_referred (test_instance_alignment.InstanceAlignment.test_missing_instance_referred) ... ok
+test_no_animal_returns_no_animal (test_instance_alignment.InstanceAlignment.test_no_animal_returns_no_animal) ... ok
+test_nonoverlap_none (test_instance_alignment.InstanceAlignment.test_nonoverlap_none) ... ok
+test_same_class_preferred_with_overlap (test_instance_alignment.InstanceAlignment.test_same_class_preferred_with_overlap) ... ok
+test_same_species_second_animal_is_also_referred (test_instance_alignment.InstanceAlignment.test_same_species_second_animal_is_also_referred) ... ok
+test_selects_correct_instance_not_union (test_instance_alignment.InstanceAlignment.test_selects_correct_instance_not_union) ... ok
+test_single_matched_instance_is_provisionally_ready (test_instance_alignment.InstanceAlignment.test_single_matched_instance_is_provisionally_ready) ... ok
+test_classifier_existing_export_is_preserved (test_model_repair.ModelRepair.test_classifier_existing_export_is_preserved) ... ok
+test_detector_existing_export_is_preserved (test_model_repair.ModelRepair.test_detector_existing_export_is_preserved) ... ERROR
+test_yolo_extra_mask_pixels_are_not_silently_cropped (test_model_repair.ModelRepair.test_yolo_extra_mask_pixels_are_not_silently_cropped) ... ERROR
+test_yolo_missing_batch_results_fail_explicitly (test_model_repair.ModelRepair.test_yolo_missing_batch_results_fail_explicitly) ... ERROR
+test_multi_detected_refers (test_pipeline_release_policy.SafetyContract.test_multi_detected_refers) ... ok
+test_ready_never_auto_publishes (test_pipeline_release_policy.SafetyContract.test_ready_never_auto_publishes) ... ok
+test_referred_never_auto_publishes (test_pipeline_release_policy.SafetyContract.test_referred_never_auto_publishes) ... ok
+test_bad_temperature_and_threshold (test_release_inputs.ReleaseInputs.test_bad_temperature_and_threshold) ... ok
+test_class_count_and_iou_validation (test_release_inputs.ReleaseInputs.test_class_count_and_iou_validation) ... ok
+test_invalid_boxes_do_not_match (test_release_inputs.ReleaseInputs.test_invalid_boxes_do_not_match) ... ok
+test_invalid_classifier_is_rejected (test_release_inputs.ReleaseInputs.test_invalid_classifier_is_rejected) ... ok
+test_manifest_independent_of_cwd (test_release_inputs.ReleaseInputs.test_manifest_independent_of_cwd) ... ok
+test_invalid_run_configuration (test_review_regressions.BenchmarkInputs.test_invalid_run_configuration) ... ok
+test_rss_units_are_portable (test_review_regressions.BenchmarkInputs.test_rss_units_are_portable) ... ok
+test_ignore_alignment (test_review_regressions.MaskEvaluation.test_ignore_alignment) ... ok
+test_ignored_image_cannot_score_perfect (test_review_regressions.MaskEvaluation.test_ignored_image_cannot_score_perfect) ... ok
+test_invalid_alignment_cannot_broadcast (test_review_regressions.MaskEvaluation.test_invalid_alignment_cannot_broadcast) ... ok
+test_known_overlap_and_ignore (test_review_regressions.MaskEvaluation.test_known_overlap_and_ignore) ... ok
+test_empty_and_unreadable (test_review_regressions.ServiceInputs.test_empty_and_unreadable) ... ok
+test_upload_limit_is_enforced_before_decode (test_review_regressions.ServiceInputs.test_upload_limit_is_enforced_before_decode) ... ok
+test_valid_image_reaches_pipeline (test_review_regressions.ServiceInputs.test_valid_image_reaches_pipeline) ... ok
+
+======================================================================
+ERROR: test_detector_existing_export_is_preserved (test_model_repair.ModelRepair.test_detector_existing_export_is_preserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/SmartPetVision_Phase2_Audit_Approved_Baseline_2026-10-30/tests/test_model_repair.py", line 29, in test_detector_existing_export_is_preserved
+    deploy.export_yolo_onnx(Path(folder) / 'weights.pt', 640, p)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/SmartPetVision_Phase2_Audit_Approved_Baseline_2026-10-30/src/spv/deploy.py", line 52, in export_yolo_onnx
+    from ultralytics import YOLO
+ModuleNotFoundError: No module named 'ultralytics'
+
+======================================================================
+ERROR: test_yolo_extra_mask_pixels_are_not_silently_cropped (test_model_repair.ModelRepair.test_yolo_extra_mask_pixels_are_not_silently_cropped)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/SmartPetVision_Phase2_Audit_Approved_Baseline_2026-10-30/tests/test_model_repair.py", line 39, in test_yolo_extra_mask_pixels_are_not_silently_cropped
+    with patch('ultralytics.YOLO') as yolo:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/unittest/mock.py", line 1481, in __enter__
+    self.target = self.getter()
+                  ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/pkgutil.py", line 513, in resolve_name
+    mod = importlib.import_module(modname)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1324, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'ultralytics'
+
+======================================================================
+ERROR: test_yolo_missing_batch_results_fail_explicitly (test_model_repair.ModelRepair.test_yolo_missing_batch_results_fail_explicitly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/SmartPetVision_Phase2_Audit_Approved_Baseline_2026-10-30/tests/test_model_repair.py", line 48, in test_yolo_missing_batch_results_fail_explicitly
+    with patch('ultralytics.YOLO') as yolo:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/unittest/mock.py", line 1481, in __enter__
+    self.target = self.getter()
+                  ~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/pkgutil.py", line 513, in resolve_name
+    mod = importlib.import_module(modname)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1324, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'ultralytics'
+
+----------------------------------------------------------------------
+Ran 49 tests in 1.419s
+
+FAILED (errors=3)

@@ -1,0 +1,11 @@
+{
+  "images": 3,
+  "input": "letterboxed 640 px, CPU for both",
+  "final_detection_matching": "greedy one-to-one IoU, class-agnostic",
+  "raw_head_max_abs_diff": 0.00128173828125,
+  "same_number_of_detections": 1.0,
+  "same_classes": 1.0,
+  "final_box_max_abs_diff_px": 0.0001220703125,
+  "conf": 0.4,
+  "nms_iou": 0.5
+}
