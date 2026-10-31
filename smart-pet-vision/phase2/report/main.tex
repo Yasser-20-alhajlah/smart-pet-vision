@@ -231,7 +231,7 @@ ONNX detector on CPU + other models on T4 & 281 / 364 / 702 ms & 3.3 img/s & 218
 Method: first 50 test images cycled, batch 1, 10 warm-up + 200 timed runs, one process per backend. The two backends do not share the same detector execution device. The selected service implementation uses \textbf{PyTorch}; ONNX is an evaluated diagnostic export, not the deployed detector. Table values come from \code{evidence/M8_benchmark_pytorch.json} and \code{M8_benchmark_onnx_detector.json}. W\&B run fqow5ly7 logged a separate repetition (PyTorch p50/p95/p99 41.9/58.3/92.8 ms, 22.0 img/s; ONNX-detector 286/318/342 ms, 3.4 img/s); both repetitions meet A8 for PyTorch.
 
 \subsection{Export and numerical parity record}
-The classifier ONNX numerical check recorded a maximum absolute difference of $2.98\times10^{-7}$, within the pre-registered 0.001 bound (criterion A9a: met). For the detector, the acceptance check recorded a maximum absolute difference of \textbf{0.0018 against the pre-registered 0.001 bound (criterion A9): not met}. A later re-check on four random inputs recorded 0.0020 (also above the bound). On three real letterboxed images the raw-head maximum was 0.0013 and final boxes matched to 0.0001 px, but a wider comparison on 50 real letterboxed test images (CPU for both runtimes, conf 0.40, NMS 0.50) found a raw-head maximum of 0.0027, the same number of detections and the same classes on 98\% of images, and a largest final-box displacement of 28.7 px. The exported detector is therefore not interchangeable with the PyTorch detector at the operating point; the service uses PyTorch.
+The classifier ONNX numerical check recorded a maximum absolute difference of $2.98\times10^{-7}$, within the 0.001 bound set before the Phase 2 runs (criterion A9a: met). For the detector, the acceptance check recorded a maximum absolute difference of \textbf{0.0018 against the same 0.001 bound applied to the detector (criterion A9b): not met}. A later re-check on four random inputs recorded 0.0020 (also above the bound). On three real letterboxed images the raw-head maximum was 0.0013 and final boxes matched to 0.0001 px, but a wider comparison on 50 real letterboxed test images (CPU for both runtimes, conf 0.40, NMS 0.50) found a raw-head maximum of 0.0027, the same number of detections and the same classes on 98\% of images, and a largest final-box displacement of 28.7 px. The exported detector is therefore not interchangeable with the PyTorch detector at the operating point; the service uses PyTorch.
 
 
 {\small\begin{tabularx}{\linewidth}{@{}P{5.1cm} P{3cm} Y@{}}\toprule
@@ -242,7 +242,7 @@ Detector raw head, re-check, 4 random inputs & 0.0020; not met & \code{M8_onnx_p
 Detector, 3 real images & raw 0.0013; same detections; box shift 0.0001 px & \code{M8_onnx_parity_real_images_3.json}\\
 Detector raw head, 50 real images & 0.0027 & \code{M8_onnx_parity_real_images.json}\\
 Detector final detections, 50 real images & 98\% same count and classes; max box shift 28.7 px & \code{M8_onnx_parity_real_images.json}\\\bottomrule\end{tabularx}}
-The 0.001 bound was fixed in advance in Phase 1 as acceptance criterion A9; it is not relaxed here. The three-image result is consistent with the 50-image result but too small to show the 2\% of images where the two runtimes disagree. Closing A9 would need an export change (for example FP32 graph without fused post-processing, or comparing at the decoded-box level with a pre-registered tolerance in a new phase) and a re-run.
+The 0.001 bound was set for the classifier before any Phase 2 run (A9) and was extended to the detector (A9b) no later than the first integration run on 17 October; it is not relaxed here. The three-image result is consistent with the 50-image result but too small to show the 2\% of images where the two runtimes disagree. Closing A9 would need an export change (for example FP32 graph without fused post-processing, or comparing at the decoded-box level with a pre-registered tolerance in a new phase) and a re-run.
 \clearpage
 
 \subsection{Integrated decisions on the inspected 401-photo collection}
@@ -265,7 +265,7 @@ Because the referral rule counts \emph{detected} animals, a multi-animal photogr
 \clearpage
 
 \section{Acceptance criteria and go/no-go decision}
-The criteria below were fixed in the Phase 1 report before Phase 2 results were known. Values are taken from \code{evidence/M8_acceptance.csv}; splits are the Oxford test split (1,106 images) unless stated.
+Thresholds A1--A8 and A9a are recorded in the team's integration notebook in the code snapshot of 15 October 2026, before the first Phase 2 training run (W\&B, 17 October); the submitted Phase 1 report states only A1--A2. Row A9b, the same 0.001 bound applied to the detector, was added no later than the first integration run (17 October), and the detector fails it. Values are taken from \code{evidence/M8_acceptance.csv}; splits are the Oxford test split (1,106 images) unless stated.
 
 {\small\begin{tabularx}{\linewidth}{@{}P{0.9cm} Y P{2.0cm} P{1.8cm} P{1.2cm}@{}}\toprule
 ID & Criterion (setting) & Value & Target & Met\\\midrule
@@ -310,7 +310,7 @@ The requirements below follow the October 2026 \emph{Capstone Project Guidelines
 \item[$\checkmark$] M5: full-test mask IoU/Dice and mask mAP, plus paired 300-image protocol and failure cases.
 \item[$\checkmark$] M8: manifested end-to-end workflow; FastAPI endpoints; historical warm-up/timed latency, throughput and memory.
 \item[$\circ$] M8: ONNX export and numerical check recorded; classifier within 0.001; \textbf{detector A9 not met (0.0018--0.0020)}, reported as a no-go for the ONNX detector.
-\item[$\checkmark$] M8: acceptance table against pre-registered criteria and explicit go/no-go decision.
+\item[$\checkmark$] M8: acceptance table against criteria set before the Phase 2 runs, and an explicit go/no-go decision.
 \item[$\checkmark$] M8: adoption-photo referral policy documented; all photos require human approval, regardless of verdict.
 \item[$\checkmark$] Data privacy: private team originals excluded from this Overleaf source ZIP; illustrated galleries from saved reference assets.
 \item[$\checkmark$] Evidence origin is traceable: experimental metrics, supplementary regression and execution-environment measurements are identified separately.
@@ -374,6 +374,7 @@ The reported team-collected images have documented team consent/provenance and m
 {\small\begin{tabularx}{\linewidth}{@{}P{3.4cm} Y@{}}\toprule
 Reference & Exact origin or location\\\midrule
 Official assessment & \emph{Capstone Project Guidelines UPDATED} (October 2026), Tables 2, 5, 6, pp.~3, 6, 7\\
+Acceptance criteria origin & Team code snapshot \code{smart-pet-vision.zip} (Drive, uploaded 15 October 2026), \code{notebooks/05_integration.ipynb}, table A1--A9; first Phase 2 W\&B runs created 17 October 2026\\
 Submitted Phase 1 source & \code{SmartPetVision_Phase1_Overleaf_Source(2).zip}, \code{main.tex}; submitted 16-page PDF\\
 Phase 2 archive & \code{SmartPetVision_Phase2_Complete_Reviewed_30Oct2026.zip}; preserved \code{evidence/M4_*}, \code{M5_*}, \code{M8_*}\\
 Later real-weight CPU record & \code{Model_Repair_Verification_30Oct2026/summary.json}; source hash differences explicitly noted\\

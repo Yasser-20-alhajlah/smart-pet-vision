@@ -31,6 +31,6 @@ PYTHONPATH=src:. python -m pytest -q tests
 
 Result on 31 Oct 2026 (CPU, Python 3.13): snapshot version 49 passed; with the v0.4 multi-animal commit, 83 passed.
 
-## Acceptance status (criteria fixed in Phase 1)
+## Acceptance status (criteria set before the Phase 2 runs)
 
-A1–A8 and A9a (classifier ONNX parity) are met. **A9b, detector ONNX parity, is not met** (0.0018–0.0020 > 0.001). The service therefore uses the PyTorch detector; the ONNX detector is not used. See the Phase 2 report, section "Acceptance criteria and go/no-go decision".
+Thresholds A1–A8 and A9a are in the team's code snapshot of 15 Oct 2026, before the first Phase 2 run (17 Oct); A9b (the same bound for the detector) was added no later than the first integration run. A1–A8 and A9a are met. **A9b, detector ONNX parity, is not met** (0.0018–0.0020 > 0.001). The service therefore uses the PyTorch detector; the ONNX detector is not used. See the Phase 2 report, section "Acceptance criteria and go/no-go decision".
