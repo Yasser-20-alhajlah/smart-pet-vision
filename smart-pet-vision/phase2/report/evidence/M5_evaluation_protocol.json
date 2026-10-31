@@ -1,0 +1,14 @@
+{
+  "split": "test",
+  "sampling_seed": 42,
+  "sam_n": 300,
+  "yolo_full_test_n": 1106,
+  "same_subset_n": 300,
+  "yolo_conf": 0.25,
+  "yolo_imgsz": 640,
+  "sam_prompt": "trimap-derived GT body box",
+  "iou_dice_unit": "mean of per-image binary union masks",
+  "border_ignored": "ambiguous trimap pixels excluded",
+  "mask_map": "class-aware Ultralytics test evaluation",
+  "new_training_run": false
+}

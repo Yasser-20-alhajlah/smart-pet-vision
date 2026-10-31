@@ -1,0 +1,26 @@
+{
+  "photos": 401,
+  "referred": 61,
+  "reason_counts": {
+    "disagreement": 22,
+    "multiple_animals": 22,
+    "no_animal": 12,
+    "animal_too_small": 10,
+    "low_confidence": 1
+  },
+  "referred_with_more_than_one_reason": 5,
+  "multi_animal_photos": 52,
+  "multi_animal_flagged_multiple": 17,
+  "multi_animal_accepted_ready": 28,
+  "single_animal_flagged_multiple": 5,
+  "no_animal_referrals": 12,
+  "classification_errors": 12,
+  "thresholds": {
+    "detector_conf": 0.4,
+    "nms_iou": 0.5,
+    "verify_threshold": 0.9,
+    "min_mask_fraction": 0.05,
+    "detector_imgsz": 640,
+    "classifier_imgsz": 224
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "split": "test",
+  "n_images": 1106,
+  "imgsz": 640,
+  "conf": 0.4,
+  "nms_iou": 0.5,
+  "tp_fp_fn": [
+    1061,
+    46,
+    45
+  ],
+  "per_class_ap": {
+    "mAP50": 0.9835682138953565,
+    "mAP50_95": 0.8500022452233958,
+    "cat": {
+      "AP50": 0.9940992261036301,
+      "AP50_95": 0.8878412233026023
+    },
+    "dog": {
+      "AP50": 0.9730372016870831,
+      "AP50_95": 0.8121632671441896
+    }
+  },
+  "per_class_at_operating_point": {
+    "cat": {
+      "tp": 351,
+      "fp": 7,
+      "fn": 6,
+      "precision": 0.9804469273743017,
+      "recall": 0.9831932773109243,
+      "f1": 0.9818181818181818
+    },
+    "dog": {
+      "tp": 710,
+      "fp": 39,
+      "fn": 39,
+      "precision": 0.9479305740987984,
+      "recall": 0.9479305740987984,
+      "f1": 0.9479305740987984
+    }
+  },
+  "fp_by_kind": {
+    "localisation": 34,
+    "class_confusion": 10,
+    "background": 1,
+    "localisation_and_class": 1
+  },
+  "fn_by_kind": {
+    "localisation": 34,
+    "missed": 7,
+    "class_confusion": 4
+  },
+  "images_with_both_fp_and_fn": 38
+}

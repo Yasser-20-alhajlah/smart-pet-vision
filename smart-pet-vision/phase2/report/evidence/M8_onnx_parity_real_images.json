@@ -1,0 +1,10 @@
+{
+  "images": 50,
+  "input": "letterboxed 640 px, CPU for both",
+  "raw_head_max_abs_diff": 0.002685546875,
+  "same_number_of_detections": 0.98,
+  "same_classes": 0.98,
+  "final_box_max_abs_diff_px": 28.673358917236328,
+  "conf": 0.4,
+  "nms_iou": 0.5
+}

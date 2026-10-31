@@ -1,0 +1,24 @@
+{
+  "device": "Tesla T4",
+  "runs": 200,
+  "warmup": 10,
+  "batch_size": 1,
+  "latency_ms": {
+    "p50": 281.14899899946977,
+    "p95": 364.25928480034395,
+    "p99": 702.1779498597606,
+    "mean": 302.7395592450148
+  },
+  "stage_mean_ms": {
+    "detect_ms": 251.79788020492197,
+    "classify_ms": 16.006909685011124,
+    "segment_ms": 34.45423774997835
+  },
+  "throughput_img_per_s": 3.3031542863333794,
+  "peak_gpu_mem_mb": 217.66015625,
+  "peak_process_rss_mb": 1913.90234375,
+  "passed_A8": true,
+  "detector_execution_provider": "CPUExecutionProvider",
+  "detector_file": "best.onnx",
+  "gpu": "Tesla T4"
+}

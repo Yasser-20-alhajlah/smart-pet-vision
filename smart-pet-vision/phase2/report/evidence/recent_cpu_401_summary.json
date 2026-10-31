@@ -1,0 +1,52 @@
+{
+  "n": 401,
+  "species_n": 399,
+  "correct": 386,
+  "referrals": 81,
+  "ready_total": 320,
+  "ready_species_n": 320,
+  "ready_correct": 319,
+  "multi_animal_n": 52,
+  "multi_animal_ready": 17,
+  "mixed_n": 2,
+  "mixed_ready": 0,
+  "elapsed_s": 122.60182393199966,
+  "independent_new_holdout": false,
+  "thresholds_changed": false,
+  "trained": false,
+  "environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "logical_cpus": 9,
+    "host_physical_ram_bytes": 10451427328,
+    "packages": {
+      "torch": "2.11.0+cpu",
+      "torchvision": "0.26.0+cpu",
+      "ultralytics": "8.4.182",
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "pillow": "12.3.0",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.0",
+      "fastapi": "0.162.0",
+      "uvicorn": "0.54.0",
+      "httpx": "0.28.1"
+    },
+    "torch_threads": 8,
+    "cuda_available": false
+  },
+  "code_sha256": {
+    "src/spv/classify.py": "a0b4ca3a944bdae9bd46e44de201f137bf45bb4d3de74c6d8abde28e0d8cabad",
+    "src/spv/serve.py": "3c1b9b288bd793d3a55d030653f5b85047cd8d4e1f427826a0db9640c73c83e1",
+    "src/spv/detect.py": "31f7bc720ea9b899ec3089c21949986d58c973a33d5d0199a7c7f6a8d126da1a",
+    "src/spv/pipeline.py": "dfb1f3c443d1d313c2990006d44b6b49064f4c1ec548dfa31a14f3f6f225abe6",
+    "src/spv/segment.py": "8e623c22d5425a761e3f1539f2a9c926e1a08d0f38dfab402dcdbb10698fc5fa",
+    "src/spv/instance_alignment.py": "f86940a606cc56868a8799447700fff5219ea6db6984e99b61f25d276ead02ae",
+    "src/spv/constants.py": "515435454065ad5770fcf7bb02af06db4ce22af028105d09cfc6a9604d8b14b8",
+    "src/spv/data.py": "7bd524515412a8d3056d1108ae6d682c2ddefa8b2599ae8c64ea12b6bd90312d",
+    "src/spv/deploy.py": "94101d68e5634a2aa27fa45a8a3f2a3b2a910289cdf7e650f45f46e5b8467c32",
+    "src/spv/common.py": "1868210f502414067ed097bfb3505e474170ced561236bde2a2d0818efc5f395",
+    "src/spv/runtime.py": "ce1ac4887df022cfd34c30922051ef629a0de3d89057bc90eea1cda9879f2ec3"
+  }
+}

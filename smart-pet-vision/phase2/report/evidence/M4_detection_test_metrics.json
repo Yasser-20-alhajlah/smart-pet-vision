@@ -1,0 +1,44 @@
+{
+  "coco": {
+    "mAP50": 0.9835682138953565,
+    "mAP50_95": 0.8500022452233958,
+    "precision": 0.9673977807028955,
+    "recall": 0.965351794619282,
+    "AP50_per_class": {
+      "cat": 0.9940992261036301,
+      "dog": 0.9730372016870831
+    }
+  },
+  "operating_point": {
+    "conf": 0.4,
+    "nms_iou": 0.5,
+    "val_precision": 0.9592021758839528,
+    "val_recall": 0.9566003616636528,
+    "val_f1": 0.9578995020371208,
+    "recall_floor_met": true
+  },
+  "test_at_operating_point": {
+    "tp": 1061,
+    "fp": 46,
+    "fn": 45,
+    "precision": 0.9584462511291779,
+    "recall": 0.9593128390596745,
+    "f1": 0.9588793492995933
+  },
+  "recall_by_size": [
+    {
+      "bucket": "large",
+      "n": 1105,
+      "recall": 0.9592760180995475
+    },
+    {
+      "bucket": "medium",
+      "n": 1,
+      "recall": 1.0
+    }
+  ],
+  "galleries": {
+    "false_positives": 46,
+    "false_negatives": 45
+  }
+}

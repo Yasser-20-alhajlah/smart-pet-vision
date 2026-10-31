@@ -1,0 +1,12 @@
+id,criterion,value,target,met
+A1,Classification accuracy,0.9990958408679927,>= 0.90,True
+A2,Classification macro-F1,0.9989651820241077,>= 0.90,True
+A3,Detection mAP50,0.9835682138953565,>= 0.75,True
+A4,Detection recall at operating point,0.9593128390596745,>= 0.80,True
+A5,Segmentation mean IoU,0.9229591960407509,>= 0.75,True
+A6,Segmentation mean Dice,0.958620112385902,>= 0.85,True
+A7,"Service success rate (uvicorn over HTTP, PyTorch backend)",1.0,>= 0.99,True
+A8,"p95 latency, T4, batch 1, PyTorch backend (ms)",61.44178579947946,<= 2000,True
+A9a,ONNX max abs diff (classifier),2.980232238769531e-07,<= 0.001,True
+A9b,"ONNX max abs diff (detector, pixel outputs)",0.001800537109375,<= 0.001,False
+

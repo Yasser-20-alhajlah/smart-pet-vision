@@ -1,0 +1,27 @@
+{
+  "server": "uvicorn, separate process, 127.0.0.1, 1 worker",
+  "manifest": "manifest.json",
+  "health": {
+    "status": "ok",
+    "detector": "best.pt",
+    "segmenter": "best.pt",
+    "classifier": "finetune"
+  },
+  "startup_s": 5.322954893112183,
+  "warmup_requests": 5,
+  "requests": 300,
+  "succeeded": 300,
+  "success_rate": 1.0,
+  "status_codes": {
+    "200": 300
+  },
+  "http_latency_ms": {
+    "p50": 46.32118099971194,
+    "p95": 135.313188149712,
+    "p99": 178.28912659050727,
+    "mean": 64.27237416668201
+  },
+  "non_image_upload_status": 415,
+  "empty_upload_status": 400,
+  "passed_A7": true
+}

@@ -1,0 +1,73 @@
+{
+  "images": 401,
+  "boxes": 503,
+  "imgsz": 640,
+  "conf": 0.4,
+  "nms_iou": 0.5,
+  "coco": {
+    "mAP50": 0.7714107579416108,
+    "mAP50_95": 0.6529826105545449,
+    "cat": {
+      "AP50": 0.840399166180452,
+      "AP50_95": 0.7033929524851559
+    },
+    "dog": {
+      "AP50": 0.7024223497027697,
+      "AP50_95": 0.6025722686239338
+    }
+  },
+  "at_operating_point": {
+    "tp": 368,
+    "fp": 48,
+    "fn": 135,
+    "precision": 0.8846153846153846,
+    "recall": 0.731610337972167,
+    "f1": 0.8008705114254625
+  },
+  "per_class_at_operating_point": {
+    "cat": {
+      "tp": 170,
+      "fp": 25,
+      "fn": 29,
+      "precision": 0.8717948717948718,
+      "recall": 0.8542713567839196,
+      "f1": 0.8629441624365483
+    },
+    "dog": {
+      "tp": 198,
+      "fp": 23,
+      "fn": 106,
+      "precision": 0.8959276018099548,
+      "recall": 0.6513157894736842,
+      "f1": 0.7542857142857143
+    }
+  },
+  "recall_by_size_coco_pixels": [
+    {
+      "bucket": "large",
+      "n": 503,
+      "recall": 0.731610337972167
+    }
+  ],
+  "recall_by_relative_size": [
+    {
+      "bucket": "large (>=10%)",
+      "n": 404,
+      "recall": 0.8737623762376238
+    },
+    {
+      "bucket": "medium (1-10%)",
+      "n": 89,
+      "recall": 0.16853932584269662
+    },
+    {
+      "bucket": "small (<1%)",
+      "n": 10,
+      "recall": 0.0
+    }
+  ],
+  "images_count_correct": 339,
+  "multi_animal_images": 52,
+  "multi_animal_images_with_all_found": 11,
+  "images_with_no_detection": 13
+}

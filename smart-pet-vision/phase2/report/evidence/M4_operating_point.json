@@ -1,0 +1,9 @@
+{
+  "conf": 0.4,
+  "nms_iou": 0.5,
+  "val_precision": 0.9592021758839528,
+  "val_recall": 0.9566003616636528,
+  "val_f1": 0.9578995020371208,
+  "recall_floor_met": true,
+  "weights": "runs/detect/yolo11s_det/weights/best.pt"
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "model": "classifier",
+    "max_abs_diff": 2.980232238769531e-07,
+    "argmax_agreement": 1.0,
+    "passed_A9": true
+  },
+  {
+    "model": "best",
+    "max_abs_diff": 0.001800537109375,
+    "max_rel_diff": 2.8199040104674837e-06,
+    "passed_A9": false
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "video": "Africanis_Dogs_Resting_In_Grass.ogv",
+    "frames": 506,
+    "video_fps": 29.97002997002997,
+    "size": [
+      1280,
+      720
+    ],
+    "conf": 0.4,
+    "nms_iou": 0.5,
+    "imgsz": 640,
+    "device": "Tesla T4",
+    "inference_ms": {
+      "mean": 11.995487628459152,
+      "p95": 14.239136250580486
+    },
+    "processing_fps": 83.36468103451767,
+    "frames_with_0": 0,
+    "frames_with_1": 506,
+    "frames_with_2_or_more": 0,
+    "detections_by_species": {
+      "cat": 0,
+      "dog": 506
+    },
+    "source": "https://commons.wikimedia.org/wiki/File:Africanis_Dogs_Resting_In_Grass.ogv",
+    "licence": "CC0",
+    "author": "Umngeni"
+  },
+  {
+    "video": "Cat_in_a_Bag.webm",
+    "frames": 510,
+    "video_fps": 29.97002997002997,
+    "size": [
+      640,
+      480
+    ],
+    "conf": 0.4,
+    "nms_iou": 0.5,
+    "imgsz": 640,
+    "device": "Tesla T4",
+    "inference_ms": {
+      "mean": 11.31744652548685,
+      "p95": 14.632189600115451
+    },
+    "processing_fps": 88.35915396180609,
+    "frames_with_0": 222,
+    "frames_with_1": 286,
+    "frames_with_2_or_more": 2,
+    "detections_by_species": {
+      "cat": 286,
+      "dog": 4
+    },
+    "source": "https://commons.wikimedia.org/wiki/File:Cat_in_a_Bag.webm",
+    "licence": "CC BY 2.0",
+    "author": "Roger Braunstein"
+  }
+]
