@@ -28,3 +28,6 @@ runs/*
 !report/figures/
 !report/figures/*.png
 !report/figures/*.jpg
+!submission/figures/
+!submission/figures/*.png
+!submission/figures/*.jpg
