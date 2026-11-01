@@ -31,7 +31,7 @@ Team of 4: Abdulrahman Mastour Alharthi (WS1 data/classification), Yasser Mansou
 ```bash
 cd smart-pet-vision/phase2
 pip install -r ../requirements.txt
-PYTHONPATH=src python -m unittest discover -s tests      # 102 tests expected to pass
+PYTHONPATH=src python -m unittest discover -s tests      # 111 tests expected to pass
 python tools/verify_submission_evidence.py               # report/main.tex vs evidence
 ```
 CI (`.github/workflows/phase2-tests.yml`) runs the same on every PR.
@@ -43,7 +43,7 @@ Google Drive (owner's account): `MyDrive/capstone /smart-pet-vision/runs/` (weig
 1. Upload `SmartPetVision_Phase2.pdf` and `_source.zip` (one team member, due 15 Nov 2026).
 2. Each member confirms their line in the "Team members" table of `submission/main.tex`.
 3. Record the demo backup video (script: Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`); export the deck (claude.ai Slides artifact) to `04_Presentation`.
-4. Privacy: the repo is public and still contains student IDs in `README_SUBMISSION.md`, `phase2/report/main.tex`, the committed PDFs, and Git history. Removing them from history needs the owner's explicit approval.
-5. Known report gaps (stated in the self-assessment, 40/45): one training recipe per model; mask thresholds not swept on validation; A9b fails; no public deployment; per-stage latency percentiles not recorded.
+4. Privacy: student IDs were removed from current tracked text and from `phase2/report/SmartPetVision_Phase2_Report.pdf`; they remain in `SmartPetVision_Phase1.pdf` (the submitted Phase 1 record) and in Git history. Removing them from history needs the owner's explicit approval.
+5. Known report gaps (self-assessment 40/45): one training recipe per model; mask thresholds not swept on validation; A9b fails; per-stage latency percentiles not recorded. `notebooks/11_phase2_gap_experiments.ipynb` (Colab T4, about 35 min plus 40 min optional YOLO11n) measures the COCO-as-is baselines, the validation sweeps, per-stage p50/p95 and the ONNX test mAP; its `results.json` lands in Drive `03_Evidence/phase2_gap_experiments_<time>/` and then goes into `submission/main.tex`.
 6. Optional: run `notebooks/09_onnx_channel_diagnosis_v2.ipynb` (CPU, ~5 min) to test whether the ONNX gap sits in the box channels.
 7. Owner to confirm the old W&B API key was revoked, and decide on a short AI-assistance disclosure (course guidelines contain no policy).

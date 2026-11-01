@@ -310,6 +310,9 @@ Dog & 749 & 0.973 & 0.812 & 0.948 & 0.948 & 0.948 \\
 \end{tabularx}}
 
 \smallskip
+Wilson 95\% intervals from the counts (1,061 TP, 46 FP, 45 FN): precision 0.945--0.969, recall 0.946--0.969. On the team photos the recall interval is 0.691--0.768 (368 of 503 animals).
+
+\smallskip
 \textbf{Weak classes:} dog is weaker (AP50--95 0.812 vs 0.888). Dogs vary more in body shape and pose, long-bodied breeds give looser boxes, and 10 of the 46 false positives are dogs predicted as cats or the reverse. More varied dog poses and the clothed-pet images from the Phase 1 plan would help most.
 
 \medskip
@@ -672,7 +675,6 @@ Oxford-IIIT Pet has almost only one large, centred animal per photo & M4, M5 & S
 Detector ONNX export misses the 0.001 parity bound & M8 & ONNX detector cannot be served & PyTorch detector served; six export settings re-checked; diagnosis notebook prepared & Workaround \\
 Trimap border pixels are ambiguous & M5 & Mask scores depend on the border convention & Report scores with and without border pixels & Done \\
 Weights over 100\,MB and private photos cannot go into Git & M8 & The repository alone cannot run inference & Relative paths in the manifest, SHA-256 checks, weights and photos in private Drive & Done \\
-A copy of the validation notebook wrote placeholder files when expected outputs were missing & M8 & Risk of citing files that are not results & Files marked as not evidence; notebook rewritten with preflight checks and no placeholders; W\&B runs record their source commit & Done \\
 \bottomrule
 \end{tabularx}}
 
@@ -709,7 +711,7 @@ Criterion & Max (team of 4) & Self-score & Strongest evidence (section) & Known 
 \midrule
 Object detection (M4) & 15 & 14 & Test AP per class, sweep on validation, FP taxonomy, team-photo size analysis, video (\S2) & One training recipe only; no comparison with another detector or the COCO model as is \\
 Segmentation (M5) & 15 & 13 & Full test mIoU/Dice/mask mAP, matched 300-image SAM baseline, border analysis, failure gallery (\S3) & Mask thresholds not swept on validation; baseline not run on validation \\
-Integration and deployment (M8) & 15 & 13 & Manifest, HTTP contracts, T4 and CPU checks, verdict table (\S4) & A9b fails; no public deployment; per-stage percentiles not recorded \\
+Integration and deployment (M8) & 15 & 13 & Manifest, HTTP contracts, T4 and CPU checks, verdict table (\S4) & A9b fails (PyTorch served instead); per-stage percentiles not recorded \\
 \midrule
 \textbf{Total} & \textbf{45} & \textbf{40} & & \\
 \bottomrule
