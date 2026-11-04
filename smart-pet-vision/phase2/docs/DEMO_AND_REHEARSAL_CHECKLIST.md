@@ -9,38 +9,44 @@ Weights are private (Drive `MyDrive/capstone /smart-pet-vision/runs/`) and are n
 git clone -b phase2-gap-closure https://github.com/Yasser-20-alhajlah/smart-pet-vision.git   # use main after PR #5 is merged
 cd smart-pet-vision/smart-pet-vision/phase2
 pip install -r ../requirements.txt
-# copy the private runs/ folder from Drive so that the paths in runs/manifest.json resolve
+# runs/manifest.json is in Git; copy only the three private weight files from Drive to the paths it lists
 python tools/preflight_release.py --manifest runs/manifest.json   # weight files, hashes, versions; no model loading
-PYTHONPATH=src python -m unittest discover -s tests               # 111 tests
+PYTHONPATH=src python -m unittest discover -s tests               # 117 tests (release candidate)
 SPV_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app --host 127.0.0.1 --port 8000 --workers 1
 ```
 
 Weight SHA-256 (must match `submission/RELEASE_MANIFEST.json` and `docs/model_card.md`):
 detector `f48e4d8e…1da1cd4`, segmenter `868f3842…a5d8ee`, classifier `22dd58d4…2081ba`.
 
-## 2. The three live requests
+## 2. The live requests
 | # | Request | Expected | What it shows |
 |---|---|---|---|
 | 1 | `curl -s 127.0.0.1:8000/health` | `{"status":"ok", ...}` with the three model names | service loaded the manifest |
 | 2 | `curl -s -F file=@<oxford_test_image>.jpg "127.0.0.1:8000/analyze?images=false"` | HTTP 200; detections, species, verdict (`ready` or `refer_to_staff` with reasons), `staff_approval_required: true`, `automatic_publication_allowed: false` | full pipeline and the publication guard |
-| 3 | `curl -s -o /dev/null -w "%{http_code}" -F file=@notes.txt "127.0.0.1:8000/analyze"` | `415` (an empty file gives `400`) | input validation |
+| 3 | Same as 2 with one authorised multi-animal image (a licensed public photo, or a team photo whose owner agreed) | Show the verdict actually returned, even if it is a wrong `ready`; this is the known 17/52 limitation | honest failure case |
+| 4 | `curl -s -o /dev/null -w "%{http_code}" -F file=@notes.txt "127.0.0.1:8000/analyze"` | `415` (an empty file gives `400`) | input validation |
 
 Choose the image for request 2 in advance from the Oxford test split and record its actual output during rehearsal; do not claim an output that was not observed. Do not show team photos on screen unless their owners agreed.
 
-Timings to quote if asked (never combine them): T4 in-process p95 61.4 ms (A8); CPU HTTP p50/p95/p99 383.8/430.8/690.1 ms (W&B mu2tolkg).
+Timings to quote if asked (never combine them): T4 in-process p95 61.4 ms (A8) and 70.9 ms (3 Nov repeat); CPU HTTP p50/p95/p99 383.8/430.8/690.1 ms (W&B mu2tolkg).
+
+**Recovery during the session:** preflight fails with "weights not found" or a hash mismatch → restore the three files from Drive and rerun preflight (never substitute downloaded models); the service returns 503 or crashes → restart uvicorn once, then switch to the backup recording; no network or Colab runtime → play the backup recording.
 
 ## 3. Backup recording
-- [ ] Record requests 1–3 from a clean Colab runtime, following Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`.
+- [ ] Record requests 1–4 from a clean Colab runtime, following Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`.
 - [ ] Check that no API key, token or personal path is visible on screen.
 - [ ] Save to Drive `05_Demo` and play it once end to end.
 
-## 4. Four-person rehearsal (presenters as in the deck notes, about 19 min)
-| Order | Presenter | Slides | Points to state correctly |
+## 4. Four-person rehearsal (deck `SmartPetVision_Phase2_Presentation_v2_20261104`, 17 slides + 3 appendix, about 19 min)
+| Slides | Presenter | Time | Points to state correctly |
 |---|---|---|---|
-| 1 | Abdulrahman Mastour Alharthi | title, criteria, data | split 5,123/1,106/1,106; test used once |
-| 2 | Yasser Mansour Alhajlah | detection | AP (eval conf 0.001) kept apart from P/R at conf 0.40, NMS 0.50; COCO baseline mAP50 0.939 → 0.984 |
-| 3 | Mohammed Adeeb Alrashdi | segmentation | foreground mIoU vs instance mask AP; SAM with a ground-truth box is an oracle reference |
-| 4 | Musaad Obaied Saad Alqahtani | system, live demo, benchmark/ONNX, decision, failures, model card, close | A9b not met; PyTorch serves; 17/52 multi-animal limitation; staff approval mandatory |
+| 1–4 | Abdulrahman Mastour Alharthi | 0:00–4:30 | split 5,123/1,106/1,106, test used once; Phase 1 0.906 vs 0.999; AdamW via `optimizer=auto`; operating point chosen on validation |
+| 5–6 | Yasser Mansour Alhajlah | 4:30–6:50 | AP (all thresholds) kept apart from P/R/F1 at conf 0.40, NMS 0.50; COCO baseline mAP50 0.939 → 0.984 |
+| 7–9 | Mohammed Adeeb Alrashdi | 6:50–10:25 | foreground mIoU vs instance mask AP; SAM with a ground-truth box is an oracle reference |
+| 10–16 | Musaad Obaied Saad Alqahtani | 10:25–18:15 | 17/52 limitation; A9b not met, PyTorch serves; CPU vs T4 kept apart; live demo |
+| 17 | All | 18:15–19:00 | GO staff-supervised PyTorch service; NO-GO ONNX detector |
+
+The guidelines ask each member to present their own contribution. Slides 3–4 (box derivation, operating point) belong to the detection workstream; the team may move them to Yasser and give Abdulrahman more time on data and Phase 1.
 
 - [ ] Full run-through with a timer; each presenter within their slot.
 - [ ] Practise one switch to the backup recording.

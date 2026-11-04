@@ -23,6 +23,7 @@ The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json
 | `submission/` | **Final Phase 2 report on the instructor's template**; `./build.sh` builds the PDF, source ZIP and `RELEASE_MANIFEST.json` (SHA-256 of all submission files) |
 | `report/` | Earlier free-form report (superseded for submission by `submission/`); `evidence/` is the source of every reported number |
 | `docs/model_card.md`, `docs/DEMO_AND_REHEARSAL_CHECKLIST.md` | Model card; clean-install service run, demo requests, backup recording, four-person rehearsal |
+| `docs/AUDIT_TRACKER_2026-11-04.md` | Release-candidate audit (issues, evidence, state), change log and verification log |
 | `runs/manifest.json` | Model paths, thresholds, classifier temperature |
 | `tests/` | Unit tests |
 
