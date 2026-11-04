@@ -46,6 +46,8 @@ Validation sweep for mask confidence (0.10-0.55, 1,106 validation images) gave m
 - Lower recall on non-Oxford photos (team set recall 0.732 vs 0.959 on Oxford).
 - Dark dogs in clothing detected as cats (detector/classifier disagreement then triggers referral).
 - Masks bleed into similar-coloured blankets or clothing; occlusion truncates masks.
+- When no animal is detected (`no_animal`), the classifier still runs on the whole frame and the response still carries a `species` and `confidence` (a grey test image returned "cat" with 0.98 in the 4 Nov smoke test). These fields describe the animal only when the verdict is `ready`; for a referral, staff should read the reasons, not the species.
+- A two-animal photo is referred only when the detector finds both animals (`multiple_animals`); a synthetic composite of two clearly separated cats was referred, while 17 of 52 real multi-animal team photos were not.
 - The ONNX detector export does not meet the raw numerical parity criterion A9b (max abs diff 0.0018-0.0020 vs 0.001). A per-channel diagnosis on four random inputs places the difference in the pixel-unit box channels (0.00183; class scores about 1.5e-7). Task-level values on the Oxford test split are close, not identical (mAP50 0.98252 vs 0.98357, mAP50-95 0.85176 vs 0.85000, ONNX vs PyTorch). A9b stays failed and the service uses PyTorch.
 
 ## Ethical considerations
