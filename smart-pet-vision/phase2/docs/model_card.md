@@ -39,14 +39,14 @@ Oxford-IIIT Pet (CC BY-SA 4.0), 7,335 images after cleaning, group-aware split 5
 
 SAM 2.1-B prompted with the ground-truth box (mIoU 0.812 on 300 test images) is an oracle reference, not an autonomous baseline.
 
-Validation sweep for mask confidence (0.10-0.55) gave mIoU 0.9200-0.9224; the highest was at 0.10, the service keeps 0.25 (difference 0.0002 mIoU). The minimum mask share 0.05 was confirmed on validation (2 of 1,106 images flagged).
+Validation sweep for mask confidence (0.10-0.55, 1,106 validation images) gave mask mIoU 0.92001-0.92240; the highest was at 0.10, the service keeps 0.25 (difference 0.00024 mIoU; referrals at 0.10 were not evaluated). The minimum mask share 0.05 was confirmed on validation (2 of 1,106 images flagged).
 
 ## Known failure modes
 - Missed secondary or small animals: on team photos 17 of 52 multi-animal photos were marked technically ready because only one animal was detected.
 - Lower recall on non-Oxford photos (team set recall 0.732 vs 0.959 on Oxford).
 - Dark dogs in clothing detected as cats (detector/classifier disagreement then triggers referral).
 - Masks bleed into similar-coloured blankets or clothing; occlusion truncates masks.
-- The ONNX detector export does not meet the raw numerical parity criterion A9b (max abs diff 0.0018-0.0020 vs 0.001, entirely in the pixel-unit box channels; class scores agree to about 1.5e-7). Task-level quality is the same (test mAP50 0.983 vs 0.984, mAP50-95 0.852 vs 0.850), but A9b stays failed and the service uses PyTorch.
+- The ONNX detector export does not meet the raw numerical parity criterion A9b (max abs diff 0.0018-0.0020 vs 0.001). A per-channel diagnosis on four random inputs places the difference in the pixel-unit box channels (0.00183; class scores about 1.5e-7). Task-level values on the Oxford test split are close, not identical (mAP50 0.98252 vs 0.98357, mAP50-95 0.85176 vs 0.85000, ONNX vs PyTorch). A9b stays failed and the service uses PyTorch.
 
 ## Ethical considerations
 Photos may show people or homes; the service returns no identity information and keeps no uploaded image. Team photos are kept in private storage only.

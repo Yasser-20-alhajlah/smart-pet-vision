@@ -454,15 +454,15 @@ Each setting was swept on the 1,106 validation images (notebook 11, T4) with a r
 \toprule
 Setting (rule) & Values tried and validation result & Chosen on validation & Served \\
 \midrule
-Mask confidence (highest val mIoU; ties to higher) & 0.10: 0.9224; 0.25: 0.9222; 0.40: 0.9218; 0.55: 0.9200 & 0.10 (+0.0002 mIoU over 0.25) & 0.25 \\
-Mask-to-box match IoU (largest with false ``no matching mask'' $\leq1\%$) & 0.05, 0.10, 0.25: 7 of 1,106 (0.6\%); 0.50: 14 (1.3\%) & 0.25 (same outcome as 0.10 on val) & 0.10 \\
+Mask confidence (highest val mIoU; ties to higher) & Mean IoU of the union mask: 0.10: 0.92240; 0.25: 0.92216; 0.40: 0.92176; 0.55: 0.92001 & 0.10 (+0.00024 mIoU over 0.25) & 0.25 \\
+Mask-to-box match IoU (largest with false ``no matching mask'' $\leq1\%$) & Full pipeline: 0.05, 0.10, 0.25: 7 of 1,106 unmatched (0.6\%), 35 referred; 0.50: 14 (1.3\%), 41 referred & 0.25 (same counts as 0.10) & 0.10 \\
 Minimum mask share (largest with false ``too small'' $\leq1\%$) & 0.01: 0; 0.02: 0; 0.05: 2 (0.2\%); 0.10: 15 (1.4\%); 0.15: 57 (5.2\%) & 0.05 & 0.05 \\
 Mask resolution & \texttt{retina\_masks=True} (full resolution) & -- & on \\
 \bottomrule
 \end{tabularx}}
 
 \smallskip
-The minimum mask share served (0.05) is the validated choice. For mask confidence and match IoU the validated values differ from the served ones by amounts that make no measurable difference on validation (0.0002 mIoU; identical referrals), so the release manifest was left unchanged rather than re-released without re-validation. At the validated confidence 0.10 the test split gives mIoU 0.922 and Dice 0.958, against 0.923 and 0.959 at the served 0.25.
+All rows use the 1,106 validation images (T4, 640\,px). The minimum mask share served (0.05) is the validated choice. \emph{Match IoU:} the full pipeline was run at each value with the other served settings; 0.05, 0.10 and 0.25 give the same counts (7 unmatched, 35 referred), but only counts were saved, so it is not shown that the same images are affected. \emph{Mask confidence:} only the mask metric was compared (mean IoU 0.92240 at 0.10 vs 0.92216 at 0.25); referrals and other safety behaviour at 0.10 were not evaluated through the pipeline. The release manifest was therefore left unchanged rather than re-released without that check. At the validated confidence 0.10 the test split gives mIoU 0.922 and Dice 0.958, against 0.923 and 0.959 at the served 0.25.
 
 \subsection{Test results}
 
@@ -499,7 +499,7 @@ Dog (749) & 0.920 & 0.957 & not recorded per class \\
   \caption{Mean IoU and Dice on the same 300 test images for the SAM 2.1-B baseline (native resolution, ground-truth box prompt) and YOLO11s-seg (640\,px, \tconf{} 0.25), with and without trimap border pixels.}
 \end{figure}
 
-\textbf{Application measure:} on the 401 team photos (CPU run \run{f8manl0i}, 640\,px, \tconf{} 0.25), the number of segmented animals equals the annotated number on 355 of 401 photos (88.5\%), and the mask's species agrees with the true label on 372 of 378 single-species photos with a mask. Masks triggered 30 referral reasons: 13 animal too small, 10 species disagreement, 7 no matching mask. On Oxford test, fine-tuning raises mean IoU from 0.830 (same architecture as is) to 0.923, and from 0.812 (SAM with an oracle box) to 0.925 on the same 300 images; with border pixels ignored SAM is higher (0.948 vs 0.934), so most of SAM's gap is the trimap border convention rather than wrong masks.
+\textbf{Application measure:} on the 401 team photos (CPU run \run{f8manl0i}, 640\,px, \tconf{} 0.25), mask-based checks (animal too small, species disagreement between mask and classifier, no matching mask) contribute to the 81 referrals; the per-photo segmentation counts of that run were not saved with the evidence, so agreement counts are not reported here. On Oxford test, fine-tuning raises mean IoU from 0.830 (same architecture as is) to 0.923, and from 0.812 (SAM with an oracle box) to 0.925 on the same 300 images; with border pixels ignored SAM is higher (0.948 vs 0.934), so most of SAM's gap is the trimap border convention rather than wrong masks.
 
 \subsection{Error analysis}
 
@@ -597,14 +597,14 @@ Check (PyTorch vs.\ ONNX) & Tolerance & Result & Pass? \\
 \midrule
 Classifier: max abs difference of logits (8 inputs) & $\leq 0.001$ (A9a) & $2.98\times10^{-7}$; argmax agreement 100\% & Yes \\
 Detector: max abs difference of raw head (4 random inputs, seed 0, CPU) & $\leq 0.001$ (A9b) & 0.0018 (acceptance); 0.0020 (re-check); 0.00198--0.00201 (six export/runtime settings, 31 Oct); 0.0018 (2 Nov) & \textbf{No} \\
-Same metric on the evaluation set (Oxford test, 1,106 images, 640\,px) & None set in advance & mAP50 0.983 vs 0.984; mAP50--95 0.852 vs 0.850 (ONNX vs PyTorch) & Reported \\
+Same metric on the evaluation set (Oxford test, 1,106 images, 640\,px) & None set in advance & Close, not identical: mAP50 0.98252 vs 0.98357; mAP50--95 0.85176 vs 0.85000 (ONNX vs PyTorch, conf 0.001 evaluation) & Reported \\
 Same decisions at the operating point (50 test images, CPU) & None set in advance & With the same letterboxed 640\,px input for both backends (3 November, first 50 Oxford test images, CPU, conf 0.40, NMS 0.50, greedy one-to-one matching): 100\% same number of detections and classes, largest final-box difference 0.00027\,px (a separate check on 50 previously inspected team photos gave 0.00055\,px). An earlier run (98\% same count and classes, largest shift 28.7\,px) did not give both backends the same square input; it is confounded by pre-processing and is not attributed to the export. Neither result changes the raw-output criterion A9b & Reported \\
 Reduced precision (FP16 / INT8) & -- & Not used & -- \\
 \bottomrule
 \end{tabularx}}
 
 \smallskip
-\textbf{Where the gap sits} (notebook 11, same four inputs, CPU, ONNX Runtime 1.31.1): the whole difference is in the four box-coordinate channels, which are in pixels (0.0018); the class-score channels differ by $1.5\times10^{-7}$. Against a float64 run of the same PyTorch model, float32 PyTorch differs by 0.0018 and ONNX by 0.00096, so the exported model is the closer of the two to the exact result. Changing the PyTorch convolution backend gives 0.0012 (oneDNN off) and 0.0011 (oneDNN off, one thread), still above 0.001; ONNX Runtime has no float64 convolution, so both sides cannot be run in float64. A9b is therefore a float32 rounding effect on pixel-scale outputs, not a wrong export, but it is recorded as not met and the bound is not changed. The service runs the PyTorch detector.
+\textbf{Where the gap sits} (notebook 11, saved per-channel diagnosis: four random $1\times3\times640\times640$ inputs, seed 0, CPU, float32 with a float64 PyTorch reference, PyTorch 2.11.0, ONNX Runtime 1.31.1): the raw head has four box-coordinate channels in pixels and two class-score channels. ONNX vs float32 PyTorch: largest difference 0.0018311 over all channels, 0.0018311 in the box channels and $1.46\times10^{-7}$ in the score channels. Against a float64 run of the same PyTorch model, float32 PyTorch differs by 0.0018189 and ONNX by 0.0009632 (box channels; score channels $1.2$--$1.4\times10^{-7}$). Changing the PyTorch convolution backend gives 0.0012207 (oneDNN off) and 0.0010986 (oneDNN off, one thread), still above 0.001; ONNX Runtime has no float64 convolution, so both sides cannot be run in float64. These diagnostics are consistent with float32 rounding on pixel-scale outputs rather than a wrong export, but they come from four random inputs; A9b is recorded as not met and the bound is not changed. The service runs the PyTorch detector.
 
 \subsection{HTTP service}
 
@@ -674,7 +674,7 @@ A9b ONNX parity, detector & $\leq0.001$ & 0.0018 & \textbf{Fail} \\
 \end{tabularx}
 
 \smallskip
-\textbf{For each FAIL:} A9b: the exported detector's raw head differs from PyTorch by 0.0018--0.0020 against a bound of 0.001. \emph{Why:} the whole difference is in the pixel-unit box channels and is of the size of float32 rounding: against a float64 run of the same model, float32 PyTorch is off by 0.0018 and ONNX by 0.00096 (Section 4.4). At task level the two backends agree: test mAP50 0.983 vs 0.984 and mAP50--95 0.852 vs 0.850. \emph{Fix and cost:} serving the PyTorch detector costs nothing. The criterion is not relaxed after the fact; a parity criterion on decisions or relative to the output scale, fixed before the run, would be the right test for a future export. (The ONNX benchmark row ran the detector on the CPU execution provider while PyTorch used the T4, so it is not a like-for-like speed comparison.) Decision: GO for a staff-supervised service with PyTorch; NO-GO for serving the ONNX detector until a parity test fixed in advance is passed.
+\textbf{For each FAIL:} A9b: the exported detector's raw head differs from PyTorch by 0.0018--0.0020 against a bound of 0.001. \emph{Why (diagnosis on four random inputs):} the difference is in the pixel-unit box channels and is of the size of float32 rounding: against a float64 run of the same model, float32 PyTorch is off by 0.0018 and ONNX by 0.00096 (Section 4.4). At task level the reported values are close but not identical (Oxford test, 1,106 images, 640\,px, Ultralytics validation): mAP50 0.98252 (ONNX) vs 0.98357 (PyTorch), mAP50--95 0.85176 vs 0.85000. \emph{Fix and cost:} serving the PyTorch detector costs nothing. The criterion is not relaxed after the fact; a parity criterion on decisions or relative to the output scale, fixed before the run, would be the right test for a future export. (The ONNX benchmark row ran the detector on the CPU execution provider while PyTorch used the T4, so it is not a like-for-like speed comparison.) Decision: GO for a staff-supervised service with PyTorch; NO-GO for serving the ONNX detector until a parity test fixed in advance is passed.
 
 Main failure modes for the model card: missed small and secondary animals (team photos: recall 0.732; 17 of 52 multi-animal photos marked technically ready because one animal was missed); dark clothed dogs detected as cats; masks spreading into similar-coloured backgrounds. Out of scope: automatic publication, identifying individual animals or people, veterinary use, species other than cats and dogs. Every photo is approved by staff, whatever the verdict.
 
@@ -688,7 +688,7 @@ Main failure modes for the model card: missed small and secondary animals (team 
 Obstacle & Module & Impact on the work & Action taken & Status \\
 \midrule
 Oxford-IIIT Pet has almost only one large, centred animal per photo & M4, M5 & Size and multi-animal behaviour cannot be measured on Oxford & 401 team photos (503 animals) annotated in CVAT and used as an evaluation-only set & Done \\
-Detector ONNX export misses the 0.001 parity bound & M8 & ONNX detector cannot be served & PyTorch detector served; gap located in the pixel-unit box channels; test mAP equal for both backends & Workaround \\
+Detector ONNX export misses the 0.001 parity bound & M8 & ONNX detector cannot be served & PyTorch detector served; gap located in the pixel-unit box channels; test mAP close for both backends (0.9825 vs 0.9836) & Workaround \\
 Trimap border pixels are ambiguous & M5 & Mask scores depend on the border convention & Report scores with and without border pixels & Done \\
 Weights over 100\,MB and private photos cannot go into Git & M8 & The repository alone cannot run inference & Relative paths in the manifest, SHA-256 checks, weights and photos in private Drive & Done \\
 \bottomrule
@@ -727,7 +727,7 @@ Criterion & Max (team of 4) & Self-score & Strongest evidence (section) & Known 
 \midrule
 Object detection (M4) & 15 & 14 & Test AP per class, sweep on validation, COCO-as-is baseline, FP taxonomy, team-photo size analysis, video (\S2) & One fine-tuning recipe only; small and secondary animals (team recall 0.169 medium, 0/10 small) \\
 Segmentation (M5) & 15 & 14 & Two baselines on validation and test, settings swept on validation, border analysis, failure gallery (\S3) & One fine-tuning recipe only; served mask confidence (0.25) differs from the validated 0.10 by 0.0002 mIoU \\
-Integration and deployment (M8) & 15 & 13 & Manifest, HTTP contracts, per-stage p50/p95, T4 and CPU checks, ONNX task-level parity, verdict table (\S4) & A9b fails (PyTorch served instead); multi-animal false-ready cases (17 of 52) \\
+Integration and deployment (M8) & 15 & 13 & Manifest, HTTP contracts, per-stage p50/p95, T4 and CPU checks, ONNX task-level comparison, verdict table (\S4) & A9b fails (PyTorch served instead); multi-animal false-ready cases (17 of 52) \\
 \midrule
 \textbf{Total} & \textbf{45} & \textbf{41} & & \\
 \bottomrule

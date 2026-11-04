@@ -105,14 +105,24 @@ def submission_checks(root):
     check("COCO segmenter baseline", has(b["val"]["mask_mAP50_95"]) and has(b["test"]["mIoU"]))
     check("SAM baseline on validation", has(g["B_segmentation_baselines"]["sam2.1_b_oracle_box_val300"]["mIoU"]))
     c = g["C_segmenter_conf_on_validation"]
-    check("mask confidence sweep and choice", all(has(r["mIoU"], "{:.4f}") for r in c["val_sweep"])
+    check("mask confidence sweep and choice", all(has(r["mIoU"], "{:.5f}") for r in c["val_sweep"])
           and has(c["chosen_conf"], "{:.2f}"))
+    ms = g["D_pipeline_validation"]["mask_match_sweep"]
+    check("match-IoU sweep quoted as counts, with the per-image limitation",
+          all(f"{r['unmatched']} of 1,106" in tex or f"{r['unmatched']} (" in tex for r in ms)
+          and f"{ms[1]['referred']} referred" in tex and "only counts were saved" in tex
+          and "were not evaluated through the pipeline" in tex)
     d = g["D_pipeline_validation"]
     st = {r["stage"]: r for r in d["stage_percentiles_T4"]}
     check("per-stage p50/p95", all(has(st[k]["p50_ms"], "{:.1f}") and has(st[k]["p95_ms"], "{:.1f}")
                                    for k in ("detect_ms", "classify_ms", "segment_ms", "total_ms")))
     e = g["E_onnx"]
-    check("ONNX task-level mAP", has(e["onnx_test"]["box_mAP50"]) and has(e["onnx_test"]["box_mAP50_95"]))
+    check("ONNX task-level mAP, unrounded and called close (not identical)",
+          all(has(e[k][m], "{:.5f}") for k in ("onnx_test", "pytorch_test") for m in ("box_mAP50", "box_mAP50_95"))
+          and "not identical" in tex and "mAP equal" not in tex)
+    check("channel diagnosis: box vs score channels quoted from saved analysis",
+          has(e["channel_diagnosis"]["summary"]["onnx_vs_torch32"]["max_abs_box"], "{:.7f}") and e["channel_diagnosis"]["summary"]["onnx_vs_torch32"]["max_abs_score"] < 1e-6
+          and has(e["channel_diagnosis"]["summary"]["onnx_vs_torch64"]["max_abs_box"], "{:.7f}") and "four random" in tex)
     cd = e["channel_diagnosis"]["summary"]
     check("ONNX channel diagnosis", has(cd["onnx_vs_torch64"]["max_abs_all"], "{:.5f}")
           and cd["onnx_vs_torch32"]["max_abs_all"] > A9_TOLERANCE)
