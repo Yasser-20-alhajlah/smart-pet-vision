@@ -1,0 +1,82 @@
+{
+ "purpose": "Direct execution records of the optimiser used to train the Phase 2 detector and segmenter.",
+ "recorded": "2026-11-04",
+ "retrieved_from": "Google Drive MyDrive/capstone /Submission/FINAL PHASE_2/02_Notebooks (owner's Drive); read-only download",
+ "notebooks": {
+  "03_detection_executed.ipynb": {
+   "drive_file_id": "13KJ7iprclM9EOliamNRgViA3pxK3-679",
+   "bytes": 5523497,
+   "sha256": "db3b490a3503ab2de44240f5d0729c4ded8bf9cb0b7b0b87994e9c3ed34ea3ff",
+   "log_lines": [
+    {
+     "cell": 3,
+     "text": "optimizer: 'optimizer=auto' found, ignoring 'lr0=0.01' and determining best 'optimizer' and 'lr0' automatically..."
+    },
+    {
+     "cell": 3,
+     "text": "optimizer: AdamW(lr=0.001667, momentum=0.9) with parameter groups 81 weight(decay=0.0), 88 weight(decay=0.0005), 87 bias(decay=0.0)"
+    }
+   ],
+   "cell_of_training": 3,
+   "trainer_args": {
+    "model": "yolo11s.pt",
+    "data": "/content/data/processed/yolo_detect/data.yaml",
+    "epochs": "40",
+    "batch": "16",
+    "imgsz": "640",
+    "seed": "42",
+    "optimizer": "auto",
+    "lr0": "0.01",
+    "lrf": "0.01",
+    "momentum": "0.937",
+    "weight_decay": "0.0005",
+    "warmup_epochs": "3.0",
+    "name": "yolo11s_det",
+    "project": "/content/drive/MyDrive/capstone /smart-pet-vision/runs/detect"
+   },
+   "ultralytics_versions_printed": [
+    "8.4.182"
+   ]
+  },
+  "04_segmentation_executed.ipynb": {
+   "drive_file_id": "1v9fVCnQvtGInougOQrR6sYcDHzyH7feB",
+   "bytes": 4787476,
+   "sha256": "cc255321b8664c5d8ba28da991b4bb1783113df90274e18f9a2cde8e403511cb",
+   "log_lines": [
+    {
+     "cell": 4,
+     "text": "optimizer: 'optimizer=auto' found, ignoring 'lr0=0.01' and determining best 'optimizer' and 'lr0' automatically..."
+    },
+    {
+     "cell": 4,
+     "text": "optimizer: AdamW(lr=0.001667, momentum=0.9) with parameter groups 90 weight(decay=0.0), 101 weight(decay=0.0005), 100 bias(decay=0.0)"
+    }
+   ],
+   "cell_of_training": 4,
+   "trainer_args": {
+    "model": "yolo11s-seg.pt",
+    "data": "/content/data/processed/yolo_segment/data.yaml",
+    "epochs": "40",
+    "batch": "16",
+    "imgsz": "640",
+    "seed": "42",
+    "optimizer": "auto",
+    "lr0": "0.01",
+    "lrf": "0.01",
+    "momentum": "0.937",
+    "weight_decay": "0.0005",
+    "warmup_epochs": "3.0",
+    "name": "yolo11s_seg",
+    "project": "/content/drive/MyDrive/capstone /smart-pet-vision/runs/segment"
+   },
+   "ultralytics_versions_printed": [
+    "8.4.182"
+   ]
+  }
+ },
+ "conclusion": {
+  "direct": "Both executed training notebooks print \"optimizer: 'optimizer=auto' found, ignoring 'lr0=0.01' ...\" followed by \"optimizer: AdamW(lr=0.001667, momentum=0.9)\" (Ultralytics 8.4.182, 40 epochs, batch 16, 640 px, seed 42).",
+  "inferred": "The notebooks do not print a W&B run id. Their link to W&B runs 2seovilv (detector) and 3ztpz2tc (segmenter) rests on identical settings and on the logged lr/pg0 schedule, which matches lr0 0.001667 (P2_training_optimizer_provenance_20261104.json).",
+  "weights_link": "Trainer project paths are MyDrive/capstone /smart-pet-vision/runs/detect and runs/segment, the folders that hold the released checkpoints; checkpoint train_args record AdamW and lr0 0.001667 (see the provenance file)."
+ }
+}

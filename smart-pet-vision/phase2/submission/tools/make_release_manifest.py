@@ -16,6 +16,7 @@ from pathlib import Path
 SUB = Path(__file__).resolve().parents[1]
 PHASE2 = SUB.parent
 sys.path.insert(0, str(PHASE2 / "tools"))
+sys.path.insert(0, str(SUB / "tools"))
 
 
 def sha(p: Path) -> str:
@@ -51,6 +52,17 @@ def main():
     zpath = SUB / "SmartPetVision_Phase2_source.zip"
     with zipfile.ZipFile(zpath) as z:
         members = {n: hashlib.sha256(z.read(n)).hexdigest() for n in sorted(z.namelist())}
+    from make_code_archive import INDEX_NAME, code_members_identical
+    cpath = SUB / "reviewed_source.zip"
+    with zipfile.ZipFile(cpath) as z:
+        cidx = json.loads(z.read(INDEX_NAME))
+    code_archive = {"file": cpath.name, "sha256": sha(cpath), "source_commit": cidx["source_commit"],
+                    "source_tree": cidx["source_tree"], "n_members": len(cidx["members"]),
+                    "excluded": cidx["excluded"],
+                    "identical_to_source_zip_code_folder": code_members_identical(zpath, cpath),
+                    "relationship": "SmartPetVision_Phase2_source.zip = main.tex + figures/ + private_ids.tex "
+                                    "(instructor submission only) + code/ holding exactly the members of "
+                                    "reviewed_source.zip with equal bytes. reviewed_source.zip has no private IDs."}
     dirty = git("status", "--porcelain", "--", ".")
     out = {
         "release": "Smart Pet Vision Phase 2 submission",
@@ -63,6 +75,7 @@ def main():
                                                          text=True).stdout.splitlines()[0]},
         "submission_files": {p.name: sha(p) for p in (SUB / "SmartPetVision_Phase2.pdf", zpath)},
         "source_zip_members": members,
+        "code_archive": code_archive,
         "other_delivered_files": {p.name: sha(p) for p in extra},
         "checks_at_build": run_checks(),
         "model_weights_sha256_recorded": EXPECTED_SHA256,
@@ -70,17 +83,24 @@ def main():
         "evidence_files": {p.name: sha(p) for p in sorted((PHASE2 / "report" / "evidence").glob("*")) if p.is_file()},
         "documents": {str(p.relative_to(PHASE2)): sha(p) for p in (
             PHASE2 / "docs" / "model_card.md", PHASE2 / "docs" / "DEMO_AND_REHEARSAL_CHECKLIST.md",
-            PHASE2 / "README.md", PHASE2 / "tools" / "verify_submission_evidence.py")},
+            PHASE2 / "docs" / "AUDIT_TRACKER_2026-11-04.md", PHASE2 / "docs" / "AI_ASSISTANCE_DISCLOSURE_DRAFT.md",
+            PHASE2 / "README.md", PHASE2 / "tools" / "verify_submission_evidence.py",
+            PHASE2 / "tools" / "smoke_test_http.py")},
         "acceptance": {"A1-A8": "met", "A9a": "met", "A9b": "not met (0.0018-0.0020 vs 0.001)",
                        "serving_backend": "PyTorch"},
         "external_assets_required": "Three private weight files from Drive MyDrive/capstone /smart-pet-vision/runs/ at the paths in runs/manifest.json; their SHA-256 must equal model_weights_sha256_recorded (checked by tools/preflight_release.py).",
         "known_limitations": ["A9b detector ONNX raw parity not met; PyTorch serves.",
                               "17 of 52 previously inspected multi-animal team photos were marked ready.",
                               "One training recipe per model; the four corrected training boxes were not used for retraining.",
-                              "Timings and team-photo results were measured with code 879b0e8, not re-measured on this candidate."],
+                              "Timings and team-photo results were measured with src/spv as at 879b0e8 (identical from a74784b), not re-measured on this candidate."],
         "open_release_gates": ["Team decision on which report is submitted (template report here vs Drive 01_Report version)",
-                               "GPU revalidation of the candidate code", "Live demo on a clean runtime and backup recording",
-                               "Four-person rehearsal", "Owner revokes the previously exposed W&B key", "Merge to main (approval)"],
+                               "Each member confirms their line in the Team members table",
+                               "Team approves or rejects the AI-assistance disclosure draft",
+                               "GPU revalidation of the candidate code", "Live demo on the presentation host and backup recording there",
+                               "Four-person rehearsal", "Owner confirms the previously exposed W&B key was revoked",
+                               "Owner decision on student IDs in the tracked Phase 1 PDF and Git history",
+                               "Owner approval before candidate files replace existing Drive submission files",
+                               "Merge to main (approval; not a submission requirement)"],
         "notes": ["PDF bytes include a build timestamp, so the PDF hash changes on every rebuild.",
                   "Weights, team photos and private_ids.tex are private and not in Git."],
     }

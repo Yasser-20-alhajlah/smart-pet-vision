@@ -133,6 +133,12 @@ def submission_checks(root):
     check("optimiser stated as recorded (AdamW, lr0 0.001667), never SGD",
           "SGD" not in body and "AdamW" in body and f"{lr_fit:.6f}" in body
           and opt["sources"]["wandb_logged_lr"]["max_relative_error_epochs_4_40"] < 1e-4)
+    dl = load(root, "P2_training_optimizer_direct_log_20261104.json")["notebooks"]
+    check("optimiser direct log in both executed notebooks; W&B link stated as inferred",
+          len(dl) == 2 and all(any(f"AdamW(lr={lr_fit:.6f}" in l["text"] for l in n["log_lines"]) for n in dl.values())
+          and "P2\\_training\\_optimizer\\_direct\\_log" in body and "inferred" in body)
+    check("code row does not claim later commits changed only the report",
+          "later commits change only this report" not in body and "CODE\\_ARCHIVE\\_INDEX.json" in body)
 
     ann = load(root, "M4_training_annotation_manifest_20261103.json")
     check("annotation correction: 4 train labels, val/test unchanged, not retrained, no gain claimed",

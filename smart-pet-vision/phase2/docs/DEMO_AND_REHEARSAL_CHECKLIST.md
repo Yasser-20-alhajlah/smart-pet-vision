@@ -5,15 +5,19 @@ Status 4 Nov 2026. Nothing in this file is marked done unless it was actually ru
 ## 1. Clean-install service run (Colab, CPU or T4)
 Weights are private (Drive `MyDrive/capstone /smart-pet-vision/runs/`) and are never committed or published.
 
+The release candidate's code is the Drive candidate folder's `02_Code/reviewed_source.zip` (the same files as `code/` in the report source ZIP). Use it, or the Git branch only if its head is the commit named in that ZIP's `CODE_ARCHIVE_INDEX.json`.
+
 ```bash
-git clone -b phase2-gap-closure https://github.com/Yasser-20-alhajlah/smart-pet-vision.git   # use main after PR #5 is merged
-cd smart-pet-vision/smart-pet-vision/phase2
+unzip reviewed_source.zip -d spv && cd spv/smart-pet-vision/phase2   # or: git clone -b phase2-gap-closure https://github.com/Yasser-20-alhajlah/smart-pet-vision.git
 pip install -r ../requirements.txt
-# runs/manifest.json is in Git; copy only the three private weight files from Drive to the paths it lists
-python tools/preflight_release.py --manifest runs/manifest.json   # weight files, hashes, versions; no model loading
-PYTHONPATH=src python -m unittest discover -s tests               # 117 tests (release candidate)
+# runs/manifest.json is included; copy only the three private weight files from Drive to the paths it lists
+python tools/preflight_release.py --manifest runs/manifest.json --requirements ../requirements.txt --strict-versions   # files, hashes, versions; no model loading
+PYTHONPATH=src python -m unittest discover -s tests               # count for this candidate: see RELEASE_MANIFEST.json checks_at_build
+python tools/smoke_test_http.py --image <authorised_pet_image>.png --out smoke_result.json   # optional rehearsal check, CPU, ~2 min
 SPV_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app --host 127.0.0.1 --port 8000 --workers 1
 ```
+
+`tools/smoke_test_http.py` starts the service, recomputes the three weight hashes, runs preflight and sends: /health; the image with images=false and images=true (decodes the returned PNGs); a synthetic two-animal composite (the image twice; the verdict actually returned is recorded, a wrong `ready` included); a blank image; text, empty and >15 MB uploads (415/400/413). It checks both policy flags on every response. It is a functional check, not an accuracy or speed measurement.
 
 Weight SHA-256 (must match `submission/RELEASE_MANIFEST.json` and `docs/model_card.md`):
 detector `f48e4d8e…1da1cd4`, segmenter `868f3842…a5d8ee`, classifier `22dd58d4…2081ba`.
@@ -38,7 +42,7 @@ Timings to quote if asked (never combine them): T4 in-process p95 61.4 ms (A8) a
 - [ ] Check that no API key, token or personal path is visible on screen.
 - [ ] Save to Drive `05_Demo` and play it once end to end.
 
-## 4. Four-person rehearsal (deck `SmartPetVision_Phase2_Presentation_v2_20261104`, 17 slides + 3 appendix, about 19 min)
+## 4. Four-person rehearsal (candidate deck `04_Presentation/SmartPetVision_Phase2_Presentation.pptx` in the Drive candidate folder, 17 slides + 3 appendix, about 19 min; the guideline range is 15–20 min)
 | Slides | Presenter | Time | Points to state correctly |
 |---|---|---|---|
 | 1–4 | Abdulrahman Mastour Alharthi | 0:00–4:30 | split 5,123/1,106/1,106, test used once; Phase 1 0.906 vs 0.999; AdamW via `optimizer=auto`; operating point chosen on validation |
@@ -52,4 +56,4 @@ The guidelines ask each member to present their own contribution. Slides 3–4 (
 - [ ] Full run-through with a timer; each presenter within their slot.
 - [ ] Practise one switch to the backup recording.
 - [ ] Every member can answer: why A9b fails and why the 0.001 bound was kept; why the 401 team photos are not a fresh holdout; why the 28.7 px figure is not used.
-- [ ] Export the deck (Slides artifact → PPTX and PDF) to Drive `04_Presentation`.
+- [ ] Team approves the candidate deck (PPTX and PDF exported in the Drive candidate folder) before it replaces the deck in `04_Presentation`.
