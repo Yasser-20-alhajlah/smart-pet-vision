@@ -2,6 +2,7 @@
 
 POST /analyze  (multipart field `file`, optional query `images=false`)
 GET  /health
+GET  /demo     browser page for the live demonstration; it only calls POST /analyze
 """
 from __future__ import annotations
 
@@ -11,9 +12,11 @@ from functools import lru_cache
 from threading import Lock
 
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+from fastapi.responses import HTMLResponse
 from PIL import Image, UnidentifiedImageError
 from starlette.concurrency import run_in_threadpool
 
+from .demo_page import DEMO_HTML
 from .pipeline import Manifest, PetPipeline, InvalidModelOutput
 
 MAX_BYTES = 15 * 1024 * 1024
@@ -33,6 +36,12 @@ def health():
         m = pipeline().m
     return {"status": "ok", "detector": os.path.basename(m.detector),
             "segmenter": os.path.basename(m.segmenter), "classifier": m.classifier_kind}
+
+
+@app.get("/demo", response_class=HTMLResponse, include_in_schema=False)
+def demo() -> str:
+    # Static page; it does not load the models (the first /analyze call does).
+    return DEMO_HTML
 
 
 @app.post("/analyze")
