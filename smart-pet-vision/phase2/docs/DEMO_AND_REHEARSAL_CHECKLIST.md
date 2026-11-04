@@ -26,14 +26,15 @@ detector `f48e4d8e…1da1cd4`, segmenter `868f3842…a5d8ee`, classifier `22dd58
 | 3 | Same as 2 with one authorised multi-animal image (a licensed public photo, or a team photo whose owner agreed) | Show the verdict actually returned, even if it is a wrong `ready`; this is the known 17/52 limitation | honest failure case |
 | 4 | `curl -s -o /dev/null -w "%{http_code}" -F file=@notes.txt "127.0.0.1:8000/analyze"` | `415` (an empty file gives `400`) | input validation |
 
-Choose the image for request 2 in advance from the Oxford test split and record its actual output during rehearsal; do not claim an output that was not observed. Do not show team photos on screen unless their owners agreed.
+Executed once on 4 Nov in a CPU cloud container from a clean install of `1cab83f` (not the presentation host): /health 200; the CC0 scikit-image cat `chelsea.png` → ready, cat, both policy flags; blank image → no_animal; 415/400/413 (record: `report/evidence/P2_cpu_smoke_test_20261104.json`). `chelsea.png` can be used for request 2 if no Oxford image is at hand. Choose the image for request 2 in advance from the Oxford test split and record its actual output during rehearsal; do not claim an output that was not observed. Do not show team photos on screen unless their owners agreed.
 
 Timings to quote if asked (never combine them): T4 in-process p95 61.4 ms (A8) and 70.9 ms (3 Nov repeat); CPU HTTP p50/p95/p99 383.8/430.8/690.1 ms (W&B mu2tolkg).
 
 **Recovery during the session:** preflight fails with "weights not found" or a hash mismatch → restore the three files from Drive and rerun preflight (never substitute downloaded models); the service returns 503 or crashes → restart uvicorn once, then switch to the backup recording; no network or Colab runtime → play the backup recording.
 
 ## 3. Backup recording
-- [ ] Record requests 1–4 from a clean Colab runtime, following Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`.
+- [x] (4 Nov, container) MP4 of the smoke-test run made from its transcript: `SmartPetVision_backup_recording_CPU_smoke_20261104.mp4` — useful as a last resort, but it is not the presentation-host demo.
+- [ ] Record requests 1–4 on the presentation host (or a clean Colab runtime), following Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`.
 - [ ] Check that no API key, token or personal path is visible on screen.
 - [ ] Save to Drive `05_Demo` and play it once end to end.
 
