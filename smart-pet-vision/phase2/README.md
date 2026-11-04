@@ -19,7 +19,10 @@ The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json
 | `notebooks/06_release_validation_v2.ipynb` | CPU regression and local HTTP check with preflight (Colab, CPU) |
 | `notebooks/09_onnx_channel_diagnosis_v2.ipynb`, `10_log_evidence_documentation_v2.ipynb` | ONNX box/score diagnosis; W&B documentation run that refuses duplicate uploads |
 | `tools/preflight_release.py`, `tools/verify_submission_evidence.py` | Fail-fast checks before real-weight runs; report numbers vs saved evidence |
-| `report/` | Report source (`main.tex`, `figures/`, `evidence/`) and PDF |
+| `notebooks/11_phase2_gap_experiments.ipynb` | COCO-as-is baselines, validation sweeps, per-stage p50/p95, ONNX test mAP (Colab, T4) |
+| `submission/` | **Final Phase 2 report on the instructor's template**; `./build.sh` builds the PDF, source ZIP and `RELEASE_MANIFEST.json` (SHA-256 of all submission files) |
+| `report/` | Earlier free-form report (superseded for submission by `submission/`); `evidence/` is the source of every reported number |
+| `docs/model_card.md`, `docs/DEMO_AND_REHEARSAL_CHECKLIST.md` | Model card; clean-install service run, demo requests, backup recording, four-person rehearsal |
 | `runs/manifest.json` | Model paths, thresholds, classifier temperature |
 | `tests/` | Unit tests |
 

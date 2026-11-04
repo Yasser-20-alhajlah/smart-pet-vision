@@ -8,4 +8,5 @@ pdflatex -interaction=nonstopmode -halt-on-error main.tex >/dev/null
 cp main.pdf SmartPetVision_Phase2.pdf
 rm -f SmartPetVision_Phase2_source.zip
 zip -q SmartPetVision_Phase2_source.zip main.tex figures/* $( [ -f private_ids.tex ] && echo private_ids.tex )
-echo "built SmartPetVision_Phase2.pdf and SmartPetVision_Phase2_source.zip"
+python3 tools/make_release_manifest.py
+echo "built SmartPetVision_Phase2.pdf, SmartPetVision_Phase2_source.zip and RELEASE_MANIFEST.json"

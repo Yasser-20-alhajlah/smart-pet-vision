@@ -28,13 +28,25 @@ Oxford-IIIT Pet (CC BY-SA 4.0), 7,335 images after cleaning, group-aware split 5
 | Team photos: detection recall | 0.732 (dog 0.651) | 401 photos, 503 animals, conf 0.40 |
 | Team photos: single-species species accuracy | 386/399 | CPU run W&B f8manl0i |
 | End-to-end p95 latency | 61 ms (T4, in-process); 431 ms (CPU HTTP, W&B mu2tolkg) | batch 1 |
+| Per-stage p50 / p95 (validation, notebook 11) | detect 16.2/17.2, classify 10.1/11.7, segment 22.1/23.4, total 48.6/51.3 ms | T4, in-process, 1,106 val images, code 879b0e8; separate run from the A8 benchmark |
+
+### Baselines (not fine-tuned, COCO-pretrained weights used as is; notebook 11)
+| Measure | Baseline | Fine-tuned (above) |
+|---|---|---|
+| Detection mAP50 / mAP50-95, test | 0.939 / 0.728 | 0.984 / 0.850 |
+| Detection P / R / F1 at conf 0.40, NMS 0.50, test | 0.937 / 0.919 / 0.928 | 0.958 / 0.959 / 0.959 |
+| Mask mAP50-95; mean IoU; mean Dice, test | 0.686; 0.830; 0.893 | 0.875; 0.923; 0.959 |
+
+SAM 2.1-B prompted with the ground-truth box (mIoU 0.812 on 300 test images) is an oracle reference, not an autonomous baseline.
+
+Validation sweep for mask confidence (0.10-0.55) gave mIoU 0.9200-0.9224; the highest was at 0.10, the service keeps 0.25 (difference 0.0002 mIoU). The minimum mask share 0.05 was confirmed on validation (2 of 1,106 images flagged).
 
 ## Known failure modes
 - Missed secondary or small animals: on team photos 17 of 52 multi-animal photos were marked technically ready because only one animal was detected.
 - Lower recall on non-Oxford photos (team set recall 0.732 vs 0.959 on Oxford).
 - Dark dogs in clothing detected as cats (detector/classifier disagreement then triggers referral).
 - Masks bleed into similar-coloured blankets or clothing; occlusion truncates masks.
-- The ONNX detector export does not meet the numerical parity criterion (max abs diff 0.0018-0.0020 vs 0.001); the service uses PyTorch.
+- The ONNX detector export does not meet the raw numerical parity criterion A9b (max abs diff 0.0018-0.0020 vs 0.001, entirely in the pixel-unit box channels; class scores agree to about 1.5e-7). Task-level quality is the same (test mAP50 0.983 vs 0.984, mAP50-95 0.852 vs 0.850), but A9b stays failed and the service uses PyTorch.
 
 ## Ethical considerations
 Photos may show people or homes; the service returns no identity information and keeps no uploaded image. Team photos are kept in private storage only.

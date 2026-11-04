@@ -39,11 +39,11 @@ CI (`.github/workflows/phase2-tests.yml`) runs the same on every PR.
 ## Private assets (not in Git)
 Google Drive (owner's account): `MyDrive/capstone /smart-pet-vision/runs/` (weights, `manifest.json`), `MyDrive/capstone /SmartPetVision_TeamData/` (team photos, labels), `MyDrive/capstone /Submission/FINAL PHASE_2/` (submission folders 01–06, 99_Review). Real-weight runs happen in Colab with `notebooks/06_release_validation_v2.ipynb`.
 
-## Open items (status 1 Nov 2026)
+## Open items (status 4 Nov 2026)
 1. Upload `SmartPetVision_Phase2.pdf` and `_source.zip` (one team member, due 15 Nov 2026).
 2. Each member confirms their line in the "Team members" table of `submission/main.tex`.
 3. Record the demo backup video (script: Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`); export the deck (claude.ai Slides artifact) to `04_Presentation`.
 4. Privacy: student IDs were removed from current tracked text and from `phase2/report/SmartPetVision_Phase2_Report.pdf`; they remain in `SmartPetVision_Phase1.pdf` (the submitted Phase 1 record) and in Git history. Removing them from history needs the owner's explicit approval.
-5. Known report gaps (self-assessment 40/45): one training recipe per model; mask thresholds not swept on validation; A9b fails; per-stage latency percentiles not recorded. `notebooks/11_phase2_gap_experiments.ipynb` (Colab T4, about 35 min plus 40 min optional YOLO11n) measures the COCO-as-is baselines, the validation sweeps, per-stage p50/p95 and the ONNX test mAP; its `results.json` lands in Drive `03_Evidence/phase2_gap_experiments_<time>/` and then goes into `submission/main.tex`.
-6. Optional: run `notebooks/09_onnx_channel_diagnosis_v2.ipynb` (CPU, ~5 min) to test whether the ONNX gap sits in the box channels.
+5. Notebook 11 ran on 2 Nov (T4, code 879b0e8); results in `report/evidence/P2_gap_experiments_20261102.json` and in `submission/main.tex` (baselines, validation sweeps, per-stage p50/p95, ONNX test mAP 0.983/0.852, channel diagnosis). Remaining gaps (self-assessment 41/45): one training recipe per model (optional YOLO11n Part F not run; needs compute approval); A9b fails; notebook 11 results not logged to W&B (Part G).
+6. Release: `submission/build.sh` also writes `RELEASE_MANIFEST.json` (SHA-256 of PDF, ZIP members, evidence, docs; recorded weight hashes). Demo and rehearsal: `phase2/docs/DEMO_AND_REHEARSAL_CHECKLIST.md`.
 7. Owner to confirm the old W&B API key was revoked, and decide on a short AI-assistance disclosure (course guidelines contain no policy).
