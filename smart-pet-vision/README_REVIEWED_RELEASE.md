@@ -1,11 +1,9 @@
-# Smart Pet Vision Phase 2 reviewed source snapshot
+# Reviewed Phase 2 executable source
 
-The ZIP in this folder contains the reviewed local code snapshot based on commit 54a78bb2816a82d69a70c8414da1f434d15f3970, with packaging and preflight fixes. Extract it and work in code/. The archive is the source artifact; the historical repository directories are retained separately.
+The ZIP in this directory contains executable code, tests, relative configuration and dependency pins only. It excludes report source, experiment evidence, images and model weights. Restore authorised report/evidence and report/figures from the private submission source before the complete test suite. Restore trained weights separately.
 
-Validation: 108 local unit tests passed. Three fingerprint-matched weights were loaded in a real CPU TCP-loopback HTTP check, including one previously inspected team cat photograph, images on/off, a blank image, and invalid inputs. This is not a fresh test-set accuracy evaluation, GPU benchmark, or presentation-host rehearsal. No training or hosted deployment is claimed.
+The local reviewed snapshot passed 108 tests with report assets restored and real-weight CPU HTTP smoke checks. No new training, fresh accuracy evaluation, GPU benchmark or completed presentation rehearsal is claimed.
 
-Restore authorized weights at the paths in code/runs/manifest.json; follow code/docs/RUN_SERVICE.md. Weights, raw photographs, and student IDs are excluded. Some archived evidence paths are redacted. Figures and the private report/source are delivered through the authorized team Drive folder; this source archive is not the Overleaf submission ZIP.
+Archive SHA256: 96bbf0ef0fbd4ba27b1809052efd4d2369488aaf8a96d4925cb170eb873cc8b8
 
-Historical test metrics remain tied to their original experiment records. The ONNX detector remains outside the accepted serving path. Training-optimizer provenance and some historical mask settings remain unresolved and must not be guessed.
-
-Archive SHA256: 3fe103ef7bde93aebb02e9aa736b2743a4271aebc80311dfc244864073216fde
+The earlier aggregate-evidence archive has been replaced in the current branch. Replacing it does not erase previous commit history.
