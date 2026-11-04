@@ -15,6 +15,7 @@ python tools/preflight_release.py --manifest runs/manifest.json --requirements .
 PYTHONPATH=src python -m unittest discover -s tests               # count for this candidate: see RELEASE_MANIFEST.json checks_at_build
 python tools/smoke_test_http.py --image <authorised_pet_image>.png --out smoke_result.json   # optional rehearsal check, CPU, ~2 min
 SPV_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app --host 127.0.0.1 --port 8000 --workers 1
+# open http://127.0.0.1:8000/demo in the browser, then analyse one photo once (warm-up: the first request loads the models)
 ```
 
 `tools/smoke_test_http.py` starts the service, recomputes the three weight hashes, runs preflight and sends: /health; the image with images=false and images=true (decodes the returned PNGs); a synthetic two-animal composite (the image twice; the verdict actually returned is recorded, a wrong `ready` included); a blank image; text, empty and >15 MB uploads (415/400/413). It checks both policy flags on every response. It is a functional check, not an accuracy or speed measurement.
@@ -22,7 +23,20 @@ SPV_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app --host 127.
 Weight SHA-256 (must match `submission/RELEASE_MANIFEST.json` and `docs/model_card.md`):
 detector `f48e4d8e…1da1cd4`, segmenter `868f3842…a5d8ee`, classifier `22dd58d4…2081ba`.
 
-## 2. The live requests
+## 2. The live demonstration (browser page `GET /demo`, about 2 min 30 s)
+The page is served by the same FastAPI process and only calls `POST /analyze`; it needs no internet access. It shows the original photo, the detections with the mask, the mask, the cutout, a large verdict (READY CANDIDATE / REFER TO STAFF) with the reason messages, and both policy flags of the response. For a `no_animal` referral it shows no species or confidence. Empty files and files over 15 MB are stopped in the browser; unreadable files show the service's 415 message; if the service is down, the page says so.
+
+| # | Action on the page | What to say |
+|---|---|---|
+| 1 | Show the header strip: staff approval required, automatic publication disabled | the system proposes, staff decide |
+| 2 | Upload the Oxford test image chosen during rehearsal (or the CC0 photo `chelsea.png`) | verdict, four panels, flags; the result is a proposal for staff |
+| 3 | Upload a photo without a pet, or the synthetic blank image (say "synthetic") | `no_animal` referral; the species field is deliberately not shown |
+| 4 | Upload a text file renamed `.png` | the 415 message; the service rejects non-images |
+| 5 | Optional, only if time remains: the synthetic two-cat composite (say "synthetic; the 17/52 real multi-animal limitation is unchanged") | `multiple_animals` referral |
+
+Observed on 4 Nov in a CPU cloud container (real weights, code commit `1721627`, Chromium; **not the presentation host**; evidence `report/evidence/P2_demo_page_check_20261104.json`): CC0 cat photo → READY CANDIDATE, cat, 1 detection; CC0 coffee-cup photo (no pet) → REFER TO STAFF (one false box, cat 0.495; classifier "dog" 1.000; reasons disagreement, segmentation_unmatched, animal_too_small); synthetic two-cat composite → REFER TO STAFF (multiple_animals); synthetic blank image → REFER TO STAFF (no_animal), species hidden; text file → HTTP 415 message; empty and 16 MB files → stopped in the browser. Both policy flags were correct on every response; the browser requested no host other than the service; no file was written in the service working tree. The coffee-cup result is a useful honest failure example (out-of-scope object referred), not a false-positive rate.
+
+### Command-line fallback (if the browser fails)
 | # | Request | Expected | What it shows |
 |---|---|---|---|
 | 1 | `curl -s 127.0.0.1:8000/health` | `{"status":"ok", ...}` with the three model names | service loaded the manifest |
@@ -40,22 +54,37 @@ Timings to quote if asked (never combine them): T4 in-process p95 61.4 ms (A8) a
 
 ## 3. Backup recording
 - [x] (4 Nov, container) MP4 of the smoke-test run made from its transcript: `SmartPetVision_backup_recording_CPU_smoke_20261104.mp4` — useful as a last resort, but it is not the presentation-host demo.
+- [x] (4 Nov, container) 71 s screen recording of the demo page with real weights on CPU, code commit `1721627`: `SmartPetVision_demo_page_backup_recording_CPU_container_1721627.mp4`. A caption on every frame states the date, commit, CPU container and that it is not the presentation host; inputs are labelled CC0 or SYNTHETIC. It is the closest available fallback until a presentation-host recording exists.
 - [ ] Record requests 1–4 on the presentation host (or a clean Colab runtime), following Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`.
 - [ ] Check that no API key, token or personal path is visible on screen.
 - [ ] Save to Drive `05_Demo` and play it once end to end.
 
-## 4. Four-person rehearsal (candidate deck `04_Presentation/SmartPetVision_Phase2_Presentation.pptx` in the Drive candidate folder, 17 slides + 3 appendix, about 19 min; the guideline range is 15–20 min)
-| Slides | Presenter | Time | Points to state correctly |
-|---|---|---|---|
-| 1–4 | Abdulrahman Mastour Alharthi | 0:00–4:30 | split 5,123/1,106/1,106, test used once; Phase 1 0.906 vs 0.999; AdamW via `optimizer=auto`; operating point chosen on validation |
-| 5–6 | Yasser Mansour Alhajlah | 4:30–6:50 | AP (all thresholds) kept apart from P/R/F1 at conf 0.40, NMS 0.50; COCO baseline mAP50 0.939 → 0.984 |
-| 7–9 | Mohammed Adeeb Alrashdi | 6:50–10:25 | foreground mIoU vs instance mask AP; SAM with a ground-truth box is an oracle reference |
-| 10–16 | Musaad Obaied Saad Alqahtani | 10:25–18:15 | 17/52 limitation; A9b not met, PyTorch serves; CPU vs T4 kept apart; live demo |
-| 17 | All | 18:15–19:00 | GO staff-supervised PyTorch service; NO-GO ONNX detector |
+## 4. Four-person rehearsal plan (polish-candidate deck, 17 slides + 3 appendix; target 18:30, guideline 15–20 min)
+The guidelines ask each member to present their own contribution and recommend 2–3 min of live demonstration. This plan therefore gives the detection slides 3–4 to Yasser (detection workstream) and gives the demo 2:30. It is a proposal: the team confirms or changes it at the first timed run. The time boxes printed on the slides follow this plan.
 
-The guidelines ask each member to present their own contribution. Slides 3–4 (box derivation, operating point) belong to the detection workstream; the team may move them to Yasser and give Abdulrahman more time on data and Phase 1.
+| Slides | Presenter | Time | Points to state correctly | Hand-off sentence |
+|---|---|---|---|---|
+| 1–2 | Abdulrahman Mastour Alharthi | 0:00–2:40 | users and decision; criteria fixed before results (shown on slide 17); split 5,123/1,106/1,106, test used once; Phase 1 0.906 vs 0.999 | "Yasser shows how we find each animal." |
+| 3–6 | Yasser Mansour Alhajlah | 2:40–6:45 | body boxes from trimaps; operating point on validation (conf 0.40, NMS 0.50); AP over all thresholds kept apart from P/R/F1 at the operating point; COCO-as-is 0.939 → 0.984 mAP50; team-photo recall 0.732 | "Mohammed explains how we outline the animal." |
+| 7–9 | Mohammed Adeeb Alrashdi | 6:45–9:55 | union-mask mIoU vs instance mask AP; trimap border; SAM with a ground-truth box is an oracle reference, not a controlled comparison | "Musaad puts the three models together." |
+| 10–15 | Musaad Obaied Saad Alqahtani | 9:55–14:45 | 17/52 limitation; A9b not met, PyTorch serves; CPU vs T4 and HTTP vs in-process never combined | "Now the system running." |
+| 16 | Musaad (demo), Yasser at the keyboard if preferred | 14:45–17:15 | demo steps 1–4 of section 2; switch to the recording after one failed retry | "We close with the decision." |
+| 17 | All (one sentence each) | 17:15–18:30 | GO staff-supervised PyTorch service; NO-GO ONNX detector; limitations | — |
+
+Timing rule: if any block runs over by more than 20 s, the next presenter shortens their spoken text, not the demo; total must stay under 20:00.
 
 - [ ] Full run-through with a timer; each presenter within their slot.
 - [ ] Practise one switch to the backup recording.
-- [ ] Every member can answer: why A9b fails and why the 0.001 bound was kept; why the 401 team photos are not a fresh holdout; why the 28.7 px figure is not used.
+- [ ] Every member can answer: why A9b fails and why the 0.001 bound was kept; why the 401 team photos are not a fresh holdout; why the 28.7 px figure is not used. Questions and short answers: `docs/PRESENTATION_QA.md`.
 - [ ] Team approves the candidate deck (PPTX and PDF exported in the Drive candidate folder) before it replaces the deck in `04_Presentation`.
+
+## 5. Presentation-host checklist (the day before and 30 min before)
+- [ ] Host chosen (laptop or Colab runtime) and the same host used for the rehearsal; Python and `../requirements.txt` installed from the release archive.
+- [ ] Three weight files copied from Drive; `preflight_release.py --strict-versions` passes (no other weights, ever).
+- [ ] `uvicorn` started from `smart-pet-vision/phase2`; `http://127.0.0.1:8000/health` returns the three model names.
+- [ ] `http://127.0.0.1:8000/demo` open in a browser tab, zoom about 90 % so the verdict and the four panels fit on the projector; one warm-up photo analysed.
+- [ ] Demo images in one local folder, named to show their status (Oxford test, CC0, SYNTHETIC); no team photos unless the owner agreed; no personal paths, keys or notebook tokens on screen.
+- [ ] Backup recording opened in a second window and played once; slides in presenter view; timer visible to the presenters.
+- [ ] No internet needed during the demo (the page loads nothing external); if the host is Colab, the runtime is connected and the tab is not idle.
+
+**Fallback procedure (decide in under 30 s):** page shows "could not be reached" or a 503 → restart uvicorn once (about 20 s to reload); still failing, or any freeze over 30 s → say "we switch to the recording made from the same code" and play the recording; never improvise a result that was not shown. The recording is from a cloud container, not this host: say so.

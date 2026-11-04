@@ -6,7 +6,7 @@ private weight files at the paths in the manifest.
 
   python tools/smoke_test_http.py --image cat.png --out smoke_result.json [--manifest runs/manifest.json] [--port 8765]
 
-Requests: /health; the image with images=false and images=true (returned PNGs decoded); a synthetic
+Requests: /health; /demo (the browser page is served as HTML); the image with images=false and images=true (returned PNGs decoded); a synthetic
 two-animal composite (the image twice, side by side; the verdict actually returned is recorded, a
 wrong 'ready' included); a blank image; invalid uploads (text 415, empty 400, >15 MB 413).
 Every /analyze response must carry staff_approval_required=true and automatic_publication_allowed=false.
@@ -101,6 +101,11 @@ def main():
         results["health"] = {"status": h.status_code, "body": h.json(), "first_response_s": round(time.time() - t0, 2)}
         log(f"curl -s {url}/health", json.dumps(h.json()) + f"   [HTTP {h.status_code}]")
 
+        d = requests.get(url + "/demo", timeout=60)
+        results["demo_page"] = {"status": d.status_code, "content_type": d.headers.get("content-type", ""),
+                                "calls_analyze": 'fetch("/analyze?images=true"' in d.text, "bytes": len(d.content)}
+        log(f"curl -s -o /dev/null -w '%{{http_code}}' {url}/demo", f"{d.status_code} {results['demo_page']['content_type']}")
+
         def analyze(name, data, images, key):
             t = time.perf_counter()
             r = requests.post(url + "/analyze", params={"images": str(images).lower()},
@@ -171,6 +176,8 @@ def main():
         "test_image": {"name": img_path.name, "sha256": sha(img_path)},
         "results": results,
         "summary": {"health_200": results["health"]["status"] == 200,
+                    "demo_page_200_html": (results["demo_page"]["status"] == 200
+                                           and results["demo_page"]["content_type"].startswith("text/html")),
                     "all_analyze_200": all(v["http_status"] == 200 for v in analyses),
                     "policy_flags_ok_on_every_analyze": all(v["policy_flags_ok"] for v in analyses),
                     "invalid_inputs_as_expected": all(v["ok"] for k, v in results.items() if k.startswith("invalid_")),

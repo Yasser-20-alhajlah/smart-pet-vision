@@ -120,3 +120,12 @@ Not run here: real-weight inference, T4 benchmarks, HTTP with real weights, Grad
 - **Manifest**: open items are split into `submission_gates`, `presentation_gates` and `optional_improvements`; GPU revalidation and retraining are optional.
 - **Reproducible PDF**: `build.sh` dates the PDF by the commit time, so rebuilding a commit gives the same PDF bytes.
 - **GitHub**: the candidate is pushed to `phase2-gap-closure` (PR #5) and merged into `main` with a merge commit (no squash or rebase), so every cited commit stays in `main`'s history.
+
+## 8. Polish candidate (branch `phase2-polish`, local, 5 Nov; not pushed)
+Bounded improvement pass on top of `17ed5bf` (stable package unchanged in Drive `REVIEW_CANDIDATE_20261104T1951Z`). No training, no new model-quality evaluation, no threshold or acceptance change.
+- **Demo page** `GET /demo` (`src/spv/demo_page.py`, route in `serve.py`): upload-and-analyse view over `POST /analyze` (original, detections with mask, mask, cutout; verdict with reason messages; both policy flags; no species/confidence for a `no_animal` referral; empty, >15 MB, unreadable and service-down states). No external resources; API contract unchanged (4 tests). Chosen over the teammate's Gradio draft in Drive `05_Demo/gradio_app_CANDIDATE_20261104.py` (left unchanged) because it needs no new dependency (Gradio is not in the pinned requirements), runs in the same process and shows the original photo and reason messages; the draft also shows species and confidence for `no_animal`.
+- **Demo check with real weights** (CPU cloud container, Chromium; not the presentation host): 7 labelled inputs, results in `report/evidence/P2_demo_page_check_20261104.json`; 71 s backup screen recording with a caption on every frame. Observation: a CC0 coffee-cup photo gave one false detection (cat 0.495) and was referred.
+- **Smoke test tool** also checks `GET /demo`.
+- **Report** (`submission/main.tex`): summary box, a results-at-a-glance table (value, population, setting, source for each headline result), the demo page in the service rows, a demo-check paragraph and a short conclusion (demonstrated / not demonstrated / next steps).
+- **Presentation**: technical Q&A sheet `docs/PRESENTATION_QA.md`; rehearsal plan with a 2:30 demo slot and hand-off sentences, presentation-host checklist and fallback procedure in `docs/DEMO_AND_REHEARSAL_CHECKLIST.md`; model card notes on the demo display rule and the out-of-scope detection.
+

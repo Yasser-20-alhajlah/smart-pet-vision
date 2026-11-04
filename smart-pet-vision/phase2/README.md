@@ -13,7 +13,7 @@ The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json
 | `src/spv/detect.py` | YOLO11s body detector: training, threshold sweep, evaluation |
 | `src/spv/segment.py`, `instance_alignment.py` | YOLO11s-seg masks, SAM 2.1 reference, mask/instance matching |
 | `src/spv/pipeline.py` | Detect → classify → segment → ready/refer verdict |
-| `src/spv/serve.py` | FastAPI service: `POST /analyze`, `GET /health` |
+| `src/spv/serve.py`, `demo_page.py` | FastAPI service: `POST /analyze`, `GET /health`; `GET /demo` browser page for the live demonstration (calls `/analyze` only, no external resources) |
 | `src/spv/deploy.py` | ONNX export, parity check, latency/throughput benchmark |
 | `notebooks/03_detection.ipynb`, `04_segmentation.ipynb`, `05_integration.ipynb` | Reproduction notebooks (Colab, T4) |
 | `notebooks/06_release_validation_v2.ipynb` | CPU regression and local HTTP check with preflight (Colab, CPU) |
@@ -38,6 +38,19 @@ PYTHONPATH=src:. python -m pytest -q tests
 ```
 
 Result on 31 Oct 2026 (CPU, Python 3.13): snapshot version 49 passed; with the v0.4 multi-animal commit, 83 passed; with the submission checks, 102 passed. `python tools/verify_submission_evidence.py` checks that the report's numbers match `report/evidence/`. The report builds with `cd report && pdflatex main.tex` (twice).
+
+## Running the service and the demo page
+
+```bash
+cd smart-pet-vision/phase2
+pip install -r ../requirements.txt
+# copy the three private weight files from Drive to the paths in runs/manifest.json, then:
+python tools/preflight_release.py --manifest runs/manifest.json --requirements ../requirements.txt --strict-versions
+SPV_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app --host 127.0.0.1 --port 8000 --workers 1
+# browser: http://127.0.0.1:8000/demo   (API: POST /analyze, GET /health, GET /docs)
+```
+
+Send one photo before the audience arrives: the first request loads the three models. Demo steps, expected results and recovery: `docs/DEMO_AND_REHEARSAL_CHECKLIST.md`.
 
 ## Acceptance status (criteria set before the Phase 2 runs)
 

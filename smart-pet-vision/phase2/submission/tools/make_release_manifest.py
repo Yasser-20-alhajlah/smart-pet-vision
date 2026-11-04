@@ -84,6 +84,7 @@ def main():
         "documents": {str(p.relative_to(PHASE2)): sha(p) for p in (
             PHASE2 / "docs" / "model_card.md", PHASE2 / "docs" / "DEMO_AND_REHEARSAL_CHECKLIST.md",
             PHASE2 / "docs" / "AUDIT_TRACKER_2026-11-04.md", PHASE2 / "docs" / "AI_ASSISTANCE_DISCLOSURE_DRAFT.md",
+            PHASE2 / "docs" / "PRESENTATION_QA.md",
             PHASE2 / "README.md", PHASE2 / "tools" / "verify_submission_evidence.py",
             PHASE2 / "tools" / "smoke_test_http.py")},
         "acceptance": {"A1-A8": "met", "A9a": "met", "A9b": "not met (0.0018-0.0020 vs 0.001)",
@@ -101,7 +102,7 @@ def main():
                              "One member uploads SmartPetVision_Phase2.pdf and SmartPetVision_Phase2_source.zip by 15 Nov 2026"],
         "presentation_gates": ["Four-person rehearsal with a timer (15-20 min)",
                                "Live demo on the presentation host and a backup recording made there",
-                               "The existing recording is a container run of an earlier candidate; it is not shown as the live demo"],
+                               "The existing recordings are cloud-container runs (CPU smoke test of an earlier candidate; demo page of this candidate); they are fallbacks, not the presentation-host demo"],
         "optional_improvements": ["GPU revalidation of the candidate code (output validation added after 879b0e8)",
                                   "New independent multi-animal data to re-measure the 17/52 limitation",
                                   "Retraining with the four corrected training boxes (validation-only selection, one final test)"],
