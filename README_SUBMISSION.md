@@ -21,7 +21,7 @@ Detection, segmentation and integrated deployment are outside the Phase 1 evalua
 
 ## Public submission files
 
-- [Phase 1 PDF](./smart-pet-vision/SmartPetVision_Phase1.pdf)
+- [Phase 1 PDF](./smart-pet-vision/SmartPetVision_Phase1.pdf) (public copy with student IDs redacted; the submitted original is kept privately by the team)
 - [Source code and notebooks](./smart-pet-vision/)
 - [Dataset card](./smart-pet-vision/docs/dataset_card.md)
 - [Configuration](./smart-pet-vision/configs/config.yaml)

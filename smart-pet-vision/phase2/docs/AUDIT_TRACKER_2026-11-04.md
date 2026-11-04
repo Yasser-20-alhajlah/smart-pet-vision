@@ -111,3 +111,12 @@ Not run here: real-weight inference, T4 benchmarks, HTTP with real weights, Grad
 - Packaging: `submission/build.sh` now writes `reviewed_source.zip` (committed files, PDFs excluded, refuses if a private ID is found) and puts the same members under `code/` in the report source ZIP; `RELEASE_MANIFEST.json` records `code_archive.identical_to_source_zip_code_folder`. Tests: `tests/test_release_packaging.py`.
 - `tools/smoke_test_http.py` added (the real-weight smoke test used on 4 Nov, plus a synthetic two-animal request and decoded-image checks).
 - Rubric comparison of the two Phase 2 reports, the inventory and the verification logs of the final candidate are in the Drive candidate folder (`00_RELEASE/AUDIT_AND_ACTIONS.md`, `03_Verification/`).
+
+## 7. Owner decisions of 4 Nov (23:25) and how they were applied
+- **Submission location**: submit from the Drive candidate folder. The team's files in `01_Report` and `04_Presentation` belong to another account and are read-only for the owner account, so they are left as the team's record; a pointer file at the top of `FINAL PHASE_2` names the candidate folder as the submission package.
+- **Duplicate upload**: the byte-identical duplicate PDF in the candidate folder was moved to the Drive trash (recoverable for 30 days).
+- **Student IDs (public repository)**: the tracked `SmartPetVision_Phase1.pdf` is replaced by a redacted copy (the four IDs on page 1 replaced by "(ID)"; text of pages 2–16 identical; no ID in extracted text, raw bytes or decompressed streams). The submitted original stays in the team Drive. Git history is **not** rewritten: a rewrite would change every commit hash cited by the report, the evidence and the manifests (for example `879b0e8`), and GitHub keeps pull-request refs and cached views, so it would not remove the old objects reliably. Release assets of `phase1-v1.0` (checkpoint and result ZIPs) could not be inspected from this environment.
+- **Checks scope**: the checker's summary line now states the split (superseded free-form report vs submission report).
+- **Manifest**: open items are split into `submission_gates`, `presentation_gates` and `optional_improvements`; GPU revalidation and retraining are optional.
+- **Reproducible PDF**: `build.sh` dates the PDF by the commit time, so rebuilding a commit gives the same PDF bytes.
+- **GitHub**: the candidate is pushed to `phase2-gap-closure` (PR #5) and merged into `main` with a merge commit (no squash or rebase), so every cited commit stays in `main`'s history.

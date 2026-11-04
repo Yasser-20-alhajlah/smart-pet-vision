@@ -2,6 +2,8 @@
 # Build SmartPetVision_Phase2.pdf, the source ZIP, reviewed_source.zip and RELEASE_MANIFEST.json. Usage: ./build.sh [extra files to fingerprint]
 set -euo pipefail
 cd "$(dirname "$0")"
+# Date the PDF by the commit, not the clock, so rebuilding the same commit gives the same PDF bytes.
+export SOURCE_DATE_EPOCH="$(git log -1 --format=%ct)" FORCE_SOURCE_DATE=1
 [ -f private_ids.tex ] || echo "note: private_ids.tex not found; student IDs will print as (ID)"
 pdflatex -interaction=nonstopmode -halt-on-error main.tex >/dev/null
 pdflatex -interaction=nonstopmode -halt-on-error main.tex >/dev/null

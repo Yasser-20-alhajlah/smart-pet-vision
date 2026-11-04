@@ -167,11 +167,15 @@ def main():
     if a.figures:
         missing = [f for f in figs if not (a.figures.parent / f).is_file() and not (a.figures / Path(f).name).is_file()]
         results.append(("all report figures present", not missing, ", ".join(missing)))
+    n_old = len(results)
     results += submission_checks(a.root)
     for name, ok, detail in results:
         print(("PASS " if ok else "FAIL ") + name + (f"  [{detail}]" if detail else ""))
     failed = [r for r in results if not r[1]]
-    print(f"{len(results) - len(failed)}/{len(results)} checks passed")
+    # The two scopes are reported separately so the total is not read as checks of the submitted report alone.
+    print(f"{len(results) - len(failed)}/{len(results)} checks passed "
+          f"({n_old} on the superseded free-form report report/main.tex, "
+          f"{len(results) - n_old} on the submission report submission/main.tex)")
     return 1 if failed else 0
 
 
