@@ -128,6 +128,17 @@ def submission_checks(root):
     check("annotation correction: 4 train labels, val/test unchanged, not retrained, no gain claimed",
           ann["yolo_detection_labels_changed"] == 4 and ann["val_test_unchanged"]
           and ann["training_or_evaluation_not_performed"] and "not retrained" in body)
+
+    fin = load(root, "M8_onnx_parity_recheck_A9b_20261103.json")
+    r50 = fin["results"][0]["real_images_50"]
+    check("matched-preprocessing final-detection agreement quoted, A9b still failed",
+          r50["same_classes"] == 1.0 and f"{r50['final_box_max_abs_diff_px']:.5f}" in body
+          and not fin["any_variant_passed"])
+
+    rep = load(root, "P2_closure_v3_20261103_extract.json")["gpu_benchmark"]
+    check("3 Nov T4 repeat quoted as recorded and kept separate",
+          "{:.1f}/{:.1f}/{:.1f}".format(rep["p50_ms"], rep["p95_ms"], rep["p99_ms"]) in body
+          and "not combined" in body and rep["measurement"].startswith("synchronized in-process"))
     return out
 
 

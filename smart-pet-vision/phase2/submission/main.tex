@@ -598,7 +598,7 @@ Check (PyTorch vs.\ ONNX) & Tolerance & Result & Pass? \\
 Classifier: max abs difference of logits (8 inputs) & $\leq 0.001$ (A9a) & $2.98\times10^{-7}$; argmax agreement 100\% & Yes \\
 Detector: max abs difference of raw head (4 random inputs, seed 0, CPU) & $\leq 0.001$ (A9b) & 0.0018 (acceptance); 0.0020 (re-check); 0.00198--0.00201 (six export/runtime settings, 31 Oct); 0.0018 (2 Nov) & \textbf{No} \\
 Same metric on the evaluation set (Oxford test, 1,106 images, 640\,px) & None set in advance & mAP50 0.983 vs 0.984; mAP50--95 0.852 vs 0.850 (ONNX vs PyTorch) & Reported \\
-Same decisions at the operating point (50 test images, CPU) & None set in advance & 98\% same count and classes. A largest box shift of 28.7\,px was recorded by an earlier code version that did not give both backends the same square input; it is confounded by pre-processing and is not attributed to the export & Reported \\
+Same decisions at the operating point (50 test images, CPU) & None set in advance & With the same letterboxed 640\,px input for both backends (3 November, first 50 Oxford test images, CPU, conf 0.40, NMS 0.50, greedy one-to-one matching): 100\% same number of detections and classes, largest final-box difference 0.00027\,px (a separate check on 50 previously inspected team photos gave 0.00055\,px). An earlier run (98\% same count and classes, largest shift 28.7\,px) did not give both backends the same square input; it is confounded by pre-processing and is not attributed to the export. Neither result changes the raw-output criterion A9b & Reported \\
 Reduced precision (FP16 / INT8) & -- & Not used & -- \\
 \bottomrule
 \end{tabularx}}
@@ -643,6 +643,8 @@ PyTorch, T4, HTTP & FP32 & 1 & 46.3 & 135.3 & 178.3 & -- & -- \\
 PyTorch, CPU only, HTTP & FP32 & 1 & 383.8 & 430.8 & 690.1 & -- & -- \\
 \bottomrule
 \end{tabularx}}
+
+\textbf{Repeat on 3 November} (separate run, not combined with the rows above): Tesla T4, PyTorch, in-process, code \texttt{879b0e8} with a local patch that made \texttt{total\_ms} include preprocessing (pipeline SHA-256 \texttt{dd9dfb5c\ldots}), the same three weights, 50 Oxford test images, 10 warm-up and 200 timed calls, images off: p50/p95/p99 51.1/70.9/84.8\,ms. A8 (p95 $\leq$ 2000\,ms) is met in both T4 runs; the A8 row of Section~\ref{sec:verdict} keeps the original run.
 
 \begin{figure}[H]
   \centering
