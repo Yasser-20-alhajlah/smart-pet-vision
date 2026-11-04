@@ -58,6 +58,7 @@
 \newlist{checklist}{itemize}{1}
 \setlist[checklist]{label=$\square$,leftmargin=1.6em,itemsep=2pt}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \renewcommand{\arraystretch}{1.25}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{4pt}
@@ -253,13 +254,14 @@ Object size at 640\,px & 1,105 of 1,106 test boxes cover $\geq10\%$ of the frame
 \toprule
 Run (W\&B link) & Model and pretrained weights & Input res. & What changed in this run & Val.\ mAP50 & Val.\ mAP50--95 \\
 \midrule
-\run{48vh56vh} & YOLO11s, COCO & 640\,px & Baseline settings: 40 epochs, batch 16, SGD (auto), lr0 0.01, mosaic (off for last 10 epochs), horizontal flip 0.5, scale 0.5, HSV jitter, seed 42 & 0.979 & 0.844 \\
+Baseline (nb.\ 11) & YOLO11s, COCO, used as is (cat and dog classes) & 640\,px & No fine-tuning: shows what fine-tuning adds & 0.929 & 0.715 \\
+\run{48vh56vh} & YOLO11s, COCO & 640\,px & Fine-tuned: 40 epochs: 40 epochs, batch 16, SGD (auto), lr0 0.01, mosaic (off for last 10 epochs), horizontal flip 0.5, scale 0.5, HSV jitter, seed 42 & 0.979 & 0.844 \\
 \run{2seovilv} & YOLO11s, COCO & 640\,px & Same settings, full rerun on 18--19 October to check reproducibility & 0.979 & 0.844 \\
 \bottomrule
 \end{tabularx}}
 
 \smallskip
-\textbf{Selected model and why:} the \run{2seovilv} checkpoint (the rerun reproduced every metric of the first run). Validation mAP50 was already 0.979 with the default recipe, so no further variants were trained; this means the effect of other settings is not measured. Augmentations: horizontal flips and scale changes match pets photographed from either side at different distances; vertical flips are off because pets are rarely upside down; mosaic is switched off for the last 10 epochs so the model ends on whole images like the deployment input.
+\textbf{Selected model and why:} the \run{2seovilv} checkpoint (the rerun reproduced every metric of the first run). Fine-tuning raises validation mAP50 from 0.929 to 0.979 and mAP50--95 from 0.715 to 0.844 over the same model used as is, mostly through tighter whole-body boxes (COCO boxes follow its own annotation style). Only one fine-tuning recipe was trained, so the effect of other settings (model size, resolution) is not measured. Augmentations: horizontal flips and scale changes match pets photographed from either side at different distances; vertical flips are off because pets are rarely upside down; mosaic is switched off for the last 10 epochs so the model ends on whole images like the deployment input.
 
 \begin{figure}[H]
   \centering
@@ -306,11 +308,13 @@ Cat & 357 & 0.994 & 0.888 & 0.980 & 0.983 & 0.982 \\
 Dog & 749 & 0.973 & 0.812 & 0.948 & 0.948 & 0.948 \\
 \midrule
 \textbf{All classes} & \textbf{1,106} & \textbf{0.984} & \textbf{0.850} & \textbf{0.958} & \textbf{0.959} & \textbf{0.959} \\
+\midrule
+Baseline, COCO model as is & 1,106 & 0.939 & 0.728 & 0.937 & 0.919 & 0.928 \\
 \bottomrule
 \end{tabularx}}
 
 \smallskip
-Wilson 95\% intervals from the counts (1,061 TP, 46 FP, 45 FN): precision 0.945--0.969, recall 0.946--0.969. On the team photos the recall interval is 0.691--0.768 (368 of 503 animals).
+The baseline row is the COCO-pretrained YOLO11s without fine-tuning (cat and dog classes only); its operating point was chosen on validation with the same rule and is also \tconf{} 0.40, \tnms{} 0.50 (notebook 11). Wilson 95\% intervals from the counts (1,061 TP, 46 FP, 45 FN): precision 0.945--0.969, recall 0.946--0.969. On the team photos the recall interval is 0.691--0.768 (368 of 503 animals).
 
 \smallskip
 \textbf{Weak classes:} dog is weaker (AP50--95 0.812 vs 0.888). Dogs vary more in body shape and pose, long-bodied breeds give looser boxes, and 10 of the 46 false positives are dogs predicted as cats or the reverse. More varied dog poses and the clothed-pet images from the Phase 1 plan would help most.
@@ -418,21 +422,22 @@ Label format & YOLO segmentation polygons from the binary body mask. Border pixe
 
 \subsection{Model and training}
 
-The baseline is SAM 2.1-B used as is, prompted with the ground-truth box (an oracle prompt, so it shows how good masks can be without any training). The fine-tuned model is YOLO11s-seg, which finds the animal by itself.
+Two baselines show what fine-tuning adds: the same YOLO11s-seg architecture with its COCO weights used as is (cat and dog classes only), and SAM 2.1-B prompted with the ground-truth box. SAM's prompt is an oracle, so it is a reference for mask quality, not an alternative that could run without labels. The fine-tuned YOLO11s-seg finds the animal by itself.
 
 {\small
-\begin{tabularx}{\linewidth}{@{}p{2.1cm} p{2.3cm} p{1.5cm} X p{1.0cm} p{2.2cm}@{}}
+\begin{tabularx}{\linewidth}{@{}P{2.0cm} P{2.2cm} P{1.4cm} Y P{0.9cm} P{2.9cm}@{}}
 \toprule
 Run (W\&B) & Model and initial weights & Train / eval res. & Training setup (loss, augmentation, optimiser) & Epochs & Val.\ metric \\
 \midrule
-Baseline \run{1jb5y453} & SAM 2.1-B, released weights & -- / native & No training; prompt = ground-truth box & -- & Not run on val (test 300: mIoU 0.812) \\
+Baseline A (nb.\ 11) & YOLO11s-seg, COCO, used as is & -- / 640\,px & No training; cat and dog classes, \tconf{} 0.25 & -- & mask mAP50--95 0.687; mIoU 0.832 \\
+Baseline B \run{1jb5y453} & SAM 2.1-B, released weights & -- / native & No training; prompt = ground-truth box (oracle) & -- & mIoU 0.803 (300 val images, seed 42) \\
 \run{kd5ksgt3} & YOLO11s-seg, COCO & 640 / 640\,px & Box, class, DFL and mask losses; mosaic (off last 10 epochs), flip 0.5, scale 0.5, HSV; SGD (auto), lr0 0.01, batch 16, seed 42 & 40 & mask mAP50--95 0.878 \\
 \run{3ztpz2tc} & YOLO11s-seg, COCO & 640 / 640\,px & Same settings, full rerun (18--19 October) & 40 & mask mAP50--95 0.878 \\
 \bottomrule
 \end{tabularx}}
 
 \smallskip
-\textbf{Selected run and why (chosen on validation):} \run{3ztpz2tc}: validation mask mAP50 0.993 and mAP50--95 0.878, identical to the first run, so the recipe is reproducible. No other recipe was trained.
+\textbf{Selected run and why (chosen on validation):} \run{3ztpz2tc}: validation mask mAP50 0.993 and mAP50--95 0.878 (0.877 when re-measured in notebook 11), against 0.687 for the same architecture without fine-tuning; mean IoU rises from 0.832 to 0.922. The rerun matched the first run, so the recipe is reproducible. No other recipe was trained.
 
 \begin{figure}[H]
   \centering
@@ -442,18 +447,22 @@ Baseline \run{1jb5y453} & SAM 2.1-B, released weights & -- / native & No trainin
 
 \subsection{Thresholds and post-processing}
 
-These settings were set once in the configuration and were not swept on validation; this is a gap in our protocol.
+Each setting was swept on the 1,106 validation images (notebook 11, T4) with a rule fixed before the run; the test split was then run once at the chosen mask confidence. On Oxford every image holds one large animal, so each ``no matching mask'' or ``too small'' referral on validation is a false alarm.
 
-\begin{tabularx}{\linewidth}{@{}l Y l l@{}}
+{\small
+\begin{tabularx}{\linewidth}{@{}P{3.0cm} Y P{3.4cm} l@{}}
 \toprule
-Setting & Values tried & Validation metric & Chosen \\
+Setting (rule) & Values tried and validation result & Chosen on validation & Served \\
 \midrule
-Mask confidence (YOLO) & 0.25 only (Ultralytics default) & Not swept & 0.25 \\
-Mask-to-box match IoU & 0.10 only & Not swept & 0.10 \\
-Minimum mask share of the image & 0.05 only & Not swept & 0.05 \\
+Mask confidence (highest val mIoU; ties to higher) & 0.10: 0.9224; 0.25: 0.9222; 0.40: 0.9218; 0.55: 0.9200 & 0.10 (+0.0002 mIoU over 0.25) & 0.25 \\
+Mask-to-box match IoU (largest with false ``no matching mask'' $\leq1\%$) & 0.05, 0.10, 0.25: 7 of 1,106 (0.6\%); 0.50: 14 (1.3\%) & 0.25 (same outcome as 0.10 on val) & 0.10 \\
+Minimum mask share (largest with false ``too small'' $\leq1\%$) & 0.01: 0; 0.02: 0; 0.05: 2 (0.2\%); 0.10: 15 (1.4\%); 0.15: 57 (5.2\%) & 0.05 & 0.05 \\
 Mask resolution & \texttt{retina\_masks=True} (full resolution) & -- & on \\
 \bottomrule
-\end{tabularx}
+\end{tabularx}}
+
+\smallskip
+The minimum mask share served (0.05) is the validated choice. For mask confidence and match IoU the validated values differ from the served ones by amounts that make no measurable difference on validation (0.0002 mIoU; identical referrals), so the release manifest was left unchanged rather than re-released without re-validation. At the validated confidence 0.10 the test split gives mIoU 0.922 and Dice 0.958, against 0.923 and 0.959 at the served 0.25.
 
 \subsection{Test results}
 
@@ -464,9 +473,12 @@ Mean IoU and Dice are the means of per-image binary scores on the union of all p
 \toprule
 Model & Split & Mask mAP50--95 & mIoU & Mean Dice & mIoU, no border \\
 \midrule
-Baseline SAM 2.1-B (oracle box) & Test, 300 sampled & -- & 0.812 & 0.883 & 0.948 \\
+Baseline A: YOLO11s-seg as is & Val & 0.687 & 0.832 & 0.895 & 0.945 \\
+Baseline A: YOLO11s-seg as is & Test, all 1,106 & 0.686 & 0.830 & 0.893 & 0.942 \\
+Baseline B: SAM 2.1-B (oracle box) & Val, 300 sampled & -- & 0.803 & 0.873 & 0.935 \\
+Baseline B: SAM 2.1-B (oracle box) & Test, 300 sampled & -- & 0.812 & 0.883 & 0.948 \\
 Selected run, same 300 images & Test, 300 sampled & -- & 0.925 & 0.960 & 0.934 \\
-Selected run & Val & 0.878 & -- & -- & -- \\
+Selected run & Val & 0.877 & 0.922 & 0.958 & 0.931 \\
 Selected run & Test, all 1,106 & 0.875 & 0.923 & 0.959 & 0.930 \\
 \bottomrule
 \end{tabularx}}
@@ -487,7 +499,7 @@ Dog (749) & 0.920 & 0.957 & not recorded per class \\
   \caption{Mean IoU and Dice on the same 300 test images for the SAM 2.1-B baseline (native resolution, ground-truth box prompt) and YOLO11s-seg (640\,px, \tconf{} 0.25), with and without trimap border pixels.}
 \end{figure}
 
-\textbf{Application measure:} on the 401 team photos (CPU run \run{f8manl0i}, 640\,px, \tconf{} 0.25), the number of segmented animals equals the annotated number on 355 of 401 photos (88.5\%), and the mask's species agrees with the true label on 372 of 378 single-species photos with a mask. Masks triggered 30 referral reasons: 13 animal too small, 10 species disagreement, 7 no matching mask. On Oxford test, fine-tuning raises mean IoU from 0.812 (SAM with an oracle box) to 0.925 on the same 300 images; with border pixels ignored SAM is higher (0.948 vs 0.934), so most of SAM's gap is the trimap border convention rather than wrong masks.
+\textbf{Application measure:} on the 401 team photos (CPU run \run{f8manl0i}, 640\,px, \tconf{} 0.25), the number of segmented animals equals the annotated number on 355 of 401 photos (88.5\%), and the mask's species agrees with the true label on 372 of 378 single-species photos with a mask. Masks triggered 30 referral reasons: 13 animal too small, 10 species disagreement, 7 no matching mask. On Oxford test, fine-tuning raises mean IoU from 0.830 (same architecture as is) to 0.923, and from 0.812 (SAM with an oracle box) to 0.925 on the same 300 images; with border pixels ignored SAM is higher (0.948 vs 0.934), so most of SAM's gap is the trimap border convention rather than wrong masks.
 
 \subsection{Error analysis}
 
@@ -523,24 +535,26 @@ Every number states its hardware and path. The acceptance benchmark (A8) is in-p
 
 \subsection{End-to-end pipeline}
 
-Per-stage times are means from the instrumented pipeline (\texttt{timings} in each response); per-stage percentiles were not recorded. The end-to-end time was measured directly per image.
+Per-stage times come from the instrumented pipeline (\texttt{timings} in each response). Two measurements are shown and are not mixed: (a) per-stage percentiles over the 1,106 validation images (notebook 11) and (b) the acceptance benchmark (A8), which timed the end-to-end call directly on the first 50 test images.
 
+{\small
 \begin{tabularx}{\linewidth}{@{}l Y r r@{}}
 \toprule
-Stage & Implementation & Mean (ms) & p95 (ms) \\
+Stage & Implementation & p50 (ms) & p95 (ms) \\
 \midrule
-Pre-processing & PIL decode; letterbox inside Ultralytics; crop and resize for the classifier & incl.\ below & -- \\
-Model inference: detector & YOLO11s, PyTorch CUDA, 640\,px & 14.2 & -- \\
-Model inference: classifier & ResNet-50, PyTorch CUDA, 224\,px crop & 9.3 & -- \\
-Model inference: segmenter & YOLO11s-seg, PyTorch CUDA, 640\,px & 17.6 & -- \\
-Post-processing and decision & Mask matching and referral rule & incl.\ above & -- \\
+Pre-processing & EXIF orientation, RGB; letterbox inside Ultralytics; crop and resize for the classifier & \multicolumn{2}{r}{inside the stage times} \\
+Model inference: detector & YOLO11s, PyTorch CUDA, 640\,px & 16.2 & 17.2 \\
+Model inference: classifier & ResNet-50, PyTorch CUDA, 224\,px crop & 10.1 & 11.7 \\
+Model inference: segmenter & YOLO11s-seg, PyTorch CUDA, 640\,px, with mask matching & 22.1 & 23.4 \\
+Post-processing and decision & Referral rule & \multicolumn{2}{r}{$<0.1$ (inside the total)} \\
 \midrule
-\textbf{End to end} & Measured per image & 41.5 (p50 38.5) & 61.4 \\
+\textbf{End to end, (a)} & Sum of timed stages per image & 48.6 & 51.3 \\
+\textbf{End to end, (b) A8} & Measured directly per call & 38.5 & 61.4 \\
 \bottomrule
-\end{tabularx}
+\end{tabularx}}
 
 \smallskip
-\textbf{Conditions:} Tesla T4, PyTorch 2.11.0 (CUDA), Ultralytics 8.4.182; batch 1; the first 50 Oxford test images cycled; 10 warm-up and 200 timed images; one process.
+\textbf{Conditions:} (a) Tesla T4, PyTorch 2.11.0 (CUDA), batch 1, 1,106 Oxford validation images, 10 warm-up, in-process, run of 2 November (code \texttt{879b0e8}); (b) Tesla T4, PyTorch 2.11.0, Ultralytics 8.4.182, batch 1, first 50 Oxford test images cycled, 10 warm-up and 200 timed calls, one process (18--19 October). The runs differ in images, session and repetition, so their totals are not combined.
 
 \subsection{Release and manifest}
 
@@ -574,23 +588,23 @@ Invalid input & Empty upload $\rightarrow$ HTTP 400; not an image $\rightarrow$ 
 
 \subsection{ONNX export and parity}
 
-\textbf{Export settings:} opset 17, fixed input $1\times3\times640\times640$ (detector) and $1\times3\times224\times224$ (classifier), FP32. The detector graph contains the network and the decoded raw head (boxes in pixels and class scores); confidence filtering and NMS stay in our code. A re-check on 31 October tried six export and runtime settings (simplified or not, graph optimisation off/basic/all, one thread).
+\textbf{Export settings:} opset 17, fixed input $1\times3\times640\times640$ (detector) and $1\times3\times224\times224$ (classifier), FP32. The detector graph contains the network and the decoded raw head (boxes in pixels and class scores); confidence filtering and NMS stay in our code. Checks are kept apart: raw numerical parity (A9b), agreement of final detections, the task metric, and speed (Section 4.6).
 
 {\small
-\begin{tabularx}{\linewidth}{@{}p{5.2cm} p{2.4cm} X l@{}}
+\begin{tabularx}{\linewidth}{@{}P{5.0cm} P{2.0cm} Y l@{}}
 \toprule
 Check (PyTorch vs.\ ONNX) & Tolerance & Result & Pass? \\
 \midrule
 Classifier: max abs difference of logits (8 inputs) & $\leq 0.001$ (A9a) & $2.98\times10^{-7}$; argmax agreement 100\% & Yes \\
-Detector: max abs difference of raw head (4 random inputs, seed 0, CPU) & $\leq 0.001$ (A9b) & 0.0018; re-check 0.0020; six settings 0.00198--0.00201 & \textbf{No} \\
-Detector: same decisions at the operating point (50 Oxford test images, CPU) & None set in advance & 98\% same count and classes; largest box shift 28.7\,px & Reported \\
-Same metric on the evaluation set & -- & Not measured & -- \\
+Detector: max abs difference of raw head (4 random inputs, seed 0, CPU) & $\leq 0.001$ (A9b) & 0.0018 (acceptance); 0.0020 (re-check); 0.00198--0.00201 (six export/runtime settings, 31 Oct); 0.0018 (2 Nov) & \textbf{No} \\
+Same metric on the evaluation set (Oxford test, 1,106 images, 640\,px) & None set in advance & mAP50 0.983 vs 0.984; mAP50--95 0.852 vs 0.850 (ONNX vs PyTorch) & Reported \\
+Same decisions at the operating point (50 test images, CPU) & None set in advance & 98\% same count and classes. A largest box shift of 28.7\,px was recorded by an earlier code version that did not give both backends the same square input; it is confounded by pre-processing and is not attributed to the export & Reported \\
 Reduced precision (FP16 / INT8) & -- & Not used & -- \\
 \bottomrule
 \end{tabularx}}
 
 \smallskip
-On the same inputs a float64 PyTorch reference differs from float32 PyTorch by 0.0016 and from ONNX by 0.0012. This shows differences of this size also arise between float32 and float64 runs of the same model, but it does not isolate the cause of the ONNX gap, and the bound is not changed. Decision: the service runs the PyTorch detector.
+\textbf{Where the gap sits} (notebook 11, same four inputs, CPU, ONNX Runtime 1.31.1): the whole difference is in the four box-coordinate channels, which are in pixels (0.0018); the class-score channels differ by $1.5\times10^{-7}$. Against a float64 run of the same PyTorch model, float32 PyTorch differs by 0.0018 and ONNX by 0.00096, so the exported model is the closer of the two to the exact result. Changing the PyTorch convolution backend gives 0.0012 (oneDNN off) and 0.0011 (oneDNN off, one thread), still above 0.001; ONNX Runtime has no float64 convolution, so both sides cannot be run in float64. A9b is therefore a float32 rounding effect on pixel-scale outputs, not a wrong export, but it is recorded as not met and the bound is not changed. The service runs the PyTorch detector.
 
 \subsection{HTTP service}
 
@@ -658,7 +672,7 @@ A9b ONNX parity, detector & $\leq0.001$ & 0.0018 & \textbf{Fail} \\
 \end{tabularx}
 
 \smallskip
-\textbf{For each FAIL:} A9b: the exported detector's raw head differs from PyTorch by 0.0018--0.0020 against a bound of 0.001, and final boxes moved by up to 28.7\,px on 50 real test images (98\% of images had the same detections and classes). \emph{Why:} the differences sit at the level of float32 arithmetic on outputs measured in pixels (up to 640). Against an exact float64 computation of the same model on the same inputs, float32 PyTorch is off by 0.0016 and ONNX by 0.0012, so the PyTorch reference itself would not meet a 0.001 bound and ONNX is the closer of the two. Six export and runtime settings did not change the result, and ONNX Runtime has no float64 convolution, so a float64 export is not available. \emph{Fix and cost:} serving the PyTorch detector costs nothing and is about seven times faster here (p50 38.5 vs 281.1\,ms); the criterion is not relaxed after the fact. A parity criterion on decisions (same detections at the operating point) or relative to the output scale, fixed before the run, would be the right test for a future export. Decision: GO for a staff-supervised service with PyTorch; NO-GO for serving the ONNX detector.
+\textbf{For each FAIL:} A9b: the exported detector's raw head differs from PyTorch by 0.0018--0.0020 against a bound of 0.001. \emph{Why:} the whole difference is in the pixel-unit box channels and is of the size of float32 rounding: against a float64 run of the same model, float32 PyTorch is off by 0.0018 and ONNX by 0.00096 (Section 4.4). At task level the two backends agree: test mAP50 0.983 vs 0.984 and mAP50--95 0.852 vs 0.850. \emph{Fix and cost:} serving the PyTorch detector costs nothing. The criterion is not relaxed after the fact; a parity criterion on decisions or relative to the output scale, fixed before the run, would be the right test for a future export. (The ONNX benchmark row ran the detector on the CPU execution provider while PyTorch used the T4, so it is not a like-for-like speed comparison.) Decision: GO for a staff-supervised service with PyTorch; NO-GO for serving the ONNX detector until a parity test fixed in advance is passed.
 
 Main failure modes for the model card: missed small and secondary animals (team photos: recall 0.732; 17 of 52 multi-animal photos marked technically ready because one animal was missed); dark clothed dogs detected as cats; masks spreading into similar-coloured backgrounds. Out of scope: automatic publication, identifying individual animals or people, veterinary use, species other than cats and dogs. Every photo is approved by staff, whatever the verdict.
 
@@ -672,7 +686,7 @@ Main failure modes for the model card: missed small and secondary animals (team 
 Obstacle & Module & Impact on the work & Action taken & Status \\
 \midrule
 Oxford-IIIT Pet has almost only one large, centred animal per photo & M4, M5 & Size and multi-animal behaviour cannot be measured on Oxford & 401 team photos (503 animals) annotated in CVAT and used as an evaluation-only set & Done \\
-Detector ONNX export misses the 0.001 parity bound & M8 & ONNX detector cannot be served & PyTorch detector served; six export settings re-checked; diagnosis notebook prepared & Workaround \\
+Detector ONNX export misses the 0.001 parity bound & M8 & ONNX detector cannot be served & PyTorch detector served; gap located in the pixel-unit box channels; test mAP equal for both backends & Workaround \\
 Trimap border pixels are ambiguous & M5 & Mask scores depend on the border convention & Report scores with and without border pixels & Done \\
 Weights over 100\,MB and private photos cannot go into Git & M8 & The repository alone cannot run inference & Relative paths in the manifest, SHA-256 checks, weights and photos in private Drive & Done \\
 \bottomrule
@@ -705,15 +719,15 @@ Weights over 100\,MB and private photos cannot go into Git & M8 & The repository
 \section{Self-assessment}
 
 {\small
-\begin{tabularx}{\linewidth}{@{}l c c Y Y@{}}
+\begin{tabularx}{\linewidth}{@{}P{2.6cm} c c Y P{4.2cm}@{}}
 \toprule
 Criterion & Max (team of 4) & Self-score & Strongest evidence (section) & Known gap \\
 \midrule
-Object detection (M4) & 15 & 14 & Test AP per class, sweep on validation, FP taxonomy, team-photo size analysis, video (\S2) & One training recipe only; no comparison with another detector or the COCO model as is \\
-Segmentation (M5) & 15 & 13 & Full test mIoU/Dice/mask mAP, matched 300-image SAM baseline, border analysis, failure gallery (\S3) & Mask thresholds not swept on validation; baseline not run on validation \\
-Integration and deployment (M8) & 15 & 13 & Manifest, HTTP contracts, T4 and CPU checks, verdict table (\S4) & A9b fails (PyTorch served instead); per-stage percentiles not recorded \\
+Object detection (M4) & 15 & 14 & Test AP per class, sweep on validation, COCO-as-is baseline, FP taxonomy, team-photo size analysis, video (\S2) & One fine-tuning recipe only; small and secondary animals (team recall 0.169 medium, 0/10 small) \\
+Segmentation (M5) & 15 & 14 & Two baselines on validation and test, settings swept on validation, border analysis, failure gallery (\S3) & One fine-tuning recipe only; served mask confidence (0.25) differs from the validated 0.10 by 0.0002 mIoU \\
+Integration and deployment (M8) & 15 & 13 & Manifest, HTTP contracts, per-stage p50/p95, T4 and CPU checks, ONNX task-level parity, verdict table (\S4) & A9b fails (PyTorch served instead); multi-animal false-ready cases (17 of 52) \\
 \midrule
-\textbf{Total} & \textbf{45} & \textbf{40} & & \\
+\textbf{Total} & \textbf{45} & \textbf{41} & & \\
 \bottomrule
 \end{tabularx}}
 

@@ -1,0 +1,397 @@
+{
+ "source_commit": "879b0e815fe5648cce9e8a4a8a6387c5ca5e3d88",
+ "weights_sha256": {
+  "detector": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+  "segmenter": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+  "classifier": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba"
+ },
+ "device": "Tesla T4",
+ "versions": {
+  "torch": "2.11.0+cu130",
+  "python": "3.13.16"
+ },
+ "split": "Oxford-IIIT Pet, saved metadata.csv",
+ "A_detector_coco_baseline": {
+  "model": "yolo11s.pt (COCO, not fine-tuned)",
+  "imgsz": 640,
+  "val": {
+   "box_mAP50": 0.9289216241173563,
+   "box_mAP50_95": 0.7150801321074284
+  },
+  "val_sweep_nms0.5": [
+   {
+    "nms_iou": 0.5,
+    "conf": 0.05,
+    "tp": 1021,
+    "fp": 134,
+    "fn": 85,
+    "precision": 0.883982683982684,
+    "recall": 0.9231464737793852,
+    "f1": 0.9031402034498011
+   },
+   {
+    "nms_iou": 0.5,
+    "conf": 0.1,
+    "tp": 1020,
+    "fp": 102,
+    "fn": 86,
+    "precision": 0.9090909090909091,
+    "recall": 0.9222423146473779,
+    "f1": 0.9156193895870737
+   },
+   {
+    "nms_iou": 0.5,
+    "conf": 0.2,
+    "tp": 1018,
+    "fp": 88,
+    "fn": 88,
+    "precision": 0.9204339963833634,
+    "recall": 0.9204339963833634,
+    "f1": 0.9204339963833634
+   },
+   {
+    "nms_iou": 0.5,
+    "conf": 0.3,
+    "tp": 1014,
+    "fp": 82,
+    "fn": 92,
+    "precision": 0.9251824817518248,
+    "recall": 0.9168173598553345,
+    "f1": 0.9209809264305177
+   },
+   {
+    "nms_iou": 0.5,
+    "conf": 0.4,
+    "tp": 1011,
+    "fp": 77,
+    "fn": 95,
+    "precision": 0.9292279411764706,
+    "recall": 0.9141048824593129,
+    "f1": 0.9216043755697357
+   },
+   {
+    "nms_iou": 0.5,
+    "conf": 0.5,
+    "tp": 1004,
+    "fp": 70,
+    "fn": 102,
+    "precision": 0.9348230912476723,
+    "recall": 0.9077757685352622,
+    "f1": 0.9211009174311927
+   },
+   {
+    "nms_iou": 0.5,
+    "conf": 0.6,
+    "tp": 999,
+    "fp": 63,
+    "fn": 107,
+    "precision": 0.940677966101695,
+    "recall": 0.903254972875226,
+    "f1": 0.9215867158671588
+   },
+   {
+    "nms_iou": 0.5,
+    "conf": 0.7,
+    "tp": 978,
+    "fp": 60,
+    "fn": 128,
+    "precision": 0.9421965317919075,
+    "recall": 0.8842676311030742,
+    "f1": 0.9123134328358209
+   }
+  ],
+  "operating_point": {
+   "conf": 0.4,
+   "nms_iou": 0.5,
+   "val_precision": 0.9292279411764706,
+   "val_recall": 0.9141048824593129,
+   "val_f1": 0.9216043755697357,
+   "recall_floor_met": true
+  },
+  "test": {
+   "box_mAP50": 0.9393870586881085,
+   "box_mAP50_95": 0.7282112998043931
+  },
+  "test_at_operating_point": {
+   "tp": 1016,
+   "fp": 68,
+   "fn": 90,
+   "precision": 0.9372693726937269,
+   "recall": 0.918625678119349,
+   "f1": 0.9278538812785389
+  }
+ },
+ "B_segmentation_baselines": {
+  "yolo11s_seg_coco_as_is_conf0.25": {
+   "val": {
+    "box_mAP50": 0.9782625085408869,
+    "box_mAP50_95": 0.8179274190135566,
+    "mask_mAP50": 0.979612275379224,
+    "mask_mAP50_95": 0.6870733842168699,
+    "conf": 0.25,
+    "mIoU": 0.8319248911149367,
+    "mean_dice": 0.8948184053188628,
+    "mIoU_no_border": 0.9449490417309329,
+    "n": 1106.0
+   },
+   "test": {
+    "box_mAP50": 0.9782824112743136,
+    "box_mAP50_95": 0.8195504825057147,
+    "mask_mAP50": 0.978361679057687,
+    "mask_mAP50_95": 0.686290595767223,
+    "conf": 0.25,
+    "mIoU": 0.8300375404137361,
+    "mean_dice": 0.8933338324897757,
+    "mIoU_no_border": 0.9423516189755571,
+    "n": 1106.0
+   }
+  },
+  "sam2.1_b_oracle_box_val300": {
+   "mIoU": 0.8032398868754332,
+   "mean_dice": 0.8730771779716235,
+   "mIoU_no_border": 0.9346437859903991,
+   "mean_dice_no_border": 0.9433248659812663,
+   "by_species": {
+    "cat": {
+     "iou": 0.8271093645741935,
+     "dice": 0.9006024222631877
+    },
+    "dog": {
+     "iou": 0.7920071914877812,
+     "dice": 0.8601241218344167
+    }
+   },
+   "worst_breeds": {
+    "beagle": 0.6921092384995076,
+    "yorkshire_terrier": 0.7066014863663178,
+    "staffordshire_bull_terrier": 0.7072022711652316,
+    "chihuahua": 0.725035797781279,
+    "bengal": 0.7312153549571492
+   },
+   "n": 300
+  },
+  "sam_val_sample_seed": 42
+ },
+ "C_segmenter_conf_on_validation": {
+  "val_sweep": [
+   {
+    "conf": 0.1,
+    "mIoU": 0.9224038659358047,
+    "mean_dice": 0.9578217723876667,
+    "mIoU_no_border": 0.9307775055950025,
+    "n": 1106
+   },
+   {
+    "conf": 0.25,
+    "mIoU": 0.9221600522397506,
+    "mean_dice": 0.9576308737998737,
+    "mIoU_no_border": 0.9306038056496989,
+    "n": 1106
+   },
+   {
+    "conf": 0.4,
+    "mIoU": 0.9217616243220532,
+    "mean_dice": 0.9570597024172084,
+    "mIoU_no_border": 0.9302681273537542,
+    "n": 1106
+   },
+   {
+    "conf": 0.55,
+    "mIoU": 0.9200136438432617,
+    "mean_dice": 0.9552731690534612,
+    "mIoU_no_border": 0.928654215520909,
+    "n": 1106
+   }
+  ],
+  "rule": "highest val mIoU, ties to higher conf",
+  "chosen_conf": 0.1,
+  "served_conf": 0.25,
+  "test_at_chosen": {
+   "conf": 0.1,
+   "mIoU": 0.9221173509656035,
+   "mean_dice": 0.9579994567463327,
+   "mIoU_no_border": 0.9286622496560828,
+   "n": 1106.0
+  },
+  "val_mask_mAP": {
+   "box_mAP50": 0.9927752041199066,
+   "box_mAP50_95": 0.911807836389262,
+   "mask_mAP50": 0.993239754809204,
+   "mask_mAP50_95": 0.8765198772916218
+  }
+ },
+ "D_pipeline_validation": {
+  "mask_match_sweep": [
+   {
+    "mask_match_iou": 0.05,
+    "unmatched": 7,
+    "unmatched_share": 0.006329113924050633,
+    "referred": 35,
+    "referred_share": 0.03164556962025317
+   },
+   {
+    "mask_match_iou": 0.1,
+    "unmatched": 7,
+    "unmatched_share": 0.006329113924050633,
+    "referred": 35,
+    "referred_share": 0.03164556962025317
+   },
+   {
+    "mask_match_iou": 0.25,
+    "unmatched": 7,
+    "unmatched_share": 0.006329113924050633,
+    "referred": 35,
+    "referred_share": 0.03164556962025317
+   },
+   {
+    "mask_match_iou": 0.5,
+    "unmatched": 14,
+    "unmatched_share": 0.012658227848101266,
+    "referred": 41,
+    "referred_share": 0.037070524412296565
+   }
+  ],
+  "chosen_mask_match_iou": 0.25,
+  "min_mask_fraction_sweep": [
+   {
+    "min_mask_fraction": 0.01,
+    "flagged_too_small": 0,
+    "share": 0.0
+   },
+   {
+    "min_mask_fraction": 0.02,
+    "flagged_too_small": 0,
+    "share": 0.0
+   },
+   {
+    "min_mask_fraction": 0.05,
+    "flagged_too_small": 2,
+    "share": 0.0018083182640144665
+   },
+   {
+    "min_mask_fraction": 0.1,
+    "flagged_too_small": 15,
+    "share": 0.013562386980108499
+   },
+   {
+    "min_mask_fraction": 0.15,
+    "flagged_too_small": 57,
+    "share": 0.051537070524412296
+   }
+  ],
+  "chosen_min_mask_fraction": 0.05,
+  "served": {
+   "mask_match_iou": 0.1,
+   "min_mask_fraction": 0.05
+  },
+  "stage_percentiles_T4": [
+   {
+    "stage": "detect_ms",
+    "p50_ms": 16.240411499893526,
+    "p95_ms": 17.15875024979141,
+    "mean_ms": 16.30399697017468,
+    "n": 1106
+   },
+   {
+    "stage": "classify_ms",
+    "p50_ms": 10.141610999880868,
+    "p95_ms": 11.685119250046228,
+    "mean_ms": 10.27604029656775,
+    "n": 1106
+   },
+   {
+    "stage": "segment_ms",
+    "p50_ms": 22.104848000026323,
+    "p95_ms": 23.385122249919732,
+    "mean_ms": 22.193695616642454,
+    "n": 1106
+   },
+   {
+    "stage": "total_ms",
+    "p50_ms": 48.59099800000877,
+    "p95_ms": 51.32471299998542,
+    "mean_ms": 48.77373288338488,
+    "n": 1106
+   }
+  ],
+  "referrals_at_served_settings": {
+   "n": 1106,
+   "referred": 35,
+   "reason_counts": {
+    "multiple_animals": 12,
+    "disagreement": 11,
+    "no_animal": 7,
+    "segmentation_disagreement": 5,
+    "animal_too_small": 2
+   },
+   "unmatched": 7
+  },
+  "conditions": "Tesla T4, PyTorch, batch 1, 1,106 validation images, 10 warm-up, in-process"
+ },
+ "E_onnx": {
+  "pytorch_test": {
+   "box_mAP50": 0.9835682138953565,
+   "box_mAP50_95": 0.8500022452233958
+  },
+  "onnx_test": {
+   "box_mAP50": 0.982524586358974,
+   "box_mAP50_95": 0.8517614076177189
+  },
+  "channel_diagnosis": {
+   "criterion": "A9b detector ONNX max abs diff <= 0.001 over the whole raw head (unchanged)",
+   "A9b_value_this_run": 0.0018310546875,
+   "A9b_met": false,
+   "hypothesis": "gap is concentrated in box-coordinate channels (pixel units)",
+   "hypothesis_supported": true,
+   "summary": {
+    "onnx_vs_torch32": {
+     "max_abs_all": 0.0018310546875,
+     "max_abs_box": 0.0018310546875,
+     "max_abs_score": 1.457519829273224e-07
+    },
+    "torch32_vs_torch64": {
+     "max_abs_all": 0.0018188668683478681,
+     "max_abs_box": 0.0018188668683478681,
+     "max_abs_score": 1.2064658241189852e-07
+    },
+    "onnx_vs_torch64": {
+     "max_abs_all": 0.0009631916879015989,
+     "max_abs_box": 0.0009631916879015989,
+     "max_abs_score": 1.3566064361410687e-07
+    }
+   },
+   "protocol": {
+    "seed": 0,
+    "inputs": 4,
+    "imgsz": 640,
+    "device": "CPU",
+    "dtype": "float32 (+float64 reference)"
+   },
+   "weights_sha256": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+   "onnx_sha256": "311e49472ead369057a4c8722dcc774a9d64b1309f0d5be8babb54f346bddabc",
+   "versions": {
+    "torch": "2.11.0+cu130",
+    "onnxruntime": "1.31.1",
+    "python": "3.13.16"
+   },
+   "note": "Per-channel figures are diagnostic only and are reported separately from A9b."
+  }
+ },
+ "E2_onnx_pytorch_backend": {
+  "max_abs_diff_by_pytorch_backend": {
+   "default": 0.0018310546875,
+   "mkldnn_off": 0.001220703125,
+   "mkldnn_off_1thread": 0.0010986328125
+  },
+  "tolerance": 0.001,
+  "note": "Diagnostic only; A9b remains unchanged and is not re-scored."
+ },
+ "provenance": {
+  "notebook": "notebooks/11_phase2_gap_experiments.ipynb (copy with cell E2)",
+  "drive_folder": "03_Evidence/phase2_gap_experiments_20261102T212724Z",
+  "parts_not_run": [
+   "F_yolo11n_detector",
+   "G_wandb_logging"
+  ]
+ }
+}
