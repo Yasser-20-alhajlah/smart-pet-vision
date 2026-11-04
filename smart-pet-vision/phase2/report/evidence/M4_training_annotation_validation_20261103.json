@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "source_sha256": "f7c6771be2f521bceb169ec4ea35f3855958de5ca03f73d992bee7d54163c993",
+  "corrected_sha256": "928451020bca3aff6e4230d602254b2c15d37930a473b5cc2636f688b925027d",
+  "total": 7335,
+  "split_counts": {
+    "train": 5123,
+    "val": 1106,
+    "test": 1106
+  },
+  "changed_rows": [
+    "english_cocker_spaniel_142",
+    "beagle_189",
+    "german_shorthaired_148",
+    "japanese_chin_178"
+  ],
+  "unchanged_rows": 7331,
+  "label_count": 7335,
+  "changed_yolo_labels": [
+    "yolo_detect/labels/train/english_cocker_spaniel_142.txt",
+    "yolo_detect/labels/train/beagle_189.txt",
+    "yolo_detect/labels/train/german_shorthaired_148.txt",
+    "yolo_detect/labels/train/japanese_chin_178.txt"
+  ],
+  "val_test_records_changed": 0,
+  "model_inference": false
+}

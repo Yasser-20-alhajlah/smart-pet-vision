@@ -1,0 +1,32 @@
+{
+ "date": "2026-11-04",
+ "scope": "all blobs reachable from every branch, tag and pull-request head on origin (31 commits), including members of ZIP blobs",
+ "blobs": 272,
+ "zip_blobs": 2,
+ "patterns": [
+  "aws_key",
+  "github_token",
+  "google_api_key",
+  "hex40_near_key_word",
+  "hex40_near_wandb",
+  "hf_token",
+  "kaggle_key_json",
+  "openai_like",
+  "private_key_block",
+  "wandb_key_assignment",
+  "wandb_v1_key"
+ ],
+ "findings": {},
+ "values_printed": false,
+ "positive_control": "Synthetic (fake) W&B, GitHub, Hugging Face and AWS strings were detected by the patterns; the env-var form of a W&B key is caught by hex40_near_wandb.",
+ "current_tree": {
+  "files": 198,
+  "findings": {},
+  "revision": "ee4a73f"
+ },
+ "limitations": [
+  "Pattern scan: a negative result does not prove that no credential was ever exposed.",
+  "Not scanned: Google Drive files, Colab notebook outputs outside Git, W&B run files, other team members' local copies.",
+  "Revocation of the previously exposed W&B key is not established by any scan; the key owner must revoke it in W&B settings."
+ ]
+}

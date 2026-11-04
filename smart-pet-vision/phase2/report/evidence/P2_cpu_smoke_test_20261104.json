@@ -1,0 +1,149 @@
+{
+ "date_utc": "2026-11-04T19:21:34Z",
+ "scope": "Functional real-weight smoke test over TCP loopback on a CPU cloud container. Not the presentation host, not a GPU run, not an accuracy evaluation, not a benchmark.",
+ "source": {
+  "repo": "https://github.com/Yasser-20-alhajlah/smart-pet-vision",
+  "commit": "1cab83f501e872b840cafc08793c049061b71b40",
+  "fresh_clone": true,
+  "local_modifications_tracked_files": []
+ },
+ "environment": {
+  "python": "3.13.16",
+  "platform": "Linux-6.18.44-fc-v233-x86_64-with-glibc2.39",
+  "logical_cpus": 2,
+  "torch": "2.11.0+cu130",
+  "cuda_available": false,
+  "ultralytics": "8.4.182",
+  "fastapi": "0.141.1",
+  "uvicorn": "0.54.0",
+  "numpy": "2.1.3",
+  "pillow": "11.3.0",
+  "install": "fresh venv; pip install -r requirements.txt from PyPI (download.pytorch.org CPU index blocked by this environment's proxy, so torch 2.11.0 is the PyPI CUDA 13.0 build running on CPU)"
+ },
+ "weights_recomputed": {
+  "detector": {
+   "path": "runs/detect/yolo11s_det/weights/best.pt",
+   "sha256": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+   "bytes": 19159066
+  },
+  "segmenter": {
+   "path": "runs/segment/yolo11s_seg/weights/best.pt",
+   "sha256": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+   "bytes": 20495332
+  },
+  "classifier": {
+   "path": "runs/classification/finetune.pt",
+   "sha256": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba",
+   "bytes": 94366917
+  }
+ },
+ "preflight": {
+  "returncode": 0,
+  "stdout": "{\n  \"weights_sha256\": {\n    \"detector\": \"f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4\",\n    \"segmenter\": \"868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee\",\n    \"classifier\": \"22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba\"\n  },\n  \"n_images\": null,\n  \"version_mismatches\": []\n}\n",
+  "stderr": ""
+ },
+ "test_image": {
+  "name": "chelsea.png",
+  "sha256": "596aa1e7cb875eb79f437e310381d26b338a81c2da23439704a73c4651e8c4bb",
+  "source": "scikit-image sample data 'chelsea' (cat); docstring: 'No copyright restrictions. CC0 by the photographer (Stefan van der Walt).'",
+  "relation_to_project_data": "not part of Oxford-IIIT Pet or the team photos"
+ },
+ "results": {
+  "health": {
+   "status": 200,
+   "body": {
+    "status": "ok",
+    "detector": "best.pt",
+    "segmenter": "best.pt",
+    "classifier": "finetune"
+   },
+   "first_response_s": 6.21
+  },
+  "cat_images_false": {
+   "verdict": "ready",
+   "species": "cat",
+   "confidence": 1.0,
+   "reasons": [],
+   "staff_approval_required": true,
+   "automatic_publication_allowed": false,
+   "segmentation_matched": true,
+   "mask_fraction": 0.814279379157428,
+   "timings": {
+    "detect_ms": 564.7415899998123,
+    "classify_ms": 107.54943900019498,
+    "segment_ms": 679.9777779997385,
+    "stages_sum_ms": 1352.2688069997457,
+    "total_ms": 1353.0858009999065
+   },
+   "image_size": [
+    451,
+    300
+   ],
+   "n_detections": 1,
+   "http_status": 200,
+   "client_wall_ms": 1372.4
+  },
+  "cat_images_true": {
+   "verdict": "ready",
+   "species": "cat",
+   "confidence": 1.0,
+   "reasons": [],
+   "staff_approval_required": true,
+   "automatic_publication_allowed": false,
+   "segmentation_matched": true,
+   "mask_fraction": 0.814279379157428,
+   "timings": {
+    "detect_ms": 238.8317059999281,
+    "classify_ms": 96.41703500028598,
+    "segment_ms": 303.4209459997328,
+    "stages_sum_ms": 638.6696869999469,
+    "total_ms": 778.2238100003269
+   },
+   "image_size": [
+    451,
+    300
+   ],
+   "n_detections": 1,
+   "decoded_images": {
+    "annotated_png": [
+     451,
+     300
+    ],
+    "cutout_png": [
+     433,
+     300
+    ],
+    "mask_png": [
+     451,
+     300
+    ]
+   },
+   "http_status": 200,
+   "client_wall_ms": 794.7
+  },
+  "blank_image": {
+   "http_status": 200,
+   "verdict": "refer_to_staff",
+   "reasons": [
+    "no_animal"
+   ],
+   "staff_approval_required": true,
+   "automatic_publication_allowed": false
+  },
+  "invalid_notes.txt": {
+   "http_status": 415,
+   "expected": 415,
+   "body": "{\"detail\":\"File is not a readable image.\"}"
+  },
+  "invalid_empty.jpg": {
+   "http_status": 400,
+   "expected": 400,
+   "body": "{\"detail\":\"Empty upload.\"}"
+  },
+  "invalid_big.jpg": {
+   "http_status": 413,
+   "expected": 413,
+   "body": "{\"detail\":\"Image larger than 15 MB.\"}"
+  }
+ }
+}

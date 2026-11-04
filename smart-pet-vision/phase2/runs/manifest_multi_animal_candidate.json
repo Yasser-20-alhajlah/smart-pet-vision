@@ -1,0 +1,23 @@
+{
+  "detector": "runs/detect/yolo11s_det/weights/best.pt",
+  "segmenter": "runs/segment/yolo11s_seg/weights/best.pt",
+  "classifier": "runs/classification/finetune.pt",
+  "classifier_kind": "finetune",
+  "temperature": 0.05,
+  "detector_conf": 0.4,
+  "detector_iou": 0.5,
+  "verify_threshold": 0.9,
+  "min_mask_fraction": 0.05,
+  "image_size": 224,
+  "imgsz": 640,
+  "segmenter_conf": 0.25,
+  "segmenter_iou": 0.7,
+  "mask_match_iou": 0.1,
+  "review_mode": "enforce",
+  "review_conf": 0.1,
+  "review_imgsz": 960,
+  "review_match_iou": 0.55,
+  "review_include_segmenter": true,
+  "review_tiles_enabled": false,
+  "review_tiles_conf": 0.1
+}

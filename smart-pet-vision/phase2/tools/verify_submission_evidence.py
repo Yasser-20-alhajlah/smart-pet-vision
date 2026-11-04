@@ -70,6 +70,94 @@ def checks(root):
     return out, figs
 
 
+def submission_checks(root):
+    """Checks on the instructor-template report (submission/main.tex) against the saved evidence."""
+    path = root / "submission" / "main.tex"
+    if not path.is_file():
+        return []
+    tex = path.read_text()
+    out = []
+
+    def check(name, ok, detail=""):
+        out.append(("submission: " + name, bool(ok), detail))
+
+    def has(value, fmt="{:.3f}"):
+        return fmt.format(value) in tex
+
+    figs = re.findall(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", tex)
+    missing = [f for f in figs if not (path.parent / f).is_file()]
+    check("all figures present", figs and not missing, ", ".join(missing) or f"{len(figs)} figures")
+    forbidden = [r"A9b\W{0,3}(is\s+)?met\b", r"A9b[^.\n]{0,20}\bpass(ed|es)?\b", r"ONNX detector (passed|meets)"]
+    hits = [m.group(0) for p in forbidden for m in re.finditer(p, tex, flags=re.I)
+            if "not" not in tex[max(0, m.start() - 12):m.end()].lower()]
+    check("never states the ONNX detector passed", not hits, "; ".join(hits))
+    check("A9b row is Fail", re.search(r"A9b ONNX parity, detector &[^\n]*\\textbf\{Fail\}", tex) is not None)
+    check("28.7 px shift marked as confounded", "28.7" not in tex or "confounded" in tex)
+    body = "\n".join(l for l in tex.splitlines() if not l.lstrip().startswith("%"))
+    check("no prompt left from the template", "\\prompt{" not in body.replace("\\newcommand{\\prompt}", ""))
+
+    g = load(root, "P2_gap_experiments_20261102.json")
+    a = g["A_detector_coco_baseline"]
+    check("COCO detector baseline (val, test, op)",
+          has(a["val"]["box_mAP50"]) and has(a["val"]["box_mAP50_95"]) and has(a["test"]["box_mAP50"])
+          and has(a["test"]["box_mAP50_95"]) and has(a["test_at_operating_point"]["f1"]))
+    b = g["B_segmentation_baselines"]["yolo11s_seg_coco_as_is_conf0.25"]
+    check("COCO segmenter baseline", has(b["val"]["mask_mAP50_95"]) and has(b["test"]["mIoU"]))
+    check("SAM baseline on validation", has(g["B_segmentation_baselines"]["sam2.1_b_oracle_box_val300"]["mIoU"]))
+    c = g["C_segmenter_conf_on_validation"]
+    check("mask confidence sweep and choice", all(has(r["mIoU"], "{:.5f}") for r in c["val_sweep"])
+          and has(c["chosen_conf"], "{:.2f}"))
+    ms = g["D_pipeline_validation"]["mask_match_sweep"]
+    check("match-IoU sweep quoted as counts, with the per-image limitation",
+          all(f"{r['unmatched']} of 1,106" in tex or f"{r['unmatched']} (" in tex for r in ms)
+          and f"{ms[1]['referred']} referred" in tex and "only counts were saved" in tex
+          and "were not evaluated through the pipeline" in tex)
+    d = g["D_pipeline_validation"]
+    st = {r["stage"]: r for r in d["stage_percentiles_T4"]}
+    check("per-stage p50/p95", all(has(st[k]["p50_ms"], "{:.1f}") and has(st[k]["p95_ms"], "{:.1f}")
+                                   for k in ("detect_ms", "classify_ms", "segment_ms", "total_ms")))
+    e = g["E_onnx"]
+    check("ONNX task-level mAP, unrounded and called close (not identical)",
+          all(has(e[k][m], "{:.5f}") for k in ("onnx_test", "pytorch_test") for m in ("box_mAP50", "box_mAP50_95"))
+          and "not identical" in tex and "mAP equal" not in tex)
+    check("channel diagnosis: box vs score channels quoted from saved analysis",
+          has(e["channel_diagnosis"]["summary"]["onnx_vs_torch32"]["max_abs_box"], "{:.7f}") and e["channel_diagnosis"]["summary"]["onnx_vs_torch32"]["max_abs_score"] < 1e-6
+          and has(e["channel_diagnosis"]["summary"]["onnx_vs_torch64"]["max_abs_box"], "{:.7f}") and "four random" in tex)
+    cd = e["channel_diagnosis"]["summary"]
+    check("ONNX channel diagnosis", has(cd["onnx_vs_torch64"]["max_abs_all"], "{:.5f}")
+          and cd["onnx_vs_torch32"]["max_abs_all"] > A9_TOLERANCE)
+    check("gap experiments not described as A9b met", e["channel_diagnosis"]["A9b_met"] is False)
+
+    opt = load(root, "P2_training_optimizer_provenance_20261104.json")
+    lr_fit = opt["conclusion"]["lr0"]
+    check("optimiser stated as recorded (AdamW, lr0 0.001667), never SGD",
+          "SGD" not in body and "AdamW" in body and f"{lr_fit:.6f}" in body
+          and opt["sources"]["wandb_logged_lr"]["max_relative_error_epochs_4_40"] < 1e-4)
+    dl = load(root, "P2_training_optimizer_direct_log_20261104.json")["notebooks"]
+    check("optimiser direct log in both executed notebooks; W&B link stated as inferred",
+          len(dl) == 2 and all(any(f"AdamW(lr={lr_fit:.6f}" in l["text"] for l in n["log_lines"]) for n in dl.values())
+          and "P2\\_training\\_optimizer\\_direct\\_log" in body and "inferred" in body)
+    check("code row does not claim later commits changed only the report",
+          "later commits change only this report" not in body and "CODE\\_ARCHIVE\\_INDEX.json" in body)
+
+    ann = load(root, "M4_training_annotation_manifest_20261103.json")
+    check("annotation correction: 4 train labels, val/test unchanged, not retrained, no gain claimed",
+          ann["yolo_detection_labels_changed"] == 4 and ann["val_test_unchanged"]
+          and ann["training_or_evaluation_not_performed"] and "not retrained" in body)
+
+    fin = load(root, "M8_onnx_parity_recheck_A9b_20261103.json")
+    r50 = fin["results"][0]["real_images_50"]
+    check("matched-preprocessing final-detection agreement quoted, A9b still failed",
+          r50["same_classes"] == 1.0 and f"{r50['final_box_max_abs_diff_px']:.5f}" in body
+          and not fin["any_variant_passed"])
+
+    rep = load(root, "P2_closure_v3_20261103_extract.json")["gpu_benchmark"]
+    check("3 Nov T4 repeat quoted as recorded and kept separate",
+          "{:.1f}/{:.1f}/{:.1f}".format(rep["p50_ms"], rep["p95_ms"], rep["p99_ms"]) in body
+          and "not combined" in body and rep["measurement"].startswith("synchronized in-process"))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
@@ -79,10 +167,15 @@ def main():
     if a.figures:
         missing = [f for f in figs if not (a.figures.parent / f).is_file() and not (a.figures / Path(f).name).is_file()]
         results.append(("all report figures present", not missing, ", ".join(missing)))
+    n_old = len(results)
+    results += submission_checks(a.root)
     for name, ok, detail in results:
         print(("PASS " if ok else "FAIL ") + name + (f"  [{detail}]" if detail else ""))
     failed = [r for r in results if not r[1]]
-    print(f"{len(results) - len(failed)}/{len(results)} checks passed")
+    # The two scopes are reported separately so the total is not read as checks of the submitted report alone.
+    print(f"{len(results) - len(failed)}/{len(results)} checks passed "
+          f"({n_old} on the superseded free-form report report/main.tex, "
+          f"{len(results) - n_old} on the submission report submission/main.tex)")
     return 1 if failed else 0
 
 

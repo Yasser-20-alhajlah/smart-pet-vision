@@ -1,0 +1,78 @@
+{
+ "purpose": "Record which optimiser actually trained the Phase 2 detector and segmenter.",
+ "recorded": "2026-11-04",
+ "conclusion": {
+  "optimizer": "AdamW (selected by Ultralytics optimizer=auto)",
+  "lr0": 0.001667,
+  "beta1": 0.9,
+  "weight_decay": 0.0005,
+  "warmup_epochs": 3,
+  "lrf": 0.01,
+  "schedule": "linear"
+ },
+ "sources": {
+  "training_code": "src/spv/detect.py and src/spv/segment.py call model.train(...) without an optimizer argument, so the Ultralytics default optimizer='auto' applies.",
+  "ultralytics_rule": "BaseTrainer.build_optimizer: with optimizer='auto', lr_fit = round(0.002*5/(4+nc), 6); AdamW(lr_fit, momentum 0.9) when iterations <= 10000; iterations = ceil(n_train / max(batch, nbs)) * epochs.",
+  "iterations": {
+   "n_train": 5123,
+   "batch": 16,
+   "nbs": 64,
+   "epochs": 40,
+   "value": 3240
+  },
+  "checkpoint_train_args": "Team evidence training_provenance_from_checkpoints.json (read from the released checkpoints, Ultralytics 8.4.182, detector sha256 f48e4d8e..., segmenter sha256 868f3842...): optimizer 'AdamW', lr0 0.001667, lrf 0.01, warmup_epochs 3, momentum 0.937. In auto mode Ultralytics writes the chosen optimizer and lr0 back to the arguments but builds AdamW with betas (0.9, 0.999); the saved momentum 0.937 is the unused default.",
+  "wandb_logged_lr": {
+   "runs": [
+    "2seovilv",
+    "3ztpz2tc"
+   ],
+   "key": "lr/pg0",
+   "identical_in_both_runs": true,
+   "by_epoch": [
+    0.000553936,
+    0.00108214,
+    0.00158284,
+    0.00154323,
+    0.00150197,
+    0.00146071,
+    0.00141945,
+    0.00137819,
+    0.00133693,
+    0.00129568,
+    0.00125442,
+    0.00121316,
+    0.0011719,
+    0.00113064,
+    0.00108938,
+    0.00104813,
+    0.00100687,
+    0.00096561,
+    0.000924352,
+    0.000883093,
+    0.000841835,
+    0.000800577,
+    0.000759318,
+    0.00071806,
+    0.000676802,
+    0.000635544,
+    0.000594286,
+    0.000553027,
+    0.000511769,
+    0.000470511,
+    0.000429253,
+    0.000387994,
+    0.000346736,
+    0.000305478,
+    0.00026422,
+    0.000222961,
+    0.000181703,
+    0.000140445,
+    9.91865e-05,
+    5.79283e-05
+   ],
+   "check": "epochs 4-40 match lr0*((1-(e-1)/40)*(1-lrf)+lrf) with lr0=0.001667",
+   "max_relative_error_epochs_4_40": 4e-06
+  }
+ },
+ "superseded_statement": "Earlier report drafts stated 'SGD (auto), lr0 0.01'; contradicted by all sources above."
+}

@@ -135,6 +135,9 @@ def benchmark(pipe, image_paths: list[Path], warmup: int = 10, runs: int = 200) 
         "latency_ms": {"p50": q("wall_ms", 50), "p95": q("wall_ms", 95), "p99": q("wall_ms", 99),
                        "mean": float(df.wall_ms.mean())},
         "stage_mean_ms": {c: float(df[c].mean()) for c in ("detect_ms", "classify_ms", "segment_ms")},
+        "stage_percentiles_ms": {c: {"p50": q(c, 50), "p95": q(c, 95)}
+                                 for c in ("detect_ms", "classify_ms", "segment_ms")},
+        "timing_scope": "in-process analyze with_images=false; preloaded RGB images; direct wall time",
         "throughput_img_per_s": runs / elapsed,
         "peak_gpu_mem_mb": (torch.cuda.max_memory_allocated() / 2 ** 20
                             if torch.cuda.is_available() else None),

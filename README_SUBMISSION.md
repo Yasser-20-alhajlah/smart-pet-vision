@@ -4,10 +4,10 @@ Team: Smart Pet Vision. Phase 1 covers M1 (data foundations) and M2-M3 (classifi
 
 | Name | Student ID |
 |---|---|
-| Abdulrahman Mastour Alharthi | 225478 |
-| Yasser Mansour Alhajlah | 225481 |
-| Mohammed Adeeb Alrashdi | 225488 |
-| Musaad Obaied Saad Alqahtani | 225471 |
+| Abdulrahman Mastour Alharthi | on file (not published) |
+| Yasser Mansour Alhajlah | on file (not published) |
+| Mohammed Adeeb Alrashdi | on file (not published) |
+| Musaad Obaied Saad Alqahtani | on file (not published) |
 
 ## Phase 1 scope
 
@@ -21,7 +21,7 @@ Detection, segmentation and integrated deployment are outside the Phase 1 evalua
 
 ## Public submission files
 
-- [Phase 1 PDF](./smart-pet-vision/SmartPetVision_Phase1.pdf)
+- [Phase 1 PDF](./smart-pet-vision/SmartPetVision_Phase1.pdf) (public copy with student IDs redacted; the submitted original is kept privately by the team)
 - [Source code and notebooks](./smart-pet-vision/)
 - [Dataset card](./smart-pet-vision/docs/dataset_card.md)
 - [Configuration](./smart-pet-vision/configs/config.yaml)

@@ -1,5 +1,8 @@
 data/
-runs/
+runs/*
+!phase2/runs/
+phase2/runs/*
+!phase2/runs/manifest.json
 *.pt
 *.onnx
 __pycache__/

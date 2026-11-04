@@ -31,19 +31,24 @@ Team of 4: Abdulrahman Mastour Alharthi (WS1 data/classification), Yasser Mansou
 ```bash
 cd smart-pet-vision/phase2
 pip install -r ../requirements.txt
-PYTHONPATH=src python -m unittest discover -s tests      # 102 tests expected to pass
-python tools/verify_submission_evidence.py               # report/main.tex vs evidence
+PYTHONPATH=src python -m unittest discover -s tests      # 121 tests expected to pass (candidate; 117 at cbcc234, 111 at 879b0e8, 108 in the reviewed archive b1aff11)
+python tools/verify_submission_evidence.py               # 37 checks: 16 on the superseded report/main.tex, 21 on submission/main.tex
 ```
 CI (`.github/workflows/phase2-tests.yml`) runs the same on every PR.
 
 ## Private assets (not in Git)
 Google Drive (owner's account): `MyDrive/capstone /smart-pet-vision/runs/` (weights, `manifest.json`), `MyDrive/capstone /SmartPetVision_TeamData/` (team photos, labels), `MyDrive/capstone /Submission/FINAL PHASE_2/` (submission folders 01–06, 99_Review). Real-weight runs happen in Colab with `notebooks/06_release_validation_v2.ipynb`.
 
-## Open items (status 1 Nov 2026)
+## Open items (status 4 Nov 2026)
 1. Upload `SmartPetVision_Phase2.pdf` and `_source.zip` (one team member, due 15 Nov 2026).
 2. Each member confirms their line in the "Team members" table of `submission/main.tex`.
 3. Record the demo backup video (script: Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`); export the deck (claude.ai Slides artifact) to `04_Presentation`.
-4. Privacy: the repo is public and still contains student IDs in `README_SUBMISSION.md`, `phase2/report/main.tex`, the committed PDFs, and Git history. Removing them from history needs the owner's explicit approval.
-5. Known report gaps (stated in the self-assessment, 40/45): one training recipe per model; mask thresholds not swept on validation; A9b fails; no public deployment; per-stage latency percentiles not recorded.
-6. Optional: run `notebooks/09_onnx_channel_diagnosis_v2.ipynb` (CPU, ~5 min) to test whether the ONNX gap sits in the box channels.
-7. Owner to confirm the old W&B API key was revoked, and decide on a short AI-assistance disclosure (course guidelines contain no policy).
+4. Privacy: student IDs are removed from all current tracked files; `SmartPetVision_Phase1.pdf` in Git is a redacted copy (owner decision 4 Nov; the submitted original stays in Drive). Git history is deliberately not rewritten (it would break every cited commit hash); see `phase2/docs/AUDIT_TRACKER_2026-11-04.md` section 7.
+5. Notebook 11 ran on 2 Nov (T4, code 879b0e8); results in `report/evidence/P2_gap_experiments_20261102.json` and in `submission/main.tex` (baselines, validation sweeps, per-stage p50/p95, ONNX test mAP 0.983/0.852, channel diagnosis). Remaining gaps (self-assessment 41/45): one training recipe per model (optional YOLO11n Part F not run; needs compute approval); A9b fails; notebook 11 results not logged to W&B (Part G).
+6. Two Phase 2 reports exist: the template report here (`submission/`) and a Phase 1-layout report in Drive `01_Report` (built 4 Nov by teammates). Team must choose one. Audit and change log: `phase2/docs/AUDIT_TRACKER_2026-11-04.md`. Corrected deck copy: Drive `04_Presentation/SmartPetVision_Phase2_Presentation_v2_20261104` (notes rewritten).
+7. Training optimiser is AdamW via `optimizer=auto` (lr0 0.001667), not SGD; evidence `report/evidence/P2_training_optimizer_provenance_20261104.json`.
+8. Release: `submission/build.sh` also writes `RELEASE_MANIFEST.json` (SHA-256 of PDF, ZIP members, evidence, docs; recorded weight hashes). Demo and rehearsal: `phase2/docs/DEMO_AND_REHEARSAL_CHECKLIST.md`.
+9. Owner to confirm the old W&B API key was revoked. AI-use: guidelines contain no policy; draft `phase2/docs/AI_ASSISTANCE_DISCLOSURE_DRAFT.md` awaits team approval.
+10. 4 Nov evening: clean-install real-weight CPU smoke test passed at `1cab83f` (weights SHA-256 recomputed); deck v3 (`SmartPetVision_Phase2_Presentation_v3_20261104`) replaces v2; repo is public; Git history still contains student IDs (see item 4). Details: `phase2/docs/AUDIT_TRACKER_2026-11-04.md` section 5.
+11. Drive is authoritative for the release (owner, 4 Nov 22:27): proposed package in `MyDrive/capstone /Submission/FINAL PHASE_2/REVIEW_CANDIDATE_<UTC>` (00_RELEASE … 05_Demo). Do not modify GitHub, merge, rename/move/overwrite existing Drive files or change sharing without approval. Optimiser now has a direct log record (`P2_training_optimizer_direct_log_20261104.json`).
+12. Owner decisions 4 Nov 23:25: submit from the Drive candidate folder (team files in `01_Report`/`04_Presentation` are read-only for the owner and stay as their record); duplicate PDF trashed; candidate pushed and PR #5 merged with a merge commit; Phase 1 PDF redacted in the tree, history kept. Manifest gates split into submission / presentation / optional.
