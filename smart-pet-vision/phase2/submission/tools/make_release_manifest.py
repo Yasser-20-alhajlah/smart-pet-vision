@@ -32,11 +32,12 @@ def run_checks():
     env = {**__import__("os").environ, "PYTHONPATH": str(PHASE2 / "src")}
     t = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests"], cwd=PHASE2,
                        capture_output=True, text=True, env=env)
-    ran = [l for l in t.stderr.splitlines() if l.startswith("Ran ")]
+    ran = [line for line in t.stderr.splitlines() if line.startswith("Ran ")]
+    verdict = [line for line in t.stderr.splitlines() if line.startswith(("OK", "FAILED"))]  # e.g. "OK (skipped=15)"
     v = subprocess.run([sys.executable, "tools/verify_submission_evidence.py"], cwd=PHASE2,
                        capture_output=True, text=True)
     return {"unit_tests": {"command": "PYTHONPATH=src python -m unittest discover -s tests",
-                           "summary": (ran[-1] if ran else "") + (" OK" if t.returncode == 0 else " FAILED"),
+                           "summary": (ran[-1] if ran else "") + " " + (verdict[-1] if verdict else ("OK" if t.returncode == 0 else "FAILED")),
                            "returncode": t.returncode},
             "evidence_checks": {"command": "python tools/verify_submission_evidence.py",
                                 "summary": v.stdout.strip().splitlines()[-1] if v.stdout.strip() else "",
@@ -84,7 +85,9 @@ def main():
         "documents": {str(p.relative_to(PHASE2)): sha(p) for p in (
             PHASE2 / "docs" / "model_card.md", PHASE2 / "docs" / "DEMO_AND_REHEARSAL_CHECKLIST.md",
             PHASE2 / "docs" / "AUDIT_TRACKER_2026-11-04.md", PHASE2 / "docs" / "AI_ASSISTANCE_DISCLOSURE_DRAFT.md",
-            PHASE2 / "docs" / "PRESENTATION_QA.md",
+            PHASE2 / "docs" / "PRESENTATION_QA.md", PHASE2 / "docs" / "QUICKSTART.md", PHASE2 / "docs" / "TROUBLESHOOTING.md",
+            PHASE2 / "docs" / "ONNX_EVIDENCE_INDEX.md", PHASE2 / "docs" / "REHEARSAL_CHECKLIST_ONE_PAGE.md",
+            PHASE2 / "docs" / "TEAM_READTHROUGH_SIGNOFF.md", PHASE2 / "tools" / "run_service.py",
             PHASE2 / "README.md", PHASE2 / "tools" / "verify_submission_evidence.py",
             PHASE2 / "tools" / "smoke_test_http.py")},
         "acceptance": {"A1-A8": "met", "A9a": "met", "A9b": "not met (0.0018-0.0020 vs 0.001)",
@@ -102,10 +105,11 @@ def main():
                              "One member uploads SmartPetVision_Phase2.pdf and SmartPetVision_Phase2_source.zip by 15 Nov 2026"],
         "presentation_gates": ["Four-person rehearsal with a timer (15-20 min)",
                                "Live demo on the presentation host and a backup recording made there",
-                               "The existing recordings are cloud-container runs (CPU smoke test of an earlier candidate; demo page of this candidate); they are fallbacks, not the presentation-host demo"],
+                               "The existing recordings are cloud-container runs (CPU smoke test of an earlier candidate; demo page of earlier candidates and of this one); they are fallbacks, not the presentation-host demo"],
         "optional_improvements": ["GPU revalidation of the candidate code (output validation added after 879b0e8)",
                                   "New independent multi-animal data to re-measure the 17/52 limitation",
-                                  "Retraining with the four corrected training boxes (validation-only selection, one final test)"],
+                                  "Retraining with the four corrected training boxes (validation-only selection, one final test)",
+                                  "Browser tests in CI (Playwright and Chromium are not in requirements.txt; CI reports the 15 browser tests as skipped)"],
         "notes": ["build.sh dates the PDF by the commit time (SOURCE_DATE_EPOCH), so rebuilding the same commit with the same TeX installation gives the same PDF bytes; the ZIPs are byte-reproducible.",
                   "evidence_checks counts checks of two reports: the superseded free-form report (report/main.tex) and the submission report (submission/main.tex); see the summary line for the split.",
                   "Weights, team photos and private_ids.tex are private and not in Git."],

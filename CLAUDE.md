@@ -31,7 +31,7 @@ Team of 4: Abdulrahman Mastour Alharthi (WS1 data/classification), Yasser Mansou
 ```bash
 cd smart-pet-vision/phase2
 pip install -r ../requirements.txt
-PYTHONPATH=src python -m unittest discover -s tests      # 125 tests expected to pass on branch phase2-polish (121 at 17ed5bf, 117 at cbcc234, 111 at 879b0e8, 108 in the reviewed archive b1aff11)
+PYTHONPATH=src python -m unittest discover -s tests      # 143 tests on branch phase2-polish with Playwright installed (128 run + 15 browser tests skipped without it; 125 at 34d13c9, 121 at 17ed5bf, 117 at cbcc234, 111 at 879b0e8, 108 in the reviewed archive b1aff11)
 python tools/verify_submission_evidence.py               # 37 checks: 16 on the superseded report/main.tex, 21 on submission/main.tex
 ```
 CI (`.github/workflows/phase2-tests.yml`) runs the same on every PR.
@@ -53,3 +53,4 @@ Google Drive (owner's account): `MyDrive/capstone /smart-pet-vision/runs/` (weig
 11. Drive is authoritative for the release (owner, 4 Nov 22:27): proposed package in `MyDrive/capstone /Submission/FINAL PHASE_2/REVIEW_CANDIDATE_<UTC>` (00_RELEASE … 05_Demo). Do not modify GitHub, merge, rename/move/overwrite existing Drive files or change sharing without approval. Optimiser now has a direct log record (`P2_training_optimizer_direct_log_20261104.json`).
 12. Owner decisions 4 Nov 23:25: submit from the Drive candidate folder (team files in `01_Report`/`04_Presentation` are read-only for the owner and stay as their record); duplicate PDF trashed; candidate pushed and PR #5 merged with a merge commit; Phase 1 PDF redacted in the tree, history kept. Manifest gates split into submission / presentation / optional.
 13. 5 Nov: polish candidate on local branch `phase2-polish` (demo page `GET /demo`, report summary/results table/conclusion, Q&A sheet, rehearsal plan, host checklist), packaged in a separate Drive folder under `FINAL PHASE_2`; the stable package `REVIEW_CANDIDATE_20261104T1951Z` stays unchanged. Not pushed or merged; promotion needs the owner's approval. Details: `phase2/docs/AUDIT_TRACKER_2026-11-04.md` section 8.
+14. 5 Nov (final polish pass): demo page wording/reset/stale-result fixes with 15 browser tests, `tools/run_service.py`, `docs/QUICKSTART.md`, `TROUBLESHOOTING.md`, `ONNX_EVIDENCE_INDEX.md`, slide-11 recount evidence, report availability row; successor Drive folder under `FINAL PHASE_2`. Not pushed or merged. Details: `phase2/docs/AUDIT_TRACKER_2026-11-04.md` section 9.

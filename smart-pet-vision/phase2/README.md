@@ -23,6 +23,9 @@ The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json
 | `submission/` | **Final Phase 2 report on the instructor's template**; `./build.sh` builds the PDF, source ZIP and `RELEASE_MANIFEST.json` (SHA-256 of all submission files) |
 | `report/` | Earlier free-form report (superseded for submission by `submission/`); `evidence/` is the source of every reported number |
 | `docs/model_card.md`, `docs/DEMO_AND_REHEARSAL_CHECKLIST.md` | Model card; clean-install service run, demo requests, backup recording, four-person rehearsal |
+| `docs/QUICKSTART.md`, `docs/TROUBLESHOOTING.md`, `tools/run_service.py` | Run instructions for the checked environments; launcher that checks prerequisites and serves on 127.0.0.1 only |
+| `docs/ONNX_EVIDENCE_INDEX.md` | The four ONNX measurements kept apart (raw head A9b, final detections, task mAP, speed), their evidence files and reproduction |
+| `docs/PRESENTATION_QA.md`, `docs/REHEARSAL_CHECKLIST_ONE_PAGE.md`, `docs/TEAM_READTHROUGH_SIGNOFF.md` | Technical Q&A; one-page rehearsal checklist; blank read-through sheet for the four members |
 | `docs/AUDIT_TRACKER_2026-11-04.md` | Release-candidate audit (issues, evidence, state), change log and verification log |
 | `runs/manifest.json` | Model paths, thresholds, classifier temperature |
 | `tests/` | Unit tests |
@@ -41,12 +44,14 @@ Result on 31 Oct 2026 (CPU, Python 3.13): snapshot version 49 passed; with the v
 
 ## Running the service and the demo page
 
+Step by step, with the weight paths and full SHA-256 values: `docs/QUICKSTART.md`; problems: `docs/TROUBLESHOOTING.md`.
+
 ```bash
 cd smart-pet-vision/phase2
 pip install -r ../requirements.txt
 # copy the three private weight files from Drive to the paths in runs/manifest.json, then:
 python tools/preflight_release.py --manifest runs/manifest.json --requirements ../requirements.txt --strict-versions
-SPV_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app --host 127.0.0.1 --port 8000 --workers 1
+python tools/run_service.py      # checks again, then serves on 127.0.0.1:8000 only; never installs or downloads
 # browser: http://127.0.0.1:8000/demo   (API: POST /analyze, GET /health, GET /docs)
 ```
 

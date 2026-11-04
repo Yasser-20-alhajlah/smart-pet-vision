@@ -1,4 +1,4 @@
-"""GET /demo: the browser page used for the live demonstration (presentation layer over POST /analyze)."""
+"""GET /demo served by the app (static checks, no browser). Behaviour: tests/test_demo_ui_browser.py."""
 import re
 import unittest
 from unittest.mock import patch
@@ -28,11 +28,16 @@ class DemoPage(unittest.TestCase):
         self.assertIsNone(re.search(r"(src|href)\s*=\s*[\"']?(https?:)?//", text))
         self.assertNotIn("@import", text)
 
-    def test_no_animal_identification_is_not_displayed(self):
-        # Display rule: for a no_animal referral the page shows no species or confidence.
+    def test_static_display_rules_present(self):
+        # Static fallback for environments without a browser; the behaviour itself is checked in
+        # tests/test_demo_ui_browser.py (Playwright), which this test does not replace.
         text = self.get().text
         self.assertIn('codes.indexOf("no_animal") !== -1', text)
         self.assertIn("Not shown: no animal was detected", text)
+        self.assertIn("Ready for staff review \u2014 not approved for publication", text)
+        self.assertIn("Staff review required \u2014 see reasons", text)
+        self.assertNotIn("innerHTML", text)  # API messages and filenames are inserted as text only
+        self.assertNotIn("localStorage", text)
 
     def test_api_contract_unchanged(self):
         paths = {route.path for route in serve.app.routes}

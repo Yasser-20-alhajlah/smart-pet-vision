@@ -1,6 +1,6 @@
 # Demo, service instructions and rehearsal checklist (Phase 2)
 
-Status 4 Nov 2026. Nothing in this file is marked done unless it was actually run; the boxes are for the team to tick.
+Status 5 Nov 2026. Nothing in this file is marked done unless it was actually run; the boxes are for the team to tick. Short versions: `QUICKSTART.md` (setup), `TROUBLESHOOTING.md`, `REHEARSAL_CHECKLIST_ONE_PAGE.md`.
 
 ## 1. Clean-install service run (Colab, CPU or T4)
 Weights are private (Drive `MyDrive/capstone /smart-pet-vision/runs/`) and are never committed or published.
@@ -24,7 +24,7 @@ Weight SHA-256 (must match `submission/RELEASE_MANIFEST.json` and `docs/model_ca
 detector `f48e4d8e…1da1cd4`, segmenter `868f3842…a5d8ee`, classifier `22dd58d4…2081ba`.
 
 ## 2. The live demonstration (browser page `GET /demo`, about 2 min 30 s)
-The page is served by the same FastAPI process and only calls `POST /analyze`; it needs no internet access. It shows the original photo, the detections with the mask, the mask, the cutout, a large verdict (READY CANDIDATE / REFER TO STAFF) with the reason messages, and both policy flags of the response. For a `no_animal` referral it shows no species or confidence. Empty files and files over 15 MB are stopped in the browser; unreadable files show the service's 415 message; if the service is down, the page says so.
+The page is served by the same FastAPI process and only calls `POST /analyze`; it needs no internet access. It shows the original photo, the detections with the mask, the mask, the cutout, a large verdict (since 5 Nov: "Ready for staff review — not approved for publication" / "Staff review required — see reasons") with the reason messages, and both policy flags of the response. For a `no_animal` referral it shows no species or confidence; for other referrals the species is marked provisional. A Clear button resets the page; a new file or an error removes the previous result. Empty files and files over 15 MB are stopped in the browser; unreadable files show the service's 415 message, over-dimensioned images the 413 message, invalid model output the 503 message; if the service is down, the page says so. Start it with `python tools/run_service.py` (checks first, 127.0.0.1 only); see `QUICKSTART.md` and `TROUBLESHOOTING.md`.
 
 | # | Action on the page | What to say |
 |---|---|---|
@@ -34,7 +34,7 @@ The page is served by the same FastAPI process and only calls `POST /analyze`; i
 | 4 | Upload a text file renamed `.png` | the 415 message; the service rejects non-images |
 | 5 | Optional, only if time remains: the synthetic two-cat composite (say "synthetic; the 17/52 real multi-animal limitation is unchanged") | `multiple_animals` referral |
 
-Observed on 4 Nov in a CPU cloud container (real weights, code commit `1721627`, Chromium; **not the presentation host**; evidence `report/evidence/P2_demo_page_check_20261104.json`): CC0 cat photo → READY CANDIDATE, cat, 1 detection; CC0 coffee-cup photo (no pet) → REFER TO STAFF (one false box, cat 0.495; classifier "dog" 1.000; reasons disagreement, segmentation_unmatched, animal_too_small); synthetic two-cat composite → REFER TO STAFF (multiple_animals); synthetic blank image → REFER TO STAFF (no_animal), species hidden; text file → HTTP 415 message; empty and 16 MB files → stopped in the browser. Both policy flags were correct on every response; the browser requested no host other than the service; no file was written in the service working tree. The coffee-cup result is a useful honest failure example (out-of-scope object referred), not a false-positive rate.
+Observed on 4 Nov with the earlier page wording (READY CANDIDATE / REFER TO STAFF) in a CPU cloud container (real weights, code commit `1721627`, Chromium; **not the presentation host**; evidence `report/evidence/P2_demo_page_check_20261104.json`): CC0 cat photo → READY CANDIDATE, cat, 1 detection; CC0 coffee-cup photo (no pet) → REFER TO STAFF (one false box, cat 0.495; classifier "dog" 1.000; reasons disagreement, segmentation_unmatched, animal_too_small); synthetic two-cat composite → REFER TO STAFF (multiple_animals); synthetic blank image → REFER TO STAFF (no_animal), species hidden; text file → HTTP 415 message; empty and 16 MB files → stopped in the browser. Both policy flags were correct on every response; the browser requested no host other than the service; no file was written in the service working tree. The coffee-cup result is a useful honest failure example (out-of-scope object referred), not a false-positive rate.
 
 ### Command-line fallback (if the browser fails)
 | # | Request | Expected | What it shows |
@@ -79,12 +79,12 @@ Timing rule: if any block runs over by more than 20 s, the next presenter shorte
 - [ ] Team approves the candidate deck (PPTX and PDF exported in the Drive candidate folder) before it replaces the deck in `04_Presentation`.
 
 ## 5. Presentation-host checklist (the day before and 30 min before)
-- [ ] Host chosen (laptop or Colab runtime) and the same host used for the rehearsal; Python and `../requirements.txt` installed from the release archive.
+- [ ] Host chosen (a laptop; a Colab runtime cannot show the demo page without a public tunnel, which we do not use) and the same host used for the rehearsal; Python and `../requirements.txt` installed from the release archive.
 - [ ] Three weight files copied from Drive; `preflight_release.py --strict-versions` passes (no other weights, ever).
-- [ ] `uvicorn` started from `smart-pet-vision/phase2`; `http://127.0.0.1:8000/health` returns the three model names.
+- [ ] Service started from `smart-pet-vision/phase2` with `python tools/run_service.py` (all checks `ok`); `http://127.0.0.1:8000/health` returns the three model names.
 - [ ] `http://127.0.0.1:8000/demo` open in a browser tab, zoom about 90 % so the verdict and the four panels fit on the projector; one warm-up photo analysed.
 - [ ] Demo images in one local folder, named to show their status (Oxford test, CC0, SYNTHETIC); no team photos unless the owner agreed; no personal paths, keys or notebook tokens on screen.
 - [ ] Backup recording opened in a second window and played once; slides in presenter view; timer visible to the presenters.
-- [ ] No internet needed during the demo (the page loads nothing external); if the host is Colab, the runtime is connected and the tab is not idle.
+- [ ] No internet needed during the demo (the page loads nothing external; the launcher sets `YOLO_OFFLINE=1`).
 
-**Fallback procedure (decide in under 30 s):** page shows "could not be reached" or a 503 → restart uvicorn once (about 20 s to reload); still failing, or any freeze over 30 s → say "we switch to the recording made from the same code" and play the recording; never improvise a result that was not shown. The recording is from a cloud container, not this host: say so.
+**Fallback procedure (decide in under 30 s):** page shows "could not be reached" or a 503 → restart the service once (Ctrl+C, `python tools/run_service.py`, one warm-up photo); still failing, or any freeze over 30 s → say "we switch to the recording made from the same code" and play the recording; never improvise a result that was not shown. The recording is from a cloud container, not this host: say so.

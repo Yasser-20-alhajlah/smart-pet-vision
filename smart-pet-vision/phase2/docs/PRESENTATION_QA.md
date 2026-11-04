@@ -57,3 +57,9 @@ Same models, thresholds and referral rule. All reported metrics come from code `
 
 **Q16. The coffee cup was detected as a cat. Is that a bug?**
 It is a real false detection (score 0.495, above the 0.40 operating point) on an object the system is not designed for. The classifier said "dog" with confidence 1.000, which shows that its confidence means little outside cat and dog crops. The referral rule caught it (disagreement, no matching mask, too small), so it went to staff. One example is not a rate (`report/evidence/P2_demo_page_check_20261104.json`).
+
+**Q17. Are your code and data public?**
+The repository is public. Oxford-IIIT Pet is public (CC BY-SA 4.0) and is downloaded from the official page, not redistributed. The 401 team photos stay private to the team: they were given with their owners' consent, are used only for evaluation and can show people and homes; only aggregate results are published. The trained weights are in the team Drive with their SHA-256 values in `docs/QUICKSTART.md` (report, "Data and code availability").
+
+**Q18. The page says "score 1.000". Is the species then certain?**
+No. It is the classifier's temperature-scaled score, calibrated on Oxford validation photos. On other photo types it can be 1.000 and wrong (the coffee cup gave "dog" at 1.000). That is why a referred photo's species is shown as provisional and every photo still needs staff approval.

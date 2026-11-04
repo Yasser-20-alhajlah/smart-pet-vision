@@ -24,7 +24,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-import requests
+import httpx  # declared in ../requirements.txt (requests is only a transitive dependency)
 from PIL import Image
 
 HERE = Path(__file__).resolve().parents[1]  # smart-pet-vision/phase2
@@ -92,23 +92,23 @@ def main():
         t0, h = time.time(), None
         while time.time() - t0 < 300:
             try:
-                h = requests.get(url + "/health", timeout=120)
+                h = httpx.get(url + "/health", timeout=120)
                 break
-            except requests.ConnectionError:
+            except httpx.TransportError:
                 time.sleep(1)
         if h is None:
             raise SystemExit("service did not answer /health within 300 s")
         results["health"] = {"status": h.status_code, "body": h.json(), "first_response_s": round(time.time() - t0, 2)}
         log(f"curl -s {url}/health", json.dumps(h.json()) + f"   [HTTP {h.status_code}]")
 
-        d = requests.get(url + "/demo", timeout=60)
+        d = httpx.get(url + "/demo", timeout=60)
         results["demo_page"] = {"status": d.status_code, "content_type": d.headers.get("content-type", ""),
                                 "calls_analyze": 'fetch("/analyze?images=true"' in d.text, "bytes": len(d.content)}
         log(f"curl -s -o /dev/null -w '%{{http_code}}' {url}/demo", f"{d.status_code} {results['demo_page']['content_type']}")
 
         def analyze(name, data, images, key):
             t = time.perf_counter()
-            r = requests.post(url + "/analyze", params={"images": str(images).lower()},
+            r = httpx.post(url + "/analyze", params={"images": str(images).lower()},
                               files={"file": (name, data, "image/png")}, timeout=300)
             wall = (time.perf_counter() - t) * 1e3
             body = r.json()
@@ -148,7 +148,7 @@ def main():
         for name, data, ctype, expect in (("notes.txt", b"not an image", "text/plain", 415),
                                           ("empty.jpg", b"", "image/jpeg", 400),
                                           ("big.jpg", b"0" * (15 * 1024 * 1024 + 1), "image/jpeg", 413)):
-            r = requests.post(url + "/analyze", files={"file": (name, data, ctype)}, timeout=120)
+            r = httpx.post(url + "/analyze", files={"file": (name, data, ctype)}, timeout=120)
             results[f"invalid_{name}"] = {"http_status": r.status_code, "expected": expect, "ok": r.status_code == expect,
                                           "body": r.text[:120]}
             log(f"curl -s -o /dev/null -w '%{{http_code}}' -F file=@{name} {url}/analyze",
