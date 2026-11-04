@@ -17,6 +17,7 @@ from .multi_animal_review import (ReviewProposal, additional_animal_cues,
                                   map_tile_boxes, review_tiles, validate_boxes)
 
 REASONS = {
+    "invalid_segmentation": "The segmentation output is invalid; staff review required.",
     "no_animal": "No cat or dog was detected.",
     "multiple_animals": "More than one animal was detected.",
     "low_confidence": "The species prediction is below the verification threshold.",
@@ -27,6 +28,32 @@ REASONS = {
     "secondary_animal_candidate": "A second, lower-threshold pass found an additional or ambiguous animal candidate; staff review required.",
     "secondary_review_failed": "The additional-animal safety check could not be completed; staff review required.",
 }
+
+
+class InvalidModelOutput(ValueError):
+    """Model output cannot safely support a decision."""
+
+
+def crop_coordinates(box, width, height):
+    """Enclose a valid subpixel box without producing an empty crop."""
+    x1, y1, x2, y2 = box
+    return (max(0, int(np.floor(x1))), max(0, int(np.floor(y1))),
+            min(width, int(np.ceil(x2))), min(height, int(np.ceil(y2))))
+
+
+def validate_detections(boxes, classes, scores, width, height):
+    boxes, classes, scores = np.asarray(boxes), np.asarray(classes), np.asarray(scores)
+    if (boxes.ndim != 2 or boxes.shape[1:] != (4,) or classes.shape != (len(boxes),)
+            or scores.shape != (len(boxes),)):
+        raise InvalidModelOutput("Detection dimensions do not align.")
+    if (not np.isfinite(boxes).all() or not np.isfinite(classes).all()
+            or not np.isfinite(scores).all() or not np.isin(classes, range(len(CLASSES))).all()
+            or ((scores < 0) | (scores > 1)).any()
+            or not (boxes[:, 2:] > boxes[:, :2]).all()
+            or (boxes < 0).any() or (boxes[:, [0, 2]] > width).any()
+            or (boxes[:, [1, 3]] > height).any()):
+        raise InvalidModelOutput("Detection values are invalid.")
+    return boxes.astype(float), classes.astype(int), scores.astype(float)
 
 
 @dataclass
@@ -166,7 +193,10 @@ class PetPipeline:
         count = int(valid.sum())
         if tuple(r.orig_shape) != (h, w) or selected_box is None or r.masks is None or r.boxes is None:
             return SegmentationEvidence(empty, False, count)
-        masks = r.masks.data.cpu().numpy().astype(bool)
+        masks = r.masks.data.cpu().numpy()
+        if not np.isfinite(masks).all() or not np.isin(masks, [0, 1]).all():
+            return SegmentationEvidence(empty, False, count)
+        masks = masks.astype(bool)
         if len(masks) != len(boxes) or not valid.all():
             return SegmentationEvidence(empty, False, count)
         index = best_mask_index(boxes, selected_box, classes, selected_class,
@@ -230,10 +260,12 @@ class PetPipeline:
 
     # ------------------------------------------------------------ main
     def analyze(self, im: Image.Image, with_images: bool = True) -> dict:
+        started = time.perf_counter()
         im = ImageOps.exif_transpose(im).convert("RGB")
         timings, t = {}, time.perf_counter()
 
         boxes, classes, confs = self.detect(im)
+        boxes, classes, confs = validate_detections(boxes, classes, confs, im.width, im.height)
         timings["detect_ms"] = (time.perf_counter() - t) * 1e3
         reasons = []
         if len(boxes) == 0:
@@ -249,8 +281,12 @@ class PetPipeline:
             det_class = int(classes[k])
 
         t = time.perf_counter()
-        crop = im.crop(tuple(int(round(v)) for v in box))
-        probs = self.classify(crop)
+        crop = im.crop(crop_coordinates(box, im.width, im.height))
+        probs = np.asarray(self.classify(crop))
+        if (probs.shape != (len(CLASSES),) or not np.isfinite(probs).all()
+                or (probs < 0).any() or (probs > 1).any()
+                or not np.isclose(probs.sum(), 1.0, atol=1e-5, rtol=1e-5)):
+            raise InvalidModelOutput("Classifier probabilities are invalid.")
         species = CLASSES[int(probs.argmax())]
         timings["classify_ms"] = (time.perf_counter() - t) * 1e3
         if probs.max() < self.m.verify_threshold:
@@ -263,6 +299,13 @@ class PetPipeline:
                                          selected_box=box if det_class is not None else None,
                                          selected_class=det_class)
         mask, seg_matched = segmentation
+        mask = np.asarray(mask)
+        if (mask.shape != (im.height, im.width) or not np.isfinite(mask).all()
+                or not np.isin(mask, [0, 1]).all()):
+            mask = np.zeros((im.height, im.width), dtype=bool)
+            seg_matched = False
+            reasons.append("invalid_segmentation")
+        mask = mask.astype(bool)
         segmentation_count = getattr(segmentation, "animal_count", None)
         segmentation_species = getattr(segmentation, "selected_species", None)
         if segmentation_count is not None and segmentation_count > 1 and "multiple_animals" not in reasons:
@@ -295,7 +338,7 @@ class PetPipeline:
                     if mode == 'enforce':
                         reasons.append('secondary_review_failed')
                 timings['secondary_review_ms'] = (time.perf_counter()-review_started)*1e3
-        timings["total_ms"] = sum(timings.values())
+        timings["stages_sum_ms"] = sum(timings.values())
 
         result = {
             "verdict": "ready" if not reasons else "refer_to_staff",
@@ -322,6 +365,8 @@ class PetPipeline:
             result["annotated_png"] = _b64(annotate(im, result, mask))
             result["cutout_png"] = _b64(cutout(im, mask, box))
             result["mask_png"] = _b64(Image.fromarray((mask * 255).astype(np.uint8)))
+        # Direct wall time includes preprocessing, decisions and optional image encoding.
+        timings["total_ms"] = (time.perf_counter() - started) * 1e3
         return result
 
 
@@ -343,7 +388,7 @@ def annotate(im: Image.Image, res: dict, mask: np.ndarray) -> Image.Image:
 def cutout(im: Image.Image, mask: np.ndarray, box: np.ndarray) -> Image.Image:
     rgba = im.convert("RGBA")
     rgba.putalpha(Image.fromarray((mask * 255).astype(np.uint8)))
-    return rgba.crop(tuple(int(round(v)) for v in box))
+    return rgba.crop(crop_coordinates(box, im.width, im.height))
 
 
 def _b64(im: Image.Image) -> str:

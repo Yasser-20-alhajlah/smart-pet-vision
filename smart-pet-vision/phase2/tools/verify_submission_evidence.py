@@ -117,6 +117,17 @@ def submission_checks(root):
     check("ONNX channel diagnosis", has(cd["onnx_vs_torch64"]["max_abs_all"], "{:.5f}")
           and cd["onnx_vs_torch32"]["max_abs_all"] > A9_TOLERANCE)
     check("gap experiments not described as A9b met", e["channel_diagnosis"]["A9b_met"] is False)
+
+    opt = load(root, "P2_training_optimizer_provenance_20261104.json")
+    lr_fit = opt["conclusion"]["lr0"]
+    check("optimiser stated as recorded (AdamW, lr0 0.001667), never SGD",
+          "SGD" not in body and "AdamW" in body and f"{lr_fit:.6f}" in body
+          and opt["sources"]["wandb_logged_lr"]["max_relative_error_epochs_4_40"] < 1e-4)
+
+    ann = load(root, "M4_training_annotation_manifest_20261103.json")
+    check("annotation correction: 4 train labels, val/test unchanged, not retrained, no gain claimed",
+          ann["yolo_detection_labels_changed"] == 4 and ann["val_test_unchanged"]
+          and ann["training_or_evaluation_not_performed"] and "not retrained" in body)
     return out
 
 

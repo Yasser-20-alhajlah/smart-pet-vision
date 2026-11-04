@@ -14,7 +14,7 @@ from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from PIL import Image, UnidentifiedImageError
 from starlette.concurrency import run_in_threadpool
 
-from .pipeline import Manifest, PetPipeline
+from .pipeline import Manifest, PetPipeline, InvalidModelOutput
 
 MAX_BYTES = 15 * 1024 * 1024
 MAX_PIXELS = 25_000_000
@@ -60,4 +60,7 @@ def _decode_and_analyze(data: bytes, images: bool):
         # ImportError: Ultralytics patches Image.open to try a HEIC decoder that may be absent.
         raise HTTPException(415, "File is not a readable image.")
     with _model_lock:
-        return pipeline().analyze(im, with_images=images)
+        try:
+            return pipeline().analyze(im, with_images=images)
+        except InvalidModelOutput:
+            raise HTTPException(503, "Model output unavailable; staff review required.") from None

@@ -186,7 +186,7 @@ Planned action (Phase 1) & Done? & Measured effect \\
 Collect harder images (puppies, curled-up, clothed, multiple, small animals) & No & No new photos were collected in Phase 2. The 401 team photos stay an evaluation-only set. Their detector results (Section~\ref{sec:team}) confirm the need: recall 0.732, small-animal bin 0/10 found \\
 Rebalance cats and dogs; add hairless and colour-point cats & No & Not done; the split is still about 1:2. Siamese is among the five weakest breeds for masks (IoU 0.899) \\
 Fit the temperature on a harder calibration set & No & Needs the new photos above. The service keeps $T=0.05$ from Phase 1, so its confidence is not claimed as calibrated on new photos \\
-Re-derive the four loose body boxes; add a box-quality check & Partly & Round-trip check on all 7,335 YOLO labels (0 missing, 0 class mismatches); the four boxes were not re-derived \\
+Re-derive the four loose body boxes; add a box-quality check & Partly & Round-trip check on all 7,335 YOLO labels (0 missing, 0 class mismatches). The four loose training boxes were corrected in a separate training-label set (3 November): coordinates proposed from the images, team visual review attested by the project representative (no individual sign-off recorded), exactly 4 train labels changed, validation and test labels unchanged, structural checks pass. The detector was not retrained on it, so no reported metric reflects the correction \\
 \bottomrule
 \end{tabularx}}
 
@@ -255,13 +255,13 @@ Object size at 640\,px & 1,105 of 1,106 test boxes cover $\geq10\%$ of the frame
 Run (W\&B link) & Model and pretrained weights & Input res. & What changed in this run & Val.\ mAP50 & Val.\ mAP50--95 \\
 \midrule
 Baseline (nb.\ 11) & YOLO11s, COCO, used as is (cat and dog classes) & 640\,px & No fine-tuning: shows what fine-tuning adds & 0.929 & 0.715 \\
-\run{48vh56vh} & YOLO11s, COCO & 640\,px & Fine-tuned: 40 epochs: 40 epochs, batch 16, SGD (auto), lr0 0.01, mosaic (off for last 10 epochs), horizontal flip 0.5, scale 0.5, HSV jitter, seed 42 & 0.979 & 0.844 \\
+\run{48vh56vh} & YOLO11s, COCO & 640\,px & Fine-tuned: 40 epochs, batch 16, optimiser AdamW (chosen by \texttt{optimizer=auto}), lr0 0.001667, mosaic (off for last 10 epochs), horizontal flip 0.5, scale 0.5, HSV jitter, seed 42 & 0.979 & 0.844 \\
 \run{2seovilv} & YOLO11s, COCO & 640\,px & Same settings, full rerun on 18--19 October to check reproducibility & 0.979 & 0.844 \\
 \bottomrule
 \end{tabularx}}
 
 \smallskip
-\textbf{Selected model and why:} the \run{2seovilv} checkpoint (the rerun reproduced every metric of the first run). Fine-tuning raises validation mAP50 from 0.929 to 0.979 and mAP50--95 from 0.715 to 0.844 over the same model used as is, mostly through tighter whole-body boxes (COCO boxes follow its own annotation style). Only one fine-tuning recipe was trained, so the effect of other settings (model size, resolution) is not measured. Augmentations: horizontal flips and scale changes match pets photographed from either side at different distances; vertical flips are off because pets are rarely upside down; mosaic is switched off for the last 10 epochs so the model ends on whole images like the deployment input.
+\textbf{Selected model and why:} the \run{2seovilv} checkpoint (the rerun reproduced every metric of the first run). Fine-tuning raises validation mAP50 from 0.929 to 0.979 and mAP50--95 from 0.715 to 0.844 over the same model used as is, mostly through tighter whole-body boxes (COCO boxes follow its own annotation style). Only one fine-tuning recipe was trained, so the effect of other settings (model size, resolution) is not measured. Augmentations: horizontal flips and scale changes match pets photographed from either side at different distances; vertical flips are off because pets are rarely upside down; mosaic is switched off for the last 10 epochs so the model ends on whole images like the deployment input. \textbf{Optimiser (recorded, not configured):} the training call sets no optimiser, so Ultralytics 8.4.182 applied \texttt{optimizer=auto}; with $\lceil 5{,}123/64\rceil \times 40 = 3{,}240$ iterations (below its 10,000 threshold) this selects AdamW with lr0 $= 0.002\cdot 5/(4+2) = 0.001667$, $\beta_1 = 0.9$ and weight decay $5\times10^{-4}$, three warm-up epochs and a linear decay to $0.01\cdot$lr0. The checkpoint's saved training arguments record AdamW and 0.001667, and the learning rate logged to W\&B for \run{2seovilv} and \run{3ztpz2tc} follows this schedule exactly (e.g.\ 0.0015432 at epoch 4 and 0.0000579 at epoch 40). The segmenter was trained by the same call pattern and logs the same schedule.
 
 \begin{figure}[H]
   \centering
@@ -431,7 +431,7 @@ Run (W\&B) & Model and initial weights & Train / eval res. & Training setup (los
 \midrule
 Baseline A (nb.\ 11) & YOLO11s-seg, COCO, used as is & -- / 640\,px & No training; cat and dog classes, \tconf{} 0.25 & -- & mask mAP50--95 0.687; mIoU 0.832 \\
 Baseline B \run{1jb5y453} & SAM 2.1-B, released weights & -- / native & No training; prompt = ground-truth box (oracle) & -- & mIoU 0.803 (300 val images, seed 42) \\
-\run{kd5ksgt3} & YOLO11s-seg, COCO & 640 / 640\,px & Box, class, DFL and mask losses; mosaic (off last 10 epochs), flip 0.5, scale 0.5, HSV; SGD (auto), lr0 0.01, batch 16, seed 42 & 40 & mask mAP50--95 0.878 \\
+\run{kd5ksgt3} & YOLO11s-seg, COCO & 640 / 640\,px & Box, class, DFL and mask losses; mosaic (off last 10 epochs), flip 0.5, scale 0.5, HSV; AdamW (\texttt{optimizer=auto}), lr0 0.001667, batch 16, seed 42 & 40 & mask mAP50--95 0.878 \\
 \run{3ztpz2tc} & YOLO11s-seg, COCO & 640 / 640\,px & Same settings, full rerun (18--19 October) & 40 & mask mAP50--95 0.878 \\
 \bottomrule
 \end{tabularx}}
@@ -558,7 +558,7 @@ Post-processing and decision & Referral rule & \multicolumn{2}{r}{$<0.1$ (inside
 
 \subsection{Release and manifest}
 
-The service reads every path and threshold from \texttt{runs/manifest.json}; \texttt{Manifest.load} rejects out-of-range values, and \texttt{tools/preflight\_release.py} checks the weight checksums before a run.
+The service reads every path and threshold from \texttt{runs/manifest.json}; \texttt{Manifest.load} rejects out-of-range values, and \texttt{tools/preflight\_release.py} checks the weight checksums before a run. Every result in this report was produced by the code at commit \texttt{879b0e8}. The release candidate adds output validation (finite and in-range boxes, scores, class probabilities and masks; an invalid model output returns HTTP 503 and never a \texttt{ready} verdict; 6 fault-injection tests). It also crops with floor/ceil instead of rounding, which can move a crop edge by one pixel, and its \texttt{total\_ms} field is direct wall time including image encoding (\texttt{stages\_sum\_ms} keeps the earlier sum). The timings and team-photo results above were not re-measured on the candidate.
 
 \begin{tabularx}{\linewidth}{@{}l Y@{}}
 \toprule
