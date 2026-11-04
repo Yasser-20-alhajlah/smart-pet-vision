@@ -1,5 +1,7 @@
 # Smart Pet Vision — capstone project (AI251P Applied Computer Vision, KAUST)
 
+> Project guide for AI/code assistants and new contributors. Ask the assistant to read this file at the start of a session.
+
 Team of 4: Abdulrahman Mastour Alharthi (WS1 data/classification), Yasser Mansour Alhajlah (WS2 detection), Mohammed Adeeb Alrashdi (WS3 segmentation), Musaad Obaied Saad Alqahtani (WS4 integration). Original topic approved by the instructor on 19 Oct 2026.
 
 ## How to work with the owner (Yasser)
@@ -42,7 +44,7 @@ Google Drive (owner's account): `MyDrive/capstone /smart-pet-vision/runs/` (weig
 ## Open items (status 4 Nov 2026)
 1. Upload `SmartPetVision_Phase2.pdf` and `_source.zip` (one team member, due 15 Nov 2026).
 2. Each member confirms their line in the "Team members" table of `submission/main.tex`.
-3. Record the demo backup video (script: Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`); export the deck (claude.ai Slides artifact) to `04_Presentation`.
+3. Record the demo backup video (script: Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`); export the deck (online Slides deck, id in AUDIT_TRACKER) to `04_Presentation`.
 4. Privacy: student IDs are removed from all current tracked files; `SmartPetVision_Phase1.pdf` in Git is a redacted copy (owner decision 4 Nov; the submitted original stays in Drive). Git history is deliberately not rewritten (it would break every cited commit hash); see `phase2/docs/AUDIT_TRACKER_2026-11-04.md` section 7.
 5. Notebook 11 ran on 2 Nov (T4, code 879b0e8); results in `report/evidence/P2_gap_experiments_20261102.json` and in `submission/main.tex` (baselines, validation sweeps, per-stage p50/p95, ONNX test mAP 0.983/0.852, channel diagnosis). Remaining gaps (self-assessment 41/45): one training recipe per model (optional YOLO11n Part F not run; needs compute approval); A9b fails; notebook 11 results not logged to W&B (Part G).
 6. Two Phase 2 reports exist: the template report here (`submission/`) and a Phase 1-layout report in Drive `01_Report` (built 4 Nov by teammates). Team must choose one. Audit and change log: `phase2/docs/AUDIT_TRACKER_2026-11-04.md`. Corrected deck copy: Drive `04_Presentation/SmartPetVision_Phase2_Presentation_v2_20261104` (notes rewritten).
