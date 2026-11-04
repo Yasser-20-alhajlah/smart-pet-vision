@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import signal
 import socket
 import subprocess
 import sys
@@ -102,6 +103,10 @@ def serve(manifest: str, host: str, port: int) -> int:
           "The first analysis loads the three models and takes longer than the next ones.\n", flush=True)
     proc = subprocess.Popen([sys.executable, "-m", "uvicorn", "spv.serve:app", "--host", host,
                              "--port", str(port), "--workers", "1"], cwd=HERE, env=env)
+
+    def _stop(signum, frame):  # `kill <launcher PID>` also stops uvicorn, not only Ctrl+C
+        raise KeyboardInterrupt
+    signal.signal(signal.SIGTERM, _stop)
     try:
         return proc.wait()
     except KeyboardInterrupt:

@@ -36,6 +36,8 @@ The page is served by the same FastAPI process and only calls `POST /analyze`; i
 
 Observed on 4 Nov with the earlier page wording (READY CANDIDATE / REFER TO STAFF) in a CPU cloud container (real weights, code commit `1721627`, Chromium; **not the presentation host**; evidence `report/evidence/P2_demo_page_check_20261104.json`): CC0 cat photo → READY CANDIDATE, cat, 1 detection; CC0 coffee-cup photo (no pet) → REFER TO STAFF (one false box, cat 0.495; classifier "dog" 1.000; reasons disagreement, segmentation_unmatched, animal_too_small); synthetic two-cat composite → REFER TO STAFF (multiple_animals); synthetic blank image → REFER TO STAFF (no_animal), species hidden; text file → HTTP 415 message; empty and 16 MB files → stopped in the browser. Both policy flags were correct on every response; the browser requested no host other than the service; no file was written in the service working tree. The coffee-cup result is a useful honest failure example (out-of-scope object referred), not a false-positive rate.
 
+Observed on 5 Nov with the revised page (real weights, code `cdcce9e` started with `tools/run_service.py`, CPU cloud container, Chromium; **not the presentation host**; evidence `report/evidence/P2_demo_page_check_20261105.json`): CC0 cat → "Ready for staff review — not approved for publication"; a text file after that result → HTTP 415 message and the earlier result removed; synthetic two-cat composite → "Staff review required — see reasons" (`multiple_animals`, species marked provisional); synthetic blank image → `no_animal`, identification not shown; CC0 coffee cup → three reasons, species "dog" score 1.000 marked provisional; empty and 16 MB files stopped in the browser; Clear reset the page; at 390 px width no horizontal scrolling. Only the service host was requested; nothing was stored in the browser; no file other than Python caches was written in the service folder.
+
 ### Command-line fallback (if the browser fails)
 | # | Request | Expected | What it shows |
 |---|---|---|---|
@@ -55,7 +57,8 @@ Timings to quote if asked (never combine them): T4 in-process p95 61.4 ms (A8) a
 ## 3. Backup recording
 - [x] (4 Nov, container) MP4 of the smoke-test run made from its transcript: `SmartPetVision_backup_recording_CPU_smoke_20261104.mp4` — useful as a last resort, but it is not the presentation-host demo.
 - [x] (4 Nov, container) 71 s screen recording of the demo page with real weights on CPU, code commit `1721627`: `SmartPetVision_demo_page_backup_recording_CPU_container_1721627.mp4`. A caption on every frame states the date, commit, CPU container and that it is not the presentation host; inputs are labelled CC0 or SYNTHETIC. It is the closest available fallback until a presentation-host recording exists.
-- [ ] Record requests 1–4 on the presentation host (or a clean Colab runtime), following Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`.
+- [x] (5 Nov, container) 56 s screen recording of the revised page with real weights on CPU, code `cdcce9e`: `SmartPetVision_demo_page_backup_recording_CPU_container_cdcce9e.mp4` (CC0 cat, SYNTHETIC blank image, SYNTHETIC two-cat composite, text file, Clear). Caption on every frame: date, container, not the presentation host, commit. Replaces the 4 Nov recording as the first fallback because it shows the current wording; both are cloud-container recordings.
+- [ ] Record requests 1–4 on the presentation host (the laptop used on the day), following Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md`.
 - [ ] Check that no API key, token or personal path is visible on screen.
 - [ ] Save to Drive `05_Demo` and play it once end to end.
 
