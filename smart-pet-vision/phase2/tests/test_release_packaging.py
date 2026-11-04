@@ -48,6 +48,15 @@ class CodeArchive(unittest.TestCase):
                 t.writestr(n, b"changed" if n == "code/phase2/src/a.py" else s.read(n))
         self.assertFalse(mca.code_members_identical(tampered, code))
 
+    def test_code_archive_is_byte_reproducible(self):
+        kept = {"b.py": b"2", "a.py": b"1"}
+        idx = mca.index(kept, {}, "c" * 40, "t" * 40)
+        one, two = self.tmp / "1.zip", self.tmp / "2.zip"
+        mca.write_zip(one, kept, idx)
+        import time; time.sleep(2.1)  # a different wall-clock second must not change the bytes
+        mca.write_zip(two, kept, idx)
+        self.assertEqual(one.read_bytes(), two.read_bytes())
+
 
 if __name__ == "__main__":
     unittest.main()

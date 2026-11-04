@@ -75,11 +75,19 @@ def index(kept: dict, excluded: dict, commit: str, tree: str) -> dict:
             "note": "Identical members appear under code/ in SmartPetVision_Phase2_source.zip."}
 
 
+def _put(z: zipfile.ZipFile, name: str, data: bytes) -> None:
+    """Fixed timestamp and permissions, so the same inputs give a byte-identical archive."""
+    info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+    info.compress_type = zipfile.ZIP_DEFLATED
+    info.external_attr = 0o644 << 16
+    z.writestr(info, data)
+
+
 def write_zip(out: Path, kept: dict, idx: dict, prefix: str = "") -> None:
-    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+    with zipfile.ZipFile(out, "w") as z:
         for n in sorted(kept):
-            z.writestr(prefix + n, kept[n])
-        z.writestr(prefix + INDEX_NAME, json.dumps(idx, indent=1) + "\n")
+            _put(z, prefix + n, kept[n])
+        _put(z, prefix + INDEX_NAME, (json.dumps(idx, indent=1) + "\n").encode())
 
 
 def build(out: Path, private_ids: Path):
@@ -97,11 +105,11 @@ def build(out: Path, private_ids: Path):
 
 def write_source_zip(out: Path, code_zip: Path, report_files: list) -> None:
     """Report source (main.tex, figures, private_ids.tex) plus every member of code_zip under code/."""
-    with zipfile.ZipFile(code_zip) as c, zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+    with zipfile.ZipFile(code_zip) as c, zipfile.ZipFile(out, "w") as z:
         for f in report_files:
-            z.write(f, Path(f).as_posix())
+            _put(z, Path(f).as_posix(), Path(f).read_bytes())
         for n in sorted(c.namelist()):
-            z.writestr("code/" + n, c.read(n))
+            _put(z, "code/" + n, c.read(n))
 
 
 def code_members_identical(source_zip: Path, code_zip: Path) -> bool:
