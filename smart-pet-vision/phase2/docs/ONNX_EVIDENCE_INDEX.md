@@ -1,7 +1,7 @@
 # ONNX evidence index
 
 **Status (unchanged):** A9a, classifier ONNX parity, **passed** (max abs difference 2.98e-7 ≤ 0.001).
-A9b, detector ONNX parity on the raw head, **failed** under its original bound ≤ 0.001 (0.0018–0.0020).
+A9b, detector ONNX parity on the raw head, **failed** under its original bound ≤ 0.001 (0.0018–0.0020; re-run on 5 Nov with a new export: 0.0018 with one PyTorch thread, 0.0023 with two).
 The bound is not relaxed. The service runs the **PyTorch** detector (`runs/manifest.json` points to
 `.pt` files; `spv.serve` → `spv.pipeline`); no ONNX model is served or deployed.
 
@@ -9,8 +9,9 @@ The bound is not relaxed. The service runs the **PyTorch** detector (`runs/manif
 
 | Measurement | Population | Result | Evidence (`report/evidence/`) |
 |---|---|---|---|
-| 1. Raw-head numerical difference (A9b) | 4 random 640×640 inputs, seed 0, CPU, FP32 | 0.0018 (acceptance run); 0.0020 (re-check); 0.00198–0.00201 over six export/runtime settings (31 Oct); 0.00183 (2 Nov) | `M8_onnx_parity.json`; `M8_onnx_parity_recheck_4inputs.json`; `M8_onnx_parity_recheck_variants.json`; `P2_gap_experiments_20261102.json` (`E_onnx`) |
+| 1. Raw-head numerical difference (A9b) | 4 random 640×640 inputs, seed 0, CPU, FP32 | 0.0018 (acceptance run); 0.0020 (re-check); 0.00198–0.00201 over six export/runtime settings (31 Oct); 0.00183 (2 Nov); 0.0018 (one thread) and 0.0023 (two threads), new export, cloud CPU container (5 Nov) | `M8_onnx_parity.json`; `M8_onnx_parity_recheck_4inputs.json`; `M8_onnx_parity_recheck_variants.json`; `P2_gap_experiments_20261102.json` (`E_onnx`); `M8_onnx_parity_recheck_A9b_20261105.json` |
 | 1a. Where the raw gap sits (diagnosis, not a criterion) | same 4 inputs, float64 PyTorch reference | box channels (pixels) 0.00183, score channels 1.5e-7; vs float64: PyTorch FP32 0.00182, ONNX 0.00096; other PyTorch CPU backends 0.00122 / 0.00110 | `P2_gap_experiments_20261102.json` (`E_onnx.channel_diagnosis`, `E2_onnx_pytorch_backend`) |
+| 1b. Stage-by-stage cause (diagnosis, not a criterion; 5 Nov) | same 4 inputs, intermediate outputs of the same graph | neck features differ by ≤ 3.6e-5 (float32 vs float64 PyTorch: ≤ 3.9e-5); box difference ≤ 8e-5 grid cells at every level, multiplied by the stride, so the maximum is always a box height/width at a stride-32 anchor (415–601 px, 6–74 float32 ulps); scores ≤ 1.4e-7; vs float64: PyTorch FP32 0.00188, ONNX 0.00096; PyTorch against itself: one vs two threads 0.0019, oneDNN off 0.0016 | `M8_onnx_parity_recheck_A9b_20261105.json` (`root_cause_diagnosis`) |
 | 2. Final detections at the operating point (conf 0.40, NMS 0.50), same letterboxed input for both backends | first 50 Oxford test images, CPU (population as stated in the report; not recorded in the file) | same count and classes 100%; largest final-box difference 0.00027 px | `M8_onnx_parity_recheck_A9b_20261103.json` (variant A, `real_images_50`) |
 | 2b. Same check on another cohort | first 50 sorted, previously inspected team photos, CPU | same count and classes 100%; 0.00055 px | `M8_onnx_final_agreement_team50_20261103.json` |
 | 3. Task metric | Oxford test, 1,106 images, 640 px, conf 0.001 evaluation | mAP50 0.98252 (ONNX) vs 0.98357 (PyTorch); mAP50–95 0.85176 vs 0.85000 — close, not identical | `P2_gap_experiments_20261102.json` (`E_onnx`) |
@@ -50,7 +51,29 @@ PYTHONPATH=src python -c "from pathlib import Path; from spv.deploy import expor
 PYTHONPATH=src python -c "from pathlib import Path; from spv.deploy import yolo_parity; print(yolo_parity(Path('runs/detect/yolo11s_det/weights/best.pt'), Path('scratch/best_candidate.onnx'), 640))"
 # 1a. per-channel diagnosis
 PYTHONPATH=src python tools/onnx_channel_diagnosis.py --weights runs/detect/yolo11s_det/weights/best.pt --onnx scratch/best_candidate.onnx --out scratch/onnx_channels.json
+# 1b. gate re-run plus stage-by-stage cause (stride, ulp, float64, threads, oneDNN)
+PYTHONPATH=src python tools/a9b_root_cause.py --weights runs/detect/yolo11s_det/weights/best.pt --onnx scratch/best_candidate.onnx --out scratch/a9b_root_cause.json
 ```
+
+Note: Ultralytics' export sets PyTorch to one CPU thread for the rest of the process, so a parity
+check run in the same process as an export uses one thread; on the 5 Nov host this gave 0.0018,
+a new process with two threads 0.0023. Both fail A9b.
+
+## Why A9b fails (5 Nov diagnosis)
+
+The difference behaves like float32 rounding rather than a wrong operator. It is already present
+before the detection head (the three neck feature maps differ by up to 3.6e-5, the same size as
+float32 against float64 PyTorch), stays below 8e-5 grid cells in the box decoder, and is then
+multiplied by the stride (8, 16, 32) to give pixels. At a stride-32 anchor with a box of 400–600 px a
+float32 step is 3–6e-5 px, so 0.001 px is about 16–33 steps. PyTorch on the same CPU differs from
+itself by more than 0.001 when only the thread count (0.0019) or the convolution library (0.0016)
+changes, and ONNX Runtime is closer to a float64 run than PyTorch float32 is (0.00096 vs 0.00188).
+The A9b bound is therefore stricter than the run-to-run variation of its own reference on this
+hardware. A9b stays failed: the bound was fixed in advance and is not changed after the result.
+For context only: the PyTorch tutorial on ONNX Runtime checks agreement with a relative tolerance
+(`rtol=1e-3`, `atol=1e-5`, https://docs.pytorch.org/tutorials/advanced/super_resolution_with_onnxruntime.html).
+A future export would need a parity test fixed before the run that accounts for the output scale
+or compares decisions.
 
 Rows 2–4 come from Colab runs: row 3 and row 1a from notebook 11 (`11_phase2_gap_experiments`, saved
 as `P2_gap_experiments_20261102.json`), row 4 from notebook 05; the final-detection check is

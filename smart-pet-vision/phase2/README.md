@@ -24,7 +24,7 @@ The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json
 | `report/` | Earlier free-form report (superseded for submission by `submission/`); `evidence/` is the source of every reported number |
 | `docs/model_card.md`, `docs/DEMO_AND_REHEARSAL_CHECKLIST.md` | Model card; clean-install service run, demo requests, backup recording, four-person rehearsal |
 | `docs/QUICKSTART.md`, `docs/TROUBLESHOOTING.md`, `tools/run_service.py` | Run instructions for the checked environments; launcher that checks prerequisites and serves on 127.0.0.1 only |
-| `docs/ONNX_EVIDENCE_INDEX.md` | The four ONNX measurements kept apart (raw head A9b, final detections, task mAP, speed), their evidence files and reproduction |
+| `docs/ONNX_EVIDENCE_INDEX.md`, `tools/a9b_root_cause.py` | The four ONNX measurements kept apart (raw head A9b, final detections, task mAP, speed), their evidence files and reproduction; re-run of A9b with a stage-by-stage diagnosis of the gap |
 | `docs/PRESENTATION_QA.md`, `docs/REHEARSAL_CHECKLIST_ONE_PAGE.md`, `docs/TEAM_READTHROUGH_SIGNOFF.md` | Technical Q&A; one-page rehearsal checklist; blank read-through sheet for the four members |
 | `docs/AUDIT_TRACKER_2026-11-04.md` | Release-candidate audit (issues, evidence, state), change log and verification log |
 | `runs/manifest.json` | Model paths, thresholds, classifier temperature |

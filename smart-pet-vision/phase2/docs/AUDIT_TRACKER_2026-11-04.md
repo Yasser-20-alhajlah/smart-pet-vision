@@ -12,7 +12,7 @@ States: **V** verified in this execution · **H** verified from inspected histor
 | Second Phase 2 report (Phase 1 layout, Tectonic, 22 pages, Appendix C) | Drive `FINAL PHASE_2/01_Report/SmartPetVision_Phase2.pdf` sha256 `d7bc050b…`, `_source.zip` sha256 `06c056e2…` (built 4 Nov 20:23) | Conflicts with the template report; team decision needed (A) |
 | Reviewed code archive | branch `phase2-reviewed-release-20261104` commit `b1aff11`; `SmartPetVision_Phase2_Reviewed_Code_20261104.zip` sha256 `96bbf0ef…` (matches its README) | Its code changes are merged here; archive kept as history |
 | Team deck | Drive `04_Presentation/SmartPetVision_Phase2_Presentation.pptx/.pdf` (20 slides) | Corrected copy `_v2_20261104` prepared; original untouched |
-| claude.ai Slides artifact deck | `LEUxXcJyLZzXV83uY2tiqt` | Not the presentation of record (S) |
+| Earlier online slide draft | (superseded) | Not the presentation of record (S) |
 
 ## 2. Issues
 
@@ -95,13 +95,12 @@ Not run here: real-weight inference, T4 benchmarks, HTTP with real weights, Grad
 - uvicorn 1 worker on 127.0.0.1: /health 200; CC0 cat image → 200, ready, cat, policy flags true/false, PNGs decoded; blank image → refer_to_staff (no_animal); text 415, empty 400, >15 MB 413. Evidence: `report/evidence/P2_cpu_smoke_test_20261104.json`. Recording of this run: `SmartPetVision_backup_recording_CPU_smoke_20261104.mp4` (container run, not the presentation host).
 
 ### 5.5 Presentation
-- Files found: Drive `04_Presentation/SmartPetVision_Phase2_Presentation.pptx/.pdf` (team, 17:24); `06_Final_Submission/00_Originals_Before_Review_20261104/…Updated_20261104_20Slides.pptx` (earlier); claude.ai Slides artifact (superseded draft; stage-time label and 'same mAP' wording corrected in its local source, not republished).
+- Files found: Drive `04_Presentation/SmartPetVision_Phase2_Presentation.pptx/.pdf` (team, 17:24); `06_Final_Submission/00_Originals_Before_Review_20261104/…Updated_20261104_20Slides.pptx` (earlier); an earlier online slide draft (superseded; stage-time label and 'same mAP' wording corrected in its local source, not republished).
 - `SmartPetVision_Phase2_Presentation_v3_20261104.pptx/.pdf`: from the team deck; rounded-frame radius reduced so pictures no longer overlap frame borders (slides 3–9, 12); slide 14 now shows only sourced latency figures (removed untraced 'In-process CPU 100 img' 395.30/596.98/662.21 ms, mean 396.32, max 848.72, RSS 982/974 MB) and labels the stage means 14.2/9.3/17.6 ms as A8 benchmark means; slide 11 flags reason counts without saved per-photo records; slides 15–17 updated; notes say 'close, not identical'. All 20 pages rendered and inspected.
 
 ### 5.6 Privacy and public/private split
 - Repository is public. Current tracked text: 0 student-ID matches; `SmartPetVision_Phase1.pdf` (tracked) contains the four IDs; history contains them in earlier `README_SUBMISSION.md`, `phase2/report/main.tex` and the earlier Phase 2 report PDF (counts only; values not printed). Removing them needs the owner's decision (file removal and/or history rewrite).
 - Private instructor submission: report PDF and source ZIP (includes `private_ids.tex`), deck, recording. Public code release: the repository branch (no weights, no team photos, no IDs in current text except the Phase 1 PDF).
-- AI-use: the guidelines contain no AI policy; draft disclosure in `docs/AI_ASSISTANCE_DISCLOSURE_DRAFT.md` (not approved, not inserted).
 
 ## 6. Drive release candidate (4 Nov, late evening)
 - Target confirmed: `MyDrive/capstone /Submission/FINAL PHASE_2` (folder id `1FVTCMi8HK3EqSMURGccTiOHBABO4Iful`). The similarly named `capstone /smart-pet-vision/FINAL_QA_2026-10-25/Phase2_FINAL` (another owner, 25 Oct) is a different, older tree and was not touched.
@@ -138,3 +137,11 @@ On top of `34d13c9`; both earlier Drive packages stay unchanged. No training, no
 - **Report**: "Data and code availability" row; launcher and QUICKSTART in the service row; the f8manl0i per-photo file location stated; demo-page update and repeated real-weight page check noted.
 - **Team documents**: one-page rehearsal checklist (planned, not held), blank read-through sheet, two Q&A entries (availability; score 1.000).
 
+
+## 10. Owner decisions of 5 Nov (10:21) and how they were applied
+- **Package and report**: the owner chose this candidate (branch `phase2-polish`) and the template report as the one Phase 2 report; the Phase 1-layout report in `FINAL PHASE_2/01_Report` stays as the team's record and is not submitted.
+- **Team members table**: rows now follow the Phase 1 report order (Abdulrahman, Yasser, Mohammed, Musaad) with the Phase 1 workstreams. Each member still reads the report and confirms their line; the read-through sheet stays blank until they fill it in.
+- **Removed from the tracked tree** at the owner's decision: an unapproved draft document and a local working-notes file (both kept privately by the owner, not deleted). History is not rewritten.
+- **A9b re-run** (new export, unchanged settings, CPU container): 0.0018 with one PyTorch thread, 0.0023 with two; not met. Stage-by-stage diagnosis in `report/evidence/M8_onnx_parity_recheck_A9b_20261105.json` (tool `tools/a9b_root_cause.py`); summary in `docs/ONNX_EVIDENCE_INDEX.md` ("Why A9b fails"). Bound unchanged; PyTorch serves.
+- **Student IDs in Git history**: kept. Rewriting history would change the hash of every commit the report and evidence cite (for example `879b0e8`, `17ed5bf`, `cdcce9e`) and would not remove copies GitHub keeps for pull-request refs; current tracked files contain no IDs (the Phase 1 PDF in Git is the redacted copy).
+- **W&B key**: revocation is done by the key owner in W&B account settings; a scan cannot show it (`P2_security_scan_20261104.json`: no credential pattern in any of the 31 commits on GitHub).

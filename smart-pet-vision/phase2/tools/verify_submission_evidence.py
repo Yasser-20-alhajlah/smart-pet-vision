@@ -19,7 +19,8 @@ def load(root, name):
 
 def checks(root):
     tex = (root / "report" / "main.tex").read_text()
-    ev = lambda n: load(root, n)
+    def ev(n):
+        return load(root, n)
     out = []
 
     def check(name, ok, detail=""):
@@ -93,7 +94,7 @@ def submission_checks(root):
     check("never states the ONNX detector passed", not hits, "; ".join(hits))
     check("A9b row is Fail", re.search(r"A9b ONNX parity, detector &[^\n]*\\textbf\{Fail\}", tex) is not None)
     check("28.7 px shift marked as confounded", "28.7" not in tex or "confounded" in tex)
-    body = "\n".join(l for l in tex.splitlines() if not l.lstrip().startswith("%"))
+    body = "\n".join(line for line in tex.splitlines() if not line.lstrip().startswith("%"))
     check("no prompt left from the template", "\\prompt{" not in body.replace("\\newcommand{\\prompt}", ""))
 
     g = load(root, "P2_gap_experiments_20261102.json")
@@ -135,7 +136,7 @@ def submission_checks(root):
           and opt["sources"]["wandb_logged_lr"]["max_relative_error_epochs_4_40"] < 1e-4)
     dl = load(root, "P2_training_optimizer_direct_log_20261104.json")["notebooks"]
     check("optimiser direct log in both executed notebooks; W&B link stated as inferred",
-          len(dl) == 2 and all(any(f"AdamW(lr={lr_fit:.6f}" in l["text"] for l in n["log_lines"]) for n in dl.values())
+          len(dl) == 2 and all(any(f"AdamW(lr={lr_fit:.6f}" in entry["text"] for entry in n["log_lines"]) for n in dl.values())
           and "P2\\_training\\_optimizer\\_direct\\_log" in body and "inferred" in body)
     check("code row does not claim later commits changed only the report",
           "later commits change only this report" not in body and "CODE\\_ARCHIVE\\_INDEX.json" in body)
@@ -150,6 +151,16 @@ def submission_checks(root):
     check("matched-preprocessing final-detection agreement quoted, A9b still failed",
           r50["same_classes"] == 1.0 and f"{r50['final_box_max_abs_diff_px']:.5f}" in body
           and not fin["any_variant_passed"])
+
+    re5 = load(root, "M8_onnx_parity_recheck_A9b_20261105.json")
+    rc5 = re5["root_cause_diagnosis"]["summary"]
+    runs5 = re5["official_gate_runs"]
+    check("5 Nov A9b re-run quoted as recorded (0.0018 one thread, 0.0023 two threads), still failed",
+          not re5["A9b_met"] and not any(r["passed"] for r in runs5)
+          and f"{runs5[0]['max_abs_diff']:.4f}" == "0.0018" and f"{runs5[1]['max_abs_diff'][0]:.4f}" == "0.0023"
+          and "0.0018 with one PyTorch thread and 0.0023 with two" in body
+          and f"{rc5['torch32_default_vs_torch32_one_thread_final']:.4f}" == "0.0019" and "differs from itself by 0.0019" in body
+          and rc5["argmax_strides"] == [32] and "\\ev{M8_onnx_parity_recheck_A9b_20261105}" in body)
 
     rep = load(root, "P2_closure_v3_20261103_extract.json")["gpu_benchmark"]
     check("3 Nov T4 repeat quoted as recorded and kept separate",

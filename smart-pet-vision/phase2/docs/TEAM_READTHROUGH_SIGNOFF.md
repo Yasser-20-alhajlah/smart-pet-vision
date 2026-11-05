@@ -13,7 +13,6 @@ What each member checks (at least their own workstream; ideally the whole report
 3. Every claim about code (thresholds, endpoints, what the page shows) matches the code in `code/`.
 4. Your line in the "Team members" table describes what you did.
 5. The deck slides you present say the same as the report.
-6. The AI-assistance disclosure (`AI_ASSISTANCE_DISCLOSURE_DRAFT.md`): approve, change or reject.
 
 | Member | Workstream | Read (sections / slides) | Problems found (or "none") | Date | Initials |
 |---|---|---|---|---|---|
