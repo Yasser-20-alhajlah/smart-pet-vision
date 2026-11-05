@@ -59,6 +59,8 @@ Note: Ultralytics' export sets PyTorch to one CPU thread for the rest of the pro
 check run in the same process as an export uses one thread; on the 5 Nov host this gave 0.0018,
 a new process with two threads 0.0023. Both fail A9b.
 
+| 1c. Candidate detector (corrected labels, Kaggle, 5 Nov; not served) | same bound | 4 random inputs 0.00073 (pass); 50 real validation images 0.0073 (fail; served detector 0.0045 on the same images); counts/classes identical, final boxes within 0.0002 px | `P2_m4_corrected_candidate_kaggle_20261105.json` (as reported by the run) |
+
 ## Why A9b fails (5 Nov diagnosis)
 
 The difference behaves like float32 rounding rather than a wrong operator. It is already present

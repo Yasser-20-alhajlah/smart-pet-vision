@@ -162,6 +162,26 @@ def submission_checks(root):
           and f"{rc5['torch32_default_vs_torch32_one_thread_final']:.4f}" == "0.0019" and "differs from itself by 0.0019" in body
           and rc5["argmax_strides"] == [32] and "\\ev{M8_onnx_parity_recheck_A9b_20261105}" in body)
 
+    m5k = load(root, "P2_m5_kaggle_regression_20261105.json")
+    s3 = m5k["same_300_ids"]
+    check("Kaggle M5 regression quoted as recorded (same-300 YOLO/SAM IoU with and without border; full-test mAP50-95)",
+          f"{s3['yolo']['iou']:.3f}" == "0.925" and f"{s3['sam_oracle_box']['iou']:.3f}" == "0.812"
+          and f"{s3['yolo']['iou_no_border']:.3f}" == "0.934" and f"{s3['sam_oracle_box']['iou_no_border']:.3f}" == "0.948"
+          and f"{m5k['yolo_full_test']['mask_mAP50_95']:.3f}" == "0.875" and f"{m5k['yolo_full_test']['iou_no_border']:.3f}" == "0.930"
+          and "& 0.925 & 0.960 & 0.934 & 0.964" in body and "& 0.812 & 0.883 & 0.948 & 0.956" in body)
+    m4k = load(root, "P2_m4_corrected_candidate_kaggle_20261105.json")
+    cv = m4k["curve_metrics_conf0.001_nms0.70"]
+    op = m4k["operating_point_conf0.40_nms0.50_iou0.50_test"]
+    check("Kaggle M4 candidate quoted as recorded and not promoted (val mAP50-95 0.839 < 0.844; op. point 1,051/49/55)",
+          f"{cv['candidate']['val']['mAP50_95']:.3f}" == "0.839" and f"{cv['historical']['val']['mAP50_95']:.3f}" == "0.844"
+          and op["candidate"]["tp"] == 1051 and op["candidate"]["fp"] == 49 and op["candidate"]["fn"] == 55
+          and "Candidate & val & 0.979 & 0.839" in body and "1,051/49/55" in body and "so the served detector is kept" in body)
+    sz = load(root, "P2_size_table_erratum_20261105.json")["recount_relative_bins"]
+    check("Recall-by-size Oxford column equals the relative-bin recount (4 medium, 1,102 large; found sum = 1,061 TP)",
+          sz["medium"]["n"] == 4 and sz["large"]["n"] == 1102 and sz["medium"]["found"] + sz["large"]["found"] == 1061
+          and "Medium (1--10\\%) & 4 & 1.000" in body and "Large ($\\geq10\\%$) & 1,102 & 0.959" in body
+          and "1,102 of 1,106 test boxes" in body)
+
     rep = load(root, "P2_closure_v3_20261103_extract.json")["gpu_benchmark"]
     check("3 Nov T4 repeat quoted as recorded and kept separate",
           "{:.1f}/{:.1f}/{:.1f}".format(rep["p50_ms"], rep["p95_ms"], rep["p99_ms"]) in body

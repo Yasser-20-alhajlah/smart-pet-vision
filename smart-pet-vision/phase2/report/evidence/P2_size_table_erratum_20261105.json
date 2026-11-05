@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-05",
+  "title": "Erratum: recall by object size on the Oxford test split, relative-area bins",
+  "problem": "The report table (Section 2.4) labels its bins as box area as a share of the frame (small < 1%, medium 1-10%, large >= 10%), but the Oxford column was taken from recall_by_size in M4_detection_test_metrics.json, which spv.detect.recall_by_size computes with COCO pixel bins (< 32^2, < 96^2 px) on native-resolution boxes. The team-photo column uses the relative bins (recall_by_relative_size). The two columns therefore used different definitions.",
+  "recount_relative_bins": {
+    "small": {
+      "n": 0,
+      "found": 0
+    },
+    "medium": {
+      "n": 4,
+      "found": 4,
+      "recall": 1.0
+    },
+    "large": {
+      "n": 1102,
+      "found": 1057,
+      "recall": 0.959165
+    }
+  },
+  "consistency_check": "4 + 1,057 = 1,061 found = the TP count of the operating-point table (M4_detection_test_metrics.json); total 1,106 boxes.",
+  "source": "SIZE_TABLE_AUDIT.json (Drive FINAL PHASE_2/Requirements_Audit_20261105), recount by the segmentation workstream on the saved historical test predictions (prediction set SHA-256 ae2e8a70a1142ec49fa1b35d813ac7c32f4fb0728e40cf5596a0ef76e6f365b8, metadata SHA-256 f7c6771be2f521bceb169ec4ea35f3855958de5ca03f73d992bee7d54163c993; conf 0.40, NMS 0.50, matching IoU 0.50)",
+  "previous_values_in_report": {
+    "medium": 1,
+    "large": 1105,
+    "definition": "COCO pixel bins"
+  },
+  "code_unchanged": "spv.detect.recall_by_size still computes pixel bins (its docstring says so); the report now states the Oxford relative-bin counts and names the definition. No retraining or re-evaluation needed."
+}

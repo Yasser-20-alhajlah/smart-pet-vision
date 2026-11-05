@@ -221,7 +221,7 @@ Planned action (Phase 1) & Done? & Measured effect \\
 Collect harder images (puppies, curled-up, clothed, multiple, small animals) & No & No new photos were collected in Phase 2. The 401 team photos stay an evaluation-only set. Their detector results (Section~\ref{sec:team}) confirm the need: recall 0.732, small-animal bin 0/10 found \\
 Rebalance cats and dogs; add hairless and colour-point cats & No & Not done; the split is still about 1:2. Siamese is among the five weakest breeds for masks (IoU 0.899) \\
 Fit the temperature on a harder calibration set & No & Needs the new photos above. The service keeps $T=0.05$ from Phase 1, so its confidence is not claimed as calibrated on new photos \\
-Re-derive the four loose body boxes; add a box-quality check & Partly & Round-trip check on all 7,335 YOLO labels (0 missing, 0 class mismatches). The four loose training boxes were corrected in a separate training-label set (3 November): coordinates proposed from the images, team visual review attested by the project representative (no individual sign-off recorded), exactly 4 train labels changed, validation and test labels unchanged, structural checks pass. The detector was not retrained on it, so no reported metric reflects the correction \\
+Re-derive the four loose body boxes; add a box-quality check & Partly & Round-trip check on all 7,335 YOLO labels (0 missing, 0 class mismatches). The four loose training boxes were corrected in a separate training-label set (3 November): coordinates proposed from the images, team visual review attested by the project representative (no individual sign-off recorded), exactly 4 train labels changed, validation and test labels unchanged, structural checks pass. The served detector was not retrained on it, so the metrics of Sections 2.3--2.6 do not reflect the correction; a candidate trained on the corrected labels is reported in Section~\ref{sec:kaggle} (no gain on validation; not promoted) \\
 \bottomrule
 \end{tabularx}}
 
@@ -272,7 +272,7 @@ Label round trip & 7,335 labels drawn back to pixels: 0 missing, 0 class mismatc
 Box quality (visual) & 300 boxes reviewed: 4 loose boxes, no missed animal & Kept; listed in the Phase 1 plan \\
 Near-duplicates across splits & MD5 and pHash groups assigned whole to one split: 0 crossing groups & Group-aware split (seed 42) \\
 Class balance & About 1 cat : 2 dogs in every split & Per-class metrics reported \\
-Object size at 640\,px & 1,105 of 1,106 test boxes cover $\geq10\%$ of the frame & Size evaluated on the team photos, which contain small animals \\
+Object size at 640\,px & 1,102 of 1,106 test boxes cover $\geq10\%$ of the frame & Size evaluated on the team photos, which contain small animals \\
 \bottomrule
 \end{tabularx}}
 
@@ -355,15 +355,15 @@ The baseline row is the COCO-pretrained YOLO11s without fine-tuning (cat and dog
 \textbf{Weak classes:} dog is weaker (AP50--95 0.812 vs 0.888). Dogs vary more in body shape and pose, long-bodied breeds give looser boxes, and 10 of the 46 false positives are dogs predicted as cats or the reverse. More varied dog poses and the clothed-pet images from the Phase 1 plan would help most.
 
 \medskip
-Recall by object size. Size bins are the box area as a share of the frame (large $\geq10\%$, medium 1--10\%, small $<1\%$), because Oxford boxes are almost all large; in COCO pixel bins at 640\,px all 1,106 test boxes and all 503 team boxes are ``large''.
+Recall by object size. Size bins are the box area as a share of the frame (large $\geq10\%$, medium 1--10\%, small $<1\%$), because Oxford boxes are almost all large; in COCO pixel bins at 640\,px all 1,106 test boxes and all 503 team boxes are ``large''. Erratum (5 November): earlier versions of this table gave the Oxford column from the saved \texttt{recall\_by\_size} record, which uses COCO pixel bins on native-resolution boxes (1 medium, 1,105 large); the Oxford column below is the recount with the relative bins stated in the header, on the same saved predictions (4 + 1,057 found = the 1,061 true positives of the operating-point table; \ev{P2_size_table_erratum_20261105}).
 
 \begin{tabularx}{\linewidth}{@{}Y r r r r@{}}
 \toprule
 Object size (share of frame) & Oxford test & Recall @ op. & Team photos & Recall @ op. \\
 \midrule
 Small ($<1\%$) & 0 & -- & 10 & 0.000 \\
-Medium (1--10\%) & 1 & 1.000 & 89 & 0.169 \\
-Large ($\geq10\%$) & 1,105 & 0.959 & 404 & 0.874 \\
+Medium (1--10\%) & 4 & 1.000 & 89 & 0.169 \\
+Large ($\geq10\%$) & 1,102 & 0.959 & 404 & 0.874 \\
 \bottomrule
 \end{tabularx}
 
@@ -717,9 +717,43 @@ A9b ONNX parity, detector & $\leq0.001$ & 0.0018 & \textbf{Fail} \\
 
 Main failure modes for the model card: missed small and secondary animals (team photos: recall 0.732; 17 of 52 multi-animal photos marked technically ready because one animal was missed); dark dogs wearing clothing detected as cats; masks spreading into similar-coloured backgrounds. Out of scope: automatic publication, identifying individual animals or people, veterinary use, species other than cats and dogs. Every photo is approved by staff, whatever the verdict.
 
+\subsection{Regression runs of 5 November (Kaggle, Tesla T4)}\label{sec:kaggle}
+
+After the report above was frozen, the segmentation workstream repeated two evaluations on a private Kaggle T4 kernel with the delivered weights (SHA-256 recorded), and trained one additional detector candidate. These runs change no served weight, threshold or acceptance criterion; they are reported as regression evidence with their own provenance (\ev{P2_m5_kaggle_regression_20261105}, \ev{P2_m4_corrected_candidate_kaggle_20261105}). The means below were recomputed from the per-image files delivered with the runs.
+
+\textbf{Segmenter and SAM baseline (M5).} The original YOLO11s-seg weights (\texttt{868f3842\ldots}) were re-evaluated on all 1,106 test images (640\,px; union mask at \tconf{} 0.25, \tnms{} 0.70; mask AP at \tconf{} 0.001, \tnms{} 0.70), and the SAM~2.1-B oracle-box baseline was repeated on the same 300 test IDs as Section~3.4 with the official \texttt{sam2.1\_b.pt} checkpoint (161,935,802 bytes, SHA-256 \texttt{f1a9cf2d\ldots}; mask logit threshold 0.0; 1024\,px model input, native-resolution output). Full-test values reproduce Section~3.4: mask mAP50 0.993, mAP50--95 0.875 (cat 0.880, dog 0.870); mean IoU 0.923 and Dice 0.959 with the trimap border counted as body, 0.930 and 0.962 without it.
+
+\begin{tabularx}{\linewidth}{@{}Y r r r r@{}}
+\toprule
+Same 300 test IDs & IoU & Dice & IoU, no border & Dice, no border \\
+\midrule
+YOLO11s-seg (served weights) & 0.925 & 0.960 & 0.934 & 0.964 \\
+SAM 2.1-B, ground-truth box prompt & 0.812 & 0.883 & 0.948 & 0.956 \\
+\bottomrule
+\end{tabularx}
+
+The ranking depends on the mask definition: with border pixels counted SAM is 0.11 IoU behind, without them it is 0.014 ahead, so the full-trimap comparison alone does not show that the fine-tuned model draws better outlines; its advantage is that it needs no box and follows the trimap convention it was trained on. The historical SAM checkpoint hash was not recorded, so equality with it is not claimed.
+
+\textbf{Detector candidate trained on the corrected labels (M4).} Section~1 notes four loose training boxes corrected on 3 November. A YOLO11s candidate was trained from the COCO weights (SHA-256 \texttt{85a76fe8\ldots}) with the recipe of Section~2.2 (640\,px, batch 16, 40 epochs, seed 42, \texttt{optimizer=auto}) on the 5,123 training images with exactly those four boxes changed; validation and test labels are unchanged (checked record by record). Kaggle version 365987622; checkpoint \texttt{ca3981e0\ldots} (19,159,066 bytes), kept by validation fitness.
+
+\begin{tabularx}{\linewidth}{@{}Y l r r r r@{}}
+\toprule
+Detector & Split & mAP50 & mAP50--95 & Recall @ op. & F1 @ op. \\
+\midrule
+Historical (served) & val & 0.980 & 0.844 & -- & -- \\
+Candidate & val & 0.979 & 0.839 & -- & -- \\
+Historical (served) & test & 0.984 & 0.850 & 0.959 & 0.959 \\
+Candidate & test & 0.980 & 0.851 & 0.950 & 0.953 \\
+\bottomrule
+\end{tabularx}
+
+mAP rows: Ultralytics curve conditions (\tconf{} 0.001, \tnms{} 0.70); operating-point columns: \tconf{} 0.40, \tnms{} 0.50, matching IoU 0.50, counts rescored from the per-image predictions (candidate TP/FP/FN 1,051/49/55 against 1,061/46/45). The candidate's validation mAP50--95 is lower (0.8387 vs 0.8436), so the served detector is kept; its slightly higher test mAP50--95 is disclosed but not used for selection, because the test split is not used to choose models. Correcting four labels and retraining did not demonstrate a quality gain. The candidate's ONNX export passes the four-random-input check (0.00073) and fails the same 0.001 bound on 50 real validation images (0.0073; served detector 0.0045 on the same images), with identical counts and classes and final boxes within 0.0002\,px; A9b for the served detector is unchanged. On a frozen cohort of 349 public COCO cat/dog images (175-image test portion, 26 with several animals) the two detectors inside the same pipeline were equally weak on counting: 12 of 26 (served) and 11 of 26 (candidate) multi-animal images were marked technically ready; this cohort is not independent of COCO pre-training and no threshold was chosen on it. Both pipelines answered 300 of 300 loopback HTTP requests on the T4 (p95 95.8 and 95.7\,ms in-process, 50 validation images cycled; a different cohort from the acceptance benchmark, not combined with it).
+
+\textbf{What these runs do not show:} generalisation to new shelter photos, dependable counting of small or secondary animals, or an independent human reproduction; they reuse the historical test split, which had already informed development.
+
 \subsection{Conclusion}
 
-\textbf{Demonstrated:} on Oxford-IIIT Pet test images with one large animal, the fine-tuned detector and segmenter clearly improve on the same models used as is (mAP50 0.939 $\rightarrow$ 0.984; mean IoU 0.830 $\rightarrow$ 0.923), the service meets every acceptance criterion except detector ONNX parity, and every response keeps the staff-approval guard. \textbf{Not demonstrated:} reliable counting of several or small animals (17 of 52 multi-animal team photos wrongly ready; small-animal recall 0 of 10), accuracy on a fresh shelter holdout (the team photos had been inspected), a passing ONNX detector, and T4 timings of the release-candidate code. \textbf{Next steps:} collect new multi-animal shelter photos as an untouched test set, retrain the detector with the corrected boxes and more small and secondary animals (selection on validation, one final test), and define an ONNX parity test on decisions before running it. Until then the system is a staff-supervised assistant, not an automatic gatekeeper.
+\textbf{Demonstrated:} on Oxford-IIIT Pet test images with one large animal, the fine-tuned detector and segmenter clearly improve on the same models used as is (mAP50 0.939 $\rightarrow$ 0.984; mean IoU 0.830 $\rightarrow$ 0.923), the service meets every acceptance criterion except detector ONNX parity, and every response keeps the staff-approval guard; the 5 November Kaggle runs reproduce the segmentation results with the delivered weights (Section~\ref{sec:kaggle}). \textbf{Not demonstrated:} reliable counting of several or small animals (17 of 52 multi-animal team photos wrongly ready; small-animal recall 0 of 10), accuracy on a fresh shelter holdout (the team photos had been inspected), a passing ONNX detector, and T4 timings of the release-candidate code. \textbf{Next steps:} collect new multi-animal shelter photos as an untouched test set, retrain the detector with more small and secondary animals (the corrected boxes alone gave no validation gain, Section~\ref{sec:kaggle}; selection on validation, one final test), and define an ONNX parity test on decisions before running it. Until then the system is a staff-supervised assistant, not an automatic gatekeeper.
 
 % =====================================================================
 \section{Obstacles and how they were addressed}

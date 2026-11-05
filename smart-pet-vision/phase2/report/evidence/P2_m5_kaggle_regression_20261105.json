@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-05",
+  "title": "M5 regression run of 5 November (Kaggle, Tesla T4): original segmenter re-evaluated; SAM 2.1-B oracle-box baseline repeated on the same 300 test IDs",
+  "source": {
+    "drive_archive": "M5_KAGGLE_VERIFICATION_20261105.zip (Drive FINAL PHASE_2/Kaggle_Reproduction_20261105, id 1ZVwrWYI_PVpidCOsqwiC0wETU6OYHPml)",
+    "archive_sha256": "2812a3482dc74e8688032443b8465dc21de3e7fd69388d09df048b582baba8e1",
+    "kaggle_version": "365992106",
+    "run_by": "segmentation workstream (Mohammed), 5 Nov 2026"
+  },
+  "how_these_numbers_were_obtained": "Means recomputed on 6 Nov from the per-image CSVs inside the archive (yolo_original_per_image.csv, 1,106 rows; sam_oracle_same_300_per_image.csv, 300 rows); mask AP read from M5_MASK_AP.json. No new inference here.",
+  "environment_recorded_in_archive": {
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "packages": {
+      "torch": "2.11.0+cu130",
+      "torchvision": "0.26.0+cu130",
+      "ultralytics": "8.4.182",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "pillow": "11.3.0",
+      "onnx": "1.23.2",
+      "onnxruntime": "1.31.0",
+      "fastapi": "0.141.1",
+      "uvicorn": "0.54.0",
+      "httpx": "0.28.1"
+    },
+    "gpu": "Tesla T4",
+    "torch_threads": 2
+  },
+  "segmenter_weights_sha256": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+  "settings": {
+    "imgsz": 640,
+    "union_mask_conf": 0.25,
+    "union_mask_nms_iou": 0.7,
+    "mask_ap_conf_floor": 0.001,
+    "mask_ap_nms_iou": 0.7,
+    "retina_masks": true
+  },
+  "yolo_full_test": {
+    "n": 1106,
+    "iou": 0.922959,
+    "dice": 0.95862,
+    "iou_no_border": 0.930349,
+    "dice_no_border": 0.961808,
+    "mask_mAP50": 0.9931178547973413,
+    "mask_mAP50_95": 0.8745493935724123,
+    "per_class": {
+      "cat": {
+        "AP50": 0.9938103688201566,
+        "AP50_95": 0.8795830754995135
+      },
+      "dog": {
+        "AP50": 0.9924253407745259,
+        "AP50_95": 0.8695157116453114
+      }
+    }
+  },
+  "same_300_ids": {
+    "n": 300,
+    "yolo": {
+      "iou": 0.925222,
+      "dice": 0.959532,
+      "iou_no_border": 0.934245,
+      "dice_no_border": 0.963838
+    },
+    "sam_oracle_box": {
+      "iou": 0.81157,
+      "dice": 0.882605,
+      "iou_no_border": 0.947602,
+      "dice_no_border": 0.956135
+    }
+  },
+  "sam": {
+    "checkpoint": "sam2.1_b.pt",
+    "sha256": "f1a9cf2dd69d84bb463b5ad98246d03e2d47a130a9295db0ec967e6cd95e2e47",
+    "bytes": 161935802,
+    "mask_threshold": 0.0,
+    "prompt": "ground-truth whole-body box (oracle)",
+    "note": "newly downloaded official checkpoint; equality with the unrecorded historical SAM checkpoint is not asserted"
+  },
+  "historical_values_for_comparison": {
+    "M5_yolo_seg_test_metrics": "mIoU 0.923, Dice 0.959, mask mAP50-95 0.875",
+    "M5_same_subset_comparison": "YOLO 0.925 vs SAM 0.812 (300 images)"
+  },
+  "scope": "Regression of the delivered weights on the historical test split; no retraining, no threshold change, no new data; not a new independent test set."
+}
