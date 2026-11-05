@@ -1,6 +1,6 @@
 # Team read-through sign-off (blank until each member fills in their own line)
 
-Each member reads the final Phase 2 report (`01_Report/SmartPetVision_Phase2.pdf`, 27 pages) and the slides they will present, then writes their own line below. Nothing here is filled in on anyone's behalf.
+Each member reads the final Phase 2 report (`01_Report/SmartPetVision_Phase2.pdf`, 26 pages) and the slides they will present, then writes their own line below. Nothing here is filled in on anyone's behalf.
 
 | Member | Workstream | Read the whole report (yes/no) | My line in the Team members table is correct (yes/no) | Corrections needed (page, sentence) | Date |
 |---|---|---|---|---|---|

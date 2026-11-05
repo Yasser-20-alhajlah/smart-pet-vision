@@ -82,6 +82,9 @@
 \IfFileExists{private_ids.tex}{\input{private_ids.tex}}{%
   \newcommand{\idYasser}{(ID)}\newcommand{\idMohammed}{(ID)}%
   \newcommand{\idMusaad}{(ID)}\newcommand{\idAbdulrahman}{(ID)}}
+% The exact delivered commit is written by build.sh (delivery_commit.tex, generated, not tracked).
+\IfFileExists{delivery_commit.tex}{\input{delivery_commit.tex}}{%
+  \newcommand{\deliverycommit}{(unbuilt working tree)}\newcommand{\deliverybranch}{(none)}}
 
 \begin{document}
 
@@ -101,20 +104,25 @@
 % =====================================================================
 \section{Team and system}
 
-\begin{tabularx}{\linewidth}{@{}l Y@{}}
+\begin{xltabular}{\linewidth}{@{}l Y@{}}
 \toprule
 Field & Our answer \\
 \midrule
+\endhead
+\midrule\multicolumn{2}{r@{}}{\footnotesize continued on the next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
 Team name & Smart Pet Vision \\
 Team size & 4 (Section 5, open-world extension, is therefore omitted) \\
 Topic & Original topic, approved by the instructor (19 October 2026): pet photo review for shelter adoption listings \\
-Code repository and commit hash & \url{https://github.com/Yasser-20-alhajlah/smart-pet-vision} \;\; \texttt{879b0e8} on branch \texttt{phase2-gap-closure} (Phase 2 code in \texttt{smart-pet-vision/phase2/}): the code that produced every result. The release candidate adds output validation, tests and release tools (Section~\ref{sec:release}); its exact files are in folder \texttt{code/} of the submitted source archive, and its commit is recorded in \texttt{CODE\_ARCHIVE\_INDEX.json} there \\
+Code repository and commit hash & \url{https://github.com/Yasser-20-alhajlah/smart-pet-vision} (Phase 2 code in \texttt{smart-pet-vision/phase2/}). \textbf{Delivered commit:} \texttt{\deliverycommit} (this PDF and the source archive were built from it; the archive's \texttt{CODE\_ARCHIVE\_INDEX.json} records the same hash). \textbf{Results commit:} \texttt{879b0e8} (branch \texttt{phase2-gap-closure}), the code that produced every reported number; the delivered commit adds output validation, tests, the demo page and release tools without changing weights, thresholds or results (Section~\ref{sec:release}). Links in this report are pinned to a commit, not to a branch, so they stay valid whether or not the delivered commit has been merged into \texttt{main} \\
 W\&B project & \url{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision} \\
 Deployed service / demo & Run locally (no public hosting) from \texttt{smart-pet-vision/phase2}: \texttt{python tools/run\_service.py} checks the weights and packages and serves on 127.0.0.1 only (or \texttt{SPV\_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app -{}-port 8000}); browser demo page at \texttt{http://127.0.0.1:8000/demo}; steps in \texttt{phase2/docs/QUICKSTART.md} and \texttt{TROUBLESHOOTING.md}; Colab: notebook \texttt{06\_release\_validation\_v2.ipynb} \\
 Data and code availability & Code: public repository above. Oxford-IIIT Pet: public (CC BY-SA 4.0), downloaded from the official page and not redistributed. Team photos (401): private to the four team members (Phase 1 report) because they were given with their owners' consent, are used only for evaluation and can show people and homes; consent and provenance are in the team's collection records; only aggregate results are published (\texttt{report/evidence/}). Trained weights (three files, 134\,MB): team Drive, not in Git; their SHA-256 values are in \texttt{QUICKSTART.md} \\
-Model card & \texttt{code/smart-pet-vision/phase2/docs/model\_card.md} in the submitted source archive (the same file is on the repository's \texttt{main} branch after pull request 5 was merged) \\
-\bottomrule
-\end{tabularx}
+Model card & \texttt{code/smart-pet-vision/phase2/docs/model\_card.md} in the submitted source archive (\href{https://github.com/Yasser-20-alhajlah/smart-pet-vision/blob/\deliverycommit/smart-pet-vision/phase2/docs/model_card.md}{repository copy at the delivered commit}) \\
+Bonus evidence & Original topic approved by the instructor on 19 October 2026 (Section 3 of the guidelines). Team-collected data: 401 photos (503 body boxes, polygon masks) collected and annotated by the team, processed with the same M1 protocol as the public data (metadata removal, duplicate check against Oxford-IIIT Pet, quality audit) and documented in the dataset card (\texttt{code/smart-pet-vision/docs/dataset\_card.md}, ``Team-collected set''); used in the evaluation of Sections~\ref{sec:team}, 3.4 and 4.7 \\
+\end{xltabular}
 
 \subsection*{Team members}
 
@@ -604,7 +612,7 @@ Class names and order & \texttt{["cat", "dog"]} (detector, segmenter and classif
 Input size and pre-processing & Detector and segmenter: letterbox to 640\,px. Classifier: crop of the selected box, resize to 255\,px, centre crop 224\,px, ImageNet mean/std \\
 Thresholds & Detector \tconf{} 0.40, \tnms{} 0.50; segmenter \tconf{} 0.25; temperature 0.05; verification threshold 0.90; minimum mask share 0.05 \\
 Library and runtime versions & Python 3.13; torch 2.11.0; torchvision 0.26.0; ultralytics 8.4.182; onnxruntime 1.31.0; fastapi 0.141.1; uvicorn 0.54.0 (pinned in \texttt{requirements.txt}) \\
-Manifest link & \href{https://github.com/Yasser-20-alhajlah/smart-pet-vision/blob/main/smart-pet-vision/phase2/report/evidence/M8_manifest.json}{\texttt{evidence/M8\_manifest.json}} (copy of \texttt{runs/manifest.json}; weights stay in private Drive) \\
+Manifest link & \texttt{evidence/M8\_manifest.json} (copy of \texttt{runs/manifest.json}; weights stay in private Drive): in the submitted source archive under \texttt{code/} and at the results commit, \url{https://github.com/Yasser-20-alhajlah/smart-pet-vision/blob/879b0e8/smart-pet-vision/phase2/report/evidence/M8_manifest.json} \\
 \bottomrule
 \end{tabularx}
 
@@ -792,6 +800,9 @@ Weights over 100\,MB and private photos cannot go into Git & M8 & The repository
   \item[$\checkmark$] Verdict reported against the acceptance criteria (\S\ref{sec:verdict})
   \item[$\checkmark$] Every figure states split, input resolution and thresholds
   \item[$\checkmark$] No data or personal information committed to the repository (weights, Oxford images and team photos stay in private Drive)
+  \item[$\checkmark$] Delivered commit named in Section 1 and recorded in the source archive; repository links pinned to commits, not branches
+  \item[$\checkmark$] Model card with failure modes and out-of-scope uses (\S4.7; \texttt{docs/model\_card.md}); go/no-go decision against criteria fixed in Phase 1
+  \item[$\checkmark$] Notebooks statically checked (15 of 15 parse; \texttt{tools/check\_notebooks.py}); the executed runs they document are cited by W\&B run and evidence file
 \end{itemize}
 
 % =====================================================================
