@@ -1,7 +1,5 @@
 # Smart Pet Vision — capstone project (AI251P Applied Computer Vision, KAUST)
 
-> Project guide for AI/code assistants and new contributors. Ask the assistant to read this file at the start of a session.
-
 Team of 4: Abdulrahman Mastour Alharthi (WS1 data/classification), Yasser Mansour Alhajlah (WS2 detection), Mohammed Adeeb Alrashdi (WS3 segmentation), Musaad Obaied Saad Alqahtani (WS4 integration). Original topic approved by the instructor on 19 Oct 2026.
 
 ## How to work with the owner (Yasser)
