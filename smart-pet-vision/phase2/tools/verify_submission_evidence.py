@@ -186,6 +186,14 @@ def submission_checks(root):
     check("3 Nov T4 repeat quoted as recorded and kept separate",
           "{:.1f}/{:.1f}/{:.1f}".format(rep["p50_ms"], rep["p95_ms"], rep["p99_ms"]) in body
           and "not combined" in body and rep["measurement"].startswith("synchronized in-process"))
+    sg = load(root, "P2_same_animal_grouping_run_20261106.json")
+    cp = sg["cross_partition_check_split_v1"]
+    check("same-animal grouping run quoted as recorded (groups, crossing groups, images, per partition) and not called confirmed leakage",
+          f'{sg["grouping_params"]["identity_groups"]:,} similarity groups' in body
+          and f'{cp["groups_crossing_partitions"]} groups ({cp["images_in_crossing_groups"]} images: {cp["images_in_crossing_groups_by_partition"]["test"]} test, '
+              f'{cp["images_in_crossing_groups_by_partition"]["val"]} validation, {cp["images_in_crossing_groups_by_partition"]["train"]} train)' in body
+          and "human identity review of the linked pairs has not been done" in body
+          and "not approved" in body and "confirmed identity leakage" not in body.replace("not confirmed", ""))
     return out
 
 
