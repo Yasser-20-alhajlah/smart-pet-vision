@@ -195,7 +195,8 @@ def submission_checks(root):
           and "human identity review of the linked pairs has not been done" in body
           and "not approved" in body and "confirmed identity leakage" not in body.replace("not confirmed", ""))
     rr = load(root, "reproduction/reproduction_eval_mohammed_20261106.json")
-    rc = rr["comparison"]; keys = [k for k in rc if k != "all_within_tolerance"]
+    rc = rr["comparison"]
+    keys = [k for k in rc if k != "all_within_tolerance"]
     rec = load(root, "P2_reproduction_run_20261106.json")
     check("6 Nov reproduction quoted as recorded (6 metrics, all identical) and operator confirmation stated as pending",
           len(keys) == 6 and rc["all_within_tolerance"] is True and all(rc[k]["difference"] == 0.0 for k in keys)
