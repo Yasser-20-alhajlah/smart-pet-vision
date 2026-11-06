@@ -1,0 +1,124 @@
+{
+  "date": "2026-11-05",
+  "title": "M4 corrected-TRAIN detector candidate (Kaggle, Tesla T4): full 40-epoch retraining from COCO weights with the four corrected training boxes; not promoted",
+  "source": {
+    "drive_folder": "FINAL PHASE_2/Kaggle_Reproduction_20261105/Kaggle_Corrected_Detector_Run_20261105 (id 13yT5TDeuwCIKN9fbEa2DUhkDWVwo2csJ)",
+    "kaggle_version": "365987622",
+    "archive": "PHASE2_KAGGLE_RERUN_20261105.zip, 895,191,165 bytes, SHA-256 a91ad0e38ad263d3a19ad7fe574a327c38be3681aa56c2634e29108d91037270 (10 parts, member hashes in PHASE2_KAGGLE_OUTPUT_MANIFEST.json)",
+    "candidate_checkpoint": {
+      "file": "Kaggle_Corrected_Detector_best.pt",
+      "bytes": 19159066,
+      "sha256": "ca3981e068b034e4db2de88e673a256038241ded1c9498a6204cd5b1580061d0"
+    },
+    "initial_weights": {
+      "file": "COCO_Init_yolo11s.pt",
+      "bytes": 19313732,
+      "sha256": "85a76fe86dd8afe384648546b56a7a78580c7cb7b404fc595f97969322d502d5"
+    },
+    "run_by": "segmentation workstream (Mohammed), 5 Nov 2026"
+  },
+  "recipe": "YOLO11s from COCO weights, 640 px, batch 16, 40 epochs, seed 42, deterministic, optimizer=auto (AdamW); train split 5,123 with exactly four corrected TRAIN boxes (english_cocker_spaniel_142, beagle_189, german_shorthaired_148, japanese_chin_178); validation and test labels unchanged (M4_TRAINING_DELIVERY_AUDIT.json)",
+  "curve_metrics_conf0.001_nms0.70": {
+    "historical": {
+      "val": {
+        "mAP50": 0.9795,
+        "mAP50_95": 0.8436
+      },
+      "test": {
+        "mAP50": 0.9836,
+        "mAP50_95": 0.85
+      }
+    },
+    "candidate": {
+      "val": {
+        "mAP50": 0.9786,
+        "mAP50_95": 0.8387
+      },
+      "test": {
+        "mAP50": 0.9804,
+        "mAP50_95": 0.8509
+      },
+      "test_per_class": {
+        "cat": {
+          "AP50": 0.993745,
+          "AP50_95": 0.889229
+        },
+        "dog": {
+          "AP50": 0.967137,
+          "AP50_95": 0.812474
+        }
+      }
+    },
+    "verification_status": "validation mAP50-95 (0.8387498 vs 0.8435842) confirmed in KAGGLE_CANDIDATE_WEIGHT_IDENTITY.json; the test rows are as reported by results/detector_corrected/COMPARISON.json in the archive and were not recomputed here"
+  },
+  "operating_point_conf0.40_nms0.50_iou0.50_test": {
+    "historical": {
+      "tp": 1061,
+      "fp": 46,
+      "fn": 45,
+      "precision": 0.9584,
+      "recall": 0.9593,
+      "f1": 0.9589
+    },
+    "candidate": {
+      "tp": 1051,
+      "fp": 49,
+      "fn": 55,
+      "precision": 0.9555,
+      "recall": 0.9503,
+      "f1": 0.9529
+    },
+    "verification_status": "counts rescored locally from the per-image predictions by the workstream (M4_LOCAL_METRICS_AUDIT.json, all_passed true); the historical row equals report/evidence/M4_detection_test_metrics.json"
+  },
+  "onnx_candidate_check": {
+    "bound": 0.001,
+    "random_inputs_4_seed0_cpu": {
+      "historical": 0.001862,
+      "candidate": 0.000732
+    },
+    "real_images_50_validation": {
+      "historical": 0.004517,
+      "candidate": 0.007263
+    },
+    "final_box_max_px": {
+      "historical": 0.000244,
+      "candidate": 0.000198
+    },
+    "count_class_agreement_50_images": "100% both",
+    "verdict": "candidate passes the four-random-input check and fails the 50-real-image check under the same bound; served historical detector keeps its A9b failure; A9b bound unchanged; source results/candidate_verification/candidate_ONNX.json and results/verification/ONNX_PARITY.json (as reported, not recomputed here)"
+  },
+  "external_coco_count_diagnostic": {
+    "cohort": "349 published COCO cat/dog images frozen before inference; 175-image test portion incl. 26 multi-animal",
+    "species_correct": {
+      "historical": "149/171",
+      "candidate": "147/171"
+    },
+    "single_animal_referrals": {
+      "both": "74/149"
+    },
+    "multi_animal_false_ready": {
+      "historical": "12/26",
+      "candidate": "11/26"
+    },
+    "note": "not independent of COCO-pretrained YOLO development; thresholds not selected on it; as reported in results/candidate_verification/external_pipeline_summary.json"
+  },
+  "t4_service_regression": {
+    "both_pipelines_http_300_of_300": true,
+    "invalid_empty_uploads": "415/400",
+    "in_process_p50_p95_p99_ms": {
+      "historical": [
+        46.5,
+        95.8,
+        101.3
+      ],
+      "candidate": [
+        48.1,
+        95.7,
+        103.6
+      ]
+    },
+    "conditions": "one T4, batch 1, two PyTorch threads, first 50 validation IDs cycled, 10 warm-up + 200 timed calls, images off; different cohort from the acceptance benchmark, not combined with it"
+  },
+  "decision": "The historical detector (SHA-256 f48e4d8e...) stays the served default: the candidate's validation mAP50-95 is lower and selection on test is not allowed. The candidate is kept as a measured experiment; corrected labels alone do not demonstrate a quality gain.",
+  "scope": "Training on the corrected labels was done by the segmentation workstream on Kaggle; it is not a retraining of the project detector and does not change any served threshold, weight or acceptance criterion."
+}

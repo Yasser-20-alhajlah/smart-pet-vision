@@ -19,7 +19,8 @@ def load(root, name):
 
 def checks(root):
     tex = (root / "report" / "main.tex").read_text()
-    ev = lambda n: load(root, n)
+    def ev(n):
+        return load(root, n)
     out = []
 
     def check(name, ok, detail=""):
@@ -93,7 +94,7 @@ def submission_checks(root):
     check("never states the ONNX detector passed", not hits, "; ".join(hits))
     check("A9b row is Fail", re.search(r"A9b ONNX parity, detector &[^\n]*\\textbf\{Fail\}", tex) is not None)
     check("28.7 px shift marked as confounded", "28.7" not in tex or "confounded" in tex)
-    body = "\n".join(l for l in tex.splitlines() if not l.lstrip().startswith("%"))
+    body = "\n".join(line for line in tex.splitlines() if not line.lstrip().startswith("%"))
     check("no prompt left from the template", "\\prompt{" not in body.replace("\\newcommand{\\prompt}", ""))
 
     g = load(root, "P2_gap_experiments_20261102.json")
@@ -135,7 +136,7 @@ def submission_checks(root):
           and opt["sources"]["wandb_logged_lr"]["max_relative_error_epochs_4_40"] < 1e-4)
     dl = load(root, "P2_training_optimizer_direct_log_20261104.json")["notebooks"]
     check("optimiser direct log in both executed notebooks; W&B link stated as inferred",
-          len(dl) == 2 and all(any(f"AdamW(lr={lr_fit:.6f}" in l["text"] for l in n["log_lines"]) for n in dl.values())
+          len(dl) == 2 and all(any(f"AdamW(lr={lr_fit:.6f}" in entry["text"] for entry in n["log_lines"]) for n in dl.values())
           and "P2\\_training\\_optimizer\\_direct\\_log" in body and "inferred" in body)
     check("code row does not claim later commits changed only the report",
           "later commits change only this report" not in body and "CODE\\_ARCHIVE\\_INDEX.json" in body)
@@ -150,6 +151,36 @@ def submission_checks(root):
     check("matched-preprocessing final-detection agreement quoted, A9b still failed",
           r50["same_classes"] == 1.0 and f"{r50['final_box_max_abs_diff_px']:.5f}" in body
           and not fin["any_variant_passed"])
+
+    re5 = load(root, "M8_onnx_parity_recheck_A9b_20261105.json")
+    rc5 = re5["root_cause_diagnosis"]["summary"]
+    runs5 = re5["official_gate_runs"]
+    check("5 Nov A9b re-run quoted as recorded (0.0018 one thread, 0.0023 two threads), still failed",
+          not re5["A9b_met"] and not any(r["passed"] for r in runs5)
+          and f"{runs5[0]['max_abs_diff']:.4f}" == "0.0018" and f"{runs5[1]['max_abs_diff'][0]:.4f}" == "0.0023"
+          and "0.0018 with one PyTorch thread and 0.0023 with two" in body
+          and f"{rc5['torch32_default_vs_torch32_one_thread_final']:.4f}" == "0.0019" and "differs from itself by 0.0019" in body
+          and rc5["argmax_strides"] == [32] and "\\ev{M8_onnx_parity_recheck_A9b_20261105}" in body)
+
+    m5k = load(root, "P2_m5_kaggle_regression_20261105.json")
+    s3 = m5k["same_300_ids"]
+    check("Kaggle M5 regression quoted as recorded (same-300 YOLO/SAM IoU with and without border; full-test mAP50-95)",
+          f"{s3['yolo']['iou']:.3f}" == "0.925" and f"{s3['sam_oracle_box']['iou']:.3f}" == "0.812"
+          and f"{s3['yolo']['iou_no_border']:.3f}" == "0.934" and f"{s3['sam_oracle_box']['iou_no_border']:.3f}" == "0.948"
+          and f"{m5k['yolo_full_test']['mask_mAP50_95']:.3f}" == "0.875" and f"{m5k['yolo_full_test']['iou_no_border']:.3f}" == "0.930"
+          and "& 0.925 & 0.960 & 0.934 & 0.964" in body and "& 0.812 & 0.883 & 0.948 & 0.956" in body)
+    m4k = load(root, "P2_m4_corrected_candidate_kaggle_20261105.json")
+    cv = m4k["curve_metrics_conf0.001_nms0.70"]
+    op = m4k["operating_point_conf0.40_nms0.50_iou0.50_test"]
+    check("Kaggle M4 candidate quoted as recorded and not promoted (val mAP50-95 0.839 < 0.844; op. point 1,051/49/55)",
+          f"{cv['candidate']['val']['mAP50_95']:.3f}" == "0.839" and f"{cv['historical']['val']['mAP50_95']:.3f}" == "0.844"
+          and op["candidate"]["tp"] == 1051 and op["candidate"]["fp"] == 49 and op["candidate"]["fn"] == 55
+          and "Candidate & val & 0.979 & 0.839" in body and "1,051/49/55" in body and "so the served detector is kept" in body)
+    sz = load(root, "P2_size_table_erratum_20261105.json")["recount_relative_bins"]
+    check("Recall-by-size Oxford column equals the relative-bin recount (4 medium, 1,102 large; found sum = 1,061 TP)",
+          sz["medium"]["n"] == 4 and sz["large"]["n"] == 1102 and sz["medium"]["found"] + sz["large"]["found"] == 1061
+          and "Medium (1--10\\%) & 4 & 1.000" in body and "Large ($\\geq10\\%$) & 1,102 & 0.959" in body
+          and "1,102 of 1,106 test boxes" in body)
 
     rep = load(root, "P2_closure_v3_20261103_extract.json")["gpu_benchmark"]
     check("3 Nov T4 repeat quoted as recorded and kept separate",

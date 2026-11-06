@@ -18,7 +18,7 @@ Capstone project for AI251P Applied Computer Vision (KAUST). The system reviews 
 
 Data: [Oxford-IIIT Pet](https://www.robots.ox.ac.uk/~vgg/data/pets/) (Parkhi et al., CVPR 2012, CC BY-SA 4.0), 7,335 images after cleaning, group-aware split 5,123 / 1,106 / 1,106 (seed 42).
 
-Acceptance criteria A1–A8 and A9a are met. **A9b is not met**: the ONNX detector differs from PyTorch by 0.0018–0.0020 against a bound of 0.001, so the service runs the PyTorch detector. Details are in the Phase 2 report, section 4.
+Acceptance criteria A1–A8 and A9a are met. **A9b is not met**: the ONNX detector differs from PyTorch by 0.0018–0.0023 against a bound of 0.001 (re-run 5 Nov), so the service runs the PyTorch detector. Details are in the Phase 2 report, section 4.
 
 Experiment tracking: [W&B project](https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision) (detector run `2seovilv`, segmenter `3ztpz2tc`, SAM baseline `1jb5y453`, T4 service `fqow5ly7`, CPU HTTP `mu2tolkg`).
 

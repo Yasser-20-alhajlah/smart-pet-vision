@@ -1,0 +1,39 @@
+{
+ "purpose": "Independent recount of the referral-reason breakdown shown on deck slide 11 (CPU replay f8manl0i, 401 previously inspected team photos). Aggregate counts only; no photo identifiers.",
+ "date_utc": "2026-11-05",
+ "source_per_photo_file": {
+  "name": "predictions.csv",
+  "location": "private run folder in the owner's Drive: f8manl0i_cpu_regression_20261031T144932Z",
+  "drive_file_id": "1mK56JhC0gk8o38JpBnaHtnblx16rTogL",
+  "bytes": 33766,
+  "note": "Contains team photo identifiers; kept private and not copied into the repository."
+ },
+ "cross_checked_against": {
+  "name": "M8_f8manl0i_reconciliation_20261102.json",
+  "drive_file_id": "1MqmTDUJNB2HZdAnWnr8d4YyK_ybxfIMK",
+  "saved_by": "a team member, 2 Nov 2026",
+  "states": "metrics_recomputed_from_predictions_csv = true"
+ },
+ "method": "Rows read from the Drive text export of predictions.csv; the referral rows and the multi-animal rows (n_animals >= 2) were transcribed and counted with a short script. Reasons are split on ';'.",
+ "results": {
+  "photos": 401,
+  "ready": 320,
+  "referred": 81,
+  "referral_reason_counts_nonexclusive": {
+   "multiple_animals": 43,
+   "disagreement": 21,
+   "no_animal": 14,
+   "animal_too_small": 13,
+   "segmentation_disagreement": 10,
+   "segmentation_unmatched": 7
+  },
+  "referred_photos_with_several_reasons": 20,
+  "multi_animal_photos": {
+   "total": 52,
+   "referred": 35,
+   "ready": 17
+  }
+ },
+ "agreement_with_reconciliation_file": "identical for every count above",
+ "limits": "A recount of a saved historical run (code as at 051bd2c, weights SHA-256 as in runs/manifest.json); not a new evaluation. The team photos had been inspected during development and are not a holdout."
+}

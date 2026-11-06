@@ -1,0 +1,361 @@
+{
+  "date": "2026-11-05",
+  "criterion": "A9b detector ONNX raw-head max abs diff <= 0.001 (unchanged; not relaxed)",
+  "A9b_met": false,
+  "code_commit_at_run": "fddf6c59579ee03da9333955928f35b5614bfd27 plus the new tools/a9b_root_cause.py",
+  "host": "Linux x86_64 cloud container, CPU only, 2 logical CPUs, no GPU",
+  "weights": "detector best.pt (owner's Drive runs/detect/yolo11s_det/weights/best.pt, local copy)",
+  "weights_sha256": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+  "onnx_export": {
+    "function": "spv.deploy.export_yolo_onnx(weights, 640, new path)",
+    "settings": "opset 17, simplify False, dynamic False (unchanged)",
+    "onnx_sha256": "ea8c552046bb841311cc0e3291da16be9faf80a689366e0f65ffdfd722d82879",
+    "file_kept": "scratch only, not committed (byte content varies between exports because Ultralytics writes the export date into the metadata)"
+  },
+  "official_gate_runs": [
+    {
+      "call": "spv.deploy.yolo_parity(weights, onnx, 640) in the same process as the export",
+      "torch_threads": 1,
+      "note": "Ultralytics export sets torch to one CPU thread for the rest of the process",
+      "max_abs_diff": 0.001800537109375,
+      "max_rel_diff": 2.8199040104674837e-06,
+      "passed": false
+    },
+    {
+      "call": "spv.deploy.yolo_parity(weights, onnx, 640) in a new process, repeated 3 times",
+      "torch_threads": 2,
+      "max_abs_diff": [
+        0.00225830078125,
+        0.00225830078125,
+        0.00225830078125
+      ],
+      "passed": false
+    }
+  ],
+  "earlier_values_for_comparison": {
+    "M8_onnx_parity_recheck_A9b_20261103.json": "0.00198-0.00201 over six export/runtime settings (Colab CPU)",
+    "P2_gap_experiments_20261102.json E_onnx": "0.00183 (Colab)"
+  },
+  "root_cause_diagnosis": {
+    "criterion": "A9b detector ONNX raw-head max abs diff <= 0.001 (unchanged)",
+    "protocol": {
+      "seed": 0,
+      "inputs": 4,
+      "imgsz": 640,
+      "device": "CPU",
+      "dtype": "float32",
+      "same_steps_as": "spv.deploy.yolo_parity",
+      "torch_threads": 2,
+      "cpu_count": 2
+    },
+    "A9b_value": 0.00225830078125,
+    "A9b_met": false,
+    "summary": {
+      "onnx_vs_torch32_final": 0.00225830078125,
+      "onnx_vs_torch32_score_channels": 1.3566063472580936e-07,
+      "onnx_vs_torch32_relative": 3.536829096976795e-06,
+      "torch32_vs_torch64_final": 0.0018799020241999642,
+      "onnx_vs_torch64_final": 0.0009631916883563463,
+      "torch32_default_vs_torch32_mkldnn_off_final": 0.001556396484375,
+      "torch32_default_vs_torch32_one_thread_final": 0.00189208984375,
+      "onnx_vs_torch32_one_thread_final": 0.001800537109375,
+      "argmax_strides": [
+        32
+      ],
+      "argmax_diff_in_ulp_max": 74.0,
+      "dfl_grid_onnx_vs_torch32": 5.53131103515625e-05,
+      "box_logits_onnx_vs_torch32": 2.855062484741211e-05,
+      "instrumented_output_equal_in_all_inputs": true
+    },
+    "per_input": [
+      {
+        "input": 0,
+        "A9b_value": 0.00225830078125,
+        "argmax": {
+          "channel": 3,
+          "group": "box",
+          "channel_name": "height",
+          "anchor": 8209,
+          "stride": 32,
+          "torch32_value_px": 415.42169189453125,
+          "float32_ulp_at_value": 3.0517578125e-05,
+          "diff_in_ulp": 74.0
+        },
+        "score_max_abs": 1.1897186169562701e-07,
+        "relative_max": 3.536829096976795e-06,
+        "per_level": {
+          "stride_8": {
+            "box_px_max_abs": 0.0003662109375,
+            "box_grid_max_abs": 4.57763671875e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 2.384185791015625e-05,
+            "box_px_value_max": 632.1527099609375
+          },
+          "stride_16": {
+            "box_px_max_abs": 0.000244140625,
+            "box_grid_max_abs": 1.52587890625e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 1.0967254638671875e-05,
+            "box_px_value_max": 626.7256469726562
+          },
+          "stride_32": {
+            "box_px_max_abs": 0.00225830078125,
+            "box_grid_max_abs": 7.05718994140625e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 5.53131103515625e-05,
+            "box_px_value_max": 638.510009765625
+          }
+        },
+        "stages_onnx_vs_torch32": {
+          "neck_features_max_abs": [
+            5.9604644775390625e-06,
+            3.647804260253906e-05,
+            3.3855438232421875e-05
+          ],
+          "box_logits_max_abs": 2.288818359375e-05,
+          "dfl_grid_max_abs": 5.53131103515625e-05,
+          "final_head_max_abs": 0.00225830078125
+        },
+        "stages_torch32_vs_torch64": {
+          "neck_features_max_abs": [
+            5.3470986018933075e-06,
+            3.783217440034292e-05,
+            3.92479096794629e-05
+          ],
+          "box_logits_max_abs": 2.3518581923287485e-05,
+          "dfl_grid_max_abs": 3.5969606069663485e-05,
+          "final_head_max_abs": 0.0012951090928936537
+        },
+        "onnx_vs_torch64_final_max_abs": 0.0009631916883563463,
+        "torch32_default_vs_torch32_mkldnn_off_final_max_abs": 0.0013427734375,
+        "torch32_default_vs_torch32_one_thread_final_max_abs": 0.001220703125,
+        "onnx_vs_torch32_one_thread_final_max_abs": 0.001800537109375,
+        "instrumented_graph_output_equals_original": true,
+        "instrumented_graph_output_max_abs_vs_original": 0.0
+      },
+      {
+        "input": 1,
+        "A9b_value": 0.0003662109375,
+        "argmax": {
+          "channel": 2,
+          "group": "box",
+          "channel_name": "width",
+          "anchor": 8209,
+          "stride": 32,
+          "torch32_value_px": 601.0703125,
+          "float32_ulp_at_value": 6.103515625e-05,
+          "diff_in_ulp": 6.0
+        },
+        "score_max_abs": 1.1874362826347351e-07,
+        "relative_max": 5.72762672063873e-07,
+        "per_level": {
+          "stride_8": {
+            "box_px_max_abs": 0.0002288818359375,
+            "box_grid_max_abs": 2.86102294921875e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 1.4781951904296875e-05,
+            "box_px_value_max": 632.088623046875
+          },
+          "stride_16": {
+            "box_px_max_abs": 0.000213623046875,
+            "box_grid_max_abs": 1.33514404296875e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 8.106231689453125e-06,
+            "box_px_value_max": 626.6148071289062
+          },
+          "stride_32": {
+            "box_px_max_abs": 0.0003662109375,
+            "box_grid_max_abs": 1.1444091796875e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 1.1444091796875e-05,
+            "box_px_value_max": 639.3764038085938
+          }
+        },
+        "stages_onnx_vs_torch32": {
+          "neck_features_max_abs": [
+            8.58306884765625e-06,
+            2.4318695068359375e-05,
+            2.7060508728027344e-05
+          ],
+          "box_logits_max_abs": 1.5735626220703125e-05,
+          "dfl_grid_max_abs": 1.4781951904296875e-05,
+          "final_head_max_abs": 0.0003662109375
+        },
+        "stages_torch32_vs_torch64": {
+          "neck_features_max_abs": [
+            7.187809489828112e-06,
+            2.130714427917013e-05,
+            2.8314566997700297e-05
+          ],
+          "box_logits_max_abs": 1.526057396805669e-05,
+          "dfl_grid_max_abs": 2.3064952580753584e-05,
+          "final_head_max_abs": 0.0003504120671777855
+        },
+        "onnx_vs_torch64_final_max_abs": 0.00019279180270359575,
+        "torch32_default_vs_torch32_mkldnn_off_final_max_abs": 0.0003662109375,
+        "torch32_default_vs_torch32_one_thread_final_max_abs": 0.0003662109375,
+        "onnx_vs_torch32_one_thread_final_max_abs": 0.00030517578125,
+        "instrumented_graph_output_equals_original": true,
+        "instrumented_graph_output_max_abs_vs_original": 0.0
+      },
+      {
+        "input": 2,
+        "A9b_value": 0.001373291015625,
+        "argmax": {
+          "channel": 3,
+          "group": "box",
+          "channel_name": "height",
+          "anchor": 8210,
+          "stride": 32,
+          "torch32_value_px": 466.5804443359375,
+          "float32_ulp_at_value": 3.0517578125e-05,
+          "diff_in_ulp": 45.0
+        },
+        "score_max_abs": 1.281728891910916e-07,
+        "relative_max": 2.1494721947142856e-06,
+        "per_level": {
+          "stride_8": {
+            "box_px_max_abs": 0.00042724609375,
+            "box_grid_max_abs": 5.340576171875e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 3.0040740966796875e-05,
+            "box_px_value_max": 632.144775390625
+          },
+          "stride_16": {
+            "box_px_max_abs": 0.000396728515625,
+            "box_grid_max_abs": 2.47955322265625e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 1.71661376953125e-05,
+            "box_px_value_max": 626.7969970703125
+          },
+          "stride_32": {
+            "box_px_max_abs": 0.001373291015625,
+            "box_grid_max_abs": 4.291534423828125e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 4.3392181396484375e-05,
+            "box_px_value_max": 638.8968505859375
+          }
+        },
+        "stages_onnx_vs_torch32": {
+          "neck_features_max_abs": [
+            7.152557373046875e-06,
+            2.574920654296875e-05,
+            2.9087066650390625e-05
+          ],
+          "box_logits_max_abs": 1.7937272787094116e-05,
+          "dfl_grid_max_abs": 4.3392181396484375e-05,
+          "final_head_max_abs": 0.001373291015625
+        },
+        "stages_torch32_vs_torch64": {
+          "neck_features_max_abs": [
+            6.688522326214752e-06,
+            3.0966742528448776e-05,
+            3.87780509796265e-05
+          ],
+          "box_logits_max_abs": 1.9492683715149894e-05,
+          "dfl_grid_max_abs": 5.506922730624808e-05,
+          "final_head_max_abs": 0.0018799020241999642
+        },
+        "onnx_vs_torch64_final_max_abs": 0.0006553946930125676,
+        "torch32_default_vs_torch32_mkldnn_off_final_max_abs": 0.00152587890625,
+        "torch32_default_vs_torch32_one_thread_final_max_abs": 0.00189208984375,
+        "onnx_vs_torch32_one_thread_final_max_abs": 0.0009765625,
+        "instrumented_graph_output_equals_original": true,
+        "instrumented_graph_output_max_abs_vs_original": 0.0
+      },
+      {
+        "input": 3,
+        "A9b_value": 0.000946044921875,
+        "argmax": {
+          "channel": 3,
+          "group": "box",
+          "channel_name": "height",
+          "anchor": 8209,
+          "stride": 32,
+          "torch32_value_px": 483.563720703125,
+          "float32_ulp_at_value": 3.0517578125e-05,
+          "diff_in_ulp": 31.0
+        },
+        "score_max_abs": 1.3566063472580936e-07,
+        "relative_max": 1.4811703118427307e-06,
+        "per_level": {
+          "stride_8": {
+            "box_px_max_abs": 0.0006103515625,
+            "box_grid_max_abs": 7.62939453125e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 4.482269287109375e-05,
+            "box_px_value_max": 632.1151123046875
+          },
+          "stride_16": {
+            "box_px_max_abs": 0.000396728515625,
+            "box_grid_max_abs": 2.47955322265625e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 2.1219253540039062e-05,
+            "box_px_value_max": 626.7431640625
+          },
+          "stride_32": {
+            "box_px_max_abs": 0.000946044921875,
+            "box_grid_max_abs": 2.956390380859375e-05,
+            "dfl_grid_max_abs_onnx_vs_torch32": 2.384185791015625e-05,
+            "box_px_value_max": 638.7144775390625
+          }
+        },
+        "stages_onnx_vs_torch32": {
+          "neck_features_max_abs": [
+            6.794929504394531e-06,
+            3.0994415283203125e-05,
+            3.0994415283203125e-05
+          ],
+          "box_logits_max_abs": 2.855062484741211e-05,
+          "dfl_grid_max_abs": 4.482269287109375e-05,
+          "final_head_max_abs": 0.000946044921875
+        },
+        "stages_torch32_vs_torch64": {
+          "neck_features_max_abs": [
+            5.511402041857849e-06,
+            2.7820223982288894e-05,
+            2.8013343920996192e-05
+          ],
+          "box_logits_max_abs": 2.355871332371251e-05,
+          "dfl_grid_max_abs": 3.752260357803294e-05,
+          "final_head_max_abs": 0.00101030016378445
+        },
+        "onnx_vs_torch64_final_max_abs": 0.00020747388424524615,
+        "torch32_default_vs_torch32_mkldnn_off_final_max_abs": 0.001556396484375,
+        "torch32_default_vs_torch32_one_thread_final_max_abs": 0.0010986328125,
+        "onnx_vs_torch32_one_thread_final_max_abs": 0.00054931640625,
+        "instrumented_graph_output_equals_original": true,
+        "instrumented_graph_output_max_abs_vs_original": 0.0
+      }
+    ],
+    "strides": [
+      8,
+      16,
+      32
+    ],
+    "anchors_per_level": [
+      6400,
+      1600,
+      400
+    ],
+    "weights_sha256": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+    "onnx_sha256": "ea8c552046bb841311cc0e3291da16be9faf80a689366e0f65ffdfd722d82879",
+    "versions": {
+      "torch": "2.11.0+cu130",
+      "onnxruntime": "1.31.0",
+      "python": "3.13.16",
+      "numpy": "2.1.3"
+    },
+    "note": "Only A9b_value is the gate. All other figures are diagnostics, reported separately; none of them re-scores or relaxes A9b."
+  },
+  "findings": [
+    "A9b is not met: 0.0018 with one torch thread and 0.0023 with two, both above 0.001.",
+    "The largest difference is always in a box channel (height or width) at a stride-32 anchor, where values are 415-601 px; it is 6-74 float32 ulps at that value. Class-score channels differ by at most 1.4e-7.",
+    "In grid units the box difference is 1e-5 to 8e-5 at every stride; the decoder multiplies by the stride (8, 16, 32; an exact power-of-two multiplication), so the coarsest level produces the largest pixel difference.",
+    "Neck features already differ by 6e-6 to 3.6e-5 between ONNX Runtime and PyTorch float32, the same size as the difference between PyTorch float32 and float64 (5e-6 to 3.9e-5): the gap starts as float32 rounding in the convolutions, not at a single operator.",
+    "Against a float64 PyTorch reference, ONNX Runtime is within 0.00096 and PyTorch float32 within 0.00188: the export is not less accurate than the PyTorch float32 reference.",
+    "PyTorch float32 against itself on the same inputs: one thread vs two threads differs by 0.00189, oneDNN off vs on by 0.00156; both above 0.001. The 0.001 absolute bound on pixel-unit outputs is below the run-to-run variation of the PyTorch reference on this CPU.",
+    "The instrumented ONNX graph (extra intermediate outputs) gave a final output identical to the original in all four inputs."
+  ],
+  "what_was_not_done": "No change to the criterion, weights, export settings, thresholds or service (still PyTorch). No training, no image evaluation; task-level agreement is the earlier evidence (test mAP 0.983/0.852 ONNX vs 0.984/0.850 PyTorch; 50 real images: same detections and classes, final boxes within 0.00027 px).",
+  "context_sources": [
+    {
+      "url": "https://docs.pytorch.org/tutorials/_sources/advanced/super_resolution_with_onnxruntime.rst.txt",
+      "used_for": "the PyTorch ONNX Runtime tutorial checks agreement with a relative tolerance (rtol 1e-3, atol 1e-5); context only, A9b keeps its own absolute bound"
+    },
+    {
+      "url": "https://docs.pytorch.org/docs/stable/notes/randomness.md",
+      "used_for": "PyTorch notes that floating-point addition is not associative, so results differ between backends"
+    }
+  ],
+  "reproduce": "PYTHONPATH=src python tools/a9b_root_cause.py --weights <detector best.pt> --onnx <new export> --out <new json>"
+}
