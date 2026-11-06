@@ -121,7 +121,7 @@ W\&B project & \url{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision} \\
 Deployed service / demo & Run locally (no public hosting) from \texttt{smart-pet-vision/phase2}: \texttt{python tools/run\_service.py} checks the weights and packages and serves on 127.0.0.1 only (or \texttt{SPV\_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app -{}-port 8000}); browser demo page at \texttt{http://127.0.0.1:8000/demo}; steps in \texttt{phase2/docs/QUICKSTART.md} and \texttt{TROUBLESHOOTING.md}; Colab: notebook \texttt{06\_release\_validation\_v2.ipynb} \\
 Data and code availability & Code: public repository above. Oxford-IIIT Pet: public (CC BY-SA 4.0), downloaded from the official page and not redistributed. Team photos (401): private to the four team members (Phase 1 report) because they were given with their owners' consent, are used only for evaluation and can show people and homes; consent and provenance are in the team's collection records; only aggregate results are published (\texttt{report/evidence/}). Trained weights (three files, 134\,MB): team Drive, not in Git; their SHA-256 values are in \texttt{QUICKSTART.md} \\
 Model card & \texttt{code/smart-pet-vision/phase2/docs/model\_card.md} in the submitted source archive (\href{https://github.com/Yasser-20-alhajlah/smart-pet-vision/blob/\deliverycommit/smart-pet-vision/phase2/docs/model_card.md}{repository copy at the delivered commit}) \\
-Bonus evidence & Original topic approved by the instructor on 19 October 2026 (Section 3 of the guidelines). Team-collected data: 401 photos (503 body boxes, polygon masks) collected and annotated by the team, processed with the same M1 protocol as the public data (metadata removal, duplicate check against Oxford-IIIT Pet, quality audit) and documented in the dataset card (\texttt{code/smart-pet-vision/docs/dataset\_card.md}, ``Team-collected set''); used in the evaluation of Sections~\ref{sec:team}, 3.4 and 4.7 \\
+Bonus conditions & Team-stated; the award is the instructor's decision. Original topic: the team records the instructor's approval on 19 October 2026 (Section 3 of the guidelines); the approval message is kept by the team, not reproduced here, and the first Phase 2 training run (17 October) precedes that date, which the team must explain from its records before claiming the bonus. Team-collected data: 401 photos (503 body boxes, polygon masks) collected and annotated by the team, processed with the same M1 protocol as the public data (metadata removal, duplicate check against Oxford-IIIT Pet, quality audit) and documented in the dataset card (\texttt{code/smart-pet-vision/docs/dataset\_card.md}, ``Team-collected set''); used in the evaluation of Sections~\ref{sec:team}, 3.4 and 4.7 \\
 \end{xltabular}
 
 \subsection*{Team members}
@@ -171,9 +171,9 @@ Segmentation (M5) & YOLO11s-seg, fine-tuned & Photo, letterboxed to 640\,px & In
 \bottomrule
 \end{tabularx}}
 
-\subsection*{Acceptance criteria (fixed in Phase 1)}
+\subsection*{Acceptance criteria (fixed before the test evaluations)}
 
-A1--A2 are the criteria of the Phase 1 report. A3--A8 and A9a were written in the team's integration notebook (code snapshot of 15 October 2026, before the first Phase 2 run on 17 October); A9b, the same bound applied to the detector, was added no later than the first integration run. None was changed after results were seen. The values are computed by notebook \texttt{05\_integration.ipynb} into \texttt{evidence/M8\_acceptance.csv}, and \texttt{tools/verify\_submission\_evidence.py} checks that the numbers in this report match the saved evidence.
+A1--A2 are the criteria of the Phase 1 report. A3--A9b were written in the team's integration notebook; the earliest independently dated record of their text with the final targets is an unexecuted copy of that notebook with Drive timestamp 18 October 2026, 11:19 UTC (SHA-256 \texttt{aca90fa4\ldots}), before the executed integration and test runs of 19 October (00:47 and 09:18 UTC); the notebook file itself was created on Drive on 15 October, but no dated copy of its content from before 18 October exists, and the first detector training run (17 October) precedes the earliest dated copy. None of the targets was changed after results were seen; the evidence file is \texttt{P2\_prespecification\_}\allowbreak\texttt{evidence\_20261106.json}. The values are computed by notebook \texttt{05\_integration.ipynb} into \texttt{evidence/M8\_acceptance.csv}, and \texttt{tools/verify\_submission\_evidence.py} checks that the numbers in this report match the saved evidence.
 
 {\small
 \begin{tabularx}{\linewidth}{@{}l Y l l Y@{}}
@@ -230,6 +230,24 @@ Collect harder images (puppies, curled-up, clothed, multiple, small animals) & N
 Rebalance cats and dogs; add hairless and colour-point cats & No & Not done; the split is still about 1:2. Siamese is among the five weakest breeds for masks (IoU 0.899) \\
 Fit the temperature on a harder calibration set & No & Needs the new photos above. The service keeps $T=0.05$ from Phase 1, so its confidence is not claimed as calibrated on new photos \\
 Re-derive the four loose body boxes; add a box-quality check & Partly & Round-trip check on all 7,335 YOLO labels (0 missing, 0 class mismatches). The four loose training boxes were corrected in a separate training-label set (3 November): coordinates proposed from the images, team visual review attested by the project representative (no individual sign-off recorded), exactly 4 train labels changed, validation and test labels unchanged, structural checks pass. The served detector was not retrained on it, so the metrics of Sections 2.3--2.6 do not reflect the correction; a candidate trained on the corrected labels is reported in Section~\ref{sec:kaggle} (no gain on validation; not promoted) \\
+\bottomrule
+\end{tabularx}}
+
+\subsection*{Response to the Phase 1 feedback (38/40)}
+
+The Phase 1 assessment deducted one point for the leakage-safe split (only near-identical images were grouped, so different photos of the same pet can cross train and test) and one for the independent reproduction (no reproduced numbers or run IDs next to the originals; empty \texttt{REPRODUCTION\_LOG.txt}), and asked for a dated record that the acceptance criteria were fixed before testing, the commit hash in every run, a harder independent test set, class balancing with per-class recall. The status of each point at the delivered commit:
+
+{\small
+\begin{tabularx}{\linewidth}{@{}p{3.1cm} Y p{1.9cm}@{}}
+\toprule
+Point & What was done and what remains & Status \\
+\midrule
+Part 2: same-animal grouping before splitting & Tool \texttt{tools/same\_animal\_groups.py}: within each breed, ImageNet ResNet-50 features (the features of the Phase 1 sensitivity check), links at cosine similarity $\geq 0.90$ (the lower cutoff of the instructor's check), merged with the MD5/pHash groups, review band 0.85--0.90 for visual review, recorded review decisions, cross-partition test and split v2 with the Phase 1 splitter (seed 42). Rules frozen in \texttt{docs/LEAKAGE\_SAME\_ANIMAL\_PROTOCOL.md} before any run; six unit tests. \textbf{Not executed on the 7,335 images} (no images or ImageNet weights in the build environment). Every number in this report rests on split v1; all delivered checkpoints were trained on v1, so a leakage-safe evaluation needs retraining on v2 train (about one T4 hour per model), which awaits approval & Partial \\
+Part 13: independent reproduction & \texttt{tools/reproduce\_phase2\_eval.py} re-evaluates the delivered checkpoints on the test split exactly as Section 2.4 and 3.4 were produced and writes original vs reproduced side by side with tolerances fixed in advance (0.005 absolute); procedure for a clean clone in \texttt{docs/INDEPENDENT\_REPRODUCTION\_PROCEDURE.md}. \textbf{No team member other than the author has executed it}; \texttt{REPRODUCTION\_LOG.txt} states this & Blocked (teammate) \\
+Dated acceptance criteria & Earliest dated copy of the criteria text: 18 October 2026, 11:19 UTC, before the test runs of 19 October (above) & Reported with its limits \\
+Commit hash in every run & The runs of 2 and 5 November record the code commit (\texttt{source\_commit} in their evidence files); the runs of 17--19 October did not; \texttt{spv.provenance.record()} now writes commit, branch, dirty state or source fingerprint, environment and input hashes for every new run; the delivered commit is printed on page 1 & Done for new runs \\
+Harder independent test set & Not collected. The 401 team photos were already used for evaluation and cannot serve as a new independent set; a collection, screening and annotation protocol is fixed in \texttt{docs/INDEPENDENT\_TEST\_SET\_PROTOCOL.md} (not started) & Open \\
+Class imbalance and per-class recall & Per-class precision, recall and F1 at the operating point are in Section 2.4 (cat recall 0.983, dog 0.948) and per-species IoU/Dice in Section 3.4. No class weights or balanced sampling were applied to the detector; a controlled comparison (unbalanced vs weighted, same split and seed) is prepared but not run & Partial \\
 \bottomrule
 \end{tabularx}}
 

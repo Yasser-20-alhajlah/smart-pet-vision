@@ -1,0 +1,9 @@
+# REPRODUCTION_LOG.txt — independent reproduction record (Smart Pet Vision)
+#
+# Status 6 Nov 2026: NO independent reproduction has been executed yet. The only recorded rerun
+# (23 Oct 2026, Phase 1, Colab T4) was performed by Yasser Alhajlah, the author of the original
+# runs, and is therefore not independent. The procedure for a teammate is in
+# smart-pet-vision/phase2/docs/INDEPENDENT_REPRODUCTION_PROCEDURE.md; the operator appends one
+# block per execution below (operator, date, commit, environment, seed, weight hashes, W&B run ids,
+# original vs reproduced table with differences and tolerances). Nothing may be written here on
+# behalf of someone who did not run it.

@@ -1,0 +1,49 @@
+{
+  "generated_utc": "2026-11-06T02:20Z",
+  "question": "Is there an independently dated record that the acceptance criteria A1-A9b existed before the Phase 2 test evaluations?",
+  "method": "Google Drive file metadata (createdTime, modifiedTime) read through the Drive API on 6 Nov 2026; one notebook copy downloaded and parsed; no file content was altered.",
+  "records": [
+    {
+      "what": "05_integration.ipynb (original notebook file in the project Drive folder)",
+      "drive_file_id": "1lM8NBvs2XGni0TXAdYMk4gxx09jcfdrP",
+      "createdTime": "2026-10-15T16:55:58Z",
+      "modifiedTime": "2026-10-30T16:03:45Z",
+      "note": "creation time is independent evidence that the notebook file existed on 15 Oct; its content was modified later, so this record alone does not show which criteria it held on 15 Oct"
+    },
+    {
+      "what": "smart-pet-vision__notebooks__05_integration.ipynb (unexecuted copy in a submission folder)",
+      "drive_file_id": "16zIa54ltYeL2XN4HOO3Sa9sEhxA9favI",
+      "createdTime": "2026-10-24T17:31:11Z",
+      "modifiedTime": "2026-10-18T11:19:06Z",
+      "size_bytes": 10484,
+      "sha256": "aca90fa4c47790197b16a77c7cb42d34e394b2d14df8a8f51efd480320083b5c",
+      "content": "all ten criteria present with the final targets: A1 acc>=0.90, A2 macro-F1>=0.90, A3 mAP50>=0.75, A4 recall>=0.80, A5 mIoU>=0.75, A6 Dice>=0.85, A7 success>=0.99, A8 p95<=2000 ms, A9a<=0.001, A9b<=0.001; 0 executed cells",
+      "note": "modifiedTime is the file's own timestamp preserved by Drive when the copy was uploaded on 24 Oct; it is weaker than a createdTime but was not set by the team by hand"
+    },
+    {
+      "what": "smart-pet-vision__notebooks__executed__05_integration.ipynb (executed integration run)",
+      "drive_file_id": "18Gt3_9Z3rylnzgLs0vGnhN_mfmwy9Uvp",
+      "modifiedTime": "2026-10-19T00:47:20Z",
+      "note": "first executed integration run that filled the acceptance table"
+    },
+    {
+      "what": "Submission__Phase2_..._05_integration_executed.ipynb",
+      "drive_file_id": "1rf0e3SSVzt0FihJgIj8mdIPpRLcgAuxy",
+      "modifiedTime": "2026-10-19T09:18:39Z"
+    },
+    {
+      "what": "Phase 1 report PDF (submitted 28 Oct)",
+      "note": "lists the Phase 2 targets as team-stated targets; dated after the Phase 2 test runs, so not prespecification evidence"
+    },
+    {
+      "what": "Git repository",
+      "note": "first commit 6263632 on 31 Oct 2026; no Git record earlier than the runs"
+    }
+  ],
+  "conclusion": "The criteria with their final targets are present in an unexecuted notebook copy dated 18 Oct 2026 11:19 UTC, before the executed integration/test runs of 19 Oct 2026 (00:47 and 09:18 UTC). No independently dated record earlier than 18 Oct carries the criteria text; the team's statement that they were written on 15 Oct is supported only by the creation time of the notebook file (15 Oct 16:55 UTC), whose content changed later. The first detector training run (17 Oct) precedes the earliest dated copy of the criteria text.",
+  "limitations": "Drive modifiedTime of an uploaded copy can in principle be set by the uploading client; W&B run creation times were not read (no key in this session); the instructor's topic-approval message was not located (mail connector not authorised in this session).",
+  "owner_actions": [
+    "locate the instructor's approval message of 19 Oct 2026 and keep a dated copy privately",
+    "explain in the report how a first run on 17 Oct precedes the approval of 19 Oct, or correct one of the dates from original records"
+  ]
+}

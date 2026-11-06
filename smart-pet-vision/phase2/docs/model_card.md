@@ -16,7 +16,7 @@ Automatic publication; identifying individual animals or people; tracking; veter
 Operating point (chosen on the Oxford validation split): detector confidence 0.40, NMS IoU 0.50; classifier temperature 0.05, verification threshold 0.90; minimum matched-mask share 0.05.
 
 ## Data
-Oxford-IIIT Pet (CC BY-SA 4.0), 7,335 images after cleaning, group-aware split 5,123 / 1,106 / 1,106 (seed 42). Body boxes and masks derived from the trimaps. A private set of 401 team photos (owner consent; metadata removed) is used only for supplementary evaluation and is not committed to the repository.
+Oxford-IIIT Pet (CC BY-SA 4.0), 7,335 images after cleaning, group-aware split 5,123 / 1,106 / 1,106 (seed 42; split v1: MD5 and pHash groups only, so different photos of the same animal can still cross train and test — the Phase 1 assessment deducted a point for this; a same-animal grouping protocol and split v2 are prepared in `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` but not executed, and every number on this card is a split-v1 number). No team member other than the author has independently reproduced these numbers (`docs/INDEPENDENT_REPRODUCTION_PROCEDURE.md`). Body boxes and masks derived from the trimaps. A private set of 401 team photos (owner consent; metadata removed) is used only for supplementary evaluation and is not committed to the repository.
 
 ## Performance (Oxford test split unless stated)
 | Measure | Value | Conditions |

@@ -1,132 +1,124 @@
-# Requirements checklist — Phase 2, final presentation and bonus (status 6 November 2026)
+# Master requirements checklist — Smart Pet Vision, Phase 2 (status 6 November 2026, evening pass)
 
-Sources: *Capstone Project: Guidelines and Example Topics* (October 2026; page numbers below),
-the instructor's Phase 2 example report (BoardSight, 18 pages) whose section structure the
-submission follows, and the instructor's messages recorded in the audit tracker. This list
-supersedes `REQUIREMENTS_CHECKLIST_AR.md` (31 October, superseded) and extends the package
-`REQUIREMENTS_CROSSWALK.md` (5 November).
+Legend: `[ ]` not reviewed · `[~]` in progress / partial · `[!]` blocked or failed · `[x]` verified
+within the stated scope. `[x]` is used only after an evidence-based check in this session; "the
+check was executed" is kept distinct from "the acceptance criterion passed". Sources: *Capstone
+Project Guidelines* (October 2026; Tables 2, 5, 6, 7; §2.4; R1–R10), the instructor's Phase 2
+example report, the **Phase 1 feedback sheet (38/40)**, and the instructor's messages recorded in
+the audit tracker. Every item names its evidence; every human step names its owner.
 
-Status values: **Met** (verified in the repository or the evidence files today), **Met, human
-step open** (the artefact exists; a team member still has to confirm or act), **Open** (not done),
-**Optional**. "Where" names the report section (`submission/main.tex`, PDF
-`SmartPetVision_Phase2.pdf`) or the file. Verification names the command or file read.
+Delivered revision: the commit printed on page 1 of the report and in `CODE_ARCHIVE_INDEX.json`;
+historical results: commit `879b0e8` (2 Nov) and the runs of 17–19 Oct (W&B `2seovilv`,
+`3ztpz2tc`, `1jb5y453`, `fqow5ly7`), all on **split v1**.
 
-## 1. Phase 2 deliverables and metrics (guidelines Table 5 p.6, rubric Table 6 p.7; 45 points)
+## A. Explicit instructor-requested corrections (Phase 1 feedback)
 
-### M4 Object detection (15 points)
+### A1 `[~]` Leakage-safe split: group likely same-animal photos before splitting (Part 2, −1)
+- Original issue: only MD5/pHash groups (84 images in 41 groups); 22 test images with a same-breed training image at similarity ≥ 0.95 and 133 at ≥ 0.90; leak measured, not removed.
+- Files changed: `tools/same_animal_groups.py` (new), `tests/test_same_animal_groups.py` (6 tests), `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` (frozen rules), `docs/dataset_card.md` (Phase 1), `docs/model_card.md`, report §1 "Response to the Phase 1 feedback".
+- Repair: within-breed ResNet-50 feature links at cosine ≥ 0.90, transitive, merged with MD5/pHash groups; review band 0.85–0.90 and recorded review decisions; cross-partition test; split v2 with the unchanged Phase 1 splitter (seed 42). Rules frozen before any run.
+- Verification: `PYTHONPATH=src python -m unittest tests.test_same_animal_groups` → 6/6 OK (synthetic features; ResNet path with random weights). Not run on real images: the Oxford images and the ImageNet weights are refused by this environment's network policy (HTTP 403 from the proxy).
+- Evidence: tests; protocol file; commit of the delivered revision.
+- Remaining: run the tool in Colab on `runs/data/metadata.csv` + images (≈10 min), review the pair sheet, commit the outputs under `report/evidence/identity_v2/`; then **retrain on split v2** (≈1 T4 hour per model) with the owner's approval and report v2 results separately from v1. Owner: team (run and review), owner (compute approval). Blocks: scientific validity of "leakage-safe" claims; does not block the report submission if stated as partial (it is).
 
-| # | Requirement | Where | Verification | Status |
-|---|---|---|---|---|
-| M4-1 | Annotations converted and verified visually | §2.1: conversion table, split table, data checks, label-check figure | `tools/verify_submission_evidence.py` (41/41); `M4_label_roundtrip.json` | Met |
-| M4-2 | Detector fine-tuned (runs with W&B links; selected model and why) | §2.2: baseline + two runs, training curves, optimiser record | W&B `48vh56vh`, `2seovilv`; `P2_training_optimizer_*` | Met |
-| M4-3 | Sweep of confidence and NMS thresholds with a justified operating point, chosen on validation | §2.3: 24-setting sweep table and figure, rule stated | `M4_threshold_sweep.csv` | Met |
-| M4-4 | mAP50, mAP50–95, per-class AP on the test split (not at the deployment threshold) | §2.4 table; mAP at conf 0.001, P/R/F1 at the operating point | `M4_detection_test_metrics.json` | Met |
-| M4-5 | Precision, recall, F1 at the operating point, with intervals | §2.4 (Wilson 95 % intervals) | checker | Met |
-| M4-6 | Breakdown of false positives; recall by object size | §2.4–2.5: FP taxonomy table; size table (relative bins, erratum stated) | `M4_fp_breakdown.csv`; `P2_size_table_erratum_20261105.json` | Met |
-| M4-7 | Galleries of false positives and false negatives | §2.5 figure (two galleries) | figures present in `submission/figures/` | Met |
-| M4-8 | At least one failure case analysed; main causes; next fix | §2.5 (`chihuahua_156`; localisation as next fix) | report text | Met |
-| M4-9 | Inference on images and video at the operating point | §2.6: 401 team photos; two CC-licensed clips with FPS and frame counts | `M4_team_detection_metrics.json`, `M4_video_inference.json` | Met |
+### A2 `[!]` Independent reproduction with numbers and run IDs beside the originals (Part 13, −1)
+- Original issue: `REPRODUCTION_LOG.txt` empty; the only rerun (23 Oct) was by the author.
+- Files changed: `tools/reproduce_phase2_eval.py` (new), `tests/test_reproduce_phase2_eval.py` (3 tests), `docs/INDEPENDENT_REPRODUCTION_PROCEDURE.md`, `REPRODUCTION_LOG.txt` (now states that no independent reproduction exists), report §1.
+- Repair: evaluation reproduction script writing original vs reproduced side by side with tolerances fixed in advance (0.005 absolute), operator, commit, dirty state, weight hashes, environment; Level 2 (training rerun) described.
+- Verification: 3/3 tests (originals loaded from evidence equal the reported numbers; tolerance verdicts; no invented metrics). The script itself was not executed (needs the data and weights on a GPU host).
+- Remaining: **a teammate (not Yasser) runs Level 1, optionally Level 2, and commits the JSON and the log block.** Owner: Abdulrahman / Mohammed / Musaad. Blocks: this rubric item stays open until executed; does not block submission if the report says so (it does).
 
-### M5 Segmentation (15 points)
+### A3 `[x]` Dated record that the acceptance criteria were fixed before testing (within the stated scope)
+- Original issue: the report asserted "written 15 October" without a dated record.
+- Files changed: `report/evidence/P2_prespecification_evidence_20261106.json`, report §1 criteria paragraph.
+- Repair/verification: Drive metadata read through the API: unexecuted notebook copy with all ten criteria and the final targets, Drive timestamp 18 Oct 2026 11:19 UTC (10,484 B, SHA-256 `aca90fa4…`), before the executed integration runs of 19 Oct 00:47 and 09:18 UTC; original notebook file created 15 Oct 16:55 UTC (content changed later). The report now states exactly this, including that the first detector training run (17 Oct) precedes the earliest dated copy of the criteria text.
+- Remaining limitation: no record earlier than 18 Oct carries the criteria text; W&B run creation times not read (no key). Status `[x]` for "dated record located and reported honestly", not for "prespecification before every run".
 
-| # | Requirement | Where | Verification | Status |
-|---|---|---|---|---|
-| M5-1 | Masks generated or refined with SAM and verified visually; ground truth described | §3.1: trimap-derived body masks (ground truth); SAM 2.1-B oracle-box masks as baseline; visual gallery | `M5_gt_mask_check.jpg`; W&B `1jb5y453` | Met (adapted: trimaps are the ground truth, SAM is the baseline; stated in §3.1) |
-| M5-2 | Fine-tuned segmentation model, runs table with two baselines, selected run and why | §3.2 | W&B `kd5ksgt3`, `3ztpz2tc` | Met |
-| M5-3 | Thresholds and post-processing chosen on validation | §3.3 (mask confidence, match IoU, minimum share; served vs validated values stated) | `P2_gap_experiments_20261102.json` | Met |
-| M5-4 | Mask mAP50–95, mean IoU, Dice on the test split, per split and per class | §3.4 tables | `M5_yolo_seg_test_metrics.json`, `M5_yolo_seg_coco.json`; Kaggle recomputation `P2_m5_kaggle_regression_20261105.json` | Met (per-class mask AP not recorded; stated) |
-| M5-5 | Application measure | §3.4 "Application measure" | `P2_cpu_release_validation_f8manl0i.json` | Met (counts of mask-based referrals; agreement counts not computed, stated) |
-| M5-6 | Error analysis with pattern table and at least one failure case | §3.5 (18 lowest-IoU gallery, pattern table, pug case) | figures present | Met |
+### A4 `[~]` Commit hash in every run
+- Repair: `src/spv/provenance.py` (`record()`: commit, branch, dirty files or archive index or source fingerprint, environment; `file_sha256`) with 4 tests; `tools/reproduce_phase2_eval.py` uses it. Evidence files of 2 and 5 Nov already carry `source_commit`; the runs of 17–19 Oct do not (historical, cannot be changed).
+- Verification: `tests.test_provenance` 4/4; `python src/spv/provenance.py` prints the current commit. Remaining: call `record()` in notebooks 03/04/11 at their next execution (no notebook was edited in this pass to avoid unexecuted edits). Owner: whoever runs the next notebook.
 
-### M8 Integration and deployment (15 points)
+### A5 `[~]` Per-class recall; class imbalance (improvement recommendations)
+- Per-class P/R/F1 at the operating point are in report §2.4 (cat 0.983 / dog 0.948 recall) from `M4_detection_extra_metrics.json`; per-species IoU/Dice in §3.4. `[x]` for reporting.
+- Imbalance: no class weights or balanced sampler were used (stated in §1 and the dataset card). A controlled comparison (same split v1/v2, same seed, unbalanced vs class-weighted) needs training → owner approval. `[~]`.
 
-| # | Requirement | Where | Verification | Status |
-|---|---|---|---|---|
-| M8-1 | End-to-end pipeline with per-stage timing | §4.1 (p50/p95 per stage, two measurements kept apart) | `P2_gap_experiments_20261102.json`; `M8_benchmark_pytorch.json` | Met |
-| M8-2 | Packaged pipeline with a manifest (model files + checksums, class order, input size, thresholds, versions) | §4.2; `runs/manifest.json`, `evidence/M8_manifest.json`; link pinned to commit `879b0e8` | `tools/preflight_release.py --strict-versions` (pass, 6 Nov) | Met |
-| M8-3 | Input and output contracts | §4.3 | unit tests (`test_release_inputs.py`, `test_output_safety.py`) | Met |
-| M8-4 | ONNX export of the principal model with a numerical-parity check | §4.4: classifier passes (A9a); **detector fails A9b** (0.0018–0.0023 vs 0.001), bound unchanged, cause diagnosed, PyTorch served | `M8_onnx_parity*.json`; `docs/ONNX_EVIDENCE_INDEX.md` | Met as a check; A9b recorded as FAIL |
-| M8-5 | Working HTTP service (framework, endpoints, start-up checks, example request, figure) | §4.5; `GET /demo`, `tools/run_service.py`, `docs/QUICKSTART.md` | real-weight CPU smoke test 6 Nov (ready / ready / multiple_animals / no_animal, HTTP 200); 147 unit tests incl. 15 browser tests | Met |
-| M8-6 | Benchmark: p50/p95/p99 latency, throughput, memory per backend, with warm-up and stated conditions | §4.6 table and figure (T4 and CPU rows never mixed) | `M8_benchmark_*.json`, `P2_cpu_http_validation_mu2tolkg.json` | Met |
-| M8-7 | Verdict against acceptance criteria fixed in advance; for each FAIL: why, fix, cost; go/no-go | §1 criteria table (A1–A9b, fixed in Phase 1 / before the first run); §4.7 verdict table and decision | `M8_acceptance.csv`; checker | Met |
-| M8-8 | Failure gallery and model card (failure modes, out-of-scope uses) | §2.5, §3.5, §4.7 last paragraph; `docs/model_card.md` ("Out of scope" section) | file read 6 Nov | Met |
-| M8-9 | Live demonstration | `GET /demo` page; checklist `docs/DEMO_AND_REHEARSAL_CHECKLIST.md` | run in a CPU container, not yet on the presentation laptop | Met in software; **laptop run and recorded fallback open** (see P5, P6) |
+### A6 `[!]` Harder independent shelter-style test and calibration set
+- Not collected; `docs/INDEPENDENT_TEST_SET_PROTOCOL.md` fixes scope, screening against Oxford and the team set (MD5/pHash/feature similarity), annotation and use before collection. Owner: team; 2–3 weeks. Blocks generalisation claims only.
 
-## 2. Report form (example report structure; guidelines §4 p.6)
+## B. Explicit graded Phase 2 requirements (Table 5 / Table 6; 45 points)
 
-| # | Requirement | Where | Status |
+| ID | Requirement (source) | Evidence (verified this session) | Status |
 |---|---|---|---|
-| F-1 | Section 1: field table, team members (name, ID, workstream, contribution), points by team size, system overview figure + component table, acceptance criteria, follow-up on the Phase 1 data plan | §1 (student IDs from the untracked `private_ids.tex`) | Met, human step open (each member confirms their line) |
-| F-2 | Sections 2–4 follow the example's subsections; Section 5 omitted (team of 4) | §2.1–2.6, §3.1–3.5, §4.1–4.7 (+ §4.8 regression runs, Conclusion) | Met |
-| F-3 | Obstacles table (obstacle, module, impact, action, status); support needed | §5 | Met |
-| F-4 | Submission checklist | §6 (17 items, all ticked) | Met |
-| F-5 | Self-assessment with strongest evidence and known gap | §7 (41/45) | Met |
-| F-6 | Every reported figure states split, input resolution and thresholds | every table caption/heading in §1–4 | Met for the tables and figures read on 5–6 Nov; each member re-checks their section during the read-through |
-| F-7 | Code repository and commit hash: the delivered commit named explicitly; links pinned to commits, not to `main` | §1 (delivered commit stamped by `build.sh`; results commit `879b0e8`) | Met (6 Nov) |
-| F-8 | Neutral academic voice; no invented results, names, roles or reviews | whole report; checker + read-through | Met for the automated checks; human read-through open |
+| M4-1 | Annotations converted and verified visually (T5) | §2.1 tables/figure; `M4_label_roundtrip.json`; checker 41/41 | `[x]` split v1 |
+| M4-2 | Fine-tuned detector, runs with W&B links, selection reason (example §2.2) | §2.2; `2seovilv`; optimiser evidence | `[x]` |
+| M4-3 | Threshold sweep on validation, justified operating point (T5) | §2.3; `M4_threshold_sweep.csv` | `[x]` |
+| M4-4 | mAP50, mAP50–95, per-class AP at conf 0.001; P/R/F1 at the op (T5) | §2.4; `M4_detection_test_metrics.json`, `_extra_metrics.json` | `[x]` |
+| M4-5 | FP breakdown, recall by size, FP/FN galleries, failure case (T5, example §2.5) | §2.4–2.5; size-table erratum evidence | `[x]` |
+| M4-6 | Inference on images and video (T5) | §2.6; `M4_video_inference.json` | `[x]` |
+| M5-1 | Ground-truth masks and SAM comparison with conditions stated (T5) | §3.1 (trimaps = GT; SAM 2.1-B oracle box = baseline; border effect quantified in §3.4) | `[x]` |
+| M5-2 | Fine-tuned segmenter, two baselines, selected run (example §3.2) | §3.2; `3ztpz2tc` | `[x]` |
+| M5-3 | Thresholds on validation (T5) | §3.3; `P2_gap_experiments_20261102.json` | `[x]` |
+| M5-4 | Mask mAP50–95, mIoU, Dice on test (T5) | §3.4; `M5_*`; Kaggle recomputation | `[x]`; per-class mask AP not recorded (stated) |
+| M5-5 | Error analysis, failure case (T5) | §3.5 | `[x]` |
+| M8-1 | End-to-end pipeline, per-stage timing (T5) | §4.1 | `[x]` |
+| M8-2 | Manifest with hashes, class order, input size, thresholds, versions (T5) | §4.2; `runs/manifest.json`; strict preflight pass | `[x]` |
+| M8-3 | Input/output contracts (example §4.3) | §4.3; unit tests | `[x]` |
+| M8-4 | ONNX export with parity check (T5) | §4.4: A9a pass; **A9b FAIL 0.0018–0.0023 vs 0.001, bound unchanged, PyTorch served** | `[x]` check done; criterion failed and reported |
+| M8-5 | HTTP service (T5) | §4.5; real-weight CPU smoke test; 15 browser tests | `[x]` |
+| M8-6 | p50/p95/p99, throughput, memory, stated conditions, warm-up (T5) | §4.6 (T4 and CPU rows never mixed) | `[x]` |
+| M8-7 | Verdict vs criteria fixed in advance; for each FAIL why/fix/cost; go/no-go (T5) | §4.7; criteria dating per A3 | `[x]` |
+| M8-8 | Failure gallery, model card with out-of-scope uses (T5) | §2.5/§3.5/§4.7; `docs/model_card.md` | `[x]` |
+| M8-9 | Live demonstration on a clean runtime (T5) | `/demo` + launcher; run only in a cloud CPU container | `[!]` laptop run and recording open (owner/presenter) |
 
-## 3. Data policy and proposal requirements (guidelines §2.4 p.3, §3.1 p.4)
+## C. Report form and consistency (example report; §4 of the guidelines)
+| ID | Requirement | Status / evidence |
+|---|---|---|
+| F-1 | Section 1 field table, team table, points, overview, criteria, Phase 1 data-plan follow-up, **Phase 1 feedback response** | `[x]` present; team-table confirmation by each member `[!]` |
+| F-2 | Sections 2–4 as in the example; §4.8 regression runs; Conclusion | `[x]` |
+| F-3 | Obstacles table; submission checklist; self-assessment | `[x]` |
+| F-4 | Every figure states split, resolution, thresholds | `[x]` for tables read in this pass; members re-check their sections `[!]` |
+| F-5 | Delivered commit stamped in the PDF; links pinned to commits; source ZIP rebuilds | `[x]` (build.sh; recompile log in the package) |
+| F-6 | Report, slides, model card, dataset card, checklist and manifests agree | `[~]` report, cards, checklist updated in this pass; **deck v8 not updated** (slides still say nothing about the Phase 1 feedback response; speaker notes to be extended) — owner/presenters |
 
-| # | Requirement | Evidence | Status |
-|---|---|---|---|
-| R1 | Computer vision as the core | three vision models; text only as output | Met |
-| R2 | Publicly available annotated data (classification + boxes) | Oxford-IIIT Pet (trimaps → body boxes, documented in §2.1) | Met |
-| R3 | Licence, privacy, ethics: no data in the repository, no redistribution, consent for team photos, no surveillance or medical claims | §1 "Data and code availability"; `docs/dataset_card.md`; `.gitignore`; archive scan (no photos, no credentials) | Met |
-| R4 | Dataset not used in the course labs | Oxford-IIIT Pet | Met |
-| R5 | Complete Phase 1 (split, dataset card, scratch vs fine-tuned, W&B) | Phase 1 report (submitted 28 Oct) | Met (Phase 1) |
-| R6 | Detector with threshold analysis, mAP, FP/FN; segmentation against ground-truth masks; each with a function in the system | §2, §3; component table in §1 | Met |
-| R7 | End-to-end pipeline, ONNX export with parity, HTTP service, benchmark, failure analysis, model card | §4 | Met (A9b fails and is reported as such) |
-| R8 | Intended users, decision supported, quantitative acceptance criteria fixed before results | §1 summary and criteria table (A1–A9b) | Met |
-| R9 | Feasibility | completed | Met |
-| R10 | Four workstreams, one per member, each presents their own work | §1 team table; deck presenter plan | Met, human step open (presentation) |
-| D-1 | Data must not be committed to code repositories or redistributed | no images in Git; weights in Drive | Met |
-| D-2 | Personal data avoided; faces/homes: consent obtained | team photos private; consent stated in the dataset card | Met |
+## D. Data policy, proposal requirements (§2.4, §3.1)
+R1–R10 and D-1/D-2: `[x]` as in the previous checklist (vision core; public annotated data; no data in Git; consent reported for the team photos — "owner consent reported by the team; records kept privately"; dataset not from the labs; Phase 1 complete; detector/segmenter with functions; pipeline/ONNX/HTTP/benchmark/model card; users and criteria; feasibility; four workstreams). Privacy: student IDs only in `private_ids.tex` and the submitted PDF; Git history keeps IDs by decision.
 
-## 4. Final presentation (rubric Table 6 p.7, §6 Table 7 p.8; 15 points)
+## E. Bonus conditions (Table 6; +10 max) — `[~]` team-stated, not verified
+- B1 original topic approved before work began: approval date 19 Oct stated by the team; the approval message is not in the delivered material and was not located in this session; the first training run (17 Oct) precedes 19 Oct. Owner: Yasser (locate the message; explain or correct the dates).
+- B2 team-collected set processed with the M1 protocol, documented in the dataset card, used in evaluation: documented and used (`[x]` for documentation); the +7 is the instructor's decision.
 
-| # | Requirement | Where | Status | Owner |
-|---|---|---|---|---|
-| P1 | Failure analysis and decision (8 pts): failure gallery with explicit statements; go/no-go against criteria defined in advance; model card with out-of-scope uses | report §2.5, §3.5, §4.7; deck v8 | Met in documents | presenters |
-| P2 | 15–20 minutes; clear line from problem to decision; structure of Table 7 (problem/users 2 min, data 2–3, Phase 1 2–3, Phase 2 5–6, demo 2–3, decision 2–3) | deck v8 (plan 18:30); `docs/REHEARSAL_CHECKLIST_ONE_PAGE.md` | **Open**: no timed rehearsal yet (owner decision: after the review) | all four |
-| P3 | Every member presents their own contribution | presenter plan in the deck notes | Met, human step open | all four |
-| P4 | Live demonstration on a clean runtime | `tools/run_service.py` + `/demo`; `docs/QUICKSTART.md` | **Open** on the presentation laptop (passed in a cloud CPU container 4–6 Nov) | demo presenter |
-| P5 | Recorded fallback | script in Drive `05_Demo/DEMO_PLAN_AND_BACKUP_RECORDING_SCRIPT.md` | **Open** (to be recorded on the presentation laptop) | demo presenter |
-| P6 | Figures reported with context (split, resolution, thresholds) on the slides | deck v8 | Met (slide-11 recount evidence 5 Nov) | — |
+## F. Presentation (Table 6, 15 points; Table 7)
+| ID | Requirement | Status / owner |
+|---|---|---|
+| P1 | Failure gallery, go/no-go, model card out-of-scope | `[x]` in documents; deck v8 to be checked for the feedback response `[~]` |
+| P2 | 15–20 min, Table 7 structure, timed rehearsal | `[!]` no rehearsal yet (owner decision: after review) |
+| P3 | Every member presents their own work | `[!]` human |
+| P4/P5 | Live demo on the presentation laptop; recorded fallback | `[!]` not done |
 
-## 5. Bonus (rubric Table 6 p.8; up to +10)
+## G. Software verification (this pass)
+| Check | Result |
+|---|---|
+| Unit tests (system Python 3.13, Playwright) | see tracker section 13 after the rebuild: 147 + 13 new = 160 expected |
+| Evidence checker | 41/41 |
+| ruff (CI selection) | clean |
+| Notebook static check | 15/15 parse; no notebook executed in this environment (needs Drive/Oxford/team photos/GPU/W&B) — `docs/NOTEBOOK_EXECUTION_PLAN.md` |
+| Real-weight HTTP smoke test | run on the delivered revision (log in the package) |
 
-| # | Requirement | Evidence | Status |
-|---|---|---|---|
-| B1 | Original project approved by the instructor before work began; R1–R10 met; all deliverables complete (+3) | approval 19 Oct 2026 stated in §1 "Topic" and "Bonus evidence"; the approval record itself is with the instructor | Met as stated by the team; chronology note: §1 also dates the first Phase 2 run 17 Oct (criteria A3–A9a written 15 Oct) — the owner should confirm the dates before submission |
-| B2 | Team-collected images annotated by the team, processed with the full M1 protocol, documented in the dataset card, used in the evaluation (+7) | 401 photos / 503 boxes / masks; `docs/dataset_card.md` "Team-collected set" (collection, M1 processing, CVAT annotation, audit); used in §2.6, §3.4, §4.7; named in §1 "Bonus evidence" | Met |
+## H. Submission mechanics
+| ID | Item | Status / owner |
+|---|---|---|
+| S1 | Upload PDF + source ZIP by 15 Nov | `[!]` one member |
+| S2 | Public repository | `[x]` (`Yasser-20-alhajlah/smart-pet-vision`) |
+| S3 | GitHub reference version | delivered commit named in the PDF; `main` matches only after PR #8 is merged `[!]` owner |
+| S4 | Human read-through, no contradictions | automated checks `[x]`; read-through `[!]` all four |
+| S5 | W&B key revoked | `[!]` owner; not verifiable from the repository |
+| S6 | Drive package files replaced in place with readback | see `00_RELEASE/DRIVE_READBACK.json` |
 
-## 6. Submission mechanics and instructor messages
-
-| # | Requirement | Status | Owner |
-|---|---|---|---|
-| S1 | Upload `SmartPetVision_Phase2.pdf` and `SmartPetVision_Phase2_source.zip` by 15 Nov 2026 (one member) | **Open** | one member |
-| S2 | Repository public (private repositories receive 0) | Met for `Yasser-20-alhajlah/smart-pet-vision` (GitHub API, 5 Nov); members' own repositories not checked | each member |
-| S3 | GitHub reference version: the delivered commit is named in the PDF and in `CODE_ARCHIVE_INDEX.json`; `main` matches it only after PR #8 is merged | commit named (6 Nov); **merge of PR #8 open** (owner's click after review) | owner |
-| S4 | No contradictions or unfinished notes; every member reads the submission | automated checks pass (checker 41/41, placeholder scan); **human read-through open** (`docs/TEAM_READTHROUGH_SIGNOFF.md`) | all four |
-| S5 | Each member confirms their line in the team table | **Open** | each member |
-| S6 | Student IDs: not in tracked files (`private_ids.tex` untracked; Phase 1 PDF in Git redacted); kept in Git history by decision (cited hashes) | Met (decided 5 Nov) | — |
-| S7 | Previously exposed W&B API key revoked | **Open** (owner's action in W&B settings; cannot be verified from the repository) | owner |
-| S8 | Notebooks: all 15 parse; executed runs cited by W&B run and evidence file; Part F / Part G of notebook 11 optional and not run | Met (`docs/NOTEBOOK_EXECUTION_PLAN.md`) | — |
-| S9 | Checks after any change: 147 unit tests, checker 41/41, ruff CI selection, preflight, real-weight smoke test | Met on the delivered commit (6 Nov) | — |
-
-## 7. Phase 1 (already graded; 40 points) — unchanged
-
-Phase 1 was submitted on 28 October. Its deliverables (M1 dataset card and leakage-safe split, M2
-scratch model, M3 fine-tuned model with W&B, reproducibility) are referenced, not re-submitted. An
-optional resubmission with a change list is drafted in the Drive package
-(`06_Team_Actions/PHASE1_RESUBMISSION_CHANGES_DRAFT.md`); no decision has been taken.
-
-## 8. Open items in one list (what remains before 15 November)
-
-1. Owner: merge PR #8 after review, so that `main` equals the delivered commit (S3).
-2. Owner: revoke the old W&B key (S7); confirm the 19 Oct approval date against the 17 Oct first run (B1).
-3. Each member: confirm their team-table line and sign the read-through sheet (S4, S5).
-4. Demo presenter: run `tools/run_service.py` on the presentation laptop, record the fallback (P4, P5).
-5. All four: one timed rehearsal, 15–20 minutes (P2).
-6. One member: upload the PDF and the source ZIP from the Drive package (S1).
-7. Optional: notebook 11 Part F (second detector recipe) and Part G (W&B logging) with the owner's approval.
+## I. Open items in one list
+1. Team: run the same-animal grouping in Colab, review pairs, commit outputs (A1). Owner approval: retraining on split v2 (A1, A5).
+2. Teammate: execute the independent reproduction and commit the log (A2).
+3. Owner: locate the 19 Oct approval message; reconcile 17/19 Oct (E); revoke the W&B key (S5); merge PR #8 after review (S3).
+4. Presenters: extend deck v8 with the feedback-response slide; laptop demo; recording; timed rehearsal (F-6, P2–P5).
+5. Each member: team-table line and read-through sign-off (F-1, S4).
+6. Team: shelter-style set per protocol (A6), after the submission.
+7. One member: upload the two files by 15 Nov (S1).

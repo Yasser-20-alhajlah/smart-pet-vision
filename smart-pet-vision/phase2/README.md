@@ -27,6 +27,7 @@ The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json
 | `docs/ONNX_EVIDENCE_INDEX.md`, `tools/a9b_root_cause.py` | The four ONNX measurements kept apart (raw head A9b, final detections, task mAP, speed), their evidence files and reproduction; re-run of A9b with a stage-by-stage diagnosis of the gap |
 | `docs/PRESENTATION_QA.md`, `docs/REHEARSAL_CHECKLIST_ONE_PAGE.md`, `docs/TEAM_READTHROUGH_SIGNOFF.md` | Technical Q&A; one-page rehearsal checklist; blank read-through sheet for the four members |
 | `docs/AUDIT_TRACKER_2026-11-04.md` | Release-candidate audit (issues, evidence, state), change log and verification log |
+| `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md`, `tools/same_animal_groups.py`; `docs/INDEPENDENT_REPRODUCTION_PROCEDURE.md`, `tools/reproduce_phase2_eval.py`; `src/spv/provenance.py`; `docs/INDEPENDENT_TEST_SET_PROTOCOL.md` | Response to the Phase 1 feedback: same-animal grouping before splitting (frozen rules, not yet run on the images), independent reproduction procedure (not yet executed by a teammate), run provenance (commit, dirty state), shelter-style test-set protocol (not started) |
 | `docs/REQUIREMENTS_CHECKLIST_2026-11-06.md`, `docs/NOTEBOOK_EXECUTION_PLAN.md`, `tools/check_notebooks.py` | Every requirement of the guidelines, the rubric and the example report with its status and owner; notebook inventory (needs, executed runs, evidence) and the static check of all 15 notebooks |
 | `runs/manifest.json` | Model paths, thresholds, classifier temperature |
 | `tests/` | Unit tests |

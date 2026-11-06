@@ -38,6 +38,7 @@ Test accuracy is reported with a 95% Wilson interval (fine-tuned ResNet-50: 0.99
 - Mostly one large, centred animal per image (1,105 of 1,106 test boxes are "large"); web and pet-site photos are cleaner than shelter photos, so small or partly visible animals are under-represented.
 - Class imbalance: about two dogs per cat; handled by breed stratification and macro-F1, no class weights.
 - The same animal may appear in more than one split (no animal identity labels). Similarity-filtered subset scores do not quantify or bound an identity-leakage effect.
+- Phase 1 feedback (deduction, Part 2): only near-identical images were grouped, so the leak is measured, not removed. A frozen same-animal grouping rule (ResNet-50 similarity >= 0.90 within breed, review band 0.85-0.90, merged with the MD5/pHash groups) and a split v2 are implemented in `phase2/tools/same_animal_groups.py` and `phase2/docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md`; as of 6 Nov 2026 the grouping has not been run on the images and all results use split v1.
 - Possible overlap between ImageNet pretraining images and Oxford-IIIT Pet (both web-collected) cannot be excluded.
 - Breed is not a protected attribute, but per-breed error rates are reported because some breeds look alike across species.
 
