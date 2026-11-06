@@ -22,7 +22,8 @@ historical results: commit `879b0e8` (2 Nov) and the runs of 17–19 Oct (W&B `2
 - Status wording: *similarity groups crossing partitions under the protocol; human identity review not complete*. Not confirmed identity leakage; not an approved split; nothing retrained.
 - Remaining: human pair review (priority: the 54 groups touching test) recorded with reviewer and date → re-run with overrides → owner approval of split v2 → owner approval of compute → **retrain the three models on v2** (≈3 T4 hours, `COLAB_C` prepared, not run) → report v2 beside v1. Owner: team (review), owner (approvals). Blocks: scientific validity of "leakage-safe" claims; does not block the report submission if stated as partial (it is).
 
-### A2 `[!]` Independent reproduction with numbers and run IDs beside the originals (Part 13, −1)
+### A2 `[~]` Independent reproduction with numbers and run IDs beside the originals (Part 13, −1)
+- **6 Nov 2026 update:** Level 1 executed from the delivered package (Colab T4, 15:24 UTC): all six metrics identical to the originals (difference 0.0, tolerance 0.005); record `report/evidence/P2_reproduction_run_20261106.json`, output `report/evidence/reproduction/`, block 1 of `REPRODUCTION_LOG.txt`. Operator field "mohammed"; the owner states that Mohammed Adeeb Alrashdi ran it on the owner's computer; the Colab record shows the owner's account. **Open:** Mohammed's own written statement and signature in the log (nobody signs for him); Level 2 not run.
 - Original issue: `REPRODUCTION_LOG.txt` empty; the only rerun (23 Oct) was by the author.
 - Files changed: `tools/reproduce_phase2_eval.py` (new), `tests/test_reproduce_phase2_eval.py` (3 tests), `docs/INDEPENDENT_REPRODUCTION_PROCEDURE.md`, `REPRODUCTION_LOG.txt` (now states that no independent reproduction exists), report §1.
 - Repair: evaluation reproduction script writing original vs reproduced side by side with tolerances fixed in advance (0.005 absolute), operator, commit, dirty state, weight hashes, environment; Level 2 (training rerun) described.
@@ -100,7 +101,7 @@ R1–R10 and D-1/D-2: `[x]` as in the previous checklist (vision core; public an
 | Check | Result |
 |---|---|
 | Unit tests, 160 collected (`PYTHONPATH=src python -m unittest discover -s tests`) | Measured 6 Nov on the delivered revision; each environment is reported on its own and the counts are never merged: (a) Git checkout, Python 3.13, PyTorch, Playwright and Chromium: **160 run, 0 skipped, OK**; (b) clean extraction of `reviewed_source.zip` (not a Git checkout), same interpreter: **159 run + 1 skipped** (`test_provenance` needs a Git checkout), OK; (c) clean extraction in the pinned virtual environment without Playwright: **144 run + 16 skipped** (15 browser tests + the Git test), OK. CI (`phase2-tests.yml`) runs in a Git checkout with `requirements.txt` and no Chromium, so its count is 145 run + 15 skipped. Logs: `03_Verification/logs/05_*` (c) and `10_*` (b). |
-| Evidence checker | 42/42 |
+| Evidence checker | 43/43 |
 | ruff (CI selection) | clean |
 | Notebook static check | 15/15 parse; no notebook executed in this environment (needs Drive/Oxford/team photos/GPU/W&B) — `docs/NOTEBOOK_EXECUTION_PLAN.md` |
 | Real-weight HTTP smoke test | run on the delivered revision (log in the package) |
@@ -129,11 +130,11 @@ Delivered archives (two different files; each name is tied to its own size and S
 | Four loose training boxes (M3 audit) | report Section 1, "Follow-up on the Phase 1 data-improvement plan", row "Re-derive the four loose body boxes": 4 train labels corrected on 3 Nov in a separate label set; the served detector was **not** retrained on them; the candidate trained on the corrected labels gave no validation gain and was not promoted (Section 4.8, "Regression runs of 5 November") | `[~]` corrected labels exist; served metrics do not reflect them |
 | 17 of 52 multi-animal team photos marked `ready` | report summary (page 1), Section 1 "Results at a glance", Section 2.6 (team photos) and Section 4.7 "Verdict against the acceptance criteria"; evidence `P2_cpu_release_validation_f8manl0i` | `[!]` open limitation; staff approval remains mandatory |
 | A9b detector ONNX parity 0.0018–0.0023 vs bound 0.001 | report Section 1 (criteria table), Section 4.4 "ONNX export and parity", Section 4.7 verdict table; `M8_onnx_parity_recheck_A9b_20261105.json` | `[!]` **not met**; bound unchanged; PyTorch served |
-| Same-animal grouping tool: tests prove the algorithm on a toy set, not the groups on the images | A1 above; `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` (review band, transitive links to be audited) | `[~]` until the Colab run and pair review exist |
+| Same-animal grouping tool: tests prove the algorithm on a toy set; on the images it ran twice with identical results (6 Nov, `bcc5337` and `609c0c5`) | A1 above; `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` (review band, transitive links to be audited) | `[~]` until the pair review exists |
 
 ## I. Open items in one list
-1. Team: run the same-animal grouping in Colab, review pairs, commit outputs (A1). Owner approval: retraining on split v2 (A1, A5).
-2. Teammate: execute the independent reproduction and commit the log (A2).
+1. Team: review the 86 crossing similarity groups (the grouping ran on 6 Nov and was repeated identically on `609c0c5`), record verdicts and overrides, re-run the grouping with them (A1). Owner approval: split v2 and retraining (A1, A5); the retraining notebook stopped at its gate on 6 Nov, nothing trained.
+2. Mohammed: add his own statement and signature to block 1 of `REPRODUCTION_LOG.txt` (Level 1 executed 6 Nov, 6/6 identical) (A2).
 3. Owner: locate the 19 Oct approval message; reconcile 17/19 Oct (E); revoke the W&B key (S5); decide on merging PR #9 (S3; PR #8 was merged on 6 Nov; not required for the submission).
 4. Presenters: extend deck v8 with the feedback-response slide; laptop demo; recording; timed rehearsal (F-6, P2–P5).
 5. Each member: read-through sign-off (S4); the team-table lines are reported approved by the owner (6 Nov).

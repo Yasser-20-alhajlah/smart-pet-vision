@@ -62,6 +62,16 @@
   "images_in_groups_ge_10_by_split": {"val": 363, "train": 211},
   "drift_explanation": "The splitter assigns whole groups. The 13 chain groups with 10 or more images (574 images) landed 363 in val and 211 in train, which inflates val to 18.8 percent and skews val towards dogs (73 percent vs 68 percent overall). Breaking the chains through the human pair review is expected to reduce this drift; changing the threshold to fit the fractions is not permitted by the protocol."
  },
+ "repeat_run_on_delivered_code": {
+  "folder": "runs/data/identity_v2_20261106T1511Z (Drive id 15COJi8VxuCTTc5vLp8BQKuV9hO6X6cJ6)",
+  "notebook": "COLAB_A_same_animal_grouping_from_package_609c0c5.ipynb (code archive 2f56a7a3..., commit 609c0c5)",
+  "operator_field": "yasser",
+  "overrides_applied": 0,
+  "run_record_sha256": "06f57ea1a964b54a547814c7bc928db275cfe6943bb3ff21c5047ca45b766d11",
+  "grouping_params_sha256": "9d41699adeca59193d936432fc280f14ef41b00a8020efe2815441efdc488e3d",
+  "result": "identical to the first run: 6,541 similarity groups, 4,361 linked pairs, 12,647 review-band pairs; 86 groups / 771 images (train 509, test 135, val 127) cross split v1; split_v2 counts 4,903 / 1,382 / 1,050 with 0 crossing groups",
+  "meaning": "the grouping is deterministic on the delivered code; it is a repeat, not a review (no overrides)"
+ },
  "next_steps_not_done": [
   "human pair review of the linked pairs (priority: the 54 groups touching test), recorded in overrides.csv with reviewer name and date",
   "re-run of the grouping with the overrides; owner approval of split v2",

@@ -1,9 +1,35 @@
 # REPRODUCTION_LOG.txt — independent reproduction record (Smart Pet Vision)
 #
-# Status 6 Nov 2026: NO independent reproduction has been executed yet. The only recorded rerun
-# (23 Oct 2026, Phase 1, Colab T4) was performed by Yasser Alhajlah, the author of the original
-# runs, and is therefore not independent. The procedure for a teammate is in
-# smart-pet-vision/phase2/docs/INDEPENDENT_REPRODUCTION_PROCEDURE.md; the operator appends one
-# block per execution below (operator, date, commit, environment, seed, weight hashes, W&B run ids,
-# original vs reproduced table with differences and tolerances). Nothing may be written here on
-# behalf of someone who did not run it.
+# One block per execution: operator, date, commit, environment, seed, weight hashes, run ids,
+# original vs reproduced table with differences and tolerances, and the operator's own statement.
+# Nothing may be written here on behalf of someone who did not run it; the statement and signature
+# lines are filled in only by the operator.
+#
+# Earlier rerun, not independent: 23 Oct 2026, Phase 1, Colab T4, by Yasser Alhajlah, the author of
+# the original runs (docs/REPRODUCE.md).
+
+## Block 1 — Level 1 evaluation reproduction, 6 Nov 2026 (status: executed; operator confirmation PENDING)
+Operator (field in the run): mohammed
+Operator according to the project owner: Mohammed Adeeb Alrashdi, on the owner's computer
+Colab execution record: all cells carry the owner's Google account; the run used the owner's Colab session
+Date (UTC): 2026-11-06T15:24:03Z
+Delivered commit: 609c0c58f6721fd6317a688476b9353eca6d2ee9 (code archive SHA-256 2f56a7a388a51e4bba1314d5ccb7be8642a01dd3a2507ba01dd43ec30347493a, checked by the notebook)
+Environment: Google Colab, Tesla T4, Python 3.13.16, torch 2.11.0+cu130;
+  phase2/report/evidence/reproduction/pip_freeze_mohammed_20261106.txt
+Seed / split: split v1 (runs/data/metadata.csv, SHA-256 f7c6771b…), 5,123 / 1,106 / 1,106; evaluation only, no training
+Weights (SHA-256 checked before use): detector f48e4d8e…1cd4, segmenter 868f3842…d8ee, classifier 22dd58d4…81ba
+W&B run id: none (the evaluation script does not log to W&B; the output file is the record)
+Output: phase2/report/evidence/reproduction/reproduction_eval_mohammed_20261106.json (SHA-256 fa1e7f72…025c)
+
+| Metric (Oxford test, 640 px) | Original | Reproduced | Difference | Tolerance | Verdict |
+|---|---|---|---|---|---|
+| Box mAP50 (conf 0.001) | 0.98357 | 0.98357 | 0.0 | 0.005 | within |
+| Box mAP50-95 | 0.85000 | 0.85000 | 0.0 | 0.005 | within |
+| Mask mAP50 | 0.99312 | 0.99312 | 0.0 | 0.005 | within |
+| Mask mAP50-95 | 0.87455 | 0.87455 | 0.0 | 0.005 | within |
+| Mean IoU (mask conf 0.25) | 0.92296 | 0.92296 | 0.0 | 0.005 | within |
+| Mean Dice | 0.95862 | 0.95862 | 0.0 | 0.005 | within |
+
+Interventions: none recorded in the executed notebook (all cells status ok).
+Operator's statement ("I executed this reproduction myself from the final package."): ________ (to be written by the operator)
+Signed (operator, own name and date): ________

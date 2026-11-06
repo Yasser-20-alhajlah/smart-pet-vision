@@ -1,4 +1,11 @@
-# Independent reproduction procedure (Phase 1 feedback, Part 13) — status BLOCKED
+# Independent reproduction procedure (Phase 1 feedback, Part 13) — Level 1 executed 6 Nov 2026; operator confirmation pending
+
+**Update 6 Nov 2026 (15:24 UTC):** Level 1 was executed from the delivered package (`06_Team_Actions/COLAB_B…`,
+commit `609c0c5`): all six metrics identical to the originals (record `report/evidence/P2_reproduction_run_20261106.json`,
+block 1 of `REPRODUCTION_LOG.txt`). The run's operator field is "mohammed"; the owner states that Mohammed Adeeb
+Alrashdi ran it on the owner's computer; the Colab record shows the owner's account. Until Mohammed writes his own
+statement and signature in the log, it is not recorded as a confirmed independent reproduction. Level 2 has not been run.
+The text below describes the state before that run.
 
 **What the instructor said:** "Yasser's reproduction is said to match, but no reproduced numbers or
 run IDs are shown next to the originals, and `REPRODUCTION_LOG.txt` is empty." Required: show the
