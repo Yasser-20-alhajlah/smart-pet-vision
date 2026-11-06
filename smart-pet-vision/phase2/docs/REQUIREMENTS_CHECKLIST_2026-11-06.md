@@ -44,9 +44,9 @@ historical results: commit `879b0e8` (2 Nov) and the runs of 17–19 Oct (W&B `2
 - Repair: `src/spv/provenance.py` (`record()`: commit, branch, dirty files or archive index or source fingerprint, environment; `file_sha256`) with 4 tests; `tools/reproduce_phase2_eval.py` uses it. Evidence files of 2 and 5 Nov already carry `source_commit`; the runs of 17–19 Oct do not (historical, cannot be changed).
 - Verification: `tests.test_provenance` 4/4; `python src/spv/provenance.py` prints the current commit. Remaining: call `record()` in notebooks 03/04/11 at their next execution (no notebook was edited in this pass to avoid unexecuted edits). Owner: whoever runs the next notebook.
 
-### A5 `[~]` Per-class recall; class imbalance (improvement recommendations)
+### A5 `[x]` Per-class recall; class imbalance (improvement recommendations)
 - Per-class P/R/F1 at the operating point are in report §2.4 (cat 0.983 / dog 0.948 recall) from `M4_detection_extra_metrics.json`; per-species IoU/Dice in §3.4. `[x]` for reporting.
-- Imbalance: no class weights or balanced sampler were used (stated in §1 and the dataset card). A controlled comparison (same split v1/v2, same seed, unbalanced vs class-weighted) needs training → owner approval. `[~]`.
+- Imbalance: no class weights or balanced sampler in the delivered detector (stated in §1 and the dataset card). Controlled comparison run on 6 Nov with the owner's approval (report §4.9, experiment E; `P2_supplementary_E_class_balance_val_20261106.json`): cats oversampled ×2, same recipe, split v1 and seed; validation only — mAP50–95 0.844 → 0.854, F1 0.958 → 0.964, dog recall 0.940 → 0.955. Test split not used; not promoted. `[x]` for the comparison.
 
 ### A6 `[!]` Harder independent shelter-style test and calibration set
 - Not collected; `docs/INDEPENDENT_TEST_SET_PROTOCOL.md` fixes scope, screening against Oxford and the team set (MD5/pHash/feature similarity), annotation and use before collection. Owner: team; 2–3 weeks. Blocks generalisation claims only.
@@ -105,7 +105,7 @@ R1–R10 and D-1/D-2: `[x]` as in the previous checklist (vision core; public an
 | Check | Result |
 |---|---|
 | Unit tests, 160 collected (`PYTHONPATH=src python -m unittest discover -s tests`) | Measured 6 Nov on the delivered revision; each environment is reported on its own and the counts are never merged: (a) Git checkout, Python 3.13, PyTorch, Playwright and Chromium: **160 run, 0 skipped, OK**; (b) clean extraction of `reviewed_source.zip` (not a Git checkout), same interpreter: **159 run + 1 skipped** (`test_provenance` needs a Git checkout), OK; (c) clean extraction in the pinned virtual environment without Playwright: **144 run + 16 skipped** (15 browser tests + the Git test), OK. CI (`phase2-tests.yml`) runs in a Git checkout with `requirements.txt` and no Chromium, so its count is 145 run + 15 skipped. Logs: `03_Verification/logs/05_*` (c) and `10_*` (b). |
-| Evidence checker | 43/43 |
+| Evidence checker | 45/45 |
 | ruff (CI selection) | clean |
 | Notebook static check | 15/15 parse; no notebook executed in this environment (needs Drive/Oxford/team photos/GPU/W&B) — `docs/NOTEBOOK_EXECUTION_PLAN.md` |
 | Real-weight HTTP smoke test | run on the delivered revision (log in the package) |
@@ -132,7 +132,7 @@ Delivered archives (two different files; each name is tied to its own size and S
 | Issue | Where it is reported | Status |
 |---|---|---|
 | Four loose training boxes (M3 audit) | report Section 1, "Follow-up on the Phase 1 data-improvement plan", row "Re-derive the four loose body boxes": 4 train labels corrected on 3 Nov in a separate label set; the served detector was **not** retrained on them; the candidate trained on the corrected labels gave no validation gain and was not promoted (Section 4.8, "Regression runs of 5 November") | `[~]` corrected labels exist; served metrics do not reflect them |
-| 17 of 52 multi-animal team photos marked `ready` | report summary (page 1), Section 1 "Results at a glance", Section 2.6 (team photos) and Section 4.7 "Verdict against the acceptance criteria"; evidence `P2_cpu_release_validation_f8manl0i` | `[!]` open limitation; staff approval remains mandatory |
+| 17 of 52 multi-animal team photos marked `ready` | report summary (page 1), Section 1 "Results at a glance", Section 2.6 (team photos) and Section 4.7 "Verdict against the acceptance criteria"; evidence `P2_cpu_release_validation_f8manl0i` | `[!]` open limitation; staff approval remains mandatory Supplementary run of 6 Nov (report §4.9, experiment D): the opt-in second detection pass gives 10 of 52 at the cost of 82 more single-animal referrals (45 → 127 of 349); post-hoc on the same photos, review stays off. |
 | A9b detector ONNX parity 0.0018–0.0023 vs bound 0.001 | report Section 1 (criteria table), Section 4.4 "ONNX export and parity", Section 4.7 verdict table; `M8_onnx_parity_recheck_A9b_20261105.json` | `[!]` **not met**; bound unchanged; PyTorch served |
 | Same-animal grouping tool: tests prove the algorithm on a toy set; on the images it ran twice with identical results (6 Nov, `bcc5337` and `609c0c5`) | A1 above; `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` (review band, transitive links to be audited) | `[~]` until the pair review exists |
 

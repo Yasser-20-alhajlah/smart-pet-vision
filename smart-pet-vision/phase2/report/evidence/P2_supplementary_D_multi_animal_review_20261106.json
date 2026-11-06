@@ -1,0 +1,64 @@
+{
+ "experiment": "Supplementary D: multi-animal secondary review (review_mode=enforce) on the 401 previously inspected team photos",
+ "approved_by_owner": "2026-11-06 21:34 Riyadh (chat): supplementary, disclosed experiments; delivered results stay the headline",
+ "run_utc": "2026-11-06T20:42Z (output folder supplementary_D_20261106T2042Z; summary written 20:44:08Z)",
+ "where": "Colab T4 (cuda_available true; 2 vCPU), owner's account; notebook SUPP_D_multi_animal_secondary_review.ipynb (Drive id 1IDzX1ATaqzX13OOIssCP0jJ--tCmP9g6)",
+ "code": {
+  "delivered_commit": "f44fd4cb0569655ed112e280c202b5139fbcf817",
+  "code_archive_sha256": "c6afa58abf2833c7e49132495737ff4ff5e9a199a922d44f1e9f55cd847aae59",
+  "tool": "tools/evaluate_multi_animal_candidate.py"
+ },
+ "settings": "runs/manifest_multi_animal_candidate.json of the delivered code, unchanged except absolute weight paths: review_conf 0.10, review_imgsz 960, review_match_iou 0.55, review_include_segmenter true, review_tiles_enabled false; primary thresholds unchanged (det conf 0.40, NMS 0.50, seg conf 0.25)",
+ "privacy": "aggregate counts and hashes only; the per-image file names team photos and stays in the owner's Drive (runs/multi_animal/supplementary_D_20261106T2042Z/)",
+ "baseline_reproduces_delivered": "baseline multi-animal ready 17 of 52 equals the delivered CPU regression (P2_cpu_release_validation_f8manl0i.json, W&B f8manl0i; same weights and label-file hash 04921d42...); all referrals 80 here vs 81 there (T4 and delivered code f44fd4c here, CPU and code 051bd2c there)",
+ "summary": {
+  "baseline": {
+   "all_images": 401,
+   "all_referrals": 80,
+   "single_animal_images": 349,
+   "single_animal_referrals": 45,
+   "single_animal_referral_rate": 0.12893982808022922,
+   "multi_animal_images": 52,
+   "multi_animal_ready": 17,
+   "multi_animal_false_ready_rate": 0.3269230769230769,
+   "single_species_ready_correct": 303,
+   "single_species_ready_total": 304
+  },
+  "candidate": {
+   "all_images": 401,
+   "all_referrals": 169,
+   "single_animal_images": 349,
+   "single_animal_referrals": 127,
+   "single_animal_referral_rate": 0.3638968481375358,
+   "multi_animal_images": 52,
+   "multi_animal_ready": 10,
+   "multi_animal_false_ready_rate": 0.19230769230769232,
+   "single_species_ready_correct": 221,
+   "single_species_ready_total": 222
+  },
+  "new_referrals": 89,
+  "multi_ready_delta": -7,
+  "single_referral_delta": 82,
+  "generalization_not_established": true,
+  "dataset": "previously-inspected team set (regression only)",
+  "independent_holdout": false,
+  "thresholds_selected_using_this_set": false,
+  "model_sha256": {
+   "detector": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+   "segmenter": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+   "classifier": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba"
+  },
+  "manifest_sha256": "06c5f2fc6334261001c1d505669ef3648426431da8951530afb2ecfba6ee5a1e",
+  "labels_sha256": "04921d428d2be17c373778d070bd15b5fc38048a18f4de05e1f458025adfd606",
+  "source_sha256": {
+   "pipeline.py": "e446fbe8e72f7c866e082294bbf2f82cfac005830202ba9b19a17e044a17469f",
+   "multi_animal_review.py": "e2c35c554892752e6259e7a3d0259e6bdc9ec94a6348c67a3387ba153f72493b"
+  },
+  "evaluation_runtime_s": 81.08182996899995
+ },
+ "interpretation": [
+  "7 fewer multi-animal photos wrongly ready (17 -> 10 of 52)",
+  "82 more single-animal photos referred to staff (45 -> 127 of 349; referral rate 12.9% -> 36.4%)",
+  "post-hoc regression on the cohort that exposed the problem; not an independent holdout; not promoted; the served manifest keeps review_mode off"
+ ]
+}

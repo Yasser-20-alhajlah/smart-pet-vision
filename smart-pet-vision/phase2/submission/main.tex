@@ -253,7 +253,7 @@ Part 13: independent reproduction & \texttt{tools/reproduce\_phase2\_eval.py} re
 Dated acceptance criteria & Earliest dated copy of the criteria text: 18 October 2026, 11:19 UTC, before the test runs of 19 October (above) & Reported with its limits \\
 Commit hash in every run & The runs of 2 and 5 November record the code commit (\texttt{source\_commit} in their evidence files); the runs of 17--19 October did not; \texttt{spv.provenance.record()} now writes commit, branch, dirty state or source fingerprint, environment and input hashes for every new run; the delivered commit is printed on page 1 & Done for new runs \\
 Harder independent test set & Not collected. The 401 team photos were already used for evaluation and cannot serve as a new independent set; a collection, screening and annotation protocol is fixed in \texttt{docs/INDEPENDENT\_TEST\_SET\_PROTOCOL.md} (not started) & Open \\
-Class imbalance and per-class recall & Per-class precision, recall and F1 at the operating point are in Section 2.4 (cat recall 0.983, dog 0.948) and per-species IoU/Dice in Section 3.4. No class weights or balanced sampling were applied to the detector; a controlled comparison (unbalanced vs weighted, same split and seed) is prepared but not run & Partial \\
+Class imbalance and per-class recall & Per-class precision, recall and F1 at the operating point are in Section 2.4 (cat recall 0.983, dog 0.948) and per-species IoU/Dice in Section 3.4. No class weights or balanced sampling were applied to the delivered detector. A controlled comparison was run on 6 November (Section~\ref{sec:supp}, experiment E): with cat images oversampled and everything else unchanged, validation mAP50--95 rose from 0.844 to 0.854 and dog recall at the operating point from 0.940 to 0.955; the test split was not used and the delivered detector was kept & Done on validation; not promoted \\
 \end{xltabular}}
 
 % =====================================================================
@@ -782,9 +782,42 @@ mAP rows: Ultralytics curve conditions (\tconf{} 0.001, \tnms{} 0.70); operating
 
 \textbf{What these runs do not show:} generalisation to new shelter photos, dependable counting of small or secondary animals, or an independent human reproduction; they reuse the historical test split, which had already informed development.
 
+\subsection{Supplementary experiments of 6 November (after the results freeze)}\label{sec:supp}
+
+Two limits named above were tested on 6 November with the delivered code (\texttt{f44fd4c}, code archive \texttt{c6afa58a\ldots}) and the delivered weights on a Colab T4. Both runs were decided after the results; they change no served weight, threshold, manifest or acceptance criterion and are reported as supplementary evidence (\ev{P2_supplementary_D_multi_animal_review_20261106}, \ev{P2_supplementary_E_class_balance_val_20261106}).
+
+\textbf{D. Secondary-animal review on the team photos.} The opt-in second detection pass of the release candidate (\texttt{runs/manifest\_multi\_animal\_candidate.json}: \tconf{} 0.10 at 960\,px, match IoU 0.55, segmenter included, tiles off; values fixed before this run, none tuned) was run over the 401 previously inspected team photos with \texttt{tools/evaluate\_multi\_animal\_candidate.py}. The baseline column reproduces the delivered regression (17 of 52 multi-animal photos ready, as in run \run{f8manl0i}).
+
+\begin{tabularx}{\linewidth}{@{}Y r r@{}}
+\toprule
+401 team photos (previously inspected; not an independent holdout) & Served (review off) & Review on \\
+\midrule
+Multi-animal photos marked ready (of 52) & 17 & 10 \\
+Single-animal photos referred to staff (of 349) & 45 (12.9\%) & 127 (36.4\%) \\
+Single-species ready photos with the correct species & 303 / 304 & 221 / 222 \\
+\bottomrule
+\end{tabularx}
+
+The review removes 7 of the 17 false-ready cases but refers 82 more single-animal photos, nearly three times the staff workload. Because these photos exposed the problem, the result shows the trade-off, not a generalisable gain; the served manifest keeps the review off.
+
+\textbf{E. Class-balanced detector (validation split only).} The detector recipe of Section~2.2 was repeated with one change: every cat training image appeared twice (1,652 cats $\times$ 2 and 3,471 dogs; 6,775 entries). Both detectors were scored on the 1,106 validation images with the sweep and rule of Section~2.3; re-scoring the delivered detector reproduced its operating point and validation P/R/F1 (0.40/0.50; 0.959/0.957/0.958). The test split was not used.
+
+\begin{tabularx}{\linewidth}{@{}Y r r@{}}
+\toprule
+Validation split, 640\,px & Delivered & Cat-oversampled \\
+\midrule
+mAP50 / mAP50--95 (Ultralytics curve conditions) & 0.980 / 0.844 & 0.982 / 0.854 \\
+Operating point chosen on validation (\tconf{} / \tnms{}) & 0.40 / 0.50 & 0.30 / 0.50 \\
+Precision / recall / F1 at that point & 0.959 / 0.957 / 0.958 & 0.962 / 0.967 / 0.964 \\
+Recall cat / dog at that point & 0.992 / 0.940 & 0.992 / 0.955 \\
+\bottomrule
+\end{tabularx}
+
+Oversampling the minority class improved every validation figure, mainly dog recall (45 to 34 missed dogs) and cat precision (7 to 4 false cat boxes). It is not promoted: the test split was already used once for the delivered detector, the gain rests on one seed, and the new checkpoint (\texttt{896a0cde\ldots}) has no test, team-photo, ONNX or latency evaluation. It is the first candidate for the next retraining, to be confirmed on an untouched test set.
+
 \subsection{Conclusion}
 
-\textbf{Demonstrated:} on Oxford-IIIT Pet test images with one large animal, the fine-tuned detector and segmenter clearly improve on the same models used as is (mAP50 0.939 $\rightarrow$ 0.984; mean IoU 0.830 $\rightarrow$ 0.923), the service meets every acceptance criterion except detector ONNX parity, and every response keeps the staff-approval guard; the 5 November Kaggle runs reproduce the segmentation results with the delivered weights (Section~\ref{sec:kaggle}), and a re-evaluation from the delivered package on 6 November reproduces the six detection and segmentation test metrics exactly (Section~1, Part 13). \textbf{Not demonstrated:} reliable counting of several or small animals (17 of 52 multi-animal team photos wrongly ready; small-animal recall 0 of 10), accuracy on a fresh shelter holdout (the team photos had been inspected), a passing ONNX detector, and T4 timings of the release-candidate code. \textbf{Next steps:} collect new multi-animal shelter photos as an untouched test set, retrain the detector with more small and secondary animals (the corrected boxes alone gave no validation gain, Section~\ref{sec:kaggle}; selection on validation, one final test), and define an ONNX parity test on decisions before running it. Until then the system is a staff-supervised assistant, not an automatic gatekeeper.
+\textbf{Demonstrated:} on Oxford-IIIT Pet test images with one large animal, the fine-tuned detector and segmenter clearly improve on the same models used as is (mAP50 0.939 $\rightarrow$ 0.984; mean IoU 0.830 $\rightarrow$ 0.923), the service meets every acceptance criterion except detector ONNX parity, and every response keeps the staff-approval guard; the 5 November Kaggle runs reproduce the segmentation results with the delivered weights (Section~\ref{sec:kaggle}), and a re-evaluation from the delivered package on 6 November reproduces the six detection and segmentation test metrics exactly (Section~1, Part 13). \textbf{Not demonstrated:} reliable counting of several or small animals (17 of 52 multi-animal team photos wrongly ready; small-animal recall 0 of 10), accuracy on a fresh shelter holdout (the team photos had been inspected), a passing ONNX detector, and T4 timings of the release-candidate code. \textbf{Next steps:} collect new multi-animal shelter photos as an untouched test set, retrain the detector with more small and secondary animals (the corrected boxes alone gave no validation gain, Section~\ref{sec:kaggle}; selection on validation, one final test), and define an ONNX parity test on decisions before running it. Two supplementary runs after the freeze (Section~\ref{sec:supp}) support this plan: oversampling cats improved every validation figure of the detector, and a second detection pass cut the false-ready multi-animal photos from 17 to 10 of 52 at the cost of 82 more referrals. Until then the system is a staff-supervised assistant, not an automatic gatekeeper.
 
 % =====================================================================
 \section{Obstacles and how they were addressed}
