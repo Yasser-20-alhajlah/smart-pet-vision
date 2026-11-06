@@ -1,0 +1,81 @@
+{
+ "purpose": "Record of the first execution of tools/same_animal_groups.py on the 7,335 Oxford-IIIT Pet images (Phase 1 feedback, Part 2). Diagnostic only: similarity groups are evidence for review, not verified animal identity. No model was trained or evaluated on any new split.",
+ "status": "similarity groups crossing partitions under the frozen protocol; human identity review NOT complete; split_v2 is a PROPOSAL, NOT approved by the project owner",
+ "run": {
+  "date_utc": "2026-11-06T09:31Z",
+  "environment": "Google Colab Pro, Tesla T4, torch 2.11.0+cu130, torchvision 0.26.0+cu130; code taken only from the delivered package (02_Code/reviewed_source.zip, SHA-256 75b73b435d5a53fc5ba4ac568d1c36663603340b6179c98f31f551f022683c04); delivered commit bcc5337cce35ccddf01f5bcf9f96d9229f4c29ba",
+  "operator": "automated run from the package on the owner's account; pair review not done",
+  "notebook": "Drive 06_Team_Actions/COLAB_A_same_animal_grouping_from_package.ipynb (executed version 3, SHA-256 5107e426c767b3fe400a4a37179c0f9c2e9d5af9eb661e2eab9e1740c11c8c69)",
+  "outputs_drive_folder": "MyDrive/capstone /smart-pet-vision/runs/data/identity_v2_20261106T0931Z (Drive id 1sAiNSJC1qbJM6WeHMMNsphzuwIscjoy8): identity_groups.csv, pairs_for_review.csv, split_v2.csv, grouping_params.json, cross_partition_check.json, RUN_RECORD.json, pip_freeze.txt, review/ (86 contact sheets, crossing_groups_summary.csv, review_log_UNFILLED.csv, sensitivity_0.90_vs_0.95.json, split_v2_integrity.json), sensitivity_threshold_0.95/",
+  "input_split_v1": "runs/data/metadata.csv, SHA-256 f7c6771be2f521bceb169ec4ea35f3855958de5ca03f73d992bee7d54163c993, counts train 5123 / val 1106 / test 1106 (rebuilt and verified before the run)"
+ },
+ "grouping_params": {
+  "generated_utc": "2026-11-06T09:32:35Z",
+  "threshold": 0.9,
+  "review_band": 0.05,
+  "frozen_threshold": 0.9,
+  "feature_model": {"model": "torchvision resnet50 (fc removed)", "weights": "DEFAULT", "state_dict_sha256": "aff9d08aaf4853e2190680b36c11419eae945e013cea39702b50bbbfbd9a1c66", "image_size": 224, "device": "cuda"},
+  "images": 7335,
+  "breeds": 37,
+  "dup_groups": 7292,
+  "identity_groups": 6541,
+  "images_in_multi_image_groups": 973,
+  "linked_pairs": 4361,
+  "review_band_pairs": 12647,
+  "overrides_applied": 0
+ },
+ "cross_partition_check_split_v1": {
+  "groups": 6541,
+  "groups_crossing_partitions": 86,
+  "images_in_crossing_groups": 771,
+  "images_in_crossing_groups_by_partition": {"train": 509, "test": 135, "val": 127},
+  "crossing_groups_by_partition_pair": {"test+train": 38, "train+val": 32, "test+train+val": 16},
+  "leakage_free_under_protocol": false,
+  "interpretation": "Under the frozen rule, split v1 is not free of cross-partition similarity groups. Whether these groups are the same animal is not established: the human review has not been done. The number 771 must not be reported as confirmed identity leakage."
+ },
+ "chain_analysis": {
+  "source": "identity_v2_20261106/crossing_groups_summary.csv (86 rows, one per crossing group, priority order: groups touching test first, then size, weak bridges, links near the threshold)",
+  "groups_touching_test": 54,
+  "groups_ge_10_images": 13,
+  "images_in_groups_ge_10": 574,
+  "largest_groups": [["keeshond", 114], ["pug", 82], ["leonberger", 60], ["saint_bernard", 59], ["boxer", 56], ["siamese", 54], ["samoyed", 39], ["birman", 27], ["persian", 24], ["pomeranian", 21], ["japanese_chin", 16], ["newfoundland", 12], ["samoyed", 10]],
+  "min_link_similarity_in_large_groups": 0.900,
+  "groups_with_weak_bridges": 12,
+  "weak_bridge_definition": "an automatic link with similarity < 0.92 whose removal splits the group into two parts of at least two images each",
+  "two_image_pairs_touching_test": 26,
+  "observation": "The large groups are transitive chains inside visually homogeneous breeds and contain many evidently different animals; the strongest candidates for genuine repeat appearances are the small groups and two-image pairs with similarity near 0.95 (for example great_pyrenees_101 / great_pyrenees_102, similarity 0.956). This observation is a reading of two contact sheets by the project assistant, not a review verdict; no verdict has been recorded."
+ },
+ "sensitivity_diagnostic": {
+  "note": "Diagnostic only. The frozen threshold stays 0.90; no threshold was chosen from model accuracy or from the test split.",
+  "threshold_0.90": {"identity_groups": 6541, "crossing_groups": 86, "images_in_crossing": 771, "by_partition": {"train": 509, "test": 135, "val": 127}, "largest_groups": [114, 82, 60, 59, 56], "groups_ge_5": 22, "groups_ge_10": 13},
+  "threshold_0.95": {"identity_groups": 7177, "crossing_groups": 18, "images_in_crossing": 115, "by_partition": {"train": 72, "test": 25, "val": 18}, "largest_groups": [43, 13, 9, 8, 8], "groups_ge_5": 6, "groups_ge_10": 2}
+ },
+ "split_v2_proposal": {
+  "status": "PROPOSAL, NOT APPROVED. Produced by the Phase 1 splitter (fractions 0.70/0.15/0.15, seed 42) over the 6,541 similarity groups. No training or evaluation has used it.",
+  "integrity": {"rows": 7335, "unique_images": 7335, "all_images_present": true, "duplicates": 0, "missing_split": 0, "groups_crossing_in_v2": 0},
+  "counts": {"train": 4903, "val": 1382, "test": 1050},
+  "fractions": {"train": 0.6684, "val": 0.1884, "test": 0.1431},
+  "species_by_split": {"test": {"dog": 698, "cat": 352}, "train": {"dog": 3262, "cat": 1641}, "val": {"dog": 1009, "cat": 373}},
+  "breeds_by_split": {"test": 37, "train": 37, "val": 37},
+  "min_breed_count_by_split": {"test": 14, "train": 63, "val": 23},
+  "group_sizes": {"n_groups": 6541, "size_1": 6362, "size_2_4": 157, "size_5_9": 9, "size_ge_10": 13, "max": 114},
+  "images_in_groups_ge_10_by_split": {"val": 363, "train": 211},
+  "drift_explanation": "The splitter assigns whole groups. The 13 chain groups with 10 or more images (574 images) landed 363 in val and 211 in train, which inflates val to 18.8 percent and skews val towards dogs (73 percent vs 68 percent overall). Breaking the chains through the human pair review is expected to reduce this drift; changing the threshold to fit the fractions is not permitted by the protocol."
+ },
+ "repeat_run_on_delivered_code": {
+  "folder": "runs/data/identity_v2_20261106T1511Z (Drive id 15COJi8VxuCTTc5vLp8BQKuV9hO6X6cJ6)",
+  "notebook": "COLAB_A_same_animal_grouping_from_package_609c0c5.ipynb (code archive 2f56a7a3..., commit 609c0c5)",
+  "operator_field": "yasser",
+  "overrides_applied": 0,
+  "run_record_sha256": "06f57ea1a964b54a547814c7bc928db275cfe6943bb3ff21c5047ca45b766d11",
+  "grouping_params_sha256": "9d41699adeca59193d936432fc280f14ef41b00a8020efe2815441efdc488e3d",
+  "result": "identical to the first run: 6,541 similarity groups, 4,361 linked pairs, 12,647 review-band pairs; 86 groups / 771 images (train 509, test 135, val 127) cross split v1; split_v2 counts 4,903 / 1,382 / 1,050 with 0 crossing groups",
+  "meaning": "the grouping is deterministic on the delivered code; it is a repeat, not a review (no overrides)"
+ },
+ "next_steps_not_done": [
+  "human pair review of the linked pairs (priority: the 54 groups touching test), recorded in overrides.csv with reviewer name and date",
+  "re-run of the grouping with the overrides; owner approval of split v2",
+  "owner approval of compute; retraining of classifier, detector and segmenter on split v2 with the delivered recipes; one evaluation on test v2; v1 results kept and shown side by side",
+  "update of the report, the dataset card and the model card with the v2 results"
+ ]
+}

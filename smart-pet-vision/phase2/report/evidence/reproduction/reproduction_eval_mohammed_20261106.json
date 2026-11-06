@@ -1,0 +1,90 @@
+{
+  "operator": "mohammed",
+  "executed_utc": "2026-11-06T15:24:03Z",
+  "command": "/content/spv/smart-pet-vision/phase2/tools/reproduce_phase2_eval.py --operator mohammed --det-weights /content/runs/detect/yolo11s_det/weights/best.pt --seg-weights /content/runs/segment/yolo11s_seg/weights/best.pt --det-yaml /content/data/processed/yolo_detect/data.yaml --seg-yaml /content/data/processed/yolo_segment/data.yaml --processed /content/data/processed --metadata /content/runs/data/metadata.csv --image-dir /content/data/raw/oxford-iiit-pet/images --out /content/drive/MyDrive/capstone /smart-pet-vision/runs/reproduction/reproduction_eval_mohammed_20261106.json",
+  "wandb_run": null,
+  "provenance": {
+    "recorded_utc": "2026-11-06T15:24:03Z",
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "code_source": "unversioned copy",
+    "source_fingerprint": {
+      "sha256": "091715fac21d8c8df24c4b34015a1c374bba217631879da37ee7b23cdd146d59",
+      "files": 50
+    },
+    "torch": "2.11.0+cu130",
+    "cuda": "13.0",
+    "device": "Tesla T4",
+    "split_version": "v1 (runs/data/metadata.csv)",
+    "det_weights_sha256": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+    "seg_weights_sha256": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+    "imgsz": 640,
+    "seg_conf": 0.25
+  },
+  "originals": {
+    "mAP50": 0.9835682138953565,
+    "mAP50_95": 0.8500022452233958,
+    "mask_mAP50": 0.9931178547973413,
+    "mask_mAP50_95": 0.8745493935724123,
+    "mIoU": 0.9229591960407509,
+    "mean_dice": 0.958620112385902
+  },
+  "reproduced": {
+    "mAP50": 0.9835682138953565,
+    "mAP50_95": 0.8500022452233958,
+    "AP50_per_class": {
+      "cat": 0.9940992261036301,
+      "dog": 0.9730372016870831
+    },
+    "mask_mAP50": 0.9931178547973413,
+    "mask_mAP50_95": 0.8745493935724123,
+    "mIoU": 0.9229591960407509,
+    "mean_dice": 0.958620112385902
+  },
+  "comparison": {
+    "mAP50": {
+      "original": 0.9835682138953565,
+      "reproduced": 0.9835682138953565,
+      "difference": 0.0,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mAP50_95": {
+      "original": 0.8500022452233958,
+      "reproduced": 0.8500022452233958,
+      "difference": 0.0,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mask_mAP50": {
+      "original": 0.9931178547973413,
+      "reproduced": 0.9931178547973413,
+      "difference": 0.0,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mask_mAP50_95": {
+      "original": 0.8745493935724123,
+      "reproduced": 0.8745493935724123,
+      "difference": 0.0,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mIoU": {
+      "original": 0.9229591960407509,
+      "reproduced": 0.9229591960407509,
+      "difference": 0.0,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mean_dice": {
+      "original": 0.958620112385902,
+      "reproduced": 0.958620112385902,
+      "difference": 0.0,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "all_within_tolerance": true
+  },
+  "scope": "evaluation of the delivered checkpoints on the Oxford test split; not a training reproduction"
+}

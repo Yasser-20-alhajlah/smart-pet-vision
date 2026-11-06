@@ -20,7 +20,7 @@ the three real weight files copied to the paths in `runs/manifest.json`):
 |---|---|
 | `python tools/check_notebooks.py --output report/evidence/P2_notebook_static_check_20261106.json` | 15/15 notebooks parse; needs recorded per notebook |
 | `PYTHONPATH=src python -m unittest discover -s tests` (Playwright installed) | 147 tests, OK (143 before + 4 for the notebook checker) |
-| `python tools/verify_submission_evidence.py` | 41/41 |
+| `python tools/verify_submission_evidence.py` | 43/43 |
 | `PYTHONPATH=src python tools/preflight_release.py --manifest runs/manifest.json --requirements ../requirements.txt --strict-versions`; `python tools/run_service.py --check-only` | pass |
 | `python tools/smoke_test_http.py --image chelsea.png` (real weights, CPU, pinned venv) | ready, ready, `multiple_animals`, `no_animal`; HTTP 200; policy flags correct on every response |
 

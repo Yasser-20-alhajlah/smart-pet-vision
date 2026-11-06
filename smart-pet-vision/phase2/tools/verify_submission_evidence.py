@@ -186,6 +186,24 @@ def submission_checks(root):
     check("3 Nov T4 repeat quoted as recorded and kept separate",
           "{:.1f}/{:.1f}/{:.1f}".format(rep["p50_ms"], rep["p95_ms"], rep["p99_ms"]) in body
           and "not combined" in body and rep["measurement"].startswith("synchronized in-process"))
+    sg = load(root, "P2_same_animal_grouping_run_20261106.json")
+    cp = sg["cross_partition_check_split_v1"]
+    check("same-animal grouping run quoted as recorded (groups, crossing groups, images, per partition) and not called confirmed leakage",
+          f'{sg["grouping_params"]["identity_groups"]:,} similarity groups' in body
+          and f'{cp["groups_crossing_partitions"]} groups ({cp["images_in_crossing_groups"]} images: {cp["images_in_crossing_groups_by_partition"]["test"]} test, '
+              f'{cp["images_in_crossing_groups_by_partition"]["val"]} validation, {cp["images_in_crossing_groups_by_partition"]["train"]} train)' in body
+          and "human identity review of the linked pairs has not been done" in body
+          and "not approved" in body and "confirmed identity leakage" not in body.replace("not confirmed", ""))
+    rr = load(root, "reproduction/reproduction_eval_mohammed_20261106.json")
+    rc = rr["comparison"]
+    keys = [k for k in rc if k != "all_within_tolerance"]
+    rec = load(root, "P2_reproduction_run_20261106.json")
+    check("6 Nov reproduction quoted as recorded (6 metrics, all identical) and operator confirmation stated as pending",
+          len(keys) == 6 and rc["all_within_tolerance"] is True and all(rc[k]["difference"] == 0.0 for k in keys)
+          and rec["comparison"]["metrics_identical"] == 6
+          and "6 of 6 metrics identical" in body and "written statement in the log is pending" in body
+          and all(f'{rr["reproduced"][k]:.3f}' in body for k in ("mAP50", "mAP50_95", "mask_mAP50", "mask_mAP50_95", "mIoU", "mean_dice"))
+          and "not yet claimed as a confirmed independent reproduction" in body)
     return out
 
 
