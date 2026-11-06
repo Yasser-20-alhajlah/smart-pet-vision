@@ -193,3 +193,9 @@ On top of `34d13c9`; both earlier Drive packages stay unchanged. No training, no
 - New evidence: `report/evidence/P2_reproduction_run_20261106.json`, `report/evidence/reproduction/` (output and pip freeze); repeat block in `P2_same_animal_grouping_run_20261106.json`.
 - Report: Part 13 row (executed, 6/6 identical, confirmation pending), Part 2 row (repeat identical), results-at-a-glance row, conclusion sentence, bonus row without the internal to-do clause. Model card, checklist A2 `[~]`, procedure header, reproduction log updated. Checker: one new check (43/43).
 - Not changed: weights, thresholds, criteria, A9b, split v1 results, the 17/52 limitation, the unapproved status of split v2.
+
+## 17. 6 Nov (18:04–): PR #9 merged; records updated
+- The owner merged PR #9 (`phase2-polish` → `main`, head `f44fd4c`) at 18:04 UTC; merge commit `a35be4c`. CI on `main` after the merge: run 42267368025, success (160 tests, 15 browser tests skipped; evidence checker 43/43; lint clean).
+- The delivered commit stays `f44fd4c` (printed on page 1 of the report); the report PDF and source ZIP are unchanged.
+- `docs/REQUIREMENTS_CHECKLIST_2026-11-06.md`: item S3 and open item 3 now record the merge, with a note that the copy inside `f44fd4c` predates it. The Drive package copy is byte-identical to this version; the package `START_HERE.md`, `INDEX.md`, `CHANGELOG.md`, `VERIFICATION.md`, `SHA256SUMS.txt` and `DRIVE_READBACK.json` record the merge as well.
+- A technical rerun of the reproduction from the delivered package was made from the owner's Colab account on 6 Nov (17:01 UTC; operator field `owner_account_technical_rerun`): six of six metrics identical. It is not an independent reproduction and does not replace the 15:24 UTC run.

@@ -7,6 +7,10 @@ Project Guidelines* (October 2026; Tables 2, 5, 6, 7; §2.4; R1–R10), the inst
 example report, the **Phase 1 feedback sheet (38/40)**, and the instructor's messages recorded in
 the audit tracker. Every item names its evidence; every human step names its owner.
 
+> Updated on 6 Nov 2026 after the merge of PR #9 into `main` (item S3 and open item 3 only). The copy inside the
+> delivered commit `f44fd4c` (and therefore inside the report's source ZIP and `02_Code/reviewed_source.zip`) predates
+> the merge and still lists it as open; nothing else differs.
+
 Delivered revision: the commit printed on page 1 of the report and in `CODE_ARCHIVE_INDEX.json`;
 historical results: commit `879b0e8` (2 Nov) and the runs of 17–19 Oct (W&B `2seovilv`,
 `3ztpz2tc`, `1jb5y453`, `fqow5ly7`), all on **split v1**.
@@ -119,7 +123,7 @@ Delivered archives (two different files; each name is tied to its own size and S
 |---|---|---|
 | S1 | Upload PDF + source ZIP by 15 Nov | `[!]` one member |
 | S2 | Public repository | `[x]` (`Yasser-20-alhajlah/smart-pet-vision`) |
-| S3 | GitHub reference version | `[x]` the delivery is **the commit printed on page 1 of the PDF** (also in `CODE_ARCHIVE_INDEX.json`), not `main`. State on 6 Nov: PR #8 (head `81cd4fd`) was merged into `main` by the owner at 01:14 UTC (merge commit `bcc8d13`, CI green); the later delivered commits are on branch `phase2-polish` under PR #9, whose CI run is recorded in the package `START_HERE.md` and `DRIVE_READBACK.json`. Merging PR #9 is the owner's decision and is not required for the submission; merging is not a test, the CI run on the delivered commit is. |
+| S3 | GitHub reference version | `[x]` the delivery is **the commit printed on page 1 of the PDF** (also in `CODE_ARCHIVE_INDEX.json`), not `main`. State on 6 Nov: PR #8 (head `81cd4fd`) was merged into `main` by the owner at 01:14 UTC (merge commit `bcc8d13`, CI green); the later delivered commits (`f5bad5b` to `f44fd4c`) went through PR #9 (CI green on `f44fd4c`, run 42247384173), which the owner merged into `main` on 6 Nov at 18:04 UTC (merge commit `a35be4c`; CI on `main` green, run 42267368025). PR #9 is closed. The delivery is still the commit `f44fd4c`, not `main`. |
 | S4 | Human read-through, no contradictions | automated checks `[x]`; team-members table: the owner stated on 6 Nov that the four members approved the table as printed (no individual signature file exists in the package) `[~]`; full read-through of the 28 pages `[!]` all four |
 | S5 | W&B key revoked | `[!]` owner; not verifiable from the repository |
 | S6 | Drive package files replaced in place with readback | `[x]` `00_RELEASE/DRIVE_READBACK.json`: every file's size, and the SHA-256 of the PDF, the source ZIP and the code archive computed on copies downloaded from Drive (the 9.25 MB source ZIP via the owner's computer, 6 Nov) |
@@ -135,7 +139,7 @@ Delivered archives (two different files; each name is tied to its own size and S
 ## I. Open items in one list
 1. Team: review the 86 crossing similarity groups (the grouping ran on 6 Nov and was repeated identically on `609c0c5`), record verdicts and overrides, re-run the grouping with them (A1). Owner approval: split v2 and retraining (A1, A5); the retraining notebook stopped at its gate on 6 Nov, nothing trained.
 2. Mohammed: add his own statement and signature to block 1 of `REPRODUCTION_LOG.txt` (Level 1 executed 6 Nov, 6/6 identical) (A2).
-3. Owner: locate the 19 Oct approval message; reconcile 17/19 Oct (E); revoke the W&B key (S5); decide on merging PR #9 (S3; PR #8 was merged on 6 Nov; not required for the submission).
+3. Owner: locate the 19 Oct approval message; reconcile 17/19 Oct (E); revoke the W&B key (S5). (Merging PR #9, S3: done by the owner on 6 Nov, 18:04 UTC, merge commit `a35be4c`.)
 4. Presenters: extend deck v8 with the feedback-response slide; laptop demo; recording; timed rehearsal (F-6, P2–P5).
 5. Each member: read-through sign-off (S4); the team-table lines are reported approved by the owner (6 Nov).
 6. Team: shelter-style set per protocol (A6), after the submission.
