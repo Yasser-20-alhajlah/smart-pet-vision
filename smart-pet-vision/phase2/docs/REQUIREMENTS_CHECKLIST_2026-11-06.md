@@ -98,27 +98,43 @@ R1–R10 and D-1/D-2: `[x]` as in the previous checklist (vision core; public an
 ## G. Software verification (this pass)
 | Check | Result |
 |---|---|
-| Unit tests (system Python 3.13, Playwright) | see tracker section 13 after the rebuild: 147 + 13 new = 160 expected |
+| Unit tests, 160 collected (`PYTHONPATH=src python -m unittest discover -s tests`) | Measured 6 Nov on the delivered revision; each environment is reported on its own and the counts are never merged: (a) Git checkout, Python 3.13, PyTorch, Playwright and Chromium: **160 run, 0 skipped, OK**; (b) clean extraction of `reviewed_source.zip` (not a Git checkout), same interpreter: **159 run + 1 skipped** (`test_provenance` needs a Git checkout), OK; (c) clean extraction in the pinned virtual environment without Playwright: **144 run + 16 skipped** (15 browser tests + the Git test), OK. CI (`phase2-tests.yml`) runs in a Git checkout with `requirements.txt` and no Chromium, so its count is 145 run + 15 skipped. Logs: `03_Verification/logs/05_*` (c) and `10_*` (b). |
 | Evidence checker | 41/41 |
 | ruff (CI selection) | clean |
 | Notebook static check | 15/15 parse; no notebook executed in this environment (needs Drive/Oxford/team photos/GPU/W&B) — `docs/NOTEBOOK_EXECUTION_PLAN.md` |
 | Real-weight HTTP smoke test | run on the delivered revision (log in the package) |
+
+Delivered archives (two different files; each name is tied to its own size and SHA-256 in the package `SHA256SUMS` and `RELEASE_MANIFEST.json`):
+
+| File | What it is | Size and hash |
+|---|---|---|
+| `01_Report/SmartPetVision_Phase2_source.zip` | report source for the instructor: `main.tex`, figures, `delivery_commit.tex`, plus the code under `code/` (PDFs excluded) | size and SHA-256 in `SHA256SUMS`; the hash is re-verified on a copy **downloaded from Drive** after every upload (`00_RELEASE/DRIVE_READBACK.json`, field `sha256_verified`) — a size match alone is not accepted |
+| `02_Code/reviewed_source.zip` | code archive only, with `CODE_ARCHIVE_INDEX.json` (tree hash and delivered commit) | size and SHA-256 in `SHA256SUMS`; verified after download in the same readback |
+| `01_Report/SmartPetVision_Phase2.pdf` | the report; page 1 prints the delivered commit | size and SHA-256 in `SHA256SUMS`; verified after download |
 
 ## H. Submission mechanics
 | ID | Item | Status / owner |
 |---|---|---|
 | S1 | Upload PDF + source ZIP by 15 Nov | `[!]` one member |
 | S2 | Public repository | `[x]` (`Yasser-20-alhajlah/smart-pet-vision`) |
-| S3 | GitHub reference version | delivered commit named in the PDF; `main` matches only after PR #8 is merged `[!]` owner |
-| S4 | Human read-through, no contradictions | automated checks `[x]`; read-through `[!]` all four |
+| S3 | GitHub reference version | `[x]` the delivery is **the commit printed on page 1 of the PDF** (also in `CODE_ARCHIVE_INDEX.json`), not `main`. State on 6 Nov: PR #8 (head `81cd4fd`) was merged into `main` by the owner at 01:14 UTC (merge commit `bcc8d13`, CI green); the later delivered commits are on branch `phase2-polish` under PR #9, whose CI run is recorded in the package `START_HERE.md` and `DRIVE_READBACK.json`. Merging PR #9 is the owner's decision and is not required for the submission; merging is not a test, the CI run on the delivered commit is. |
+| S4 | Human read-through, no contradictions | automated checks `[x]`; team-members table: the owner stated on 6 Nov that the four members approved the table as printed (no individual signature file exists in the package) `[~]`; full read-through of the 28 pages `[!]` all four |
 | S5 | W&B key revoked | `[!]` owner; not verifiable from the repository |
-| S6 | Drive package files replaced in place with readback | see `00_RELEASE/DRIVE_READBACK.json` |
+| S6 | Drive package files replaced in place with readback | `[x]` `00_RELEASE/DRIVE_READBACK.json`: every file's size, and the SHA-256 of the PDF, the source ZIP and the code archive computed on copies downloaded from Drive (the 9.25 MB source ZIP via the owner's computer, 6 Nov) |
+
+## J. Known issues that stay open and visible (not closed by any later report)
+| Issue | Where it is reported | Status |
+|---|---|---|
+| Four loose training boxes (M3 audit) | report Section 1, "Follow-up on the Phase 1 data-improvement plan", row "Re-derive the four loose body boxes": 4 train labels corrected on 3 Nov in a separate label set; the served detector was **not** retrained on them; the candidate trained on the corrected labels gave no validation gain and was not promoted (Section 4.8, "Regression runs of 5 November") | `[~]` corrected labels exist; served metrics do not reflect them |
+| 17 of 52 multi-animal team photos marked `ready` | report summary (page 1), Section 1 "Results at a glance", Section 2.6 (team photos) and Section 4.7 "Verdict against the acceptance criteria"; evidence `P2_cpu_release_validation_f8manl0i` | `[!]` open limitation; staff approval remains mandatory |
+| A9b detector ONNX parity 0.0018–0.0023 vs bound 0.001 | report Section 1 (criteria table), Section 4.4 "ONNX export and parity", Section 4.7 verdict table; `M8_onnx_parity_recheck_A9b_20261105.json` | `[!]` **not met**; bound unchanged; PyTorch served |
+| Same-animal grouping tool: tests prove the algorithm on a toy set, not the groups on the images | A1 above; `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` (review band, transitive links to be audited) | `[~]` until the Colab run and pair review exist |
 
 ## I. Open items in one list
 1. Team: run the same-animal grouping in Colab, review pairs, commit outputs (A1). Owner approval: retraining on split v2 (A1, A5).
 2. Teammate: execute the independent reproduction and commit the log (A2).
-3. Owner: locate the 19 Oct approval message; reconcile 17/19 Oct (E); revoke the W&B key (S5); merge PR #8 after review (S3).
+3. Owner: locate the 19 Oct approval message; reconcile 17/19 Oct (E); revoke the W&B key (S5); decide on merging PR #9 (S3; PR #8 was merged on 6 Nov; not required for the submission).
 4. Presenters: extend deck v8 with the feedback-response slide; laptop demo; recording; timed rehearsal (F-6, P2–P5).
-5. Each member: team-table line and read-through sign-off (F-1, S4).
+5. Each member: read-through sign-off (S4); the team-table lines are reported approved by the owner (6 Nov).
 6. Team: shelter-style set per protocol (A6), after the submission.
 7. One member: upload the two files by 15 Nov (S1).
