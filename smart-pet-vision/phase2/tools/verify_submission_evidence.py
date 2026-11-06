@@ -204,6 +204,23 @@ def submission_checks(root):
           and "6 of 6 metrics identical" in body and "written statement in the log is pending" in body
           and all(f'{rr["reproduced"][k]:.3f}' in body for k in ("mAP50", "mAP50_95", "mask_mAP50", "mask_mAP50_95", "mIoU", "mean_dice"))
           and "not yet claimed as a confirmed independent reproduction" in body)
+    sd = load(root, "P2_supplementary_D_multi_animal_review_20261106.json")["summary"]
+    base, cand = sd["baseline"], sd["candidate"]
+    check("Supplementary D quoted as recorded (17 -> 10 of 52; 45 -> 127 of 349) and not presented as a holdout",
+          (base["multi_animal_ready"], cand["multi_animal_ready"], base["multi_animal_images"]) == (17, 10, 52)
+          and (base["single_animal_referrals"], cand["single_animal_referrals"], base["single_animal_images"]) == (45, 127, 349)
+          and sd["independent_holdout"] is False and sd["thresholds_selected_using_this_set"] is False
+          and "Multi-animal photos marked ready (of 52) & 17 & 10" in body
+          and "45 (12.9\\%) & 127 (36.4\\%)" in body and "not an independent holdout" in body)
+    se = load(root, "P2_supplementary_E_class_balance_val_20261106.json")
+    d, b2 = se["results"]["delivered"], se["results"]["balanced"]
+    f3 = lambda x: f"{x:.3f}"
+    check("Supplementary E quoted as recorded (validation only, test split unused, not promoted)",
+          se["test_split_used"] is False
+          and f"{f3(d['val_ap']['mAP50'])} / {f3(d['val_ap']['mAP50_95'])} & {f3(b2['val_ap']['mAP50'])} / {f3(b2['val_ap']['mAP50_95'])}" in body
+          and f"{f3(b2['operating_point']['val_precision'])} / {f3(b2['operating_point']['val_recall'])} / {f3(b2['operating_point']['val_f1'])}" in body
+          and f"{f3(d['val_per_class_at_op']['dog']['recall'])} & {f3(b2['val_per_class_at_op']['cat']['recall'])} / {f3(b2['val_per_class_at_op']['dog']['recall'])}" in body
+          and "The test split was not used" in body and "It is not promoted" in body)
     return out
 
 

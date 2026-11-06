@@ -1,0 +1,112 @@
+{
+ "experiment": "Supplementary E: class-balanced (cat-oversampled) YOLO11s detector vs the delivered detector, validation split only",
+ "approved_by_owner": "2026-11-06 21:34 Riyadh (chat): supplementary, disclosed experiments; delivered results stay the headline",
+ "run_utc": "training started about 2026-11-06T20:47Z; record written 2026-11-06T22:14:20Z (Drive runs/class_balance/supplementary_E_*/P2_class_balance_val_record.json, id 1HFClD3BWIuOBqtZHuv0BSwZdqgoxajUT)",
+ "where": "Colab Tesla T4, owner's account; notebook SUPP_E_class_balanced_detector_val.ipynb (Drive id 1EE--RAt4u3h9RQ2oJfsgtuBjbFedLpmf)",
+ "test_split_used": false,
+ "delivered_commit": "f44fd4cb0569655ed112e280c202b5139fbcf817",
+ "code_archive_sha256": "c6afa58abf2833c7e49132495737ff4ff5e9a199a922d44f1e9f55cd847aae59",
+ "split_v1_metadata_sha256": "f7c6771be2f521bceb169ec4ea35f3855958de5ca03f73d992bee7d54163c993",
+ "recipe": {
+  "model": "yolo11s.pt",
+  "epochs": 40,
+  "imgsz": 640,
+  "batch": 16,
+  "seed": 42
+ },
+ "train_cats": 1652,
+ "train_dogs": 3471,
+ "cat_repeat": 2,
+ "train_list_len": 6775,
+ "selection_rule": "same threshold sweep (conf 0.05-0.70 x NMS 0.50/0.60/0.70) and rule (highest F1 with recall >= 0.80) for both models, on the 1,106 validation images",
+ "consistency_check": "the delivered detector re-scored here gives the operating point and validation P/R/F1 of Section 2.3 (0.40/0.50; 0.959/0.957/0.958) and validation mAP50-95 0.844 of Section 4.8",
+ "results": {
+  "delivered": {
+   "operating_point": {
+    "conf": 0.4,
+    "nms_iou": 0.5,
+    "val_precision": 0.9592021758839528,
+    "val_recall": 0.9566003616636528,
+    "val_f1": 0.9578995020371208,
+    "recall_floor_met": true
+   },
+   "val_ap": {
+    "mAP50": 0.9795177805018552,
+    "mAP50_95": 0.84358474811278,
+    "cat": {
+     "AP50": 0.9894826449149609,
+     "AP50_95": 0.8804715345681131
+    },
+    "dog": {
+     "AP50": 0.9695529160887496,
+     "AP50_95": 0.8066979616574466
+    }
+   },
+   "val_per_class_at_op": {
+    "cat": {
+     "tp": 354,
+     "fp": 7,
+     "fn": 3,
+     "precision": 0.9806094182825484,
+     "recall": 0.9915966386554622,
+     "f1": 0.9860724233983287
+    },
+    "dog": {
+     "tp": 704,
+     "fp": 38,
+     "fn": 45,
+     "precision": 0.9487870619946092,
+     "recall": 0.9399198931909212,
+     "f1": 0.9443326626425219
+    }
+   },
+   "weights_sha256": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4"
+  },
+  "balanced": {
+   "operating_point": {
+    "conf": 0.3,
+    "nms_iou": 0.5,
+    "val_precision": 0.9621962196219622,
+    "val_recall": 0.9665461121157324,
+    "val_f1": 0.9643662607126748,
+    "recall_floor_met": true
+   },
+   "val_ap": {
+    "mAP50": 0.9821132755159749,
+    "mAP50_95": 0.8537938062746697,
+    "cat": {
+     "AP50": 0.9920743414388703,
+     "AP50_95": 0.8997539215656669
+    },
+    "dog": {
+     "AP50": 0.9721522095930797,
+     "AP50_95": 0.8078336909836727
+    }
+   },
+   "val_per_class_at_op": {
+    "cat": {
+     "tp": 354,
+     "fp": 4,
+     "fn": 3,
+     "precision": 0.9888268156424581,
+     "recall": 0.9915966386554622,
+     "f1": 0.9902097902097903
+    },
+    "dog": {
+     "tp": 715,
+     "fp": 38,
+     "fn": 34,
+     "precision": 0.949535192563081,
+     "recall": 0.9546061415220294,
+     "f1": 0.9520639147802931
+    }
+   },
+   "weights_sha256": "896a0cdefe82c971394b9d7733769e1476f7d69526957bf6de735b94a1072455"
+  }
+ },
+ "interpretation": [
+  "validation mAP50 0.980 -> 0.982, mAP50-95 0.844 -> 0.854; F1 at each model's own operating point 0.958 -> 0.964 (balanced chosen at conf 0.30)",
+  "dog recall 0.940 -> 0.955 (45 -> 34 misses); cat recall unchanged 0.992; cat false positives 7 -> 4",
+  "not promoted: the balanced detector has not been evaluated on the test split, which was already used once for the delivered detector; one seed only"
+ ]
+}

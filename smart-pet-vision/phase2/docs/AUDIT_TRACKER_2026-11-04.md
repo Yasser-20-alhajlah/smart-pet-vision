@@ -199,3 +199,8 @@ On top of `34d13c9`; both earlier Drive packages stay unchanged. No training, no
 - The delivered commit stays `f44fd4c` (printed on page 1 of the report); the report PDF and source ZIP are unchanged.
 - `docs/REQUIREMENTS_CHECKLIST_2026-11-06.md`: item S3 and open item 3 now record the merge, with a note that the copy inside `f44fd4c` predates it. The Drive package copy is byte-identical to this version; the package `START_HERE.md`, `INDEX.md`, `CHANGELOG.md`, `VERIFICATION.md`, `SHA256SUMS.txt` and `DRIVE_READBACK.json` record the merge as well.
 - A technical rerun of the reproduction from the delivered package was made from the owner's Colab account on 6 Nov (17:01 UTC; operator field `owner_account_technical_rerun`): six of six metrics identical. It is not an independent reproduction and does not replace the 15:24 UTC run.
+
+## 18. 6–7 Nov: supplementary experiments D and E (owner decision 21:34 Riyadh: supplementary, disclosed)
+- D (`P2_supplementary_D_multi_animal_review_20261106.json`): opt-in second detection pass with the frozen candidate settings on the 401 previously inspected team photos: multi-animal photos ready 17 → 10 of 52; single-animal referrals 45 → 127 of 349; baseline reproduces 17/52. Not an independent holdout; review stays off.
+- E (`P2_supplementary_E_class_balance_val_20261106.json`): YOLO11s with cat images oversampled ×2, same recipe, split v1, seed 42; validation only: mAP50 0.980 → 0.982, mAP50–95 0.844 → 0.854, F1 0.958 → 0.964 (op 0.30/0.50 vs 0.40/0.50), dog recall 0.940 → 0.955. Test split not used; checkpoint 896a0cde… not promoted.
+- Report Section 4.9 added; class-imbalance row of the feedback table, conclusion, checklist A5 and the 17/52 known-issue row, model card updated; evidence checker 45/45.

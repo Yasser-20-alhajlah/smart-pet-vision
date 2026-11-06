@@ -42,7 +42,8 @@ SAM 2.1-B prompted with the ground-truth box (mIoU 0.812 on 300 test images) is 
 Validation sweep for mask confidence (0.10-0.55, 1,106 validation images) gave mask mIoU 0.92001-0.92240; the highest was at 0.10, the service keeps 0.25 (difference 0.00024 mIoU; referrals at 0.10 were not evaluated). The minimum mask share 0.05 was confirmed on validation (2 of 1,106 images flagged).
 
 ## Known failure modes
-- Missed secondary or small animals: on team photos 17 of 52 multi-animal photos were marked technically ready because only one animal was detected.
+- Missed secondary or small animals: on team photos 17 of 52 multi-animal photos were marked technically ready because only one animal was detected. The opt-in second detection pass (`review_mode: enforce`) lowers this to 10 of 52 on the same, previously inspected photos but refers 127 instead of 45 of 349 single-animal photos (6 Nov supplementary run; not an independent holdout); it stays off in the served manifest.
+- Class balance (supplementary, 6 Nov): a detector trained with cat images oversampled ×2 (same recipe, split v1, seed 42) scored higher on the validation split (mAP50–95 0.854 vs 0.844; dog recall 0.955 vs 0.940 at its own operating point). It was not evaluated on the test split and is not served.
 - Lower recall on non-Oxford photos (team set recall 0.732 vs 0.959 on Oxford).
 - Dark dogs in clothing detected as cats (detector/classifier disagreement then triggers referral).
 - Masks bleed into similar-coloured blankets or clothing; occlusion truncates masks.
