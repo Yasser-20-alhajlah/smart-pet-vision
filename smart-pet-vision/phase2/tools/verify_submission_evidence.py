@@ -214,7 +214,10 @@ def submission_checks(root):
           and "45 (12.9\\%) & 127 (36.4\\%)" in body and "not an independent holdout" in body)
     se = load(root, "P2_supplementary_E_class_balance_val_20261106.json")
     d, b2 = se["results"]["delivered"], se["results"]["balanced"]
-    f3 = lambda x: f"{x:.3f}"
+
+    def f3(x):
+        return f"{x:.3f}"
+
     check("Supplementary E quoted as recorded (validation only, test split unused, not promoted)",
           se["test_split_used"] is False
           and f"{f3(d['val_ap']['mAP50'])} / {f3(d['val_ap']['mAP50_95'])} & {f3(b2['val_ap']['mAP50'])} / {f3(b2['val_ap']['mAP50_95'])}" in body
