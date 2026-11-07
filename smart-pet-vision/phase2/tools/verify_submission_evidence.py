@@ -188,12 +188,15 @@ def submission_checks(root):
           and "not combined" in body and rep["measurement"].startswith("synchronized in-process"))
     sg = load(root, "P2_same_animal_grouping_run_20261106.json")
     cp = sg["cross_partition_check_split_v1"]
-    check("same-animal grouping run quoted as recorded (groups, crossing groups, images, per partition) and not called confirmed leakage",
+    orv = load(root, "P2_same_animal_review_owner_20261107.json")
+    check("same-animal grouping run and the owner's review quoted as recorded (groups, crossing groups, images, verdicts, test share)",
           f'{sg["grouping_params"]["identity_groups"]:,} similarity groups' in body
           and f'{cp["groups_crossing_partitions"]} groups ({cp["images_in_crossing_groups"]} images: {cp["images_in_crossing_groups_by_partition"]["test"]} test, '
               f'{cp["images_in_crossing_groups_by_partition"]["val"]} validation, {cp["images_in_crossing_groups_by_partition"]["train"]} train)' in body
-          and "human identity review of the linked pairs has not been done" in body
-          and "not approved" in body and "confirmed identity leakage" not in body.replace("not confirmed", ""))
+          and orv["verdicts"]["clear duplicate"] == cp["groups_crossing_partitions"]
+          and "recorded every group as a clear duplicate" in body
+          and f'{orv["groups_touching_test"]["test_images"]} of the 1,106 test images' in body
+          and "not approved" in body)
     rr = load(root, "reproduction/reproduction_eval_mohammed_20261106.json")
     rc = rr["comparison"]
     keys = [k for k in rc if k != "all_within_tolerance"]
