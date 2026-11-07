@@ -204,3 +204,9 @@ On top of `34d13c9`; both earlier Drive packages stay unchanged. No training, no
 - D (`P2_supplementary_D_multi_animal_review_20261106.json`): opt-in second detection pass with the frozen candidate settings on the 401 previously inspected team photos: multi-animal photos ready 17 → 10 of 52; single-animal referrals 45 → 127 of 349; baseline reproduces 17/52. Not an independent holdout; review stays off.
 - E (`P2_supplementary_E_class_balance_val_20261106.json`): YOLO11s with cat images oversampled ×2, same recipe, split v1, seed 42; validation only: mAP50 0.980 → 0.982, mAP50–95 0.844 → 0.854, F1 0.958 → 0.964 (op 0.30/0.50 vs 0.40/0.50), dog recall 0.940 → 0.955. Test split not used; checkpoint 896a0cde… not promoted.
 - Report Section 4.9 added; class-imbalance row of the feedback table, conclusion, checklist A5 and the 17/52 known-issue row, model card updated; evidence checker 45/45.
+
+## 19. 7 Nov: owner's identity review of the 86 crossing groups
+
+- Owner (14:24 Riyadh): reviewed the contact sheets himself and confirmed his log. Log `review_log_Yasser_20261107_1.xlsx` (Drive id 1gSLhkwL…, SHA-256 aa976580…): 86/86 `clear duplicate`, reviewer YASSER, date and note empty.
+- Recorded in `report/evidence/P2_same_animal_review_owner_20261107.json` and checklist A1. Under this review 135 test images (12.2%) have a cross-partition duplicate.
+- Not changed: delivered PDF/ZIP (`5ab3512`, which still says the review is not complete), split v2 (not approved), models (not retrained).
