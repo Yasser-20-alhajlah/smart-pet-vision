@@ -210,3 +210,8 @@ On top of `34d13c9`; both earlier Drive packages stay unchanged. No training, no
 - Owner (14:24 Riyadh): reviewed the contact sheets himself and confirmed his log. Log `review_log_Yasser_20261107_1.xlsx` (Drive id 1gSLhkwL…, SHA-256 aa976580…): 86/86 `clear duplicate`, reviewer YASSER, date and note empty.
 - Recorded in `report/evidence/P2_same_animal_review_owner_20261107.json` and checklist A1. Under this review 135 test images (12.2%) have a cross-partition duplicate.
 - Not changed: delivered PDF/ZIP (`5ab3512`, which still says the review is not complete), split v2 (not approved), models (not retrained).
+
+## 20. 7 Nov: owner review carried into the report (owner 14:28 Riyadh: "نفذ وعدلها كلها وقفلها")
+
+- PR #12 merged (`3b85701`) and PR #14 merged (`5ab82a1`) on the owner's instruction.
+- Report Part 2 row, model card and checklist A1 now quote the owner review (86/86 clear duplicate; 135 of 1,106 test images); evidence checker check updated to read `P2_same_animal_review_owner_20261107.json` (45/45).
