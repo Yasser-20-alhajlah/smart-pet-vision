@@ -1,0 +1,15 @@
+{
+  "name": "sarfi",
+  "version": "0.1.0",
+  "private": true,
+  "description": "صرفي: تطبيق خاص يحسب مصاريفك تلقائياً من رسائل البنك، بالدعوة فقط",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "test": "node --disable-warning=ExperimentalWarning --test"
+  },
+  "license": "UNLICENSED"
+}

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="صرفي">
+  <title>صرفي</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>صرفي</h1>
+    <nav id="nav" hidden>
+      <button type="button" data-view="home" class="tab active">الرئيسية</button>
+      <button type="button" data-view="settings" class="tab">الإعدادات</button>
+      <button type="button" data-view="owner" class="tab" id="ownerTab" hidden>الأعضاء</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Join -->
+    <section id="view-join" class="view" hidden>
+      <div class="card narrow">
+        <h2>انضمام</h2>
+        <p class="muted">التطبيق خاص وبالدعوة فقط. حط رمز الدعوة اللي وصلك من صاحب التطبيق.</p>
+        <form id="joinForm">
+          <label>رمز الدعوة<input name="code" required autocomplete="off" spellcheck="false" dir="ltr"></label>
+          <label>اسمك<input name="name" required maxlength="40"></label>
+          <button type="submit" class="primary">دخول</button>
+          <p class="error" id="joinError" role="alert"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- Home -->
+    <section id="view-home" class="view" hidden>
+      <div class="month-row">
+        <button type="button" id="prevMonth" aria-label="الشهر السابق">›</button>
+        <strong id="monthLabel"></strong>
+        <button type="button" id="nextMonth" aria-label="الشهر التالي">‹</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><span>الصرف</span><strong id="statSpent">0</strong></div>
+        <div class="stat"><span>الدخل</span><strong id="statIncome">0</strong></div>
+        <div class="stat"><span>الصافي</span><strong id="statNet">0</strong></div>
+      </div>
+
+      <div class="card">
+        <h2>حسب التصنيف</h2>
+        <ul id="categoryList" class="bars"></ul>
+        <p class="muted" id="categoryEmpty">ما فيه صرف هذا الشهر.</p>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="primary" id="openSms">لصق رسالة بنك</button>
+        <button type="button" id="openManual">إضافة يدوية</button>
+      </div>
+
+      <div class="card">
+        <h2>العمليات</h2>
+        <ul id="txList" class="tx-list"></ul>
+        <p class="muted" id="txEmpty">ما فيه عمليات.</p>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section id="view-settings" class="view" hidden>
+      <div class="card">
+        <h2>الحساب</h2>
+        <p>مرحباً <strong id="meName"></strong></p>
+        <div class="row">
+          <button type="button" id="exportCsv">تصدير الشهر (CSV)</button>
+          <button type="button" id="logout" class="danger">تسجيل خروج</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>تسجيل تلقائي من رسائل البنك (آيفون)</h2>
+        <ol class="steps">
+          <li>افتح تطبيق <b>الاختصارات</b> ← <b>الأتمتة</b> ← <b>+</b> ← <b>الرسالة</b>.</li>
+          <li>في «المرسل» اختر اسم البنك (مثل الراجحي أو الأهلي). اختر <b>تشغيل فوراً</b>.</li>
+          <li>أضف إجراء <b>الحصول على محتويات URL</b> بهذي الإعدادات:</li>
+        </ol>
+        <dl class="kv">
+          <dt>الرابط</dt><dd><code id="smsUrl" dir="ltr"></code> <button type="button" class="small" data-copy="smsUrl">نسخ</button></dd>
+          <dt>الطريقة</dt><dd><code dir="ltr">POST</code></dd>
+          <dt>الترويسة</dt><dd><code dir="ltr">Authorization</code></dd>
+          <dt>القيمة</dt><dd><code id="authValue" dir="ltr" class="secret">••••••••</code>
+            <button type="button" class="small" id="revealToken">إظهار</button>
+            <button type="button" class="small" data-copy="authValue">نسخ</button></dd>
+          <dt>نص الطلب</dt><dd>JSON ← حقل <code dir="ltr">text</code> = <b>محتوى الرسالة</b></dd>
+        </dl>
+        <p class="muted">الرمز هذا مثل كلمة المرور. لا ترسله لأحد. إذا تسرّب، غيّره من هنا والرمز القديم يتوقف فوراً.</p>
+        <button type="button" id="rotateToken" class="danger">تغيير الرمز</button>
+      </div>
+    </section>
+
+    <!-- Owner -->
+    <section id="view-owner" class="view" hidden>
+      <div class="card">
+        <h2>دعوة شخص</h2>
+        <form id="inviteForm" class="row">
+          <input name="note" placeholder="لمن الدعوة؟ (اختياري)" maxlength="60">
+          <button type="submit" class="primary">إنشاء دعوة</button>
+        </form>
+        <div id="inviteResult" hidden class="invite-box">
+          <p>أرسل هذا الرابط للشخص. يشتغل مرة وحدة وينتهي بعد ٧ أيام:</p>
+          <code id="inviteLink" dir="ltr"></code>
+          <button type="button" class="small" data-copy="inviteLink">نسخ</button>
+        </div>
+        <h3>دعوات لم تُستخدم</h3>
+        <ul id="inviteList" class="simple-list"></ul>
+      </div>
+      <div class="card">
+        <h2>الأعضاء</h2>
+        <ul id="memberList" class="simple-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="smsDialog">
+    <form id="smsForm" method="dialog">
+      <h2>لصق رسالة البنك</h2>
+      <textarea name="text" rows="6" required placeholder="الصق نص الرسالة هنا"></textarea>
+      <p class="error" id="smsError" role="alert"></p>
+      <div class="row">
+        <button type="submit" class="primary" value="save">حفظ</button>
+        <button type="button" data-close>إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="manualDialog">
+    <form id="manualForm" method="dialog">
+      <h2>إضافة عملية</h2>
+      <div class="row">
+        <label class="radio"><input type="radio" name="direction" value="out" checked> صرف</label>
+        <label class="radio"><input type="radio" name="direction" value="in"> دخل</label>
+      </div>
+      <label>المبلغ (ر.س)<input name="amount" type="number" inputmode="decimal" step="0.01" min="0.01" required></label>
+      <label>الجهة<input name="merchant" maxlength="80"></label>
+      <label>التصنيف<select name="category" id="manualCategory"></select></label>
+      <label>التاريخ<input name="date" type="datetime-local" required></label>
+      <label>ملاحظة<input name="note" maxlength="200"></label>
+      <p class="error" id="manualError" role="alert"></p>
+      <div class="row">
+        <button type="submit" class="primary" value="save">حفظ</button>
+        <button type="button" data-close>إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="editDialog">
+    <form id="editForm" method="dialog">
+      <h2>تعديل العملية</h2>
+      <p id="editSummary" class="muted"></p>
+      <label>الجهة<input name="merchant" maxlength="80"></label>
+      <label>التصنيف<select name="category" id="editCategory"></select></label>
+      <label>ملاحظة<input name="note" maxlength="200"></label>
+      <div class="row">
+        <button type="submit" class="primary" value="save">حفظ</button>
+        <button type="button" id="deleteTx" class="danger">حذف</button>
+        <button type="button" data-close>إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
