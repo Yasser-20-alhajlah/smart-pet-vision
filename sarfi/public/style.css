@@ -138,3 +138,43 @@ dialog::backdrop { background: rgb(0 0 0 / 45%); }
   .stat strong { font-size: 1rem; }
   .kv { grid-template-columns: 1fr; }
 }
+
+/* Advisor */
+.hero { text-align: center; }
+.hero #safeDailyBox { margin: 4px 0 12px; }
+.hero #safeDailyBox span { display: block; }
+.hero #safeDaily { font-size: 2rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+.bar.big { height: 12px; background: var(--accent-soft); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.bar.big > span { display: block; height: 100%; background: var(--accent); }
+.bar.big > span.warn, .bars .bar > span.warn { background: #d97706; }
+.bar.big > span.over, .bars .bar > span.over { background: var(--out); }
+
+.insights { list-style: none; margin: 0; padding: 0; }
+.insights li { padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; font-size: .95rem; border-inline-start: 4px solid var(--line); background: var(--bg); }
+.insights li.alert { border-color: var(--out); }
+.insights li.warn { border-color: #d97706; }
+.insights li.good { border-color: var(--in); }
+.insights li.info { border-color: var(--accent); }
+
+.stack { display: flex; height: 18px; border-radius: 9px; overflow: hidden; margin: 8px 0; background: var(--accent-soft); }
+.stack > span { display: block; height: 100%; }
+.legend { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: .85rem; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-inline-end: 6px; vertical-align: middle; }
+.c-needs { background: #0f766e; }
+.c-wants { background: #d97706; }
+.c-savings { background: #2563eb; }
+.c-buffer { background: #94a3b8; }
+@media (prefers-color-scheme: dark) {
+  .c-needs { background: #3fb8a8; }
+  .c-wants { background: #f59e0b; }
+  .c-savings { background: #60a5fa; }
+  .c-buffer { background: #64748b; }
+}
+.budgets .bar-head { gap: 8px; align-items: baseline; }
+.budgets .bar-head span { flex: 1; }
+.budgets .tag { font-size: .7rem; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 0 5px; margin-inline-start: 4px; }
+.small-note { font-size: .8rem; margin: 8px 0 0; }
+.profile-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
+.profile-grid div { background: var(--bg); border-radius: 10px; padding: 10px; }
+.profile-grid span { display: block; font-size: .8rem; color: var(--muted); }
+.profile-grid b { font-variant-numeric: tabular-nums; }

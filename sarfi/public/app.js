@@ -5,6 +5,8 @@
   const $ = (id) => document.getElementById(id);
   const fmt = new Intl.NumberFormat('ar-SA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const money = (n) => `${fmt.format(n || 0)} ر.س`;
+  const fmt0 = new Intl.NumberFormat('ar-SA', { maximumFractionDigits: 0 });
+  const riyals = (n) => `${fmt0.format(Math.round(n || 0))} ر.س`;
   const dateFmt = new Intl.DateTimeFormat('ar-SA', { timeZone: 'Asia/Riyadh', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
   const monthFmt = new Intl.DateTimeFormat('ar-SA', { timeZone: 'UTC', month: 'long', year: 'numeric', calendar: 'gregory' });
 
@@ -62,6 +64,7 @@
     for (const s of document.querySelectorAll('.view')) s.hidden = s.id !== `view-${view}`;
     for (const b of document.querySelectorAll('.tab')) b.classList.toggle('active', b.dataset.view === view);
     if (view === 'home') loadHome();
+    if (view === 'advisor') loadAdvisor();
     if (view === 'settings') loadSettings();
     if (view === 'owner') loadOwner();
   }
@@ -239,6 +242,137 @@
 
   $('prevMonth').addEventListener('click', () => { state.month = shiftMonth(state.month, -1); loadHome(); });
   $('nextMonth').addEventListener('click', () => { state.month = shiftMonth(state.month, 1); loadHome(); });
+
+  // ---------- advisor ----------
+  const dayFmt = new Intl.DateTimeFormat('ar-SA', { timeZone: 'Asia/Riyadh', day: 'numeric', month: 'long', calendar: 'gregory' });
+  const pct = (x) => `${Math.round(x)}٪`;
+  let advisorSettings = {};
+
+  async function loadAdvisor() {
+    try {
+      const [a, s] = await Promise.all([api('GET', '/api/advisor'), api('GET', '/api/settings')]);
+      advisorSettings = s.settings;
+      renderAdvisor(a);
+    } catch (e) {
+      toast(e.message);
+    }
+  }
+
+  function renderAdvisor(a) {
+    const { cycle, plan, progress, profile } = a;
+    const lastDay = new Date(new Date(cycle.end).getTime() - 86400000);
+    $('cycleLabel').textContent = `دورة الراتب: ${dayFmt.format(new Date(cycle.start))} – ${dayFmt.format(lastDay)} · باقي ${cycle.daysLeft} يوم`;
+    $('safeDaily').textContent = progress.safeDaily === null ? '—' : riyals(progress.safeDaily);
+
+    const bar = $('cycleBar');
+    if (progress.budgetTotal) {
+      const ratio = progress.spent / progress.budgetTotal;
+      bar.style.width = `${Math.min(100, ratio * 100)}%`;
+      bar.className = ratio > 1 ? 'over' : ratio >= 0.8 ? 'warn' : '';
+      $('cycleTotals').textContent = `صرفت ${riyals(progress.spent)} من ${riyals(progress.budgetTotal)}`;
+    } else {
+      bar.style.width = '0';
+      $('cycleTotals').textContent = `صرفت ${riyals(progress.spent)} في هذي الدورة`;
+    }
+
+    $('insightList').replaceChildren(...a.insights.map((i) => el('li', { class: i.level, text: i.text })));
+
+    $('planCard').hidden = !plan;
+    if (plan) renderPlan(plan, progress);
+    renderProfile(profile);
+
+    const f = $('advisorSettings');
+    f.salary.value = advisorSettings.salary ?? '';
+    f.salary.placeholder = a.salary.source === 'detected' ? `تلقائي: ${a.salary.amount}` : 'تلقائي من رسالة الراتب';
+    f.payday.value = advisorSettings.payday ?? '';
+    f.payday.placeholder = a.payday.source === 'detected' ? `تلقائي: ${a.payday.day}` : `تلقائي (${a.payday.day})`;
+    f.savings_pct.value = advisorSettings.savings_pct ?? '';
+  }
+
+  function renderPlan(plan, progress) {
+    $('planBasis').textContent = plan.basis === 'history'
+      ? 'مبني على متوسط صرفك في الشهور الماضية.'
+      : 'تقسيم مبدئي 50/30/20. بيتعدّل على طريقة صرفك بعد أول دورة راتب.';
+    const parts = [
+      ['needs', 'احتياجات', plan.needs],
+      ['wants', 'رغبات', plan.wants],
+      ['savings', 'ادخار', plan.savings.amount],
+      ['buffer', 'فائض', Math.max(0, plan.buffer)],
+    ].filter((p) => p[2] > 0);
+    $('planStack').replaceChildren(...parts.map(([k, , v]) => {
+      const s = el('span', { class: `c-${k}` });
+      s.style.width = `${(v / plan.salary) * 100}%`;
+      return s;
+    }));
+    $('planLegend').replaceChildren(...parts.map(([k, label, v]) => el('li', {},
+      el('i', { class: `c-${k}` }), `${label}: ${riyals(v)} (${pct((v / plan.salary) * 100)})`)));
+
+    const spentBy = Object.fromEntries(progress.categories.map((c) => [c.category, c]));
+    $('budgetList').replaceChildren(...plan.categories.map((row) => {
+      const p = spentBy[row.category] || { spent: 0, status: 'ok' };
+      const fill = el('span', { class: p.status === 'ok' ? '' : p.status });
+      fill.style.width = `${Math.min(100, row.budget ? (p.spent / row.budget) * 100 : 0)}%`;
+      const tags = [];
+      if (row.fixed) tags.push(el('span', { class: 'tag', text: `ثابت ${riyals(row.fixed)}` }));
+      if (row.override) tags.push(el('span', { class: 'tag', text: 'محددة يدوياً' }));
+      return el('li', {},
+        el('div', { class: 'bar-head' },
+          el('span', {}, row.category, ...tags),
+          el('b', { text: `${riyals(p.spent)} / ${riyals(row.budget)}` }),
+          el('button', { type: 'button', class: 'small', text: 'تعديل', onclick: () => editBudget(row) })),
+        el('div', { class: 'bar' }, fill));
+    }));
+  }
+
+  function renderProfile(profile) {
+    const box = $('profileBox');
+    if (!profile.cyclesAnalyzed) {
+      box.replaceChildren(el('p', { class: 'muted', text: 'لسا ما عندي بيانات كافية. سجّل مصاريفك دورة راتب كاملة وأتعلم طريقة صرفك.' }));
+      return;
+    }
+    const grid = el('div', { class: 'profile-grid' },
+      el('div', {}, el('span', { text: 'متوسط صرفك الشهري' }), el('b', { text: riyals(profile.avgMonthlySpend) })),
+      el('div', {}, el('span', { text: 'التزامات ثابتة' }), el('b', { text: riyals(profile.recurringTotal) })),
+      el('div', {}, el('span', { text: 'أكثر يوم تصرف فيه' }), el('b', { text: profile.peakWeekday ? profile.peakWeekday.day : '—' })),
+      el('div', {}, el('span', { text: 'صرف الجمعة والسبت' }), el('b', { text: pct(profile.weekendShare * 100) })));
+    const section = (title, items) => (items.length
+      ? [el('h3', { text: title }), el('ul', { class: 'simple-list' }, ...items)]
+      : []);
+    box.replaceChildren(grid,
+      ...section('متوسطك لكل تصنيف', profile.avgByCategory.map((c) => el('li', {}, el('span', { text: c.category }), el('b', { text: riyals(c.avg) })))),
+      ...section('مدفوعات متكررة', profile.recurring.map((r) => el('li', {}, el('span', { text: `${r.merchant} · ${r.category}` }), el('b', { text: riyals(r.monthly) })))),
+      ...section('أكثر أماكن تصرف فيها', profile.topMerchants.map((m) => el('li', {}, el('span', { text: `${m.merchant} (${m.count})` }), el('b', { text: riyals(m.total) })))),
+      el('p', { class: 'muted small-note', text: `مبني على آخر ${profile.cyclesAnalyzed} دورة راتب.` }));
+  }
+
+  async function editBudget(row) {
+    const answer = prompt(`ميزانية ${row.category} بالريال (اتركها فاضية ترجع تلقائية):`, row.override ? String(row.budget) : '');
+    if (answer === null) return;
+    const v = answer.trim() === '' ? null : Number(answer.replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
+    if (v !== null && (!Number.isFinite(v) || v < 0)) {
+      toast('رقم غير صحيح');
+      return;
+    }
+    try {
+      await api('PUT', '/api/settings', { budget_overrides: { [row.category]: v } });
+      loadAdvisor();
+    } catch (err) {
+      toast(err.message);
+    }
+  }
+
+  $('advisorSettings').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const val = (input) => (input.value.trim() === '' ? null : Number(input.value));
+    try {
+      await api('PUT', '/api/settings', { salary: val(f.salary), payday: val(f.payday), savings_pct: val(f.savings_pct) });
+      toast('تم الحفظ');
+      loadAdvisor();
+    } catch (err) {
+      toast(err.message);
+    }
+  });
 
   // ---------- settings ----------
   let tokenVisible = false;

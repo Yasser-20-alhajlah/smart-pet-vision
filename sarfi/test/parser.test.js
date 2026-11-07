@@ -74,3 +74,11 @@ test('Missing date falls back to now', () => {
 test('Invalid date falls back to now', () => {
   assert.equal(parse('شراء 15 ر.س بتاريخ 45/13/2026').transaction.occurred_at, now.toISOString());
 });
+
+test('bill payments name the biller even without "at"', () => {
+  assert.equal(parse('سداد فاتورة STC بمبلغ 230 ريال').transaction.merchant, 'STC');
+  assert.equal(parse('سداد فاتورة الكهرباء مبلغ: 410.50 ر.س').transaction.merchant, 'الكهرباء');
+  assert.equal(parse('SADAD Bill payment Mobily SAR 199.00').transaction.merchant, 'Mobily');
+  // A labelled merchant still wins.
+  assert.equal(parse('سداد فاتورة لدى: ZAIN مبلغ 99 SAR').transaction.merchant, 'ZAIN');
+});

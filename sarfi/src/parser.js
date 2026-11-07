@@ -42,7 +42,10 @@ const TYPES = [
 // Merchant follows "لدى/من/عند/at/from". Stop at the next labelled field or line.
 const MERCHANT_RE = /(?:لدى|عند|التاجر|من\s*:|\bAt\b|\bat\b|\bfrom\b|Merchant)\s*[:：]?\s*([^\n:،,]+?)(?=\s*(?:\n|$|مبلغ|المبلغ|بمبلغ|في\s+\d|بتاريخ|تاريخ|\bon\s+\d|الرصيد|رصيد|بطاقة|\bCard\b|Amount|SAR|ر\.?س|ريال|\d{1,2}[/-]\d{1,2}))/;
 
-const CARD_RE = /(?:بطاقة|البطاقة|Card|card|حساب|Acc(?:ount)?)[^\d\n]{0,12}?[*xX#]*(\d{4})\b|[*xX]{2,}(\d{4})\b/;
+// Bill payments rarely say "at": "سداد فاتورة STC بمبلغ 300" → "STC".
+const BILLER_RE = /(?:سداد\s+فاتورة|سداد|فاتورة|Bill\s+payment|Payment)\s*[:：]?\s*(?:ل|لـ|for|to)?\s*([A-Za-zء-ي][A-Za-zء-ي0-9&.' -]{1,30}?)(?=\s*(?:\n|$|بمبلغ|مبلغ|المبلغ|في|بتاريخ|SAR|ر\.?س|ريال|\d|Amount|on\s))/i;
+
+const CARD_RE =/(?:بطاقة|البطاقة|Card|card|حساب|Acc(?:ount)?)[^\d\n]{0,12}?[*xX#]*(\d{4})\b|[*xX]{2,}(\d{4})\b/;
 
 const DATE_RE = /(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:\s+(\d{1,2}):(\d{2}))?|(\d{1,2})[-/](\d{1,2})[-/](\d{2,4})(?:\s+(\d{1,2}):(\d{2}))?/;
 
@@ -114,7 +117,11 @@ function parseSms(rawText, { now = new Date() } = {}) {
 
   const typeInfo = TYPES.find((t) => t.re.test(text)) || { type: 'purchase', direction: 'out' };
   const merchantMatch = MERCHANT_RE.exec(text);
-  const merchant = merchantMatch ? merchantMatch[1].trim().slice(0, 80) || null : null;
+  let merchant = merchantMatch ? merchantMatch[1].trim().slice(0, 80) || null : null;
+  if (!merchant && typeInfo.type === 'bill') {
+    const biller = BILLER_RE.exec(text);
+    if (biller) merchant = biller[1].trim().slice(0, 80) || null;
+  }
   const cardMatch = CARD_RE.exec(text);
 
   return {

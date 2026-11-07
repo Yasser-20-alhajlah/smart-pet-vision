@@ -3,6 +3,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { parseSms, CATEGORY_NAMES } = require('./parser');
+const { buildAdvice, historyStart, SPEND_CATEGORIES } = require('./advisor');
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 const MAX_BODY = 16 * 1024;
@@ -116,6 +117,42 @@ function validateManual(body) {
   };
 }
 
+// Merges a partial settings update. null clears a value (back to automatic).
+function validateSettings(body, current) {
+  const next = { ...current, budget_overrides: { ...(current.budget_overrides || {}) } };
+  const num = (v, min, max, msg) => {
+    const n = Number(v);
+    if (v === '' || typeof v === 'boolean' || !Number.isFinite(n) || n < min || n > max) throw new HttpError(400, msg);
+    return n;
+  };
+  if ('salary' in body) {
+    if (body.salary === null) delete next.salary;
+    else next.salary = Math.round(num(body.salary, 1, 10_000_000, 'الراتب غير صحيح') * 100) / 100;
+  }
+  if ('payday' in body) {
+    if (body.payday === null) delete next.payday;
+    else {
+      const d = num(body.payday, 1, 31, 'يوم الراتب لازم يكون بين 1 و 31');
+      if (!Number.isInteger(d)) throw new HttpError(400, 'يوم الراتب لازم يكون رقم صحيح');
+      next.payday = d;
+    }
+  }
+  if ('savings_pct' in body) {
+    if (body.savings_pct === null) delete next.savings_pct;
+    else next.savings_pct = num(body.savings_pct, 0, 80, 'نسبة الادخار لازم تكون بين 0 و 80');
+  }
+  if ('budget_overrides' in body) {
+    const o = body.budget_overrides;
+    if (!o || typeof o !== 'object' || Array.isArray(o)) throw new HttpError(400, 'ميزانيات غير صحيحة');
+    for (const [cat, v] of Object.entries(o)) {
+      if (!SPEND_CATEGORIES.includes(cat)) throw new HttpError(400, 'التصنيف غير معروف');
+      if (v === null) delete next.budget_overrides[cat];
+      else next.budget_overrides[cat] = Math.round(num(v, 0, 10_000_000, 'المبلغ غير صحيح'));
+    }
+  }
+  return next;
+}
+
 function csvCell(v) {
   const s = v === null || v === undefined ? '' : String(v);
   // Neutralise spreadsheet formulas and quote everything.
@@ -123,7 +160,7 @@ function csvCell(v) {
   return `"${safe.replace(/"/g, '""')}"`;
 }
 
-function createApp(db, { log = () => {}, trustProxy = false } = {}) {
+function createApp(authDb, users, { log = () => {}, trustProxy = false } = {}) {
   const joinAttempts = new Map();
 
   function clientIp(req) {
@@ -148,7 +185,7 @@ function createApp(db, { log = () => {}, trustProxy = false } = {}) {
   function auth(req) {
     const h = req.headers.authorization || '';
     const token = h.startsWith('Bearer ') ? h.slice(7).trim() : null;
-    const user = db.userByToken(token);
+    const user = authDb.userByToken(token);
     if (!user) throw new HttpError(401, 'غير مصرح');
     return user;
   }
@@ -169,7 +206,7 @@ function createApp(db, { log = () => {}, trustProxy = false } = {}) {
       const body = await readJson(req);
       const name = cleanText(body.name, 40);
       if (!name) throw new HttpError(400, 'اكتب اسمك');
-      const result = db.redeemInvite(cleanText(body.code, 64) || '', name);
+      const result = authDb.redeemInvite(cleanText(body.code, 64) || '', name);
       if (!result) throw new HttpError(403, 'رمز الدعوة غير صحيح أو مستخدم أو منتهي');
       log(`user joined: id=${result.user.id} role=${result.user.role}`);
       return [201, result];
@@ -179,7 +216,7 @@ function createApp(db, { log = () => {}, trustProxy = false } = {}) {
 
     ['POST', /^\/api\/me\/token$/, async (req) => {
       const user = auth(req);
-      return [200, { token: db.rotateToken(user.id) }];
+      return [200, { token: authDb.rotateToken(user.id) }];
     }],
 
     // Accepts JSON {"text": "..."} or a raw text/plain body, which is the
@@ -196,19 +233,19 @@ function createApp(db, { log = () => {}, trustProxy = false } = {}) {
       }
       const parsed = parseSms(text);
       if (!parsed.ok) throw new HttpError(422, parsed.error);
-      const result = db.addTransaction(user.id, parsed.transaction, 'sms');
+      const result = users.get(user.id).addTransaction(parsed.transaction, 'sms');
       return [result.duplicate ? 200 : 201, result];
     }],
 
     ['POST', /^\/api\/transactions$/, async (req) => {
       const user = auth(req);
       const tx = validateManual(await readJson(req));
-      return [201, db.addTransaction(user.id, tx, 'manual')];
+      return [201, users.get(user.id).addTransaction(tx, 'manual')];
     }],
 
     ['GET', /^\/api\/transactions$/, async (req, url) => {
       const user = auth(req);
-      return [200, { transactions: db.transactions(user.id, monthParam(url)) }];
+      return [200, { transactions: users.get(user.id).transactions(monthParam(url)) }];
     }],
 
     ['PATCH', /^\/api\/transactions\/(\d+)$/, async (req, url, m) => {
@@ -222,20 +259,20 @@ function createApp(db, { log = () => {}, trustProxy = false } = {}) {
       }
       if (body.merchant !== undefined) fields.merchant = cleanText(body.merchant, 80);
       if (body.note !== undefined) fields.note = cleanText(body.note, 200);
-      const tx = db.updateTransaction(user.id, idParam(m), fields);
+      const tx = users.get(user.id).updateTransaction(idParam(m), fields);
       if (!tx) throw new HttpError(404, 'العملية غير موجودة');
       return [200, { transaction: tx }];
     }],
 
     ['DELETE', /^\/api\/transactions\/(\d+)$/, async (req, url, m) => {
       const user = auth(req);
-      if (!db.deleteTransaction(user.id, idParam(m))) throw new HttpError(404, 'العملية غير موجودة');
+      if (!users.get(user.id).deleteTransaction(idParam(m))) throw new HttpError(404, 'العملية غير موجودة');
       return [200, { ok: true }];
     }],
 
     ['GET', /^\/api\/summary$/, async (req, url) => {
       const user = auth(req);
-      return [200, db.summary(user.id, monthParam(url))];
+      return [200, users.get(user.id).summary(monthParam(url))];
     }],
 
     ['GET', /^\/api\/export\.csv$/, async (req, url) => {
@@ -243,7 +280,7 @@ function createApp(db, { log = () => {}, trustProxy = false } = {}) {
       const month = monthParam(url);
       const header = ['التاريخ', 'النوع', 'المبلغ', 'التاجر', 'التصنيف', 'البطاقة', 'ملاحظة', 'المصدر'];
       const lines = [header.map(csvCell).join(',')];
-      for (const t of db.transactions(user.id, month)) {
+      for (const t of users.get(user.id).transactions(month)) {
         lines.push([t.occurred_at, t.direction === 'in' ? 'دخل' : 'صرف', t.amount, t.merchant,
           t.category, t.card_last4, t.note, t.source].map(csvCell).join(','));
       }
@@ -257,29 +294,58 @@ function createApp(db, { log = () => {}, trustProxy = false } = {}) {
       const user = auth(req);
       requireOwner(user);
       const body = await readJson(req);
-      return [201, db.createMemberInvite(user.id, cleanText(body.note, 60))];
+      return [201, authDb.createMemberInvite(user.id, cleanText(body.note, 60))];
     }],
 
     ['GET', /^\/api\/invites$/, async (req) => {
       requireOwner(auth(req));
-      return [200, { invites: db.pendingInvites() }];
+      return [200, { invites: authDb.pendingInvites() }];
     }],
 
     ['DELETE', /^\/api\/invites\/(\d+)$/, async (req, url, m) => {
       requireOwner(auth(req));
-      if (!db.revokeInvite(idParam(m))) throw new HttpError(404, 'الدعوة غير موجودة');
+      if (!authDb.revokeInvite(idParam(m))) throw new HttpError(404, 'الدعوة غير موجودة');
       return [200, { ok: true }];
     }],
 
     ['GET', /^\/api\/members$/, async (req) => {
       requireOwner(auth(req));
-      return [200, { members: db.members() }];
+      const members = authDb.members().map((u) => ({ ...u, tx_count: users.get(u.id).txCount() }));
+      return [200, { members }];
     }],
 
+    // Removes the member from the auth database, then deletes their own
+    // database file with all their data.
     ['DELETE', /^\/api\/members\/(\d+)$/, async (req, url, m) => {
       requireOwner(auth(req));
-      if (!db.deleteMember(idParam(m))) throw new HttpError(404, 'العضو غير موجود');
+      const id = idParam(m);
+      if (!authDb.deleteMember(id)) throw new HttpError(404, 'العضو غير موجود');
+      users.remove(id);
+      log(`member removed: id=${id}`);
       return [200, { ok: true }];
+    }],
+
+    ['GET', /^\/api\/settings$/, async (req) => {
+      const user = auth(req);
+      return [200, { settings: users.get(user.id).getSettings() }];
+    }],
+
+    ['PUT', /^\/api\/settings$/, async (req) => {
+      const user = auth(req);
+      const store = users.get(user.id);
+      const next = validateSettings(await readJson(req), store.getSettings());
+      return [200, { settings: store.saveSettings(next) }];
+    }],
+
+    ['GET', /^\/api\/advisor$/, async (req) => {
+      const user = auth(req);
+      const store = users.get(user.id);
+      const now = new Date();
+      return [200, buildAdvice({
+        transactions: store.transactionsSince(historyStart(now)),
+        settings: store.getSettings(),
+        now,
+      })];
     }],
   ];
 

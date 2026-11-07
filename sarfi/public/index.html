@@ -17,6 +17,7 @@
     <h1>صرفي</h1>
     <nav id="nav" hidden>
       <button type="button" data-view="home" class="tab active">الرئيسية</button>
+      <button type="button" data-view="advisor" class="tab">المستشار</button>
       <button type="button" data-view="settings" class="tab">الإعدادات</button>
       <button type="button" data-view="owner" class="tab" id="ownerTab" hidden>الأعضاء</button>
     </nav>
@@ -66,6 +67,49 @@
         <h2>العمليات</h2>
         <ul id="txList" class="tx-list"></ul>
         <p class="muted" id="txEmpty">ما فيه عمليات.</p>
+      </div>
+    </section>
+
+    <!-- Advisor -->
+    <section id="view-advisor" class="view" hidden>
+      <div class="card hero">
+        <p class="muted" id="cycleLabel"></p>
+        <div id="safeDailyBox">
+          <span class="muted">تقدر تصرف باليوم</span>
+          <strong id="safeDaily">—</strong>
+        </div>
+        <div class="bar big"><span id="cycleBar"></span></div>
+        <p class="muted" id="cycleTotals"></p>
+      </div>
+
+      <div class="card">
+        <h2>نصائح لك</h2>
+        <ul id="insightList" class="insights"></ul>
+      </div>
+
+      <div class="card" id="planCard">
+        <h2>توزيع راتبك هذا الشهر</h2>
+        <p class="muted" id="planBasis"></p>
+        <div class="stack" id="planStack" aria-hidden="true"></div>
+        <ul class="legend" id="planLegend"></ul>
+        <ul id="budgetList" class="bars budgets"></ul>
+        <p class="muted small-note">اضغط «تعديل» عشان تحدد ميزانية بنفسك. اتركها فاضية ترجع تلقائية.</p>
+      </div>
+
+      <div class="card">
+        <h2>طريقة صرفك</h2>
+        <div id="profileBox"></div>
+      </div>
+
+      <div class="card">
+        <h2>راتبك</h2>
+        <form id="advisorSettings">
+          <label>الراتب الشهري (ر.س)<input name="salary" type="number" inputmode="decimal" min="1" step="0.01" placeholder="تلقائي من رسالة الراتب"></label>
+          <label>يوم نزول الراتب<input name="payday" type="number" inputmode="numeric" min="1" max="31" step="1" placeholder="تلقائي"></label>
+          <label>نسبة الادخار (٪)<input name="savings_pct" type="number" inputmode="numeric" min="0" max="80" step="1" placeholder="20"></label>
+          <button type="submit" class="primary">حفظ</button>
+        </form>
+        <p class="muted small-note">نصائح عامة لتنظيم الميزانية، مو استشارة مالية مرخّصة.</p>
       </div>
     </section>
 

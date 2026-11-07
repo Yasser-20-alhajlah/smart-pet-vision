@@ -2,7 +2,7 @@
 
 // Caches only the app shell so the app opens offline. API responses (personal
 // financial data) are never cached.
-const CACHE = 'sarfi-shell-v1';
+const CACHE = 'sarfi-shell-v2';
 const SHELL = ['/', '/index.html', '/app.js', '/style.css', '/icon.svg', '/manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {

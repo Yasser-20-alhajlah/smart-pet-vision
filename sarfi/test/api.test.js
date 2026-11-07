@@ -3,12 +3,14 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('node:http');
-const { openDb } = require('../src/db');
+const { openAuthDb, createUserStore } = require('../src/db');
 const { createApp } = require('../src/app');
 
-async function startServer() {
-  const db = openDb(':memory:');
-  const server = http.createServer(createApp(db));
+// dataDir null keeps every database in memory.
+async function startServer(dataDir = null) {
+  const db = openAuthDb(dataDir ? `${dataDir}/sarfi.db` : ':memory:');
+  const users = createUserStore(dataDir ? `${dataDir}/users` : null);
+  const server = http.createServer(createApp(db, users));
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
   const base = `http://127.0.0.1:${server.address().port}`;
   const call = async (method, path, { token, body, raw, headers = {} } = {}) => {
@@ -28,8 +30,8 @@ async function startServer() {
     try { json = JSON.parse(text); } catch { /* not json */ }
     return { status: res.status, json, text, headers: res.headers };
   };
-  const close = () => new Promise((r) => server.close(() => { db.close(); r(); }));
-  return { db, call, close };
+  const close = () => new Promise((r) => server.close(() => { users.closeAll(); db.close(); r(); }));
+  return { db, users, call, close };
 }
 
 async function withOwner() {
@@ -219,6 +221,98 @@ test('oversized bodies, bad JSON and path traversal are rejected', async () => {
     const page = await s.call('GET', '/');
     assert.equal(page.status, 200);
     assert.match(page.headers.get('content-security-policy'), /default-src 'self'/);
+  } finally {
+    await s.close();
+  }
+});
+
+test('each user gets their own database file, deleted when the member is removed', async () => {
+  const fs = require('node:fs');
+  const os = require('node:os');
+  const path = require('node:path');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'sarfi-'));
+  const s = await startServer(dir);
+  try {
+    const { code } = s.db.bootstrapOwnerInvite();
+    const owner = (await s.call('POST', '/api/join', { body: { code, name: 'ياسر' } })).json;
+    const inv = await s.call('POST', '/api/invites', { token: owner.token, body: {} });
+    const member = (await s.call('POST', '/api/join', { body: { code: inv.json.code, name: 'محمد' } })).json;
+    await s.call('POST', '/api/sms', { token: owner.token, raw: SMS });
+    await s.call('POST', '/api/sms', { token: member.token, raw: SMS });
+
+    const ownerFile = s.users.fileFor(owner.user.id);
+    const memberFile = s.users.fileFor(member.user.id);
+    assert.notEqual(ownerFile, memberFile);
+    assert.ok(fs.existsSync(ownerFile) && fs.existsSync(memberFile));
+
+    // The central database holds no financial data.
+    const { DatabaseSync } = require('node:sqlite');
+    const central = new DatabaseSync(path.join(dir, 'sarfi.db'), { readOnly: true });
+    const tables = central.prepare("SELECT name FROM sqlite_master WHERE type = 'table'").all().map((r) => r.name);
+    central.close();
+    assert.deepEqual(tables.sort(), ['invites', 'users']);
+
+    assert.equal((await s.call('DELETE', `/api/members/${member.user.id}`, { token: owner.token })).status, 200);
+    assert.equal(fs.existsSync(memberFile), false);
+    assert.equal(fs.existsSync(ownerFile), true);
+  } finally {
+    await s.close();
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('settings: validated, merged, and private per user', async () => {
+  const s = await withOwner();
+  try {
+    const t = s.ownerToken;
+    const ok = await s.call('PUT', '/api/settings', { token: t, body: { salary: 12000, payday: 27, savings_pct: 25 } });
+    assert.equal(ok.status, 200);
+    assert.deepEqual(ok.json.settings, { salary: 12000, payday: 27, savings_pct: 25, budget_overrides: {} });
+
+    const merged = await s.call('PUT', '/api/settings', { token: t, body: { budget_overrides: { 'مطاعم وقهوة': 800 } } });
+    assert.equal(merged.json.settings.salary, 12000);
+    assert.equal(merged.json.settings.budget_overrides['مطاعم وقهوة'], 800);
+    const cleared = await s.call('PUT', '/api/settings', { token: t, body: { salary: null, budget_overrides: { 'مطاعم وقهوة': null } } });
+    assert.equal('salary' in cleared.json.settings, false);
+    assert.deepEqual(cleared.json.settings.budget_overrides, {});
+
+    for (const body of [{ salary: -5 }, { salary: 'abc' }, { payday: 0 }, { payday: 32 }, { payday: 2.5 },
+      { savings_pct: 90 }, { budget_overrides: { 'غير موجود': 10 } }, { budget_overrides: [1] }]) {
+      assert.equal((await s.call('PUT', '/api/settings', { token: t, body })).status, 400, JSON.stringify(body));
+    }
+
+    const inv = await s.call('POST', '/api/invites', { token: t, body: {} });
+    const member = (await s.call('POST', '/api/join', { body: { code: inv.json.code, name: 'محمد' } })).json.token;
+    await s.call('PUT', '/api/settings', { token: t, body: { salary: 12000 } });
+    assert.deepEqual((await s.call('GET', '/api/settings', { token: member })).json.settings, {});
+    assert.equal((await s.call('GET', '/api/settings')).status, 401);
+  } finally {
+    await s.close();
+  }
+});
+
+test('advisor endpoint returns a plan from the user salary and only their data', async () => {
+  const s = await withOwner();
+  try {
+    const t = s.ownerToken;
+    const none = await s.call('GET', '/api/advisor', { token: t });
+    assert.equal(none.status, 200);
+    assert.equal(none.json.plan, null);
+    assert.equal(none.json.insights[0].level, 'alert');
+
+    await s.call('PUT', '/api/settings', { token: t, body: { salary: 10000, payday: 27 } });
+    await s.call('POST', '/api/transactions', { token: t, body: { amount: 300, category: 'مطاعم وقهوة' } });
+    const r = await s.call('GET', '/api/advisor', { token: t });
+    assert.equal(r.json.plan.salary, 10000);
+    assert.equal(r.json.plan.savings.amount, 2000);
+    assert.equal(r.json.progress.spent, 300);
+
+    const inv = await s.call('POST', '/api/invites', { token: t, body: {} });
+    const member = (await s.call('POST', '/api/join', { body: { code: inv.json.code, name: 'محمد' } })).json.token;
+    const m = await s.call('GET', '/api/advisor', { token: member });
+    assert.equal(m.json.plan, null);
+    assert.equal(m.json.progress.spent, 0);
+    assert.equal((await s.call('GET', '/api/advisor')).status, 401);
   } finally {
     await s.close();
   }
