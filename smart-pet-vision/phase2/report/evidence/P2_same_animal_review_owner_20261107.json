@@ -1,0 +1,44 @@
+{
+ "date": "2026-11-07",
+ "title": "Owner's identity review of the 86 crossing similarity groups (split v1)",
+ "reviewer": "Yasser Mansour Alhajlah (owner); reviewer field in the log: YASSER",
+ "owner_statement": "Owner stated on 7 Nov 2026 (14:24 Riyadh) that he reviewed the groups himself against the contact sheets and confirmed the verdicts.",
+ "review_log": {
+  "file": "review_log_Yasser_20261107_1.xlsx",
+  "drive_folder": "runs/data/identity_v2_20261106T0931Z/review/",
+  "drive_id": "1gSLhkwLgtVwvIoTbQKAftW5BRCTv5RBT",
+  "bytes": 13585,
+  "sha256": "aa9765801cca256d0a6fff518881d5e4d21541fb971d3070675e04a79d43d673"
+ },
+ "verdicts": {
+  "clear duplicate": 86,
+  "likely same animal": 0,
+  "different animals": 0,
+  "undecided": 0
+ },
+ "fields_not_filled": [
+  "date",
+  "note"
+ ],
+ "groups_touching_test": {
+  "groups": 54,
+  "images": 689,
+  "test_images": 135
+ },
+ "groups_val_train_only": {
+  "groups": 32,
+  "images": 82
+ },
+ "consequence": "Under the owner's review, all 86 groups (771 images) are duplicates that cross the partitions of split v1; 135 of the 1,106 test images (12.2%) have a duplicate in training or validation. Reported test metrics on split v1 may therefore be optimistic.",
+ "not_done": [
+  "split v2 not approved",
+  "no model retrained or re-evaluated on split v2",
+  "grouping not re-run with overrides (none recorded)",
+  "report PDF of the delivered commit 5ab3512 still states that the human review is not complete"
+ ],
+ "superseded_logs": [
+  "review_log_UNFILLED.csv (template)",
+  "review_log_Yasser_20261107 (Google Sheet, partial)",
+  "review_log_Yasser_20261107_final.xlsx (earlier version, mixed verdicts, draft rows)"
+ ]
+}

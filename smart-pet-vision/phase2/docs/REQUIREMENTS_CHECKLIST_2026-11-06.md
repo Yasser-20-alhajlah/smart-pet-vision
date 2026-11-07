@@ -18,6 +18,7 @@ historical results: commit `879b0e8` (2 Nov) and the runs of 17–19 Oct (W&B `2
 ## A. Explicit instructor-requested corrections (Phase 1 feedback)
 
 ### A1 `[~]` Leakage-safe split: group likely same-animal photos before splitting (Part 2, −1)
+- **7 Nov 2026 update (owner review):** the owner reviewed the 86 groups himself and recorded `clear duplicate` for all 86 (reviewer YASSER; date and note fields empty); record `report/evidence/P2_same_animal_review_owner_20261107.json`, log in Drive `review/review_log_Yasser_20261107_1.xlsx`. Consequence: 135 of 1,106 test images (12.2%) have a duplicate across partitions; split v1 results may be optimistic. Split v2 not approved; nothing retrained.
 - Original issue: only MD5/pHash groups (84 images in 41 groups); 22 test images with a same-breed training image at similarity ≥ 0.95 and 133 at ≥ 0.90; leak measured, not removed.
 - Files changed: `tools/same_animal_groups.py` (new), `tests/test_same_animal_groups.py` (6 tests), `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` (frozen rules), `docs/dataset_card.md` (Phase 1), `docs/model_card.md`, report §1 "Response to the Phase 1 feedback".
 - Repair: within-breed ResNet-50 feature links at cosine ≥ 0.90, transitive, merged with MD5/pHash groups; review band 0.85–0.90 and recorded review decisions; cross-partition test; split v2 with the unchanged Phase 1 splitter (seed 42). Rules frozen before any run.
