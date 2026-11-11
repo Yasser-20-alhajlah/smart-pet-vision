@@ -6,7 +6,8 @@
   "retrain_record": "P2_split_v2_retrain_record.json (Drive id 1eRjEQYMUULsAgAiRn5WiYdkW99D7HkPa)",
   "threshold_sweep": "det_threshold_sweep_val_v2.csv (Drive id 16jGa0xRBTquTciGHy55lSdUw15lii0az)",
   "onnx_acceptance": "P2_ONNX_v2_A9b_acceptance.json (Drive id 1RQTz8liA5cvIoSf0v7CjGv0GrCPgl0Wj)",
-  "onnx_summary": "P2_ONNX_v2_final_summary.json (Drive id 186U4L_umHIwNLdNqCtJfMJg05NLeMDso)"
+  "onnx_summary": "P2_ONNX_v2_final_summary.json (Drive id 186U4L_umHIwNLdNqCtJfMJg05NLeMDso)",
+  "notebook": "COLAB_C_retrain_on_split_v2_from_package_reviewed_20261107.ipynb (Drive id 1atk5KyNFywlvXt-JaME7iYl6w3hrlQF8); its saved outputs show the same test metrics, weight hashes and budget lines as the records (read 2026-11-11)"
  },
  "run": {
   "run_utc": "20261107T1646Z",
@@ -20,7 +21,9 @@
   "torch_pinned_in_requirements": "2.11.0",
   "wandb_logged": false,
   "seed": 42,
-  "repeat_runs": 0
+  "repeat_runs": 0,
+  "classifier": "not retrained in this session: the split-v2 fine-tuned classifier saved by an earlier session of the same day (runs/split_v2_retrain_20261107T1500Z) was reused and evaluated once on the v2 test split; its training time is not part of the 3.06 hours",
+  "gpu_hours_note": "3.06 h for detector and segmenter training and evaluation; the session ended at about 3.38 h after the 900 s extension for export and parity checks"
  },
  "split_v2": {
   "sha256": "a8846b0fa0969069c85763ab1f31d0cf594e37fd2839e474d1e1fa6737f9f86b",
@@ -133,14 +136,16 @@
    "within_bound": false,
    "same_detection_count_fraction": 1.0,
    "same_class_fraction": 1.0,
-   "max_final_box_difference_px": 0.000579833984375
+   "max_final_box_difference_px": 0.000579833984375,
+   "images": "first 50 validation images of split v2 (sorted by name), letterboxed to 640 px"
   },
   "other_exports_real_50_images": {
    "opset12": 0.00421142578125,
    "simplified": 0.00421142578125,
    "direct_unfused": 0.00238037109375
   },
-  "reading": "one measurement under the bound on four random inputs; every export exceeds it on real images; not treated as parity; the A9b verdict of the delivered detector is unchanged"
+  "reading": "one measurement under the bound on four random inputs; every export exceeds it on real images; not treated as parity; the A9b verdict of the delivered detector is unchanged",
+  "notebook_first_rule": "the first parity cell of the notebook would have recorded a failure because it also required the real-image difference to be within the bound; the later record applies the four-random-input protocol of the report (Section 4.4)"
  },
  "caveats": [
   "v1 and v2 test sets differ (1,106 vs 1,050 images); the numbers are not on the same images",
