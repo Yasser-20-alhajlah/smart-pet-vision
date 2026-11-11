@@ -201,12 +201,12 @@ def submission_checks(root):
     rc = rr["comparison"]
     keys = [k for k in rc if k != "all_within_tolerance"]
     rec = load(root, "P2_reproduction_run_20261106.json")
-    check("6 Nov reproduction quoted as recorded (6 metrics, all identical) and operator confirmation stated as pending",
+    check("6 Nov reproduction quoted as recorded (6 metrics, all identical) and the operator attributed to the project owner's statement",
           len(keys) == 6 and rc["all_within_tolerance"] is True and all(rc[k]["difference"] == 0.0 for k in keys)
           and rec["comparison"]["metrics_identical"] == 6
-          and "6 of 6 metrics identical" in body and "written statement in the log is pending" in body
+          and "6 of 6 metrics identical" in body and "this is the statement of the project owner" in body
           and all(f'{rr["reproduced"][k]:.3f}' in body for k in ("mAP50", "mAP50_95", "mask_mAP50", "mask_mAP50_95", "mIoU", "mean_dice"))
-          and "not yet claimed as a confirmed independent reproduction" in body)
+          and "the Colab record shows the owner's computer and account" in body and "signed by Mohammed" not in body)
     sd = load(root, "P2_supplementary_D_multi_animal_review_20261106.json")["summary"]
     base, cand = sd["baseline"], sd["candidate"]
     check("Supplementary D quoted as recorded (17 -> 10 of 52; 45 -> 127 of 349) and not presented as a holdout",
