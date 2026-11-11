@@ -201,12 +201,12 @@ def submission_checks(root):
     rc = rr["comparison"]
     keys = [k for k in rc if k != "all_within_tolerance"]
     rec = load(root, "P2_reproduction_run_20261106.json")
-    check("6 Nov reproduction quoted as recorded (6 metrics, all identical) and operator confirmation stated as pending",
+    check("6 Nov reproduction quoted as recorded (6 metrics, all identical) and the operator attributed to the project owner's statement",
           len(keys) == 6 and rc["all_within_tolerance"] is True and all(rc[k]["difference"] == 0.0 for k in keys)
           and rec["comparison"]["metrics_identical"] == 6
-          and "6 of 6 metrics identical" in body and "written statement in the log is pending" in body
+          and "6 of 6 metrics identical" in body and "this is the statement of the project owner" in body
           and all(f'{rr["reproduced"][k]:.3f}' in body for k in ("mAP50", "mAP50_95", "mask_mAP50", "mask_mAP50_95", "mIoU", "mean_dice"))
-          and "not yet claimed as a confirmed independent reproduction" in body)
+          and "the Colab record shows the owner's computer and account" in body and "signed by Mohammed" not in body)
     sd = load(root, "P2_supplementary_D_multi_animal_review_20261106.json")["summary"]
     base, cand = sd["baseline"], sd["candidate"]
     check("Supplementary D quoted as recorded (17 -> 10 of 52; 45 -> 127 of 349) and not presented as a holdout",
@@ -227,6 +227,45 @@ def submission_checks(root):
           and f"{f3(b2['operating_point']['val_precision'])} / {f3(b2['operating_point']['val_recall'])} / {f3(b2['operating_point']['val_f1'])}" in body
           and f"{f3(d['val_per_class_at_op']['dog']['recall'])} & {f3(b2['val_per_class_at_op']['cat']['recall'])} / {f3(b2['val_per_class_at_op']['dog']['recall'])}" in body
           and "The test split was not used" in body and "It is not promoted" in body)
+    sf = load(root, "P2_supplementary_F_split_v2_retrain_20261107.json")
+    sb, dv, ox = sf["side_by_side"], sf["detector_v2"], sf["onnx_v2_detector"]
+    op = dv["test_at_operating_point"]
+    check("Supplementary F quoted as recorded (split v2 retrain: not promoted, test sets differ, ONNX not claimed as parity)",
+          sf["split_v2"]["crossing_groups"] == 0 and sf["test_images"]["same_images"] is False
+          and sum(sf["split_v2"]["counts"].values()) == 7335
+          and abs(op["tp"] / (op["tp"] + op["fp"]) - op["precision"]) < 1e-9 and abs(op["tp"] / (op["tp"] + op["fn"]) - op["recall"]) < 1e-9
+          and f"{f3(sb['detector_mAP50']['v1'])} / {f3(sb['detector_mAP50_95']['v1'])} & {f3(sb['detector_mAP50']['v2'])} / {f3(sb['detector_mAP50_95']['v2'])}" in body
+          and f"{f3(op['precision'])} / {f3(op['recall'])} / {f3(op['f1'])}" in body
+          and f"{f3(sb['mask_mAP50_95']['v1'])} & {f3(sb['mask_mAP50_95']['v2'])}" in body
+          and f"{f3(sb['mIoU']['v1'])} / {f3(sb['dice']['v1'])} & {f3(sb['mIoU']['v2'])} / {f3(sb['dice']['v2'])}" in body
+          and ox["a9b_protocol"]["within_bound"] is True and ox["real_50_images"]["within_bound"] is False
+          and f"{ox['a9b_protocol']['max_abs_diff']:.5f}" in body and f"{ox['real_50_images']['raw_head_max_abs_diff']:.4f}" in body
+          and "is not treated as parity" in body and "They are therefore not promoted" in body
+          and "not the same images" in body)
+    fr = load(root, "P2_supplementary_F_onnx_v2_rerun_20261111.json")
+    check("Supplementary F ONNX re-run quoted as recorded (same value as the run record; range over seeds and threads)",
+          fr["protocol_run"]["max_abs_diff"] == ox["a9b_protocol"]["max_abs_diff"] and all(x["within_bound"] for x in fr["runs"])
+          and fr["weights_sha256"] == sf["v2_weights_sha256_recorded_by_run"]["detector"]
+          and fr["onnx_sha256"] == sf["v2_weights_sha256_recorded_by_run"]["detector_onnx"]
+          and f"{fr['min_max_abs_diff']:.5f} to {fr['max_max_abs_diff']:.5f}" in body)
+    sg = load(root, "P2_supplementary_G_second_recipe_val_20261111.json")
+    gs, gn = sg["results"]["delivered_yolo11s"], sg["results"]["second_recipe_yolo11n"]
+    check("Supplementary G quoted as recorded (YOLO11n vs delivered YOLO11s, validation only, test split unused)",
+          sg["test_split_used"] is False
+          and abs(gs["operating_point"]["val_f1"] - d["operating_point"]["val_f1"]) < 1e-9
+          and f"{f3(gs['val_ap']['mAP50'])} / {f3(gs['val_ap']['mAP50_95'])} & {f3(gn['val_ap']['mAP50'])} / {f3(gn['val_ap']['mAP50_95'])}" in body
+          and f"{f3(gn['operating_point']['val_precision'])} / {f3(gn['operating_point']['val_recall'])} / {f3(gn['operating_point']['val_f1'])}" in body
+          and f"{f3(gs['val_recall_at_op']['cat'])} / {f3(gs['val_recall_at_op']['dog'])} & {f3(gn['val_recall_at_op']['cat'])} / {f3(gn['val_recall_at_op']['dog'])}" in body
+          and f"{gs['detector_latency_ms_T4']['p50']:.1f} / {gs['detector_latency_ms_T4']['p95']:.1f} & {gn['detector_latency_ms_T4']['p50']:.1f} / {gn['detector_latency_ms_T4']['p95']:.1f}" in body
+          and f"{gs['parameters'] / gn['parameters']:.1f} times fewer parameters" in body)
+    ss, sn = sg["segmenter"]["results"]["delivered_yolo11s_seg"], sg["segmenter"]["results"]["second_recipe_yolo11n_seg"]
+    check("Supplementary G segmenter quoted as recorded (YOLO11n-seg vs delivered YOLO11s-seg, validation only)",
+          sg["segmenter"]["test_split_used"] is False and ss["val_masks"]["n"] == sn["val_masks"]["n"] == 1106
+          and f"{f3(ss['val_coco']['mask_mAP50'])} / {f3(ss['val_coco']['mask_mAP50_95'])} & {f3(sn['val_coco']['mask_mAP50'])} / {f3(sn['val_coco']['mask_mAP50_95'])}" in body
+          and f"{f3(ss['val_masks']['mIoU'])} / {f3(ss['val_masks']['mean_dice'])} & {f3(sn['val_masks']['mIoU'])} / {f3(sn['val_masks']['mean_dice'])}" in body
+          and f"{f3(ss['val_masks']['mIoU_no_border'])} / {f3(ss['val_masks']['mean_dice_no_border'])} & {f3(sn['val_masks']['mIoU_no_border'])} / {f3(sn['val_masks']['mean_dice_no_border'])}" in body
+          and f"{ss['segmenter_latency_ms_T4']['p50']:.1f} / {ss['segmenter_latency_ms_T4']['p95']:.1f} & {sn['segmenter_latency_ms_T4']['p50']:.1f} / {sn['segmenter_latency_ms_T4']['p95']:.1f}" in body
+          and f"{ss['parameters'] / sn['parameters']:.1f} times fewer parameters" in body)
     return out
 
 

@@ -106,7 +106,7 @@ R1–R10 and D-1/D-2: `[x]` as in the previous checklist (vision core; public an
 | Check | Result |
 |---|---|
 | Unit tests, 160 collected (`PYTHONPATH=src python -m unittest discover -s tests`) | Measured 6 Nov on the delivered revision; each environment is reported on its own and the counts are never merged: (a) Git checkout, Python 3.13, PyTorch, Playwright and Chromium: **160 run, 0 skipped, OK**; (b) clean extraction of `reviewed_source.zip` (not a Git checkout), same interpreter: **159 run + 1 skipped** (`test_provenance` needs a Git checkout), OK; (c) clean extraction in the pinned virtual environment without Playwright: **144 run + 16 skipped** (15 browser tests + the Git test), OK. CI (`phase2-tests.yml`) runs in a Git checkout with `requirements.txt` and no Chromium, so its count is 145 run + 15 skipped. Logs: `03_Verification/logs/05_*` (c) and `10_*` (b). |
-| Evidence checker | 45/45 |
+| Evidence checker | 49/49 |
 | ruff (CI selection) | clean |
 | Notebook static check | 15/15 parse; no notebook executed in this environment (needs Drive/Oxford/team photos/GPU/W&B) — `docs/NOTEBOOK_EXECUTION_PLAN.md` |
 | Real-weight HTTP smoke test | run on the delivered revision (log in the package) |

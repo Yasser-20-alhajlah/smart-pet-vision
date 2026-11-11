@@ -1,0 +1,158 @@
+{
+ "experiment": "Supplementary F: the three delivered recipes retrained once on split v2 (same-animal identity groups kept in one partition), one evaluation on the v2 test split; ONNX export of the v2 detector checked with the A9b protocol",
+ "status": "supplementary evidence; v2 checkpoints NOT promoted; served weights, thresholds, manifest and acceptance criteria unchanged",
+ "source_records": {
+  "note": "Values below were copied on 2026-11-11 from the run records in the team Drive folder runs/retrain_v2 (written by the run on 2026-11-07); the records and weights stay in private Drive",
+  "retrain_record": "P2_split_v2_retrain_record.json (Drive id 1eRjEQYMUULsAgAiRn5WiYdkW99D7HkPa)",
+  "threshold_sweep": "det_threshold_sweep_val_v2.csv (Drive id 16jGa0xRBTquTciGHy55lSdUw15lii0az)",
+  "onnx_acceptance": "P2_ONNX_v2_A9b_acceptance.json (Drive id 1RQTz8liA5cvIoSf0v7CjGv0GrCPgl0Wj)",
+  "onnx_summary": "P2_ONNX_v2_final_summary.json (Drive id 186U4L_umHIwNLdNqCtJfMJg05NLeMDso)",
+  "notebook": "COLAB_C_retrain_on_split_v2_from_package_reviewed_20261107.ipynb (Drive id 1atk5KyNFywlvXt-JaME7iYl6w3hrlQF8); its saved outputs show the same test metrics, weight hashes and budget lines as the records (read 2026-11-11)"
+ },
+ "run": {
+  "run_utc": "20261107T1646Z",
+  "where": "Colab Tesla T4, team member account (Musaad Alqahtani, integration workstream)",
+  "authorisation_recorded_by_run": "requester (Musaad) on 2026-11-07, cap 3.0 T4-hours, plus 900 s for export and parity; not an owner approval",
+  "owner_decision": "2026-11-11 (chat): report the 7 Nov split-v2 run as supplementary evidence; the delivered split-v1 results stay the headline",
+  "gpu_hours_used": 3.06,
+  "gpu_hours_cap": 3.0,
+  "code": "delivered commit e526518dde0c5eb4006f7676cba7fbb43ce9f8f2, code archive e92d87b429d016bde8c388d4a41bbe634e42d54e2632b790a294aeaa59cce764",
+  "torch": "2.14.1+cu130",
+  "torch_pinned_in_requirements": "2.11.0",
+  "wandb_logged": false,
+  "seed": 42,
+  "repeat_runs": 0,
+  "classifier": "not retrained in this session: the split-v2 fine-tuned classifier saved by an earlier session of the same day (runs/split_v2_retrain_20261107T1500Z) was reused and evaluated once on the v2 test split; its training time is not part of the 3.06 hours",
+  "gpu_hours_note": "3.06 h for detector and segmenter training and evaluation; the session ended at about 3.38 h after the 900 s extension for export and parity checks"
+ },
+ "split_v2": {
+  "sha256": "a8846b0fa0969069c85763ab1f31d0cf594e37fd2839e474d1e1fa6737f9f86b",
+  "counts": {
+   "train": 4903,
+   "val": 1382,
+   "test": 1050
+  },
+  "crossing_groups": 0,
+  "split_v1_crossing_groups": 86
+ },
+ "recipes": {
+  "detection": {
+   "model": "yolo11s.pt",
+   "epochs": 40,
+   "imgsz": 640,
+   "batch": 16
+  },
+  "segmentation": {
+   "model": "yolo11s-seg.pt",
+   "epochs": 40,
+   "imgsz": 640,
+   "batch": 16
+  },
+  "classification": {
+   "backbone": "resnet50",
+   "finetune_epochs": 10,
+   "lr": 0.0001
+  }
+ },
+ "v2_weights_sha256_recorded_by_run": {
+  "classifier": "7b9c4b9739e2ccece3b34f1eb8fc05dbd60edfc7ae74bb70d8dfcbb0697024b4",
+  "detector": "a3410f3106893164ea3a65357254a92a4c0554400d076ad1e879d1b93670dbf0",
+  "segmenter": "e1537e568477af4dbf7892a2ddc47ac79edd3a8566f0b24e8320d8f2de52b7b0",
+  "detector_onnx": "f74b6f9f245c971d835409b3de4ee06bbbaed65f8f134b1dbfaa807f12ea02fe",
+  "rehashed_for_this_record": true,
+  "rehash_note": "2026-11-11: the four files were downloaded from the team Drive and hashed again; all four SHA-256 values equal the recorded ones (sizes 94,366,917 / 19,156,442 / 20,493,348 / 37,890,228 bytes)"
+ },
+ "test_images": {
+  "v1": 1106,
+  "v2": 1050,
+  "same_images": false
+ },
+ "side_by_side": {
+  "classifier_accuracy": {
+   "v1": 0.999096,
+   "v2": 0.9990476190476191
+  },
+  "classifier_macro_f1": {
+   "v1": 0.998965,
+   "v2": 0.9989308526399285
+  },
+  "detector_mAP50": {
+   "v1": 0.9835682138953565,
+   "v2": 0.9777915331038987
+  },
+  "detector_mAP50_95": {
+   "v1": 0.8500022452233958,
+   "v2": 0.8213798581982482
+  },
+  "detector_f1_at_operating_point": {
+   "v1": 0.9588793492995933,
+   "v2": 0.9586305278174037
+  },
+  "mask_mAP50_95": {
+   "v1": 0.8745493935724123,
+   "v2": 0.8683640047676494
+  },
+  "mIoU": {
+   "v1": 0.9229591960407509,
+   "v2": 0.9205404535466603
+  },
+  "dice": {
+   "v1": 0.958620112385902,
+   "v2": 0.9570993045580002
+  }
+ },
+ "detector_v2": {
+  "AP50_per_class": {
+   "cat": 0.9888784330038938,
+   "dog": 0.9667046332039037
+  },
+  "operating_point": {
+   "conf": 0.3,
+   "nms_iou": 0.5,
+   "rule": "highest F1 with recall >= 0.80 on the v2 validation split",
+   "val_precision": 0.9719020172910663,
+   "val_recall": 0.9761215629522432,
+   "val_f1": 0.9740072202166065
+  },
+  "test_at_operating_point": {
+   "tp": 1008,
+   "fp": 45,
+   "fn": 42,
+   "precision": 0.9572649572649573,
+   "recall": 0.96,
+   "f1": 0.9586305278174037
+  }
+ },
+ "onnx_v2_detector": {
+  "a9b_protocol": {
+   "inputs": 4,
+   "seed": 0,
+   "backend": "CPU, PyTorch vs ONNX Runtime",
+   "bound": 0.001,
+   "max_abs_diff": 0.00048828125,
+   "within_bound": true
+  },
+  "real_50_images": {
+   "raw_head_max_abs_diff": 0.00421142578125,
+   "within_bound": false,
+   "same_detection_count_fraction": 1.0,
+   "same_class_fraction": 1.0,
+   "max_final_box_difference_px": 0.000579833984375,
+   "images": "first 50 validation images of split v2 (sorted by name), letterboxed to 640 px"
+  },
+  "other_exports_real_50_images": {
+   "opset12": 0.00421142578125,
+   "simplified": 0.00421142578125,
+   "direct_unfused": 0.00238037109375
+  },
+  "reading": "one measurement under the bound on four random inputs; every export exceeds it on real images; not treated as parity; the A9b verdict of the delivered detector is unchanged",
+  "notebook_first_rule": "the first parity cell of the notebook would have recorded a failure because it also required the real-image difference to be within the bound; the later record applies the four-random-input protocol of the report (Section 4.4)"
+ },
+ "caveats": [
+  "v1 and v2 test sets differ (1,106 vs 1,050 images); the numbers are not on the same images",
+  "single seed (42), no repeat runs; torch 2.14.1 instead of the pinned 2.11.0; not logged to W&B",
+  "v2 metadata reuses the v1 boxes and masks, so the four corrected training boxes are not in the v2 labels",
+  "no team-photo evaluation, no multi-animal evaluation and no PyTorch T4 latency run exist for the v2 checkpoints",
+  "the v2 test split has now been used once"
+ ]
+}
