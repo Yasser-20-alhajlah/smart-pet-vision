@@ -248,6 +248,16 @@ def submission_checks(root):
           and fr["weights_sha256"] == sf["v2_weights_sha256_recorded_by_run"]["detector"]
           and fr["onnx_sha256"] == sf["v2_weights_sha256_recorded_by_run"]["detector_onnx"]
           and f"{fr['min_max_abs_diff']:.5f} to {fr['max_max_abs_diff']:.5f}" in body)
+    sg = load(root, "P2_supplementary_G_second_recipe_val_20261111.json")
+    gs, gn = sg["results"]["delivered_yolo11s"], sg["results"]["second_recipe_yolo11n"]
+    check("Supplementary G quoted as recorded (YOLO11n vs delivered YOLO11s, validation only, test split unused)",
+          sg["test_split_used"] is False
+          and abs(gs["operating_point"]["val_f1"] - d["operating_point"]["val_f1"]) < 1e-9
+          and f"{f3(gs['val_ap']['mAP50'])} / {f3(gs['val_ap']['mAP50_95'])} & {f3(gn['val_ap']['mAP50'])} / {f3(gn['val_ap']['mAP50_95'])}" in body
+          and f"{f3(gn['operating_point']['val_precision'])} / {f3(gn['operating_point']['val_recall'])} / {f3(gn['operating_point']['val_f1'])}" in body
+          and f"{f3(gs['val_recall_at_op']['cat'])} / {f3(gs['val_recall_at_op']['dog'])} & {f3(gn['val_recall_at_op']['cat'])} / {f3(gn['val_recall_at_op']['dog'])}" in body
+          and f"{gs['detector_latency_ms_T4']['p50']:.1f} / {gs['detector_latency_ms_T4']['p95']:.1f} & {gn['detector_latency_ms_T4']['p50']:.1f} / {gn['detector_latency_ms_T4']['p95']:.1f}" in body
+          and f"{gs['parameters'] / gn['parameters']:.1f} times fewer parameters" in body)
     return out
 
 

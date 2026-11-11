@@ -1,0 +1,98 @@
+{
+ "experiment": "Supplementary G: second recipe for the detector (YOLO11n instead of YOLO11s), same settings, validation split only",
+ "owner_decision": "2026-11-11 12:20 Riyadh (chat): train a second recipe; supplementary, delivered results stay the headline",
+ "source_record": "P2_second_recipe_detector_val_record.json (Drive runs/second_recipe/supplementary_G_20261111T0933Z, id 157quhkOf74YOTJhwMrMUfXV0ZFVOsHh0); notebook SUPP_G_second_recipe_val.ipynb (Drive id 1dkm0hF_hK-VbjC-kJ2s8o6lz-Uiu9iFL)",
+ "where": "Colab Tesla T4, owner's account; code from the package archive of the delivered commit",
+ "test_split_used": false,
+ "delivered_commit": "e526518dde0c5eb4006f7676cba7fbb43ce9f8f2",
+ "code_archive_sha256": "e92d87b429d016bde8c388d4a41bbe634e42d54e2632b790a294aeaa59cce764",
+ "split_v1_metadata_sha256": "f7c6771be2f521bceb169ec4ea35f3855958de5ca03f73d992bee7d54163c993",
+ "seed": 42,
+ "torch": "2.11.0+cu130",
+ "run_utc": "20261111T0933Z",
+ "recipe": {
+  "model": "yolo11n.pt",
+  "epochs": 40,
+  "imgsz": 640,
+  "batch": 16
+ },
+ "train_minutes": 54.23035505215327,
+ "selection_rule": "same threshold sweep and rule (highest F1 with recall >= 0.80) for both models, on the 1,106 validation images",
+ "results": {
+  "delivered_yolo11s": {
+   "operating_point": {
+    "conf": 0.4,
+    "nms_iou": 0.5,
+    "val_precision": 0.9592021758839528,
+    "val_recall": 0.9566003616636528,
+    "val_f1": 0.9578995020371208
+   },
+   "val_ap": {
+    "mAP50": 0.9795177805018552,
+    "mAP50_95": 0.84358474811278,
+    "cat": {
+     "AP50": 0.9894826449149609,
+     "AP50_95": 0.8804715345681131
+    },
+    "dog": {
+     "AP50": 0.9695529160887496,
+     "AP50_95": 0.8066979616574466
+    }
+   },
+   "val_recall_at_op": {
+    "cat": 0.9915966386554622,
+    "dog": 0.9399198931909212
+   },
+   "parameters": 9428566,
+   "file_bytes": 19159066,
+   "weights_sha256": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+   "detector_latency_ms_T4": {
+    "p50": 12.635433500236104,
+    "p95": 23.95625290005225,
+    "calls": 190,
+    "images": 50,
+    "warmup": 10
+   }
+  },
+  "second_recipe_yolo11n": {
+   "operating_point": {
+    "conf": 0.4,
+    "nms_iou": 0.5,
+    "val_precision": 0.9617137648131268,
+    "val_recall": 0.953887884267631,
+    "val_f1": 0.9577848388561054
+   },
+   "val_ap": {
+    "mAP50": 0.9792664379543391,
+    "mAP50_95": 0.8385219505827853,
+    "cat": {
+     "AP50": 0.9934418624287792,
+     "AP50_95": 0.8754485959704776
+    },
+    "dog": {
+     "AP50": 0.965091013479899,
+     "AP50_95": 0.8015953051950933
+    }
+   },
+   "val_recall_at_op": {
+    "cat": 0.9915966386554622,
+    "dog": 0.9359145527369827
+   },
+   "parameters": 2605126,
+   "file_bytes": 5486170,
+   "weights_sha256": "da424d0f0da0b0d897204ccadea257374142266fb0385442d1a21489a173ccaa",
+   "detector_latency_ms_T4": {
+    "p50": 12.868828000137,
+    "p95": 23.223962949850822,
+    "calls": 190,
+    "images": 50,
+    "warmup": 10
+   }
+  }
+ },
+ "caveats": [
+  "one seed, no repeat",
+  "validation only: no test, team-photo, ONNX or end-to-end evaluation of the YOLO11n checkpoint",
+  "latency is the detector alone, batch 1, on the T4; CPU latency was not measured"
+ ]
+}
