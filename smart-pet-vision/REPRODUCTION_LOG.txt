@@ -8,7 +8,7 @@
 # Earlier rerun, not independent: 23 Oct 2026, Phase 1, Colab T4, by Yasser Alhajlah, the author of
 # the original runs (docs/REPRODUCE.md).
 
-## Block 1 — Level 1 evaluation reproduction, 6 Nov 2026 (status: executed; operator confirmation PENDING)
+## Block 1 — Level 1 evaluation reproduction, 6 Nov 2026 (status: executed; operator agreement received in writing 11 Nov 2026; operator's own statement and signature PENDING)
 Operator (field in the run): mohammed
 Operator according to the project owner: Mohammed Adeeb Alrashdi, on the owner's computer
 Colab execution record: all cells carry the owner's Google account; the run used the owner's Colab session
@@ -31,5 +31,13 @@ Output: phase2/report/evidence/reproduction/reproduction_eval_mohammed_20261106.
 | Mean Dice | 0.95862 | 0.95862 | 0.0 | 0.005 | within |
 
 Interventions: none recorded in the executed notebook (all cells status ok).
+Operator's written agreement (message from Mohammed Adeeb Alrashdi to the project owner, 11 Nov 2026,
+relayed and recorded by the project owner; quoted as received, not a signature):
+  "ياسر، أؤكد موافقتي على ما ورد بخصوص إعادة الإنتاج (Independent Reproduction)، وأوافق على توثيق ذلك
+  في ملف REPRODUCTION_LOG.txt وفق النتائج التي تم التحقق منها. وسأضيف الإقرار والتاريخ والتوقيع بنفسي
+  بعد مراجعة السجل والتأكد من مطابقته لما تم تنفيذه فعليًا."
+  English summary: he confirms his agreement with the reproduction as recorded, agrees to its documentation
+  in this file according to the verified results, and will add his own declaration, date and signature himself
+  after checking this log against what was actually run.
 Operator's statement ("I executed this reproduction myself from the final package."): ________ (to be written by the operator)
 Signed (operator, own name and date): ________
