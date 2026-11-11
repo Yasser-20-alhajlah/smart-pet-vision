@@ -95,7 +95,7 @@ def main():
         "external_assets_required": "Three private weight files from Drive MyDrive/capstone /smart-pet-vision/runs/ at the paths in runs/manifest.json; their SHA-256 must equal model_weights_sha256_recorded (checked by tools/preflight_release.py).",
         "known_limitations": ["A9b detector ONNX raw parity not met; PyTorch serves.",
                               "17 of 52 previously inspected multi-animal team photos were marked ready.",
-                              "One training recipe per model; the four corrected training boxes were not used for retraining.",
+                              "The served models come from one training recipe each. Supplementary runs after the results freeze (cat oversampling, a split-v2 retraining, the smaller YOLO11n / YOLO11n-seg; report Sections 4.9-4.11) are reported and not promoted; the four corrected training boxes are not in the served detector.",
                               "Timings and team-photo results were measured with src/spv as at 879b0e8 (identical from a74784b), not re-measured on this candidate."],
         # Three groups, so optional work is not read as a condition for submission.
         "decisions_recorded": ["Owner chose this package and the template report as the one Phase 2 report (5 Nov 2026)",
