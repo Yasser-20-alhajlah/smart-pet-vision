@@ -121,7 +121,7 @@ W\&B project & \url{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision} \\
 Deployed service / demo & Run locally (no public hosting) from \texttt{smart-pet-vision/phase2}: \texttt{python tools/run\_service.py} checks the weights and packages and serves on 127.0.0.1 only (or \texttt{SPV\_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app -{}-port 8000}); browser demo page at \texttt{http://127.0.0.1:8000/demo}; steps in \texttt{phase2/docs/QUICKSTART.md} and \texttt{TROUBLESHOOTING.md}; Colab: notebook \texttt{06\_release\_validation\_v2.ipynb} \\
 Data and code availability & Code: public repository above. Oxford-IIIT Pet: public (CC BY-SA 4.0), downloaded from the official page and not redistributed. Team photos (401): private to the four team members (Phase 1 report) because they were given with their owners' consent, are used only for evaluation and can show people and homes; consent and provenance are in the team's collection records; only aggregate results are published (\texttt{report/evidence/}). Trained weights (three files, 134\,MB): team Drive, not in Git; their SHA-256 values are in \texttt{QUICKSTART.md} \\
 Model card & \texttt{code/smart-pet-vision/phase2/docs/model\_card.md} in the submitted source archive (\href{https://github.com/Yasser-20-alhajlah/smart-pet-vision/blob/\deliverycommit/smart-pet-vision/phase2/docs/model_card.md}{repository copy at the delivered commit}) \\
-Bonus conditions & Team-stated; the award is the instructor's decision. Original topic: the team records the instructor's approval on 19 October 2026 (Section 3 of the guidelines); the approval message is kept by the team, not reproduced here, and the first Phase 2 training run (17 October) precedes that date. Team-collected data: 401 photos (503 body boxes, polygon masks) collected and annotated by the team, processed with the same M1 protocol as the public data (metadata removal, duplicate check against Oxford-IIIT Pet, quality audit) and documented in the dataset card (\texttt{code/smart-pet-vision/docs/dataset\_card.md}, ``Team-collected set''); used in the evaluation of Sections~\ref{sec:team}, 3.4 and 4.7 \\
+Bonus conditions & Team-stated; the award is the instructor's decision. Original topic: the team records the instructor's approval on 19 October 2026 (Section 3 of the guidelines); the approval message is kept by the team, not reproduced here, and the first Phase 2 training run (17 October) precedes that date. Phase 1 of the same topic was submitted on 28 October and assessed by the instructor (38/40, with written feedback). Team-collected data: 401 photos (503 body boxes, polygon masks) collected and annotated by the team, processed with the same M1 protocol as the public data (metadata removal, duplicate check against Oxford-IIIT Pet, quality audit) and documented in the dataset card (\texttt{code/smart-pet-vision/docs/dataset\_card.md}, ``Team-collected set''); used in the evaluation of Sections~\ref{sec:team}, 3.4 and 4.7 \\
 \end{xltabular}
 
 \subsection*{Team members}
@@ -754,6 +754,24 @@ A9b ONNX parity, detector & $\leq0.001$ & 0.0018 & \textbf{Fail} \\
 
 Main failure modes for the model card: missed small and secondary animals (team photos: recall 0.732; 17 of 52 multi-animal photos marked technically ready because one animal was missed); dark dogs wearing clothing detected as cats; masks spreading into similar-coloured backgrounds. Out of scope: automatic publication, identifying individual animals or people, veterinary use, species other than cats and dogs. Every photo is approved by staff, whatever the verdict.
 
+\textbf{Failure cases of the integrated system.} The failure galleries of Sections~2.5 and 3.5 show errors of one model. The table lists what the whole pipeline returned in its recorded failure cases, each with an explicit statement of what went wrong. The multi-animal and referral cases come from the team photos, which are private (their owners' consent covers evaluation only), so they are reported as counts and not as images.
+
+{\small
+\begin{tabularx}{\linewidth}{@{}P{3.0cm} P{3.3cm} Y P{3.2cm}@{}}
+\toprule
+Case & Where it was observed & What the pipeline returned, and the failure & Contained by the system? \\
+\midrule
+Second animal missed & 17 of 52 team photos with two or more animals (CPU run \run{f8manl0i}) & Verdict \texttt{ready} with no referral reason, although the photo shows more than one animal: the count is wrong and the single-animal rule is not applied & No. Only the mandatory staff approval catches it \\
+Needless referral & 45 of 349 single-animal team photos (12.9\%); 35 of 1,106 Oxford validation images (3.2\%, Section~3.3) & Verdict \texttt{refer\_to\_staff} for a photo with one clearly visible animal: a false alarm that costs staff time & Safe, but lowers the value of the pre-check \\
+Wrong species on a ready photo & 1 of 304 single-species team photos marked ready (Section~\ref{sec:supp}) & Verdict \texttt{ready} with the wrong species: detector and classifier agreed on the same error & No. Staff approval only \\
+Object that is not a pet & CC0 photo of a coffee cup (demo page check, Section~4.5) & One false box (cat, score 0.495) and a classifier output of ``dog'' with confidence 1.000; referred for disagreement, no matching mask and too small an animal & Yes, by the referral rule; the confidence of 1.000 shows that the classifier score is not a safety signal for inputs without a pet \\
+Species confusion in the detector & \texttt{chihuahua\_156}, Oxford test (Section~2.5) & Detector says cat, classifier says dog; referred for disagreement & Yes, by the cross-check between detector and classifier \\
+\bottomrule
+\end{tabularx}}
+
+\smallskip
+The first and third rows are the failures that the pipeline does not detect by itself; they are the reason the decision is GO only as a staff-supervised assistant.
+
 \subsection{Regression runs of 5 November (Kaggle, Tesla T4)}\label{sec:kaggle}
 
 After the report above was frozen, the segmentation workstream repeated two evaluations on a private Kaggle T4 kernel with the delivered weights (SHA-256 recorded), and trained one additional detector candidate. These runs change no served weight, threshold or acceptance criterion; they are reported as regression evidence with their own provenance (\ev{P2_m5_kaggle_regression_20261105}, \ev{P2_m4_corrected_candidate_kaggle_20261105}). The means below were recomputed from the per-image files delivered with the runs.
@@ -881,6 +899,7 @@ Weights over 100\,MB and private photos cannot go into Git & M8 & The repository
   \item[$\checkmark$] Working HTTP service with input and output contracts (\S4.3, \S4.5)
   \item[$\checkmark$] p50/p95/p99 latency, throughput and memory measured with warm-up and stated conditions (\S4.6)
   \item[$\checkmark$] Verdict reported against the acceptance criteria (\S\ref{sec:verdict})
+  \item[$\checkmark$] Failure cases of the integrated system listed with explicit failure statements (\S\ref{sec:verdict})
   \item[$\checkmark$] Every figure states split, input resolution and thresholds
   \item[$\checkmark$] No data or personal information committed to the repository (weights, Oxford images and team photos stay in private Drive)
   \item[$\checkmark$] Delivered commit named in Section 1 and recorded in the source archive; repository links pinned to commits, not branches
