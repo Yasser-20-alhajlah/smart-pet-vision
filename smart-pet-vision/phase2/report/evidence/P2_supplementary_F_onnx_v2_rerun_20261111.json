@@ -1,0 +1,79 @@
+{
+ "purpose": "Re-run of the four-random-input raw-head check (spv.deploy.yolo_parity, n=4, 640 px, CPU) on the split-v2 detector and its ONNX export; no export, no training, no threshold change",
+ "date": "2026-11-11",
+ "where": "CPU container, pinned requirements",
+ "versions": {
+  "torch": "2.11.0",
+  "onnxruntime": "1.31.0",
+  "ultralytics": "8.4.182"
+ },
+ "weights_sha256": "a3410f3106893164ea3a65357254a92a4c0554400d076ad1e879d1b93670dbf0",
+ "onnx_sha256": "f74b6f9f245c971d835409b3de4ee06bbbaed65f8f134b1dbfaa807f12ea02fe",
+ "bound": 0.001,
+ "runs": [
+  {
+   "torch_threads": 1,
+   "seed": 0,
+   "max_abs_diff": 0.00048828125,
+   "within_bound": true
+  },
+  {
+   "torch_threads": 1,
+   "seed": 1,
+   "max_abs_diff": 0.0006103515625,
+   "within_bound": true
+  },
+  {
+   "torch_threads": 1,
+   "seed": 2,
+   "max_abs_diff": 0.00054931640625,
+   "within_bound": true
+  },
+  {
+   "torch_threads": 2,
+   "seed": 0,
+   "max_abs_diff": 0.000518798828125,
+   "within_bound": true
+  },
+  {
+   "torch_threads": 2,
+   "seed": 1,
+   "max_abs_diff": 0.0004730224609375,
+   "within_bound": true
+  },
+  {
+   "torch_threads": 2,
+   "seed": 2,
+   "max_abs_diff": 0.0007476806640625,
+   "within_bound": true
+  },
+  {
+   "torch_threads": 4,
+   "seed": 0,
+   "max_abs_diff": 0.000518798828125,
+   "within_bound": true
+  },
+  {
+   "torch_threads": 4,
+   "seed": 1,
+   "max_abs_diff": 0.0004730224609375,
+   "within_bound": true
+  },
+  {
+   "torch_threads": 4,
+   "seed": 2,
+   "max_abs_diff": 0.0007476806640625,
+   "within_bound": true
+  }
+ ],
+ "min_max_abs_diff": 0.0004730224609375,
+ "max_max_abs_diff": 0.0007476806640625,
+ "protocol_run": {
+  "torch_threads": 1,
+  "seed": 0,
+  "max_abs_diff": 0.00048828125,
+  "equals_run_record": true
+ },
+ "not_covered": "the 50-real-image comparison was not repeated here (the images are not in this environment); the recorded value 0.0042 stands",
+ "reading": "within the bound on random inputs for every seed and thread count tried; real images exceed it, so this is not a parity claim and the delivered detector's A9b verdict is unchanged"
+}

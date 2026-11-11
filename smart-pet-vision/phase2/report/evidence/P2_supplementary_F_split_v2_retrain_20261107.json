@@ -59,7 +59,8 @@
   "detector": "a3410f3106893164ea3a65357254a92a4c0554400d076ad1e879d1b93670dbf0",
   "segmenter": "e1537e568477af4dbf7892a2ddc47ac79edd3a8566f0b24e8320d8f2de52b7b0",
   "detector_onnx": "f74b6f9f245c971d835409b3de4ee06bbbaed65f8f134b1dbfaa807f12ea02fe",
-  "rehashed_for_this_record": false
+  "rehashed_for_this_record": true,
+  "rehash_note": "2026-11-11: the four files were downloaded from the team Drive and hashed again; all four SHA-256 values equal the recorded ones (sizes 94,366,917 / 19,156,442 / 20,493,348 / 37,890,228 bytes)"
  },
  "test_images": {
   "v1": 1106,

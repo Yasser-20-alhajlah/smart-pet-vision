@@ -242,6 +242,12 @@ def submission_checks(root):
           and f"{ox['a9b_protocol']['max_abs_diff']:.5f}" in body and f"{ox['real_50_images']['raw_head_max_abs_diff']:.4f}" in body
           and "is not treated as parity" in body and "They are therefore not promoted" in body
           and "not the same images" in body)
+    fr = load(root, "P2_supplementary_F_onnx_v2_rerun_20261111.json")
+    check("Supplementary F ONNX re-run quoted as recorded (same value as the run record; range over seeds and threads)",
+          fr["protocol_run"]["max_abs_diff"] == ox["a9b_protocol"]["max_abs_diff"] and all(x["within_bound"] for x in fr["runs"])
+          and fr["weights_sha256"] == sf["v2_weights_sha256_recorded_by_run"]["detector"]
+          and fr["onnx_sha256"] == sf["v2_weights_sha256_recorded_by_run"]["detector_onnx"]
+          and f"{fr['min_max_abs_diff']:.5f} to {fr['max_max_abs_diff']:.5f}" in body)
     return out
 
 
