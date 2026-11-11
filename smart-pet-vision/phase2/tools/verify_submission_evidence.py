@@ -227,6 +227,21 @@ def submission_checks(root):
           and f"{f3(b2['operating_point']['val_precision'])} / {f3(b2['operating_point']['val_recall'])} / {f3(b2['operating_point']['val_f1'])}" in body
           and f"{f3(d['val_per_class_at_op']['dog']['recall'])} & {f3(b2['val_per_class_at_op']['cat']['recall'])} / {f3(b2['val_per_class_at_op']['dog']['recall'])}" in body
           and "The test split was not used" in body and "It is not promoted" in body)
+    sf = load(root, "P2_supplementary_F_split_v2_retrain_20261107.json")
+    sb, dv, ox = sf["side_by_side"], sf["detector_v2"], sf["onnx_v2_detector"]
+    op = dv["test_at_operating_point"]
+    check("Supplementary F quoted as recorded (split v2 retrain: not promoted, test sets differ, ONNX not claimed as parity)",
+          sf["split_v2"]["crossing_groups"] == 0 and sf["test_images"]["same_images"] is False
+          and sum(sf["split_v2"]["counts"].values()) == 7335
+          and abs(op["tp"] / (op["tp"] + op["fp"]) - op["precision"]) < 1e-9 and abs(op["tp"] / (op["tp"] + op["fn"]) - op["recall"]) < 1e-9
+          and f"{f3(sb['detector_mAP50']['v1'])} / {f3(sb['detector_mAP50_95']['v1'])} & {f3(sb['detector_mAP50']['v2'])} / {f3(sb['detector_mAP50_95']['v2'])}" in body
+          and f"{f3(op['precision'])} / {f3(op['recall'])} / {f3(op['f1'])}" in body
+          and f"{f3(sb['mask_mAP50_95']['v1'])} & {f3(sb['mask_mAP50_95']['v2'])}" in body
+          and f"{f3(sb['mIoU']['v1'])} / {f3(sb['dice']['v1'])} & {f3(sb['mIoU']['v2'])} / {f3(sb['dice']['v2'])}" in body
+          and ox["a9b_protocol"]["within_bound"] is True and ox["real_50_images"]["within_bound"] is False
+          and f"{ox['a9b_protocol']['max_abs_diff']:.5f}" in body and f"{ox['real_50_images']['raw_head_max_abs_diff']:.4f}" in body
+          and "is not treated as parity" in body and "They are therefore not promoted" in body
+          and "not the same images" in body)
     return out
 
 
