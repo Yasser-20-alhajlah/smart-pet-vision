@@ -1,5 +1,5 @@
 {
- "experiment": "Supplementary G: second recipe for the detector (YOLO11n instead of YOLO11s), same settings, validation split only",
+ "experiment": "Supplementary G: second recipe (model size n instead of s) for the detector and the segmenter, same settings, validation split only",
  "owner_decision": "2026-11-11 12:20 Riyadh (chat): train a second recipe; supplementary, delivered results stay the headline",
  "source_record": "P2_second_recipe_detector_val_record.json (Drive runs/second_recipe/supplementary_G_20261111T0933Z, id 157quhkOf74YOTJhwMrMUfXV0ZFVOsHh0); notebook SUPP_G_second_recipe_val.ipynb (Drive id 1dkm0hF_hK-VbjC-kJ2s8o6lz-Uiu9iFL)",
  "where": "Colab Tesla T4, owner's account; code from the package archive of the delivered commit",
@@ -92,7 +92,74 @@
  },
  "caveats": [
   "one seed, no repeat",
-  "validation only: no test, team-photo, ONNX or end-to-end evaluation of the YOLO11n checkpoint",
-  "latency is the detector alone, batch 1, on the T4; CPU latency was not measured"
- ]
+  "validation only: no test, team-photo, ONNX or end-to-end evaluation of the YOLO11n and YOLO11n-seg checkpoints",
+  "latency is one model alone, batch 1, on the T4; CPU latency was not measured"
+ ],
+ "segmenter": {
+  "source_record": "P2_second_recipe_segmenter_val_record.json (same Drive folder, id 1an1iyp88Nebnv1Y0G5s9j04chGW6huDh); notebook SUPP_G_part2_segmenter_val.ipynb (Drive id 1ktX6kOFIKt_KpWE0n8XSsp06b-_1Qo6e)",
+  "note": "run in a second Colab session of the same day (the first runtime was lost after the detector part); same package code, split and settings",
+  "run_utc": "20261111T1130Z",
+  "torch": "2.11.0+cu130",
+  "test_split_used": false,
+  "recipe": {
+   "model": "yolo11n-seg.pt",
+   "epochs": 40,
+   "imgsz": 640,
+   "batch": 16
+  },
+  "train_minutes": 79.98201357920965,
+  "mask_conf": 0.25,
+  "results": {
+   "delivered_yolo11s_seg": {
+    "val_coco": {
+     "box_mAP50": 0.9927752041199066,
+     "box_mAP50_95": 0.911807836389262,
+     "mask_mAP50": 0.993239754809204,
+     "mask_mAP50_95": 0.8765198772916218
+    },
+    "val_masks": {
+     "mIoU": 0.9221600115580239,
+     "mean_dice": 0.9576308476077113,
+     "mIoU_no_border": 0.9306038169686663,
+     "mean_dice_no_border": 0.9612210507083239,
+     "n": 1106
+    },
+    "parameters": 10083062,
+    "file_bytes": 20495332,
+    "weights_sha256": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+    "segmenter_latency_ms_T4": {
+     "p50": 16.367433499908657,
+     "p95": 27.023046549902563,
+     "calls": 190,
+     "images": 50,
+     "warmup": 10
+    }
+   },
+   "second_recipe_yolo11n_seg": {
+    "val_coco": {
+     "box_mAP50": 0.9915542059564144,
+     "box_mAP50_95": 0.9110693456149764,
+     "mask_mAP50": 0.9916220305781556,
+     "mask_mAP50_95": 0.8752535098782206
+    },
+    "val_masks": {
+     "mIoU": 0.9234105601574326,
+     "mean_dice": 0.9581728566884513,
+     "mIoU_no_border": 0.9319075533660452,
+     "mean_dice_no_border": 0.9619154856173694,
+     "n": 1106
+    },
+    "parameters": 2857894,
+    "file_bytes": 6018468,
+    "weights_sha256": "378b102454ab18b508770e60b4e39be7f32548b4c7d2dc809da582e64608ac43",
+    "segmenter_latency_ms_T4": {
+     "p50": 15.038587999697484,
+     "p95": 25.872398350293217,
+     "calls": 190,
+     "images": 50,
+     "warmup": 10
+    }
+   }
+  }
+ }
 }

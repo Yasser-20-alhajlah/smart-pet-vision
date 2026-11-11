@@ -258,6 +258,14 @@ def submission_checks(root):
           and f"{f3(gs['val_recall_at_op']['cat'])} / {f3(gs['val_recall_at_op']['dog'])} & {f3(gn['val_recall_at_op']['cat'])} / {f3(gn['val_recall_at_op']['dog'])}" in body
           and f"{gs['detector_latency_ms_T4']['p50']:.1f} / {gs['detector_latency_ms_T4']['p95']:.1f} & {gn['detector_latency_ms_T4']['p50']:.1f} / {gn['detector_latency_ms_T4']['p95']:.1f}" in body
           and f"{gs['parameters'] / gn['parameters']:.1f} times fewer parameters" in body)
+    ss, sn = sg["segmenter"]["results"]["delivered_yolo11s_seg"], sg["segmenter"]["results"]["second_recipe_yolo11n_seg"]
+    check("Supplementary G segmenter quoted as recorded (YOLO11n-seg vs delivered YOLO11s-seg, validation only)",
+          sg["segmenter"]["test_split_used"] is False and ss["val_masks"]["n"] == sn["val_masks"]["n"] == 1106
+          and f"{f3(ss['val_coco']['mask_mAP50'])} / {f3(ss['val_coco']['mask_mAP50_95'])} & {f3(sn['val_coco']['mask_mAP50'])} / {f3(sn['val_coco']['mask_mAP50_95'])}" in body
+          and f"{f3(ss['val_masks']['mIoU'])} / {f3(ss['val_masks']['mean_dice'])} & {f3(sn['val_masks']['mIoU'])} / {f3(sn['val_masks']['mean_dice'])}" in body
+          and f"{f3(ss['val_masks']['mIoU_no_border'])} / {f3(ss['val_masks']['mean_dice_no_border'])} & {f3(sn['val_masks']['mIoU_no_border'])} / {f3(sn['val_masks']['mean_dice_no_border'])}" in body
+          and f"{ss['segmenter_latency_ms_T4']['p50']:.1f} / {ss['segmenter_latency_ms_T4']['p95']:.1f} & {sn['segmenter_latency_ms_T4']['p50']:.1f} / {sn['segmenter_latency_ms_T4']['p95']:.1f}" in body
+          and f"{ss['parameters'] / sn['parameters']:.1f} times fewer parameters" in body)
     return out
 
 

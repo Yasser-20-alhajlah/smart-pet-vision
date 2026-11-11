@@ -504,7 +504,7 @@ Baseline B \run{1jb5y453} & SAM 2.1-B, released weights & -- / native & No train
 \end{tabularx}}
 
 \smallskip
-\textbf{Selected run and why (chosen on validation):} \run{3ztpz2tc}: validation mask mAP50 0.993 and mAP50--95 0.878 (0.877 when re-measured in notebook 11), against 0.687 for the same architecture without fine-tuning; mean IoU rises from 0.832 to 0.922. The rerun matched the first run, so the recipe is reproducible. No other recipe was trained.
+\textbf{Selected run and why (chosen on validation):} \run{3ztpz2tc}: validation mask mAP50 0.993 and mAP50--95 0.878 (0.877 when re-measured in notebook 11), against 0.687 for the same architecture without fine-tuning; mean IoU rises from 0.832 to 0.922. The rerun matched the first run, so the recipe is reproducible. A second recipe, the smaller YOLO11n-seg, was trained after the results freeze and compared on validation only (Section~\ref{sec:suppg}).
 
 \begin{figure}[H]
   \centering
@@ -862,7 +862,7 @@ With the crossing groups removed, detection mAP50--95 is 0.029 lower and mAP50 0
 
 \subsection{Supplementary experiment of 11 November: a second recipe (model size)}\label{sec:suppg}
 
-To measure what the model size contributes, the detector recipe of Section~2.2 was repeated on 11 November with one change: YOLO11n (2.6 million parameters) instead of YOLO11s (9.4 million). Code from the delivered package (\texttt{e526518}), split v1, 40 epochs, 640\,px, batch 16, seed 42, PyTorch 2.11.0, Colab T4 (54 minutes). Both detectors were scored on the 1,106 validation images with the sweep and rule of Section~2.3; re-scoring the delivered detector reproduced its operating point and validation P/R/F1. The test split was not used (\ev{P2_supplementary_G_second_recipe_val_20261111}).
+\textbf{Detector.} To measure what the model size contributes, the detector recipe of Section~2.2 was repeated on 11 November with one change: YOLO11n (2.6 million parameters) instead of YOLO11s (9.4 million). Code from the delivered package (\texttt{e526518}), split v1, 40 epochs, 640\,px, batch 16, seed 42, PyTorch 2.11.0, Colab T4 (54 minutes). Both detectors were scored on the 1,106 validation images with the sweep and rule of Section~2.3; re-scoring the delivered detector reproduced its operating point and validation P/R/F1. The test split was not used (\ev{P2_supplementary_G_second_recipe_val_20261111}).
 
 \begin{tabularx}{\linewidth}{@{}Y r r@{}}
 \toprule
@@ -878,6 +878,22 @@ Detector latency on the T4, batch 1, p50 / p95 (ms) & 12.6 / 24.0 & 12.9 / 23.2 
 \end{tabularx}
 
 The smaller model has 3.6 times fewer parameters and reaches the same F1 and the same operating point, with mAP50--95 0.005 lower and three more missed dogs. On the T4 at batch 1 the two are equally fast, so the smaller model brings no speed gain on this hardware; its advantage would be memory and CPU or edge deployment, which were not measured. The delivered YOLO11s is kept: it is slightly better on the stricter metric and on the weaker class, and it is the only detector with test, team-photo and end-to-end results. The comparison shows that the reported detection quality does not depend on the larger model.
+
+\textbf{Segmenter.} The segmenter recipe of Section~3.2 was repeated the same day in the same way: YOLO11n-seg (2.9 million parameters) instead of YOLO11s-seg (10.1 million), 40 epochs, 640\,px, batch 16, seed 42 (80 minutes on the T4). Both models were scored on the 1,106 validation images at the served mask confidence 0.25, which was not tuned here; the delivered model reproduced its validation values of Section~3.4. The test split was not used.
+
+\begin{tabularx}{\linewidth}{@{}Y r r@{}}
+\toprule
+Validation split, 640\,px, mask \tconf{} 0.25 & Delivered YOLO11s-seg & YOLO11n-seg \\
+\midrule
+Parameters / weight file & 10.08\,M / 20.5\,MB & 2.86\,M / 6.0\,MB \\
+Mask mAP50 / mAP50--95 (Ultralytics curve conditions) & 0.993 / 0.877 & 0.992 / 0.875 \\
+Mean IoU / Dice (border counted as body) & 0.922 / 0.958 & 0.923 / 0.958 \\
+Mean IoU / Dice (border ignored) & 0.931 / 0.961 & 0.932 / 0.962 \\
+Segmenter latency on the T4, batch 1, p50 / p95 (ms) & 16.4 / 27.0 & 15.0 / 25.9 \\
+\bottomrule
+\end{tabularx}
+
+With 3.5 times fewer parameters the smaller segmenter matches the delivered one on every mask metric to within 0.002 and is about 1\,ms faster per image. On this dataset, with one large animal per image, the mask quality is therefore set by the data and the trimap convention rather than by the model size. The delivered YOLO11s-seg is kept because it is the model with test, team-photo and end-to-end results; YOLO11n-seg is a candidate for a lighter deployment once it has been evaluated in the full pipeline.
 
 \subsection{Conclusion}
 
@@ -936,7 +952,7 @@ Weights over 100\,MB and private photos cannot go into Git & M8 & The repository
 Criterion & Max (team of 4) & Self-score & Strongest evidence (section) & Known gap \\
 \midrule
 Object detection (M4) & 15 & 14 & Test AP per class, sweep on validation, COCO-as-is baseline, FP taxonomy, team-photo size analysis, video (\S2) & Alternative recipes (cat oversampling, YOLO11n) compared on validation only (\S\ref{sec:supp}, \S\ref{sec:suppg}); small and secondary animals (team recall 0.169 medium, 0/10 small) \\
-Segmentation (M5) & 15 & 14 & Two baselines on validation and test, settings swept on validation, border analysis, failure gallery (\S3) & One fine-tuning recipe only; served mask confidence (0.25) differs from the validated 0.10 by 0.0002 mIoU \\
+Segmentation (M5) & 15 & 14 & Two baselines on validation and test, settings swept on validation, border analysis, failure gallery (\S3) & Second recipe (YOLO11n-seg) compared on validation only (\S\ref{sec:suppg}); served mask confidence (0.25) differs from the validated 0.10 by 0.0002 mIoU \\
 Integration and deployment (M8) & 15 & 13 & Manifest, HTTP contracts, per-stage p50/p95, T4 and CPU checks, ONNX task-level comparison, verdict table (\S4) & A9b fails (PyTorch served instead); multi-animal false-ready cases (17 of 52) \\
 \midrule
 \textbf{Total} & \textbf{45} & \textbf{41} & & \\
