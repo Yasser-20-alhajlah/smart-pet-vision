@@ -36,6 +36,22 @@ class ProvenanceTest(unittest.TestCase):
             self.assertEqual(p2["commit"], "a" * 40)
             self.assertEqual(p2["split_version"], "v1")
 
+    def test_nested_delivered_archive_records_published_revision(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            code = Path(tmp) / "code"
+            root = code / "smart-pet-vision" / "phase2"
+            (root / "src" / "spv").mkdir(parents=True)
+            (root / "src" / "spv" / "example.py").write_text("value = 1\n")
+            index = code / "CODE_ARCHIVE_INDEX.json"
+            index.write_text(json.dumps({"source_commit": "c" * 40,
+                                         "source_tree": "d" * 40}))
+            result = provenance.record(root)
+            self.assertEqual(result["code_source"], "archive")
+            self.assertEqual(result["commit"], "c" * 40)
+            self.assertEqual(result["tree"], "d" * 40)
+            self.assertEqual(Path(result["archive_index"]), index)
+            self.assertEqual(result["source_fingerprint"]["files"], 1)
+
     def test_fingerprint_changes_when_source_changes(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / "phase2"
