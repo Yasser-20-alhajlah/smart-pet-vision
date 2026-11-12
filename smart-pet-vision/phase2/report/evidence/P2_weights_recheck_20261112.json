@@ -1,0 +1,75 @@
+{
+  "reviewed_date": "2026-11-12",
+  "method": "Fresh Drive downloads; SHA256 and full ZIP CRC. No pickle deserialization or image inference.",
+  "phase1_historical": [
+    {
+      "id": "1z3iv23yT6xLM9Kpph9v604LGqOE4qH0W",
+      "name": "finetune",
+      "bytes": 94366917,
+      "sha256": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba",
+      "expected_sha256": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba",
+      "hash_matches": true,
+      "zip_crc_passed": true,
+      "members": 326,
+      "passed": true,
+      "method": "Fresh download; SHA256 and full ZIP CRC; no pickle deserialization, no inference or training."
+    },
+    {
+      "id": "1WICbTV-Rz58Rx9gU5Ens3AwWqsbt4RL6",
+      "name": "frozen",
+      "bytes": 94360889,
+      "sha256": "e6b11b82fa5fe84dc2a4247737683a75522c578cb1c52e51dcb3d0b7a8d911dd",
+      "expected_sha256": "e6b11b82fa5fe84dc2a4247737683a75522c578cb1c52e51dcb3d0b7a8d911dd",
+      "hash_matches": true,
+      "zip_crc_passed": true,
+      "members": 326,
+      "passed": true,
+      "method": "Fresh download; SHA256 and full ZIP CRC; no pickle deserialization, no inference or training."
+    },
+    {
+      "id": "1aLyUTjcEnYy23BnWdUiJy-a1_lO55kU5",
+      "name": "scratch",
+      "bytes": 9449961,
+      "sha256": "af87fad1eee796824d35899c80cbb53b21ee36123a67c88cab52c0ce62a75544",
+      "expected_sha256": "af87fad1eee796824d35899c80cbb53b21ee36123a67c88cab52c0ce62a75544",
+      "hash_matches": true,
+      "zip_crc_passed": true,
+      "members": 68,
+      "passed": true,
+      "method": "Fresh download; SHA256 and full ZIP CRC; no pickle deserialization, no inference or training."
+    }
+  ],
+  "phase2_split_v2": [
+    {
+      "id": "1DEkTVBW3EYah36GgDBnAQL2Z5lakrOpb",
+      "name": "classifier_v2.pt",
+      "bytes": 94366917,
+      "sha256": "7b9c4b9739e2ccece3b34f1eb8fc05dbd60edfc7ae74bb70d8dfcbb0697024b4",
+      "expected_sha256": "7b9c4b9739e2ccece3b34f1eb8fc05dbd60edfc7ae74bb70d8dfcbb0697024b4",
+      "hash_matches": true,
+      "zip_crc_passed": true,
+      "passed": true
+    },
+    {
+      "id": "1vJHsmGdT67dQn8a5s_3F-kgJD6Kb8wbR",
+      "name": "detector_v2.pt",
+      "bytes": 19156442,
+      "sha256": "a3410f3106893164ea3a65357254a92a4c0554400d076ad1e879d1b93670dbf0",
+      "expected_sha256": "a3410f3106893164ea3a65357254a92a4c0554400d076ad1e879d1b93670dbf0",
+      "hash_matches": true,
+      "zip_crc_passed": true,
+      "passed": true
+    },
+    {
+      "id": "1ME6ScyeYRCiKEMVXUc0oOcaESYE3U0k-",
+      "name": "segmenter_v2.pt",
+      "bytes": 20493348,
+      "sha256": "e1537e568477af4dbf7892a2ddc47ac79edd3a8566f0b24e8320d8f2de52b7b0",
+      "expected_sha256": "e1537e568477af4dbf7892a2ddc47ac79edd3a8566f0b24e8320d8f2de52b7b0",
+      "hash_matches": true,
+      "zip_crc_passed": true,
+      "passed": true
+    }
+  ],
+  "phase1_5nov_research_weights": "Not recovered or byte-verified. The verified split-v2 checkpoints and historical classifiers are different experiments and are not substitutes."
+}
