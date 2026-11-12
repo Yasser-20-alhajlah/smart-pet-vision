@@ -1,43 +1,65 @@
 {
- "purpose": "Record of the first Level 1 reproduction run (Phase 1 feedback, Part 13): re-evaluation of the delivered checkpoints on the Oxford test split from the delivered package, original and reproduced values side by side with tolerances fixed in advance (0.005 absolute).",
- "status": "EXECUTED on 6 Nov 2026; all six metrics identical to the originals. Operator attribution rests on the project owner's statement; the operator's own written confirmation is PENDING, so the run is not yet recorded as a confirmed independent reproduction.",
- "run": {
-  "executed_utc": "2026-11-06T15:24:03Z",
-  "notebook": "COLAB_B_independent_reproduction_from_package.ipynb (pinned to commit 609c0c5, code archive SHA-256 2f56a7a388a51e4bba1314d5ccb7be8642a01dd3a2507ba01dd43ec30347493a; the setup cell printed 'code archive OK' and 'archive commit OK 609c0c5')",
-  "executed_notebook_drive_id": "1lm1bYAEOyOoElDb-c3ui25VJYai5-GKw",
-  "executed_notebook_sha256": "5553e43d0a97a6fa124e5b69925854a6911e198d17d9b7cc3c01f49415228cde",
-  "environment": "Google Colab, Tesla T4, Python 3.13.16, torch 2.11.0+cu130 (pip freeze in reproduction/pip_freeze_mohammed_20261106.txt)",
-  "weights_checked": "detector f48e4d8e..., segmenter 868f3842..., classifier 22dd58d4... (SHA-256 checked by the notebook before use)",
-  "split": "v1 (runs/data/metadata.csv, SHA-256 f7c6771be2f521bceb169ec4ea35f3855958de5ca03f73d992bee7d54163c993; 5,123 / 1,106 / 1,106 verified by the notebook)",
-  "output": "reproduction/reproduction_eval_mohammed_20261106.json (SHA-256 fa1e7f72dbae7586d6352fdda3236a24ba3275f9ebc5b97ae2fbf933b3d2025c), copied byte for byte from Drive runs/reproduction/"
- },
- "attribution": {
-  "operator_field_in_run": "mohammed",
-  "operator_per_owner_statement": "Mohammed Adeeb Alrashdi (segmentation workstream), on the owner's computer (owner's answer in the project log, 6 Nov 2026, 15:45 UTC)",
-  "colab_execution_record": "every cell of the executed notebook carries the owner's Google account (display name 'Yasser'); the run used the owner's Colab session, in which the dataset had already been downloaded by the owner's grouping run of 15:04-15:12 UTC",
-  "operator_written_confirmation": "PENDING (to be added by Mohammed himself to REPRODUCTION_LOG.txt; nobody else signs for him)"
- },
- "comparison": {
-  "tolerance_abs": 0.005,
-  "metrics": {
-   "mAP50": [0.9835682138953565, 0.9835682138953565],
-   "mAP50_95": [0.8500022452233958, 0.8500022452233958],
-   "mask_mAP50": [0.9931178547973413, 0.9931178547973413],
-   "mask_mAP50_95": [0.8745493935724123, 0.8745493935724123],
-   "mIoU": [0.9229591960407509, 0.9229591960407509],
-   "mean_dice": [0.958620112385902, 0.958620112385902]
+  "purpose": "Record of the first Level 1 reproduction run (Phase 1 feedback, Part 13): re-evaluation of the delivered checkpoints on the Oxford test split from the delivered package, original and reproduced values side by side with tolerances fixed in advance (0.005 absolute).",
+  "status": "Executed checkpoint evaluation on 6 November: six metrics identical. Operator attribution and relayed written agreement dated 11 November are recorded in REPRODUCTION_LOG.txt; no signature or new training is required by the official feedback.",
+  "run": {
+    "executed_utc": "2026-11-06T15:24:03Z",
+    "notebook": "COLAB_B_independent_reproduction_from_package.ipynb (pinned to commit 609c0c5, code archive SHA-256 2f56a7a388a51e4bba1314d5ccb7be8642a01dd3a2507ba01dd43ec30347493a; the setup cell printed 'code archive OK' and 'archive commit OK 609c0c5')",
+    "executed_notebook_drive_id": "1lm1bYAEOyOoElDb-c3ui25VJYai5-GKw",
+    "executed_notebook_sha256": "5553e43d0a97a6fa124e5b69925854a6911e198d17d9b7cc3c01f49415228cde",
+    "environment": "Google Colab, Tesla T4, Python 3.13.16, torch 2.11.0+cu130 (pip freeze in reproduction/pip_freeze_mohammed_20261106.txt)",
+    "weights_checked": "detector f48e4d8e..., segmenter 868f3842..., classifier 22dd58d4... (SHA-256 checked by the notebook before use)",
+    "split": "v1 (runs/data/metadata.csv, SHA-256 f7c6771be2f521bceb169ec4ea35f3855958de5ca03f73d992bee7d54163c993; 5,123 / 1,106 / 1,106 verified by the notebook)",
+    "output": "reproduction/reproduction_eval_mohammed_20261106.json (SHA-256 fa1e7f72dbae7586d6352fdda3236a24ba3275f9ebc5b97ae2fbf933b3d2025c), copied byte for byte from Drive runs/reproduction/"
   },
-  "metrics_format": "[original, reproduced]; difference 0.0 for all six",
-  "all_within_tolerance": true,
-  "metrics_identical": 6
- },
- "scope_and_limits": [
-  "evaluation of the delivered checkpoints on the Oxford test split; not a training reproduction (Level 2 not run)",
-  "same platform family as the original evaluation (Colab T4, same pinned packages), so an identical result is expected and shows that the delivered package re-creates the reported numbers; it does not test other hardware",
-  "the run used the owner's account and session; it is independent in operator only if the operator confirms"
- ],
- "related_runs_same_day": {
-  "grouping_repeat": "identity_v2_20261106T1511Z: same-animal grouping re-run on the delivered code 609c0c5 by the owner (no review overrides): 6,541 groups, 86 crossing groups, 771 images -- identical to the first run; see P2_same_animal_grouping_run_20261106.json",
-  "retraining_notebook": "COLAB_C opened at 15:32 UTC and stopped at its gate (AssertionError 'STOP: fill GROUP_RUN, SPLIT_V2_SHA256, REVIEW_LOG_PATH and APPROVAL_PATH first'); every later cell aborted; no model was trained (executed notebook SHA-256 f64b246c84446404d5fdb83795750f9011ac031d7647ef92a99c125ab518cd3a)"
- }
+  "attribution": {
+    "operator_field_in_run": "mohammed",
+    "operator_per_owner_statement": "Mohammed Adeeb Alrashdi (segmentation workstream), on the owner's computer (owner's answer in the project log, 6 Nov 2026, 15:45 UTC)",
+    "colab_execution_record": "every cell of the executed notebook carries the owner's Google account (display name 'Yasser'); the run used the owner's Colab session, in which the dataset had already been downloaded by the owner's grouping run of 15:04-15:12 UTC",
+    "operator_written_confirmation": "Relayed written agreement dated 11 November 2026 is quoted in REPRODUCTION_LOG.txt; this is attribution evidence, not a personal signature or independent account-identity verification."
+  },
+  "comparison": {
+    "tolerance_abs": 0.005,
+    "metrics": {
+      "mAP50": [
+        0.9835682138953565,
+        0.9835682138953565
+      ],
+      "mAP50_95": [
+        0.8500022452233958,
+        0.8500022452233958
+      ],
+      "mask_mAP50": [
+        0.9931178547973413,
+        0.9931178547973413
+      ],
+      "mask_mAP50_95": [
+        0.8745493935724123,
+        0.8745493935724123
+      ],
+      "mIoU": [
+        0.9229591960407509,
+        0.9229591960407509
+      ],
+      "mean_dice": [
+        0.958620112385902,
+        0.958620112385902
+      ]
+    },
+    "metrics_format": "[original, reproduced]; difference 0.0 for all six",
+    "all_within_tolerance": true,
+    "metrics_identical": 6
+  },
+  "scope_and_limits": [
+    "evaluation of the delivered checkpoints on the Oxford test split; not a training reproduction (Level 2 not run)",
+    "same platform family as the original evaluation (Colab T4, same pinned packages), so an identical result is expected and shows that the delivered package re-creates the reported numbers; it does not test other hardware",
+    "the run used the owner's account and session; it is independent in operator only if the operator confirms"
+  ],
+  "related_runs_same_day": {
+    "grouping_repeat": "identity_v2_20261106T1511Z: same-animal grouping re-run on the delivered code 609c0c5 by the owner (no review overrides): 6,541 groups, 86 crossing groups, 771 images -- identical to the first run; see P2_same_animal_grouping_run_20261106.json",
+    "retraining_notebook": "COLAB_C opened at 15:32 UTC and stopped at its gate (AssertionError 'STOP: fill GROUP_RUN, SPLIT_V2_SHA256, REVIEW_LOG_PATH and APPROVAL_PATH first'); every later cell aborted; no model was trained (executed notebook SHA-256 f64b246c84446404d5fdb83795750f9011ac031d7647ef92a99c125ab518cd3a)"
+  },
+  "documentation_reconciliation_20261112": {
+    "original_execution_unchanged": true,
+    "scope": "Original feedback asks for reproduction numbers and run IDs next to originals and a committed log; no additional classifier-training run is prescribed."
+  }
 }

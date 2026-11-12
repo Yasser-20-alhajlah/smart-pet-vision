@@ -42,14 +42,14 @@ PYTHONPATH=src python tools/reproduce_phase2_eval.py --operator "<Full Name>" \
 Exit status 0 means every metric is within tolerance; the JSON holds operator, date, command,
 commit, dirty state, weight hashes, environment, originals, reproduced values and differences.
 
-## Level 2 — training reproduction (about 1 T4 hour per model; recommended)
+## Level 2 — training reproduction (about 1 T4 hour per model; optional; not prescribed by the official feedback)
 Run notebooks `03_detection.ipynb` and `04_segmentation.ipynb` on a copy of the repository
 without `runs/` (`SPV_REPO` set to the copy, as in `docs/REPRODUCE.md`), with W&B logging on,
 then run Level 1 on the new checkpoints. Record the new W&B run ids. Training is not bit-exact
 on GPU; the comparison uses the same tolerances and reports the differences as they are.
 
 ## What to commit afterwards
-1. The JSON from Level 1 (and Level 2) under `report/evidence/reproduction/`.
+1. The JSON from Level 1 (and Level 2 only if it is actually performed) under `report/evidence/reproduction/`.
 2. `REPRODUCTION_LOG.txt`: one block per execution — operator, date, commit, environment
    (`pip freeze` path), seed, weight hashes, W&B run ids, the side-by-side table (original /
    reproduced / difference / tolerance / verdict), and the operator's statement that they ran it.
@@ -65,3 +65,5 @@ The saved 6 November record documents checkpoint evaluation. A further run must 
 | Segmenter mask mAP50 / mAP50–95 | 0.9931 / 0.8745 | W&B `3ztpz2tc`; `M5_yolo_seg_coco.json` |
 | Segmenter mIoU / Dice (test, conf 0.25) | 0.9230 / 0.9586 | `M5_yolo_seg_test_metrics.json` |
 | Classifier test accuracy (Phase 1) | see Phase 1 report | W&B `8nvxbsn2` |
+
+Original feedback checked on 12 November: the two requested Phase 2 repairs are grouping likely same-animal photos before splitting and reporting original/reproduced numbers with identifiers and a committed log. A further independent Phase 1 classifier-training run and a signature are not added submission gates.

@@ -1,6 +1,6 @@
 # Master requirements checklist — Smart Pet Vision Phase 2
 
-Updated 12 November 2026. Earlier dated execution details are retained with their original scope. Current delivery is `FINAL PHASE_2/06_Final_Submission`; the PDF and archive index give its exact commit. The official Phase 2 assignment text supplied by the team is verified; the original template, guideline PDF and Phase 1 grade-sheet originals have not been retrieved anew. References to their table numbers below are retained secondary mappings, not a claim that those originals were opened today.
+Updated 12 November 2026. Earlier dated execution details are retained with their original scope. Current delivery is `FINAL PHASE_2 (PDF and source ZIP only)`; the PDF and archive index give its exact commit. The official Phase 2 assignment text supplied by the team is verified; the original Phase 1 template, original Phase 2 template and actual one-page 38/40 feedback have now been opened. The older general guidelines conflict with the later phase-specific templates and do not override them.
 
 Legend: `[ ]` not reviewed · `[~]` in progress / partial · `[!]` blocked or failed · `[x]` verified
 within the stated scope. `[x]` is used only after an evidence-based check in this session; "the
@@ -19,7 +19,7 @@ historical results: commit `879b0e8` (2 Nov) and the runs of 17–19 Oct (W&B `2
 
 ## A. Explicit instructor-requested corrections (Phase 1 feedback)
 
-### A1 `[~]` Leakage-safe split: group likely same-animal photos before splitting (Part 2, −1)
+### A1 `[x]` Leakage-safe split: group likely same-animal photos before splitting (Part 2, −1)
 - **7 Nov 2026 update (owner review):** the owner reviewed the 86 groups himself and recorded `clear duplicate` for all 86 (reviewer YASSER; date and note fields empty); record `report/evidence/P2_same_animal_review_owner_20261107.json`, log in Drive `review/review_log_Yasser_20261107_1.xlsx`. Consequence: 135 of 1,106 test images (12.2%) have a duplicate across partitions; split v1 results may be optimistic. Split v2 was not promoted. On 7 November all three recipes were retrained once on v2 as supplementary evidence, recorded in `P2_supplementary_F_split_v2_retrain_20261107.json`.
 - Original issue: only MD5/pHash groups (84 images in 41 groups); 22 test images with a same-breed training image at similarity ≥ 0.95 and 133 at ≥ 0.90; leak measured, not removed.
 - Files changed: `tools/same_animal_groups.py` (new), `tests/test_same_animal_groups.py` (6 tests), `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` (frozen rules), `docs/dataset_card.md` (Phase 1), `docs/model_card.md`, report §1 "Response to the Phase 1 feedback".
@@ -27,15 +27,15 @@ historical results: commit `879b0e8` (2 Nov) and the runs of 17–19 Oct (W&B `2
 - Verification: `PYTHONPATH=src python -m unittest tests.test_same_animal_groups` → 6/6 OK (synthetic features). **Run on the real images on 6 Nov 2026** (Colab T4, code from the delivered package, split v1 rebuilt and verified 5,123/1,106/1,106 first): 6,541 similarity groups, 4,361 automatic links, 12,647 review-band pairs; **86 groups / 771 images cross the v1 partitions** (test 135, val 127, train 509); 13 chain groups of 10–114 images (links at the 0.90 floor, visibly many different animals) hold 574 of them; 54 groups touch test; diagnostic 0.95 threshold → 18 groups / 115 images. Split v2 proposal 4,903/1,382/1,050, 0 crossing, integrity checked (val inflated to 18.8 % by the chain groups).
 - Evidence: `report/evidence/P2_same_animal_grouping_run_20261106.json`, `report/evidence/identity_v2_20261106/crossing_groups_summary.csv`; full outputs, 86 contact sheets and the unfilled review log in Drive `runs/data/identity_v2_20261106T0931Z/`.
 - Status wording: *86 groups crossing partitions; owner review (7 Nov) recorded all 86 as clear duplicates; 135 of 1,106 test images affected*. Not the served split; supplementary v2 retraining is recorded separately.
-- Current scope: v2 is 4,903/1,382/1,050 with no crossing similarity group under the recorded procedure. The supplementary detector/segmenter/classifier runs exist; headline results and served weights remain v1. Independent individual-animal identity adjudication is not established, and no retroactive grade change is claimed.
+- Current scope: v2 is 4,903/1,382/1,050 with no crossing similarity group under the recorded procedure. The supplementary detector/segmenter/classifier runs exist; headline results and served weights remain v1. The requirement is likely same-animal grouping, not a certified identity registry; v2 implements it before splitting. Individual identity and the historical v1 scores remain limited; no retroactive grade change is claimed.
 
-### A2 `[~]` Independent reproduction with numbers and run IDs beside the originals (Part 13, −1)
-- **6 Nov 2026 update:** Level 1 executed from the delivered package (Colab T4, 15:24 UTC): all six metrics identical to the originals (difference 0.0, tolerance 0.005); record `report/evidence/P2_reproduction_run_20261106.json`, output `report/evidence/reproduction/`, block 1 of `REPRODUCTION_LOG.txt`. Operator field "mohammed"; the owner states that Mohammed Adeeb Alrashdi ran it on the owner's computer; the Colab record shows the owner's account. **11 Nov 2026:** Mohammed's written agreement received and quoted in block 1 of the log. No personal signature form is an established instructor submission requirement. The saved Colab account alone does not establish the physical operator; operator attribution and independent classification training remain evidential limitations. Level 2 not run.
+### A2 `[x]` Independent reproduction with numbers and run IDs beside the originals (Part 13, −1)
+- **6 Nov 2026 update:** Level 1 executed from the delivered package (Colab T4, 15:24 UTC): all six metrics identical to the originals (difference 0.0, tolerance 0.005); record `report/evidence/P2_reproduction_run_20261106.json`, output `report/evidence/reproduction/`, block 1 of `REPRODUCTION_LOG.txt`. Operator field "mohammed"; the owner states that Mohammed Adeeb Alrashdi ran it on the owner's computer; the Colab record shows the owner's account. **11 Nov 2026:** Mohammed's written agreement received and quoted in block 1 of the log. No personal signature form is an established instructor submission requirement. The saved Colab account alone does not establish the physical operator; operator attribution remains an attribution limitation; the official feedback does not require another classifier-training run. Level 2 is optional and was not run.
 - Original issue: `REPRODUCTION_LOG.txt` empty; the only rerun (23 Oct) was by the author.
 - Files changed: `tools/reproduce_phase2_eval.py` (new), `tests/test_reproduce_phase2_eval.py` (3 tests), `docs/INDEPENDENT_REPRODUCTION_PROCEDURE.md`, `REPRODUCTION_LOG.txt` (distinguishes the saved evaluation run from independently operated classifier training), report §1.
 - Repair: evaluation reproduction script writing original vs reproduced side by side with tolerances fixed in advance (0.005 absolute), operator, commit, dirty state, weight hashes, environment; Level 2 (training rerun) described.
 - Verification: 3/3 tests (originals loaded from evidence equal the reported numbers; tolerance verdicts; no invented metrics). The saved Level 1 execution of 6 November is recorded above; no fresh GPU execution occurred in this review.
-- Remaining evidence: attributable independent classification-training reproduction is not proved by the six detection/segmentation evaluation metrics. The log and evaluation JSON are published. Do not require another signature or mislabel evaluation as classifier retraining.
+- The explicit documentation repair is complete: original W&B source run IDs, reproduced execution ID, original/reproduced numbers and the nonempty committed log are linked. This does not assert a new training run or change the awarded grade.
 
 ### A3 `[x]` Dated record that the acceptance criteria were fixed before testing (within the stated scope)
 - Original issue: the report asserted "written 15 October" without a dated record.
@@ -45,7 +45,7 @@ historical results: commit `879b0e8` (2 Nov) and the runs of 17–19 Oct (W&B `2
 
 ### A4 `[~]` Commit hash in every run
 - Repair: `src/spv/provenance.py` (`record()`: commit, branch, dirty files or archive index or source fingerprint, environment; `file_sha256`) with 4 tests; `tools/reproduce_phase2_eval.py` uses it. Evidence files of 2 and 5 Nov already carry `source_commit`; the runs of 17–19 Oct do not (historical, cannot be changed).
-- Verification: `tests.test_provenance` 4/4; `python src/spv/provenance.py` prints the current commit. Remaining: call `record()` in notebooks 03/04/11 at their next execution (no notebook was edited in this pass to avoid unexecuted edits). Owner: whoever runs the next notebook.
+- Verification: `tests.test_provenance` 4/4; `python src/spv/provenance.py` prints the current commit. Future detector and segmenter training now records source identity through `training_provenance.py` at the actual training entry points. Historical runs are unchanged. New code is tested without performing training.
 
 ### A5 `[x]` Per-class recall; class imbalance (improvement recommendations)
 - Per-class P/R/F1 at the operating point are in report §2.4 (cat 0.983 / dog 0.948 recall) from `M4_detection_extra_metrics.json`; per-species IoU/Dice in §3.4. `[x]` for reporting.
@@ -82,7 +82,7 @@ historical results: commit `879b0e8` (2 Nov) and the runs of 17–19 Oct (W&B `2
 ## C. Report form and consistency (example report; §4 of the guidelines)
 | ID | Requirement | Status / evidence |
 |---|---|---|
-| F-1 | Section 1 field table, team table, points, overview, criteria, Phase 1 data-plan follow-up, **Phase 1 feedback response** | `[x]` present; team-table confirmation by each member `[!]` |
+| F-1 | Section 1 field table, team table, points, overview, criteria, Phase 1 data-plan follow-up, **Phase 1 feedback response** | `[x]` present; contributions reported by the team; no additional signature condition |
 | F-2 | Sections 2–4 as in the example; §4.8 regression runs; Conclusion | `[x]` |
 | F-3 | Obstacles table; submission checklist; self-assessment | `[x]` |
 | F-4 | Every figure states split, resolution, thresholds | `[x]` for tables read in this pass; members re-check their sections `[!]` |
