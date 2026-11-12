@@ -179,7 +179,6 @@ that all of that package's files are available in this public repository.
   on leakage.
 - Calibration improvements do not establish reliable confidence on
   shelter-domain photographs.
-- Instructor topic approval remains pending.
 - Any 40/40 in the PDF is the team's self-assessment, not an awarded grade.
 
 ## Privacy and submission

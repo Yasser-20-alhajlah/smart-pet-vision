@@ -61,6 +61,14 @@ runs/                   Restore data/, classification/ and verification_2026-10-
   provisional: the temperature fitted on the near-separable validation split is not a reliable probability scale,
   so the threshold will be fixed on a harder, independent calibration set.
 
+## Phase 1 report on Weights & Biases
+
+`docs/PHASE1_REPORT_STANDALONE.md` is the current Phase 1 report text (M1–M3 only). Its learning-curve
+panels are fed by the full-logging reruns bvns5vir (scratch), 4ixtdkiq (frozen) and b3t0emrs (fine-tuned);
+replaced values and the submitted runs' panels are in its Appendix H. `python tools/publish_phase1_wandb_report.py`
+prints the outline; with `--publish` (after `wandb login`) it creates a new draft report and leaves the
+earlier report unchanged. `docs/WANDB_CURRENT_RESULTS_UPDATE.md` is the record of the 28 October update.
+
 Status (24 Oct 2026): both reviews are complete (`runs/data/review/labels/review.csv`, 200 images; `runs/data/review/boxes/review.csv`, 300 boxes; both confirmed by the team), and the 401 team photos with labels and masks are in the folder `SmartPetVision_TeamData` next to this repository (moved out of `data/team/` on 26 Oct 2026; see `docs/REPRODUCE.md`).
 
 

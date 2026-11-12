@@ -1,5 +1,8 @@
 # Published Phase 1 update — 28 October 2026
 
+> Record of the 28 October update, kept as written. The current standalone Phase 1 report text is
+> `docs/PHASE1_REPORT_STANDALONE.md`.
+
 Published in the existing scientific report; historical narrative/panels retained.
 
 **Use this section for the current M1–M3 submission.** The sections below dated 26 October are retained as historical analysis, including superseded figures. In particular, the earlier frozen test value of 99.37% is superseded for the submitted checkpoints; the current frozen result is **99.9096% (1105/1106)**. Detection, segmentation and deployment material below belongs to Phase 2 and was not re-audited in this update.
