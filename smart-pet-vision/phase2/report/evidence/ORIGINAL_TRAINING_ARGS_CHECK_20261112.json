@@ -19,5 +19,6 @@
     "conf": null,
     "iou": 0.7
   },
-  "interpretation": "args.yaml retains auto. Resolved AdamW comes from the documented executed notebook stdout; association with original W&B run IDs remains inferred from matching settings/schedules as stated in the report."
+  "interpretation": "External args.yaml records the original optimizer=auto request. Literal train_args metadata in both SHA-256-verified served checkpoints directly stores optimizer=AdamW and lr0=0.001667, matching executed stdout. W&B source-run association remains bounded as described in the report; no missing original run commit is invented.",
+  "followup_checkpoint_metadata": "CHECKPOINT_TRAIN_ARGS_LITERAL_VERIFIED_20261112.json"
 }
