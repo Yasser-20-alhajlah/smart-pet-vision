@@ -4,8 +4,7 @@ The same members, byte for byte, are written under code/ in SmartPetVision_Phase
 build.sh, so the report source archive and the code archive contain identical candidate code.
 
 Excluded from the code archive (listed in the archive's CODE_ARCHIVE_INDEX.json):
-  * *.pdf: documents, not executable. The report PDF is delivered separately, and the tracked
-    Phase 1 PDF contains student identifiers.
+  * *.pdf: documents, not executable. The report PDF is delivered separately, and private instructor PDFs may contain student identifiers.
 The tool refuses to write the archive if any member contains a private student identifier read
 from private_ids.tex (when that file is present). Standard library only.
 
@@ -22,7 +21,7 @@ from pathlib import Path
 
 SUB = Path(__file__).resolve().parents[1]
 EXCLUDED_SUFFIXES = {".pdf": "document, not executable; the report PDF is delivered separately and "
-                             "the tracked Phase 1 PDF contains student identifiers"}
+                             "instructor reports are packaged separately"}
 INDEX_NAME = "CODE_ARCHIVE_INDEX.json"
 
 
