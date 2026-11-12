@@ -1,0 +1,380 @@
+{
+  "date": "2026-11-12",
+  "method": "Read-only public W&B GraphQL run.commit, complete run file lists and output-artifact names; no mutation or backfill. Git object existence checked locally for non-null commits.",
+  "public_project_runs_checked": 44,
+  "project_runs_pagination_exhausted": true,
+  "all_run_file_pagination_exhausted": true,
+  "selected_training_runs": [
+    {
+      "run": "2ptjc52f",
+      "display_name": "retrain-finetune-20261029-122331",
+      "created_at_recorded": "2026-10-29T13:00:17Z",
+      "wandb_commit": "0f9debb8b6e15873409e6dc5590cd0e22350f97e",
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4271987016/wandb_manifest.json",
+        "config.yaml",
+        "output.log",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-2ptjc52f-history"
+      ],
+      "git_object_exists_as_commit": true
+    },
+    {
+      "run": "qlzja26v",
+      "display_name": "retrain-frozen-20261029-122331",
+      "created_at_recorded": "2026-10-29T12:55:37Z",
+      "wandb_commit": "0f9debb8b6e15873409e6dc5590cd0e22350f97e",
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4263558940/wandb_manifest.json",
+        "config.yaml",
+        "output.log",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-qlzja26v-history"
+      ],
+      "git_object_exists_as_commit": true
+    },
+    {
+      "run": "9fay48ne",
+      "display_name": "retrain-scratch-20261029-122331",
+      "created_at_recorded": "2026-10-29T12:41:43Z",
+      "wandb_commit": "0f9debb8b6e15873409e6dc5590cd0e22350f97e",
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4263586455/wandb_manifest.json",
+        "config.yaml",
+        "output.log",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-9fay48ne-history"
+      ],
+      "git_object_exists_as_commit": true
+    },
+    {
+      "run": "b3t0emrs",
+      "display_name": "curves-finetune-2026-10-28",
+      "created_at_recorded": "2026-10-27T23:33:08Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4230687201/wandb_manifest.json",
+        "config.yaml",
+        "output.log",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-b3t0emrs-history"
+      ]
+    },
+    {
+      "run": "4ixtdkiq",
+      "display_name": "curves-frozen-2026-10-28",
+      "created_at_recorded": "2026-10-27T23:26:19Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4230681702/wandb_manifest.json",
+        "config.yaml",
+        "output.log",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-4ixtdkiq-history"
+      ]
+    },
+    {
+      "run": "bvns5vir",
+      "display_name": "curves-scratch-2026-10-28",
+      "created_at_recorded": "2026-10-27T23:04:25Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4230681893/wandb_manifest.json",
+        "config.yaml",
+        "output.log",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-bvns5vir-history"
+      ]
+    },
+    {
+      "run": "3ztpz2tc",
+      "display_name": "seg-yolo11s-seg",
+      "created_at_recorded": "2026-10-19T01:01:39Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4064331445/wandb_manifest.json",
+        "config.yaml",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-3ztpz2tc-history"
+      ]
+    },
+    {
+      "run": "2seovilv",
+      "display_name": "det-yolo11s",
+      "created_at_recorded": "2026-10-19T01:01:36Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4064331442/wandb_manifest.json",
+        "config.yaml",
+        "media/images/fig/figures_threshold_sweep.png_40_b7433299297644cf4f50.png",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-2seovilv-history"
+      ]
+    },
+    {
+      "run": "8nvxbsn2",
+      "display_name": "cls-finetune",
+      "created_at_recorded": "2026-10-18T21:55:34Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4064330171/wandb_manifest.json",
+        "config.yaml",
+        "output.log",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-8nvxbsn2-history"
+      ]
+    },
+    {
+      "run": "xsz5afr9",
+      "display_name": "cls-frozen",
+      "created_at_recorded": "2026-10-18T21:48:30Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4064330361/wandb_manifest.json",
+        "config.yaml",
+        "output.log",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-xsz5afr9-history"
+      ]
+    },
+    {
+      "run": "gh7ayx6h",
+      "display_name": "cls-scratch",
+      "created_at_recorded": "2026-10-18T21:25:57Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4064330174/wandb_manifest.json",
+        "config.yaml",
+        "output.log",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-gh7ayx6h-history"
+      ]
+    },
+    {
+      "run": "kd5ksgt3",
+      "display_name": "seg-yolo11s-seg",
+      "created_at_recorded": "2026-10-17T12:09:01Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4064331446/wandb_manifest.json",
+        "config.yaml",
+        "media/images/figures/BoxF1_curve_40_25880a77f9c7371db749.png",
+        "media/images/figures/BoxPR_curve_41_ff86057e51653bc972df.png",
+        "media/images/figures/BoxP_curve_42_f272d5a39a9a60a809c3.png",
+        "media/images/figures/BoxR_curve_43_a3ac97c3dfef94354b11.png",
+        "media/images/figures/MaskF1_curve_44_185c48a234c00917f87b.png",
+        "media/images/figures/MaskPR_curve_45_9909d612252448a72afa.png",
+        "media/images/figures/MaskP_curve_46_571fd96e433579984b2d.png",
+        "media/images/figures/MaskR_curve_47_9d60f96b17195f687885.png",
+        "media/images/figures/confusion_matrix_48_2a808255afcef581a83f.png",
+        "media/images/figures/confusion_matrix_normalized_49_b6d7c6b1281c4448600f.png",
+        "media/images/figures/results_50_0ad9bdfd010ecd719ac5.png",
+        "media/images/figures/sam_baseline_failures_51_d4af22c9e0fb4619bb6f.jpg",
+        "media/images/figures/yolo_seg_failures_52_04e7fcf22cdc6ee3938b.jpg",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-kd5ksgt3-history"
+      ]
+    },
+    {
+      "run": "48vh56vh",
+      "display_name": "det-yolo11s",
+      "created_at_recorded": "2026-10-17T12:08:54Z",
+      "wandb_commit": null,
+      "code_file_count": 0,
+      "file_names": [
+        "artifact/4014925800/wandb_manifest.json",
+        "artifact/4064331444/wandb_manifest.json",
+        "config.yaml",
+        "media/images/figures/BoxF1_curve_41_43b5318d41c1c8ed8caa.png",
+        "media/images/figures/BoxPR_curve_42_32fd1c1d416ea6c992f4.png",
+        "media/images/figures/BoxP_curve_43_975cefa37866ddf04bf3.png",
+        "media/images/figures/BoxR_curve_44_4126ef84aa9c07a90c60.png",
+        "media/images/figures/confusion_matrix_45_f537d8fe629189d75a06.png",
+        "media/images/figures/confusion_matrix_normalized_46_9e3cfa7c9e1692aa5d28.png",
+        "media/images/figures/det_false_negatives_49_5f3007c3a2166b6528ca.jpg",
+        "media/images/figures/det_false_positives_50_e30e6c868fe5e55e840a.jpg",
+        "media/images/figures/figures_threshold_sweep_48_b7433299297644cf4f50.png",
+        "media/images/figures/results_47_f0133a84869dcad10c3c.png",
+        "media/table/threshold_sweep_40_a51d616cb49566fe3655.table.json",
+        "requirements.txt",
+        "wandb-summary.json"
+      ],
+      "output_artifact_names": [
+        "run-48vh56vh-threshold_sweep",
+        "run-48vh56vh-history"
+      ]
+    }
+  ],
+  "research_5nov_configuration_records": [
+    {
+      "run": "finetune_balanced_seed42",
+      "configuration_sha256": "26dcd7d848813f18507e2ca0473f699e2aaf100ad5f8ca69859f5aed4c5f23e3",
+      "recorded_source": {
+        "git_commit": null,
+        "git_dirty": null,
+        "source_sha256": "33401ec36c79707cecd38941a722f3b572cabfdc846e55509dc26107776e14ad",
+        "source_file_count": 47
+      },
+      "recorded_weights_sha256": "bcc4957a15e429df37c883c38c64cd33a3c4c81cae63beb3a53b1803bbdc1f3b",
+      "checkpoint_recovered": false,
+      "run_operator_recorded": "Codex automated execution"
+    },
+    {
+      "run": "finetune_none_seed42",
+      "configuration_sha256": "473ebb5b6c6c6afaffae2ae73a03da5567d7cc1647bc73198d06f7560d571b0f",
+      "recorded_source": {
+        "git_commit": null,
+        "git_dirty": null,
+        "source_sha256": "33401ec36c79707cecd38941a722f3b572cabfdc846e55509dc26107776e14ad",
+        "source_file_count": 47
+      },
+      "recorded_weights_sha256": "3ff904e9c29f0fde4df386473b154765957dc09bbc142ca16ed5f88dcb67c7cd",
+      "checkpoint_recovered": false,
+      "run_operator_recorded": "Codex automated execution"
+    },
+    {
+      "run": "finetune_none_seed43",
+      "configuration_sha256": "e3e54240144510f8f610dcec28985027592af39a9e5238cd2f9253c2cdf40e90",
+      "recorded_source": {
+        "git_commit": null,
+        "git_dirty": null,
+        "source_sha256": "33401ec36c79707cecd38941a722f3b572cabfdc846e55509dc26107776e14ad",
+        "source_file_count": 47
+      },
+      "recorded_weights_sha256": "d2c85048d644a794a34d5cf882a11c3fd803aadb99e1280d9303385eda8dd53c",
+      "checkpoint_recovered": false,
+      "run_operator_recorded": "Codex automated execution"
+    },
+    {
+      "run": "frozen_balanced_seed42",
+      "configuration_sha256": "1465aff33a1850e1da75dcace346571a6ff1201bb9a947da17aefb40f1e5ae10",
+      "recorded_source": {
+        "git_commit": null,
+        "git_dirty": null,
+        "source_sha256": "33401ec36c79707cecd38941a722f3b572cabfdc846e55509dc26107776e14ad",
+        "source_file_count": 47
+      },
+      "recorded_weights_sha256": "11ea7382086c9557cde2665f25842df5b91ae2e53b447c2ca6664540b3c1b1b0",
+      "checkpoint_recovered": false,
+      "run_operator_recorded": "Codex automated execution"
+    },
+    {
+      "run": "frozen_none_seed42",
+      "configuration_sha256": "2811a389d050e4a55640f4b65adbc8054bc78f8bc8bc59eaea93ca92b04647dd",
+      "recorded_source": {
+        "git_commit": null,
+        "git_dirty": null,
+        "source_sha256": "33401ec36c79707cecd38941a722f3b572cabfdc846e55509dc26107776e14ad",
+        "source_file_count": 47
+      },
+      "recorded_weights_sha256": "f933d9e3a57fdee91599556cd1a8b678914feb6dc09082df2b98d0c6ea8017ba",
+      "checkpoint_recovered": false,
+      "run_operator_recorded": "Codex automated execution"
+    },
+    {
+      "run": "frozen_none_seed42_reproduce",
+      "configuration_sha256": "dedcf7ee02c106e351b607bd0ab26a006a30afba4a1c2a4eed56a827b7400904",
+      "recorded_source": {
+        "git_commit": null,
+        "git_dirty": null,
+        "source_sha256": "33401ec36c79707cecd38941a722f3b572cabfdc846e55509dc26107776e14ad",
+        "source_file_count": 47
+      },
+      "recorded_weights_sha256": "f933d9e3a57fdee91599556cd1a8b678914feb6dc09082df2b98d0c6ea8017ba",
+      "checkpoint_recovered": false,
+      "run_operator_recorded": "Codex automated execution"
+    },
+    {
+      "run": "scratch_balanced_seed42",
+      "configuration_sha256": "c0fcc072a99fb0aa8b5e95e113971817637ce50efe4b37fedb209531eb75648f",
+      "recorded_source": {
+        "git_commit": null,
+        "git_dirty": null,
+        "source_sha256": "33401ec36c79707cecd38941a722f3b572cabfdc846e55509dc26107776e14ad",
+        "source_file_count": 47
+      },
+      "recorded_weights_sha256": "b90140b8cd4f843b433a2583e02d1ce300a103ea19a9930811f26424ae5bdc79",
+      "checkpoint_recovered": false,
+      "run_operator_recorded": "Codex automated execution"
+    },
+    {
+      "run": "scratch_none_seed42",
+      "configuration_sha256": "1453ad676c90cf69283c0c64c991abe8fc8d570937d1b04fea67299b8f60dccd",
+      "recorded_source": {
+        "git_commit": null,
+        "git_dirty": null,
+        "source_sha256": "33401ec36c79707cecd38941a722f3b572cabfdc846e55509dc26107776e14ad",
+        "source_file_count": 47
+      },
+      "recorded_weights_sha256": "d662b5e43a3c4517d3531bb4e2330048a23eb79f63d563a2f899ff6fc34bf085",
+      "checkpoint_recovered": false,
+      "run_operator_recorded": "Codex automated execution"
+    }
+  ],
+  "recovery_search": {
+    "main_backup_members_checked": 4395,
+    "additional_backup_members_checked": 616,
+    "checkpoint_members_in_both_backups": 0,
+    "drive_browsed": [
+      "Capstone root",
+      "smart-pet-vision/runs",
+      "classification",
+      "Original_Weights_20261105",
+      "Executed_Review_20261105",
+      "Phase1 asset root",
+      "Phase2 archive",
+      "local cloud backup manifests"
+    ],
+    "research_weight_checkpoint_matches_recovered": 0,
+    "expected_unique_hashes": 7
+  },
+  "conclusion": "Three 29 October W&B retraining runs explicitly record source commit 0f9debb8b6e15873409e6dc5590cd0e22350f97e, which exists in Git. The selected original/curve runs have null run.commit and no uploaded code files; their source commit cannot be reconstructed by guessing. All eight 5 November configurations record the same 47-file source fingerprint (33401ec3...), not a Git commit. Seven distinct research weight hashes are recorded but the corresponding checkpoint files were not recovered. Current served weights remain separately verified."
+}

@@ -1,0 +1,183 @@
+{
+  "date": "2026-11-12",
+  "method": "Read ZIP data.pkl via pickletools.genops and resolve scalar memo references only. No pickle load, torch load, model import, inference or training. Stored checkpoint metadata is distinguished from external args.yaml and does not recover absent W&B run commits.",
+  "checkpoints": [
+    {
+      "file": "served_detector",
+      "sha256": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+      "zip_member": "best/data.pkl",
+      "zip_crc_passed": true,
+      "train_args_literals": {
+        "task": "detect",
+        "model": "yolo11s.pt",
+        "data": "/content/data/processed/yolo_detect/data.yaml",
+        "epochs": 40,
+        "batch": 16,
+        "imgsz": 640,
+        "optimizer": "AdamW",
+        "seed": 42,
+        "conf": null,
+        "iou": 0.7,
+        "lr0": 0.001667,
+        "momentum": 0.937,
+        "weight_decay": 0.0005
+      },
+      "opcode_locations": {
+        "task": {
+          "key_byte_offset": 127834,
+          "value_opcode": "LONG_BINGET",
+          "memo_resolved": true
+        },
+        "model": {
+          "key_byte_offset": 127872,
+          "value_opcode": "LONG_BINGET",
+          "memo_resolved": true
+        },
+        "data": {
+          "key_byte_offset": 127892,
+          "value_opcode": "LONG_BINGET",
+          "memo_resolved": true
+        },
+        "epochs": {
+          "key_byte_offset": 127911,
+          "value_opcode": "BININT1",
+          "memo_resolved": false
+        },
+        "batch": {
+          "key_byte_offset": 127964,
+          "value_opcode": "BININT1",
+          "memo_resolved": false
+        },
+        "imgsz": {
+          "key_byte_offset": 127981,
+          "value_opcode": "BININT2",
+          "memo_resolved": false
+        },
+        "optimizer": {
+          "key_byte_offset": 128197,
+          "value_opcode": "LONG_BINGET",
+          "memo_resolved": true
+        },
+        "seed": {
+          "key_byte_offset": 128239,
+          "value_opcode": "BININT1",
+          "memo_resolved": false
+        },
+        "conf": {
+          "key_byte_offset": 128646,
+          "value_opcode": "NONE",
+          "memo_resolved": false
+        },
+        "iou": {
+          "key_byte_offset": 128661,
+          "value_opcode": "BINFLOAT",
+          "memo_resolved": false
+        },
+        "lr0": {
+          "key_byte_offset": 129240,
+          "value_opcode": "BINFLOAT",
+          "memo_resolved": false
+        },
+        "momentum": {
+          "key_byte_offset": 129284,
+          "value_opcode": "BINFLOAT",
+          "memo_resolved": false
+        },
+        "weight_decay": {
+          "key_byte_offset": 129311,
+          "value_opcode": "BINFLOAT",
+          "memo_resolved": false
+        }
+      }
+    },
+    {
+      "file": "served_segmenter",
+      "sha256": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+      "zip_member": "best/data.pkl",
+      "zip_crc_passed": true,
+      "train_args_literals": {
+        "task": "segment",
+        "model": "yolo11s-seg.pt",
+        "data": "/content/data/processed/yolo_segment/data.yaml",
+        "epochs": 40,
+        "batch": 16,
+        "imgsz": 640,
+        "optimizer": "AdamW",
+        "seed": 42,
+        "conf": null,
+        "iou": 0.7,
+        "lr0": 0.001667,
+        "momentum": 0.937,
+        "weight_decay": 0.0005
+      },
+      "opcode_locations": {
+        "task": {
+          "key_byte_offset": 142222,
+          "value_opcode": "LONG_BINGET",
+          "memo_resolved": true
+        },
+        "model": {
+          "key_byte_offset": 142260,
+          "value_opcode": "LONG_BINGET",
+          "memo_resolved": true
+        },
+        "data": {
+          "key_byte_offset": 142280,
+          "value_opcode": "LONG_BINGET",
+          "memo_resolved": true
+        },
+        "epochs": {
+          "key_byte_offset": 142299,
+          "value_opcode": "BININT1",
+          "memo_resolved": false
+        },
+        "batch": {
+          "key_byte_offset": 142352,
+          "value_opcode": "BININT1",
+          "memo_resolved": false
+        },
+        "imgsz": {
+          "key_byte_offset": 142369,
+          "value_opcode": "BININT2",
+          "memo_resolved": false
+        },
+        "optimizer": {
+          "key_byte_offset": 142585,
+          "value_opcode": "LONG_BINGET",
+          "memo_resolved": true
+        },
+        "seed": {
+          "key_byte_offset": 142627,
+          "value_opcode": "BININT1",
+          "memo_resolved": false
+        },
+        "conf": {
+          "key_byte_offset": 143034,
+          "value_opcode": "NONE",
+          "memo_resolved": false
+        },
+        "iou": {
+          "key_byte_offset": 143049,
+          "value_opcode": "BINFLOAT",
+          "memo_resolved": false
+        },
+        "lr0": {
+          "key_byte_offset": 143628,
+          "value_opcode": "BINFLOAT",
+          "memo_resolved": false
+        },
+        "momentum": {
+          "key_byte_offset": 143672,
+          "value_opcode": "BINFLOAT",
+          "memo_resolved": false
+        },
+        "weight_decay": {
+          "key_byte_offset": 143699,
+          "value_opcode": "BINFLOAT",
+          "memo_resolved": false
+        }
+      }
+    }
+  ],
+  "conclusion": "Both delivered checkpoint train_args store optimizer AdamW and lr0 0.001667; external args.yaml stores requested optimizer auto. These are different records, not a contradictory experiment."
+}
