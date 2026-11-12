@@ -33,5 +33,11 @@ jobs:
           PYTHONPATH: src
           CUDA_VISIBLE_DEVICES: ""
         run: python -m unittest discover -s tests -v
+      - name: Phase 1 regression contracts (no training)
+        working-directory: smart-pet-vision
+        env:
+          PYTHONPATH: src
+          WANDB_MODE: disabled
+        run: python -m unittest discover -s tests -v
       - name: Report numbers match saved evidence
         run: python tools/verify_submission_evidence.py

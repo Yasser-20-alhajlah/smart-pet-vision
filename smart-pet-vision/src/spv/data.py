@@ -201,17 +201,19 @@ def build_annotations(root: Path, df: pd.DataFrame, out: Path) -> pd.DataFrame:
     """Write binary masks (0/255) and border masks; add body boxes to df."""
     (out / "masks").mkdir(parents=True, exist_ok=True)
     (out / "borders").mkdir(parents=True, exist_ok=True)
-    boxes = []
+    boxes, fractions = [], []
     for name in df["image"]:
         tri = np.array(Image.open(root / "annotations" / "trimaps" / f"{name}.png"))
         body, border = trimap_to_masks(tri)
+        fractions.append(float(body.mean()))
         Image.fromarray((body * 255).astype(np.uint8)).save(out / "masks" / f"{name}.png")
         Image.fromarray((border * 255).astype(np.uint8)).save(out / "borders" / f"{name}.png")
         box = mask_to_box(body)
         boxes.append(box if box else (np.nan,) * 4)
     df = df.copy()
     df[["x1", "y1", "x2", "y2"]] = np.array(boxes, dtype=float)
-    df["mask_fraction"] = ((df.x2 - df.x1) * (df.y2 - df.y1)) / (df.width * df.height)
+    df["mask_fraction"] = fractions
+    df["box_fraction"] = ((df.x2 - df.x1) * (df.y2 - df.y1)) / (df.width * df.height)
     return df
 
 
@@ -347,7 +349,14 @@ def ensure_data(cfg: dict) -> pd.DataFrame:
     saved = Path(cfg["paths"]["runs"]) / "data"
     if (saved / "metadata.csv").exists():
         df = pd.read_csv(saved / "metadata.csv")
-        if not (out / "yolo_segment" / "data.yaml").exists():
+        exports_missing = any(not (out / f"yolo_{task}" / "data.yaml").is_file()
+                              for task in ("detect", "segment"))
+        masks_missing = any(not (out / folder / f"{name}.png").is_file()
+                            for folder in ("masks", "borders") for name in df["image"])
+        labels_missing = any(not (out / f"yolo_{task}" / "labels" / row.split /
+                                  f"{row.image}.txt").is_file()
+                             for task in ("detect", "segment") for row in df.itertuples())
+        if exports_missing or masks_missing or labels_missing:
             build_annotations(root, df, out)
             for task in ("detect", "segment"):
                 export_yolo(root, df, out, task)
@@ -363,6 +372,8 @@ def ensure_data(cfg: dict) -> pd.DataFrame:
 
 def leakage_audit(df: pd.DataFrame) -> dict:
     """Every duplicate group must live in exactly one split; no MD5 across splits."""
+    from .integrity import validate_metadata
+    validate_metadata(df)
     groups_per_split = df.groupby("group")["split"].nunique()
     md5_per_split = df.groupby("md5")["split"].nunique()
     return {
