@@ -1,0 +1,50 @@
+PASS A9b tolerance is 0.001 in every variant
+PASS no ONNX variant within tolerance  [min=0.001984]
+PASS report quotes the variant range  [0.00198--0.00201]
+PASS A9b recorded as not met
+PASS report never states the ONNX detector passed
+PASS f8manl0i counts
+PASS report shows f8manl0i accuracy  [386/399]
+PASS report shows referrals
+PASS f8manl0i is not labelled a new test
+PASS report shows CPU HTTP percentiles  [383.8/430.8/690.1]
+PASS HTTP 300/300 and guards 300/300
+PASS demo requests excluded from timing
+PASS HTTP run is CPU
+PASS CPU latency not used for A8
+PASS report links f8manl0i and mu2tolkg  [1jb5y453,2seovilv,3ztpz2tc,f8manl0i,fqow5ly7,mu2tolkg]
+PASS figure references found  [12 figures]
+PASS submission: all figures present  [16 figures]
+PASS submission: never states the ONNX detector passed
+PASS submission: A9b row is Fail
+PASS submission: 28.7 px shift marked as confounded
+PASS submission: no prompt left from the template
+PASS submission: COCO detector baseline (val, test, op)
+PASS submission: COCO segmenter baseline
+PASS submission: SAM baseline on validation
+PASS submission: mask confidence sweep and choice
+PASS submission: match-IoU sweep quoted as counts, with the per-image limitation
+PASS submission: per-stage p50/p95
+PASS submission: ONNX task-level mAP, unrounded and called close (not identical)
+PASS submission: channel diagnosis: box vs score channels quoted from saved analysis
+PASS submission: ONNX channel diagnosis
+PASS submission: gap experiments not described as A9b met
+PASS submission: optimiser stated as recorded (AdamW, lr0 0.001667), never SGD
+PASS submission: optimiser direct log in both executed notebooks; W&B link stated as inferred
+PASS submission: code row does not claim later commits changed only the report
+PASS submission: annotation correction: 4 train labels, val/test unchanged, not retrained, no gain claimed
+PASS submission: matched-preprocessing final-detection agreement quoted, A9b still failed
+PASS submission: 5 Nov A9b re-run quoted as recorded (0.0018 one thread, 0.0023 two threads), still failed
+PASS submission: Kaggle M5 regression quoted as recorded (same-300 YOLO/SAM IoU with and without border; full-test mAP50-95)
+PASS submission: Kaggle M4 candidate quoted as recorded and not promoted (val mAP50-95 0.839 < 0.844; op. point 1,051/49/55)
+PASS submission: Recall-by-size Oxford column equals the relative-bin recount (4 medium, 1,102 large; found sum = 1,061 TP)
+PASS submission: 3 Nov T4 repeat quoted as recorded and kept separate
+PASS submission: same-animal grouping run and the owner's review quoted as recorded (groups, crossing groups, images, verdicts, test share)
+PASS submission: 6 Nov reproduction quoted as recorded (6 metrics, all identical) and the operator attributed to the project owner's statement
+PASS submission: Supplementary D quoted as recorded (17 -> 10 of 52; 45 -> 127 of 349) and not presented as a holdout
+PASS submission: Supplementary E quoted as recorded (validation only, test split unused, not promoted)
+PASS submission: Supplementary F quoted as recorded (split v2 retrain: not promoted, test sets differ, ONNX not claimed as parity)
+PASS submission: Supplementary F ONNX re-run quoted as recorded (same value as the run record; range over seeds and threads)
+PASS submission: Supplementary G quoted as recorded (YOLO11n vs delivered YOLO11s, validation only, test split unused)
+PASS submission: Supplementary G segmenter quoted as recorded (YOLO11n-seg vs delivered YOLO11s-seg, validation only)
+49/49 checks passed (16 on the superseded free-form report report/main.tex, 33 on the submission report submission/main.tex)

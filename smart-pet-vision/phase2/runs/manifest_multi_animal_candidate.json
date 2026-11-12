@@ -19,5 +19,6 @@
   "review_match_iou": 0.55,
   "review_include_segmenter": true,
   "review_tiles_enabled": false,
-  "review_tiles_conf": 0.1
+  "review_tiles_conf": 0.1,
+  "force_manual_review": true
 }

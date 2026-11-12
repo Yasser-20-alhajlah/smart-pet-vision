@@ -26,6 +26,7 @@ REASONS = {
     "segmentation_unmatched": "The segmenter could not match a reliable animal mask to the selected detection.",
     "segmentation_disagreement": "The segmenter and the selected detector disagree on the animal species.",
     "secondary_animal_candidate": "A second, lower-threshold pass found an additional or ambiguous animal candidate; staff review required.",
+    "release_safety_hold": "This candidate requires staff review before release.",
     "secondary_review_failed": "The additional-animal safety check could not be completed; staff review required.",
 }
 
@@ -90,6 +91,7 @@ class Manifest:
     segmenter_iou: float = 0.70
     mask_match_iou: float = 0.10
     # Opt-in candidate only. Historical manifests and weights remain unchanged.
+    force_manual_review: bool = False
     review_mode: str = "off"  # off | audit | enforce
     review_conf: float = 0.10
     review_imgsz: int = 960
@@ -123,6 +125,8 @@ class Manifest:
                 raise ValueError(f"Manifest {name} must be a positive integer.")
         if manifest.classifier_kind not in {"scratch", "frozen", "finetune"}:
             raise ValueError("Manifest classifier_kind is not supported.")
+        if type(manifest.force_manual_review) is not bool:
+            raise ValueError("force_manual_review must be a boolean.")
         if manifest.review_mode not in {'off', 'audit', 'enforce'}:
             raise ValueError('Manifest review_mode must be off, audit or enforce.')
         if type(manifest.review_include_segmenter) is not bool or type(manifest.review_tiles_enabled) is not bool:
@@ -340,7 +344,13 @@ class PetPipeline:
                 timings['secondary_review_ms'] = (time.perf_counter()-review_started)*1e3
         timings["stages_sum_ms"] = sum(timings.values())
 
+        technical_verdict = "ready" if not reasons else "refer_to_staff"
+        release_hold = getattr(self.m, "force_manual_review", False) is True
+        if release_hold:
+            reasons.append("release_safety_hold")
         result = {
+            "technical_verdict": technical_verdict,
+            "release_safety_hold": release_hold,
             "verdict": "ready" if not reasons else "refer_to_staff",
             # A readiness candidate is NOT permission to publish.
             # The current detector missed animals in multi-animal external photos.

@@ -10,7 +10,9 @@ This is not an accuracy or speed evaluation. If a step fails, see `TROUBLESHOOTI
 | Linux x86_64 cloud container, Python 3.13.16, CPU only; new virtual environment with `../requirements.txt` from PyPI (default Linux wheels) | unit tests, preflight, real-weight HTTP smoke test, demo page with real weights | 4–5 Nov 2026; logs in the release package `03_Verification` |
 | Google Colab, Python 3.13, Tesla T4 (and Colab CPU runtime) | training, evaluation, benchmarks, `notebooks/06_release_validation_v2.ipynb` | Oct–2 Nov 2026, code `879b0e8`; see the report |
 
-Not checked: Windows, macOS, Python other than 3.13, and the computer used for the final presentation.
+| macOS arm64, Python 3.12.14, CPU; PyTorch 2.15.0, Ultralytics 8.4.210 (versions differ from the pinned environment) | real-weight loopback HTTP functional check, three weight hashes, demo HTML, four image-analysis requests, three invalid uploads and three decoded PNGs; explicit `--allow-version-drift` | 12 Nov 2026; `report/evidence/P2_local_cpu_smoke_20261112/` |
+
+Not checked: Windows, a pinned macOS installation, and the computer used for the final presentation. The 12 November check demonstrates the recorded local configuration only, not full platform support or T4 performance.
 Commands below are for a Linux shell.
 
 ## A. Local shell (Linux)
@@ -66,7 +68,7 @@ python tools/smoke_test_http.py --image path/to/authorised_photo.png --out smoke
 ```
 
 Expected last line: every value `true` and `"decoded_png_count": 3`. It checks behaviour and the
-two policy flags only, not accuracy or speed.
+two policy flags only, not accuracy or speed. The command stops before starting HTTP if preflight fails and exits nonzero if its response checks fail. It uses CPU. A different installed-library environment requires the explicit option `--allow-version-drift`; this records the differences while retaining file, weight-hash and manifest checks. Such a check does not validate the pinned environment.
 
 **8. Stop.** Press Ctrl+C in the service terminal. If a service is left running, find it with
 `ss -ltnp | grep 8000` and stop that process ID with `kill <PID>`.
@@ -84,3 +86,5 @@ the manifest and weights directly from `MyDrive/capstone /smart-pet-vision/runs/
 `SmartPetVision_TeamData` needed) and a local HTTP check inside the Colab machine. The demo page is
 not reachable from your own browser in Colab without a tunnel; do not open a public tunnel. For the
 live demonstration use a local computer (section A).
+
+On 12 November, the local Git checkout was also checked with Playwright 1.65.1 and Chromium Headless Shell: all 164 unittest cases passed, including the 15 browser cases, with zero skips. These UI tests use a stand-in pipeline and synthetic uploads; they do not re-evaluate model accuracy or replace the presentation-host rehearsal. See `report/evidence/P2_local_cpu_smoke_20261112/git_browser_verification_20261112.json`.
