@@ -244,7 +244,8 @@ Class imbalance and per-class recall & Per-class precision, recall and F1 at the
 \end{xltabular}}
 
 \subsection*{Reproduction numbers and identifiers (Part 13)}
-Original source runs: detector \run{2seovilv}, segmenter \run{3ztpz2tc}. Reproduced execution: \nolinkurl{2026-11-06T15:24:03Z}, \path{reproduction_eval_mohammed_20261106.json}; its notebook and the nonempty committed log are linked in the feedback response above. No W\&B run was created for the reproduction.
+Original source runs: detector \run{2seovilv}, segmenter \run{3ztpz2tc}. Reproduced execution: 6 November 2026, 15:24:03 UTC. Its notebook and the nonempty committed log are linked in the feedback response above.\par
+Saved output: \path{reproduction_eval_mohammed_20261106.json}. No W\&B run was created for the reproduction.
 
 {\small
 \begin{tabularx}{\linewidth}{@{}Y l r r r@{}}
@@ -935,7 +936,7 @@ Weights over 100\,MB and private photos cannot go into Git & M8 & The repository
   \item[$\checkmark$] p50/p95/p99 latency, throughput and memory measured with warm-up and stated conditions (\S4.6)
   \item[$\checkmark$] Verdict reported against the acceptance criteria (\S\ref{sec:verdict})
   \item[$\checkmark$] Failure cases of the integrated system listed with explicit failure statements (\S\ref{sec:verdict})
-  \item Every displayed figure states its split, resolution and applicable thresholds. Historical SAM summaries remain labelled in the table; two optional historical SAM plots with unrecorded input/threshold settings are omitted rather than assigning them the settings of a later repeat.
+  \item Every displayed figure states its split, resolution and applicable thresholds. The historical SAM table identifies its incomplete settings separately from the documented repeat.
   \item[$\checkmark$] Current code-archive privacy checks exclude private identifiers, weights and raw team photos; historical Git objects were not rewritten or certified by this review
   \item[$\checkmark$] Delivered commit named in Section 1 and recorded in the source archive; repository links pinned to commits, not branches
   \item[$\checkmark$] Model card with failure modes and out-of-scope uses (\S4.7; \texttt{docs/model\_card.md}); go/no-go decision against the criteria and their documented timing limits in Section 1

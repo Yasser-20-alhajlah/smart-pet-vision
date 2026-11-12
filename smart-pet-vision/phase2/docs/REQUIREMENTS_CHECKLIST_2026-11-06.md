@@ -148,7 +148,7 @@ Delivered archives (two different files; each name is tied to its own size and S
 
 ## K. Verification scope
 - Prior published f30264d baseline: local Phase 2 165 passed; CI 150 passed and 15 browser skips. These are separate executions.
-- This official-source revision adds five focused bootstrap/provenance regressions, all passed locally without training. The current full CI result is recorded in the release metadata; do not infer a GPU accuracy run from unit tests.
+- This official-source revision adds six focused bootstrap/provenance regressions, all passed locally without training. The current full CI result is recorded in the release metadata; do not infer a GPU accuracy run from unit tests.
 - Saved evidence checks pass 49/49; all 15 selected notebooks parse. Historical saved outputs are preserved.
 - Public W&B read returned 44 runs; 84 shared numeric summary fields of the three selected runs matched the saved snapshot. No API key, new run or historical edit was used.
 - The real-weight CPU functional receipt and all T4 measurements retain their original environments and source identities; actual presentation-host testing remains the presenters' task.
