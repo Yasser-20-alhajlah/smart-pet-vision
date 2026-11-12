@@ -1,5 +1,9 @@
-# Rebuilding the corrected report
+# Phase 1 report source
 
-Report rebuilding is not currently available from a clean clone. This folder does not contain the documented build script or its required base PDF. A local `tools/build_report.py` may exist, but it is untracked and its required `tools/assets/base_report.pdf` is absent.
+The public `SmartPetVision_Phase1.pdf` is a historical copy with student IDs redacted. The current instructor PDF and matching editable LaTeX source are retained privately in the [Final Phase 1 folder](https://drive.google.com/drive/folders/1M7frAxmWt-eJO2p2FxHP5Yc3Ejn8J4FO). Use the canonical `SmartPetVision_Phase1.pdf` and `SmartPetVision_Phase1_source.zip` identified by that folder's current README.
 
-To enable reproducible rebuilding, add the authorized base PDF and build script (or the original authoring source) to this repository or a versioned release. Then update these instructions with the exact command and verify the generated PDF against the supplied report. Until those inputs are available, use the corrected PDF as a separately supplied deliverable. The older 8-page Overleaf ZIP is historical.
+Extract the source ZIP into a new directory and compile root `main.tex` with pdfLaTeX or Tectonic. The consolidated source retains historical benchmark results and separately labels the 5 November experiments and their checkpoint-availability limit. The current software revision is recorded in the report and its code archive; this does not recover the unknown historical training commit.
+
+`tools/build_report.py` is a tracked legacy PDF-overlay script. Its historical `tools/assets/base_report.pdf` input is absent from this checkout. It is not the LaTeX builder for the current report and is not needed when building the supplied source ZIP.
+
+Phase 2 has a separate LaTeX project under `phase2/submission/`. Private student identifiers belong only in instructor-facing materials, never in public source commits.

@@ -51,6 +51,8 @@ class PetDataset(Dataset):
 
 
 def loaders(df: pd.DataFrame, image_dir: Path, cfg: dict) -> dict:
+    from .integrity import validate_metadata
+    validate_metadata(df)
     cc = cfg["classification"]
     out = {}
     for split in ("train", "val", "test"):
@@ -85,6 +87,8 @@ class ScratchCNN(nn.Module):
 
 def build_model(kind: str, cfg: dict) -> nn.Module:
     """kind: 'scratch' | 'frozen' | 'finetune'."""
+    if kind not in {"scratch", "frozen", "finetune"}:
+        raise ValueError(f"Unknown classification strategy: {kind}")
     if kind == "scratch":
         return ScratchCNN(len(CLASSES))
     from torchvision import models
@@ -137,9 +141,14 @@ def train(kind: str, data: dict, cfg: dict, out_dir: Path, max_batches: int | No
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.AdamW(params, lr=hp["lr"], weight_decay=hp["weight_decay"])
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=hp["epochs"])
-    loss_fn = nn.CrossEntropyLoss()
+    from .integrity import training_class_weights
+    balance = hp.get("class_balance", "none")
+    train_labels = data["train"].dataset.df["label"].to_numpy()
+    weights = training_class_weights(train_labels, balance)
+    loss_fn = nn.CrossEntropyLoss(weight=None if weights is None else
+                                  torch.tensor(weights, dtype=torch.float32, device=dev))
     scaler = torch.amp.GradScaler(enabled=dev.type == "cuda")
-    tracker = Tracker(cfg, run_name or f"cls-{kind}", {"kind": kind, **hp, **count_params(model)})
+    tracker = Tracker(cfg, run_name or f"cls-{kind}", {"kind": kind, "class_balance": balance, **hp, **count_params(model)})
 
     out_dir.mkdir(parents=True, exist_ok=True)
     best, history = -1.0, []
@@ -196,7 +205,12 @@ def load_model(kind: str, cfg: dict, ckpt: Path) -> nn.Module:
 # ----------------------------------------------------------- calibration
 def fit_temperature(logits: np.ndarray, labels: np.ndarray) -> float:
     """Temperature scaling on validation logits (Guo et al., 2017)."""
-    lg, y = torch.tensor(logits), torch.tensor(labels)
+    logits, labels = np.asarray(logits), np.asarray(labels)
+    if (logits.ndim != 2 or logits.shape[1] != 2 or len(logits) == 0
+            or labels.shape != (len(logits),) or not np.isfinite(logits).all()
+            or not np.isin(labels, [0, 1]).all()):
+        raise ValueError("Calibration requires aligned finite binary logits and labels.")
+    lg, y = torch.tensor(logits), torch.tensor(labels).long()
     log_t = torch.zeros(1, requires_grad=True)
     opt = torch.optim.LBFGS([log_t], lr=0.1, max_iter=200)
 
@@ -238,6 +252,8 @@ def evaluate(probs: np.ndarray, labels: np.ndarray, meta: pd.DataFrame) -> dict:
     from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score,
                                  precision_recall_fscore_support)
 
+    from .integrity import validate_predictions
+    validate_predictions(probs, labels, meta)
     pred = probs.argmax(1)
     p, r, f, s = precision_recall_fscore_support(labels, pred, labels=[0, 1], zero_division=0)
     err, _ = ece(probs, labels)
