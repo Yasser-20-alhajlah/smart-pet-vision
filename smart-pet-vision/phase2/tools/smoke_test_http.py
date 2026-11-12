@@ -63,8 +63,11 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--manifest", default="runs/manifest.json")
     ap.add_argument("--port", type=int, default=8765)
+    ap.add_argument("--allow-version-drift", action="store_true",
+                    help="Record a functional check in a different library environment; keep weight/manifest checks.")
     a = ap.parse_args()
     out, img_path, url = Path(a.out).resolve(), Path(a.image).resolve(), f"http://127.0.0.1:{a.port}"
+    out.parent.mkdir(parents=True, exist_ok=True)
     os.chdir(HERE)
     transcript, results = [], {}
 
@@ -73,14 +76,24 @@ def main():
         print("$ " + cmd + "\n" + text + "\n", flush=True)
 
     man = json.loads(Path(a.manifest).read_text())
+    env = {**os.environ, "PYTHONPATH": "src"}
+    pre_command = [sys.executable, "tools/preflight_release.py", "--manifest", a.manifest,
+                   "--requirements", "../requirements.txt"]
+    if not a.allow_version_drift:
+        pre_command.append("--strict-versions")
+    pre = subprocess.run(pre_command, capture_output=True, text=True, env=env)
+    log(" ".join(pre_command),
+        (pre.stdout.strip() or pre.stderr.strip())[:900] + f"\n(exit {pre.returncode})")
+    if pre.returncode != 0:
+        out.write_text(json.dumps({"status": "PREFLIGHT_FAILED",
+                                  "preflight_returncode": pre.returncode,
+                                  "allow_version_drift": a.allow_version_drift,
+                                  "requests_executed": 0,
+                                  "detail": pre.stdout + pre.stderr}, indent=2) + "\n")
+        raise SystemExit(2)
+
     weights = {k: {"path": man[k], "sha256": sha(man[k]), "bytes": Path(man[k]).stat().st_size}
                for k in ("detector", "segmenter", "classifier")}
-    env = {**os.environ, "PYTHONPATH": "src"}
-    pre = subprocess.run([sys.executable, "tools/preflight_release.py", "--manifest", a.manifest,
-                          "--requirements", "../requirements.txt", "--strict-versions"],
-                         capture_output=True, text=True, env=env)
-    log(f"python tools/preflight_release.py --manifest {a.manifest} --strict-versions",
-        (pre.stdout.strip() or pre.stderr.strip())[:900] + f"\n(exit {pre.returncode})")
 
     srv_env = {**env, "SPV_MANIFEST": a.manifest, "CUDA_VISIBLE_DEVICES": ""}
     srv = subprocess.Popen([sys.executable, "-m", "uvicorn", "spv.serve:app", "--host", "127.0.0.1",
@@ -164,6 +177,7 @@ def main():
     import fastapi, numpy, PIL, torch, ultralytics, uvicorn  # noqa: E401  (versions for the record)
     analyses = [v for k, v in results.items() if k.startswith(("single", "two", "blank"))]
     rec = {
+        "allow_version_drift": a.allow_version_drift,
         "date_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "scope": "Functional real-weight smoke test over TCP loopback. Not an accuracy evaluation, not a benchmark.",
         "source": source_revision(),
@@ -186,6 +200,10 @@ def main():
     out.write_text(json.dumps(rec, indent=1) + "\n")
     (out.parent / (out.stem + "_transcript.json")).write_text(json.dumps(transcript, indent=1))
     print(json.dumps(rec["summary"]))
+    checks = rec["summary"]
+    if not (all(value for key, value in checks.items() if key != "decoded_png_count")
+            and checks["decoded_png_count"] == 3):
+        raise SystemExit(2)
 
 
 if __name__ == "__main__":

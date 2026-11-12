@@ -180,3 +180,14 @@ class ReviewManifest(unittest.TestCase):
 
 
 if __name__=='__main__': unittest.main()
+
+
+class CandidateManifestHold(unittest.TestCase):
+    def test_both_experimental_manifests_keep_the_release_hold(self):
+        runs = Path(__file__).resolve().parents[1] / "runs"
+        for name in ("manifest_multi_animal_candidate.json",
+                     "manifest_multi_animal_tiled_experimental.json"):
+            with self.subTest(manifest=name):
+                manifest = Manifest.load(runs / name)
+                self.assertTrue(manifest.force_manual_review)
+                self.assertEqual(manifest.review_mode, "enforce")
