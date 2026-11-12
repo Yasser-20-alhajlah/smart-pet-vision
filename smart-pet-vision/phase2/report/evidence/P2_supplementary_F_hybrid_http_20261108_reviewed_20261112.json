@@ -1,0 +1,111 @@
+{
+  "reviewed_date": "2026-11-12",
+  "execution_date_recorded": "2026-11-08",
+  "method": "Read saved outputs only; no notebook cell, model inference, HTTP request or training executed during this review.",
+  "sources": {
+    "record_drive_id": "1GZxhMaXinveo10GYc_CQ3cdhsqfUREjz",
+    "record_sha256": "60f9e70b6ecb94b24a9879258010805bd1979af5e33c873738c6e98eb6e748fe",
+    "matching_runtime_record_drive_id": "1cGxDhHodYo5ZH1IlzQPy-AkfVHln-z6f",
+    "notebook_drive_id": "1atk5KyNFywlvXt-JaME7iYl6w3hrlQF8",
+    "notebook_sha256": "32a7e0e08e083e4e44721c8101d0e4e9c10699e43b0b1e072107e0228aad3f09",
+    "matched_notebook_cell": 52,
+    "manifest_drive_id": "1mAAdguiUvXAopDYYw3seB7fY5DVyxIza",
+    "manifest_sha256": "20174fc94de7a75d0343b6ad85a5b3a978153b9bc3c2bef541b4324cd4702fcc"
+  },
+  "record": {
+    "candidate": "split-v2 ONNX detector + v2 segmenter/classifier with isolated safety hold",
+    "manifest": "runs/manifest_split_v2_service_candidate_20261108.json",
+    "endpoint": "POST /analyze?images=false",
+    "bind_address": "127.0.0.1:8765",
+    "dataset": {
+      "name": "Oxford-IIIT Pet",
+      "split": "test",
+      "warmup_requests": 10,
+      "measured_requests": 200,
+      "distinct_measured_images": 200,
+      "sha256_of_210_ordered_image_ids": "fcac10145c29074e745f8745f5de7fdbc5bc533c0eaa731177a7ff15f4c99db5"
+    },
+    "http_statuses": {
+      "warmup_200": 10,
+      "measured_200": 200,
+      "GET_health": 200,
+      "GET_demo": 200,
+      "non_image_upload": 415,
+      "empty_upload": 400
+    },
+    "latency_ms": {
+      "p50": 310.34462400020857,
+      "p95": 434.87018600021656,
+      "p99": 466.2744516099699,
+      "mean": 338.2805328300083,
+      "min": 287.4631039999258,
+      "max": 509.1837130003114
+    },
+    "throughput_requests_per_second": 2.956126359486719,
+    "safety": {
+      "refer_to_staff_count": 200,
+      "release_safety_hold_all_200": true,
+      "automatic_publication_allowed_all_false": true
+    },
+    "runtime": {
+      "python": "3.13.16",
+      "torch": "2.14.1+cu130",
+      "torchvision": "0.29.1+cu130",
+      "gpu": "Tesla T4",
+      "onnxruntime": "1.31.0",
+      "ultralytics": "8.4.182",
+      "onnx_detector_provider": "CPUExecutionProvider"
+    },
+    "model_sha256": {
+      "detector_onnx": "f74b6f9f245c971d835409b3de4ee06bbbaed65f8f134b1dbfaa807f12ea02fe",
+      "segmenter": "e1537e568477af4dbf7892a2ddc47ac79edd3a8566f0b24e8320d8f2de52b7b0",
+      "classifier": "7b9c4b9739e2ccece3b34f1eb8fc05dbd60edfc7ae74bb70d8dfcbb0697024b4"
+    },
+    "limitations": [
+      "This measures isolated service latency, not model accuracy or multi-animal recall.",
+      "The ONNX detector ran through CPUExecutionProvider; this is not a GPU-only detector benchmark.",
+      "The candidate retained force_manual_review=true and was not promoted to production.",
+      "No model training, confidence-threshold change, or production-manifest change occurred."
+    ]
+  },
+  "scope": {
+    "original_held_out_split": "torchvision OxfordIIITPet split=test, not established as the project split-v2 test cohort",
+    "input_dimensions": "native varied JPEG dimensions; detector/segmenter letterbox 640; classifier 224 crop",
+    "manifest_thresholds": {
+      "temperature": 0.05,
+      "detector_conf": 0.3,
+      "detector_iou": 0.5,
+      "verify_threshold": 0.9,
+      "min_mask_fraction": 0.05,
+      "image_size": 224,
+      "imgsz": 640,
+      "segmenter_conf": 0.25,
+      "segmenter_iou": 0.7,
+      "force_manual_review": true
+    },
+    "runtime_source_commit": null,
+    "runtime_source_commit_note": "The HTTP receipt does not identify the exact code revision; do not attribute this measurement to the current published main.",
+    "memory": "not recorded",
+    "concurrency": "sequential, one client",
+    "validation": "Receipt latency values, model hashes and image-order digest match saved notebook cell 52. All measured responses were held for staff review; no accuracy/recall inference is made."
+  },
+  "notebook_integrity": {
+    "code_cells": 47,
+    "cells_with_non_null_execution_count": 15,
+    "code_cells_with_saved_outputs": 45,
+    "saved_errors": [
+      {
+        "cell": 26,
+        "type": "AssertionError",
+        "meaning": "Budget guard stopped execution at 3.07 hours before later export work."
+      },
+      {
+        "cell": 39,
+        "type": "SyntaxError",
+        "meaning": "Setup cell failed; later saved outputs show subsequent work."
+      }
+    ],
+    "interpretation": "Resumed notebook with retained outputs; not a clean error-free run from top to bottom. Original notebook and errors preserved."
+  },
+  "promotion": "None; v1 served weights and thresholds unchanged; ONNX parity failure and independent-data limitations remain."
+}
