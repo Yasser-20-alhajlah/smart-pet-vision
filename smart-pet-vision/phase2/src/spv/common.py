@@ -54,12 +54,17 @@ class Tracker:
 
     def __init__(self, cfg: dict, name: str, config: dict | None = None):
         self.run = None
+        from .provenance import record
+        self.provenance = record()
+        run_config = dict(config or {})
+        run_config["source_provenance"] = self.provenance
+        run_config["source_commit"] = self.provenance.get("commit")
         if cfg["wandb"]["enabled"]:
             import wandb
 
             self.run = wandb.init(
                 entity=cfg["wandb"].get("entity"), project=cfg["wandb"]["project"],
-                name=name, config=config or {}, reinit=True
+                name=name, config=run_config, reinit=True
             )
 
     def log(self, data: dict, step: int | None = None) -> None:

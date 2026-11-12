@@ -15,6 +15,8 @@ def train(cfg: dict, data_yaml: Path, name: str = "yolo11s_seg") -> Path:
 
     sc = cfg["segmentation"]
     model = YOLO(sc["model"])
+    from .training_provenance import attach_training_provenance
+    attach_training_provenance(model, cfg, data_yaml, name, task="segment")
     model.train(data=str(data_yaml), epochs=sc["epochs"], imgsz=sc["imgsz"], batch=sc["batch"],
                 seed=cfg["seed"], deterministic=True,
                 project=str(Path(cfg["paths"]["runs"]) / "segment"), name=name, exist_ok=True,

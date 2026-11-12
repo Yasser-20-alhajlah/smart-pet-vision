@@ -9,6 +9,12 @@ from spv import classify
 from spv.common import load_config
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def source_revision(root):
+ try:
+  return subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL).strip()
+ except (FileNotFoundError, subprocess.CalledProcessError):
+  return "unavailable: source archive without Git metadata; consult source hashes"
+
 def main():
  a=argparse.ArgumentParser();a.add_argument('--images',type=Path,required=True);a.add_argument('--output',type=Path,required=True);a.add_argument('--device',choices=['cpu','cuda','mps'],default='cpu');a.add_argument('--batch-size',type=int,default=32);args=a.parse_args()
  root=Path(__file__).resolve().parents[1];out=args.output.resolve();runs=(root/'runs').resolve()
@@ -20,7 +26,7 @@ def main():
   p=args.images/(r.image+'.jpg')
   if hashlib.md5(p.read_bytes()).hexdigest()!=r.md5:raise ValueError('Image fingerprint mismatch: '+r.image)
  dev=torch.device(args.device);classify.device=lambda:dev
- data=classify.loaders(meta,args.images,cfg);environment={'evaluator_sha256':sha(__file__),'source_sha256':{k:sha(root/'src/spv'/k)for k in ['classify.py','common.py']},'source_commit':subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip(),'python':sys.version,'platform':platform.platform(),'torch':torch.__version__,'device':str(dev),'inference_precision':'float32','metadata_sha256':sha(runs/'data/metadata.csv'),'config_sha256':sha(root/'configs/config.yaml'),'kind':'fresh-checkpoint-inference; not training reproduction','model_selection':'none; all three submitted checkpoints preselected','packages':{k:importlib.metadata.version(k) for k in ['torch','torchvision','numpy','pandas','pillow','scikit-learn']},'started_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())};results={}
+ data=classify.loaders(meta,args.images,cfg);environment={'evaluator_sha256':sha(__file__),'source_sha256':{k:sha(root/'src/spv'/k)for k in ['classify.py','common.py']},'source_commit':source_revision(root),'python':sys.version,'platform':platform.platform(),'torch':torch.__version__,'device':str(dev),'inference_precision':'float32','metadata_sha256':sha(runs/'data/metadata.csv'),'config_sha256':sha(root/'configs/config.yaml'),'kind':'fresh-checkpoint-inference; not training reproduction','model_selection':'none; all three submitted checkpoints preselected','packages':{k:importlib.metadata.version(k) for k in ['torch','torchvision','numpy','pandas','pillow','scikit-learn']},'started_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())};results={}
  for kind in ['scratch','frozen','finetune']:
   print('START',kind,flush=True);model=classify.load_model(kind,cfg,runs/'classification'/f'{kind}.pt');lg,y=classify.predict_logits(model,data['test']);saved=json.loads((runs/'classification'/f'{kind}_test_metrics.json').read_text());t=saved['temperature'];p=classify.softmax(lg);pc=classify.softmax(lg,t);tm=meta[meta.split=='test'].reset_index(drop=True)
   np.savez_compressed(out/f'{kind}_test_logits.npz',logits=lg,labels=y,images=tm.image.to_numpy(dtype=str))

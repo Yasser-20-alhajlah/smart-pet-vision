@@ -22,6 +22,14 @@ class SafetyContract(unittest.TestCase):
         self.assertEqual(r['verdict'],'ready')
         self.assertTrue(r['staff_approval_required'])
         self.assertFalse(r['automatic_publication_allowed'])
+    def test_hold_preserves_technical_verdict_and_refers(self):
+        self.p.m.force_manual_review = True
+        result = self.p.analyze(self.img, with_images=False)
+        self.assertEqual(result["verdict"], "refer_to_staff")
+        self.assertEqual(result["technical_verdict"], "ready")
+        self.assertTrue(result["release_safety_hold"])
+        self.assertFalse(result["automatic_publication_allowed"])
+
     def test_referred_never_auto_publishes(self):
         self.p.detect.return_value=(np.zeros((0,4)),np.zeros((0,),dtype=int),np.zeros(0))
         r=self.p.analyze(self.img,with_images=False)

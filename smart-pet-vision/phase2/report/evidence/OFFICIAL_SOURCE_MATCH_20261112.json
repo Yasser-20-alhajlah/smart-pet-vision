@@ -1,0 +1,25 @@
+{
+  "checked": "2026-11-12",
+  "phase1_feedback_sha256": "24af33f54cf4304bd393b34b0138e8efb9eb589c7ce18dcaffc122352afd60fb",
+  "phase2_template_sha256": "b44a6b074e83bb4d5bc7767dc8171660b992eb442a77f528717123c02b6ed7dd",
+  "phase2_template_due": "2026-11-15",
+  "team_size": 4,
+  "points": {
+    "M4": 15,
+    "M5": 15,
+    "M8": 15
+  },
+  "open_world_required": false,
+  "signature_required": false,
+  "new_classifier_training_required_by_feedback": false,
+  "private_source_folder": "https://drive.google.com/drive/folders/1oQxznINfos4Bglbd3pDumyU2DbSCF4xw",
+  "removed_optional_figures_with_unrecorded_historical_settings": [
+    [
+      "figures/M5_paired_metrics.png"
+    ],
+    [
+      "figures/M5_sam_baseline_failures.jpg"
+    ]
+  ],
+  "historical_results_changed": false
+}

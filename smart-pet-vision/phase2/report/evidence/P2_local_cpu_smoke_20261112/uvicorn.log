@@ -1,0 +1,19 @@
+INFO:     Started server process [12232]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:18765 (Press CTRL+C to quit)
+INFO:     127.0.0.1:53513 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53514 - "GET /demo HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53515 - "POST /analyze?images=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53516 - "POST /analyze?images=true HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53517 - "POST /analyze?images=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53518 - "POST /analyze?images=false HTTP/1.1" 200 OK
+[31m[1mrequirements:[0m Ultralytics requirement ['pi-heif'] not found, attempting AutoUpdate...
+WARNING ⚠️ [31m[1mrequirements:[0m ❌ AutoUpdate skipped (offline)
+INFO:     127.0.0.1:53519 - "POST /analyze HTTP/1.1" 415 Unsupported Media Type
+INFO:     127.0.0.1:53520 - "POST /analyze HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:53521 - "POST /analyze HTTP/1.1" 413 Request Entity Too Large
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [12232]

@@ -1,0 +1,797 @@
+{
+  "checked_date": "2026-11-12",
+  "method": "Read-only unauthenticated GraphQL request to https://api.wandb.ai/graphql; no API key used; no run created or modified.",
+  "project_url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision",
+  "returned_run_count": 44,
+  "runs": [
+    {
+      "id": "7cq6b17h",
+      "display_name": "phase2-documentation-closure-20261109",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "1f6rc8hi",
+      "display_name": "phase2-current-delivery-pointers-20261108",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "99tp73ni",
+      "display_name": "v2-service-integration-preparation-20261107",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "2frliuz1",
+      "display_name": "deploy-benchmark-evidence",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {
+        "onnx_detector/latency_mean_ms": 302.7395592450148,
+        "onnx_detector/latency_p50_ms": 281.14899899946977,
+        "onnx_detector/latency_p95_ms": 364.2592848003439,
+        "onnx_detector/latency_p99_ms": 702.1779498597606,
+        "onnx_detector/peak_gpu_mem_mb": 217.66015625,
+        "onnx_detector/peak_process_rss_mb": 1913.90234375,
+        "onnx_detector/throughput_img_per_s": 3.3031542863333794,
+        "pytorch/latency_mean_ms": 41.4857845150118,
+        "pytorch/latency_p50_ms": 38.48430499965616,
+        "pytorch/latency_p95_ms": 61.44178579947946,
+        "pytorch/latency_p99_ms": 78.39273482038152,
+        "pytorch/peak_gpu_mem_mb": 254.61865234375,
+        "pytorch/peak_process_rss_mb": 1732.95703125,
+        "pytorch/throughput_img_per_s": 24.10392883184878,
+        "service/requests": 300,
+        "service/success_rate": 1
+      }
+    },
+    {
+      "id": "r9kmch6z",
+      "display_name": "notebook-11-v3-verified-closure-code-only",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "bbxluyjz",
+      "display_name": "phase2-audited-handoff-2026-10-31",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "f2mavy13",
+      "display_name": "phase2-submission-review-candidate-20261031",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "55c7z87k",
+      "display_name": "phase2-verified-http-report",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "mu2tolkg",
+      "display_name": "phase2-http-validation-20261031T150838Z",
+      "state": "finished",
+      "config": {
+        "device": "CPU",
+        "weights_sha256": {
+          "detector": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+          "segmenter": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+          "classifier": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba"
+        },
+        "source_revision": "051bd2cff8c362aabdca82b3a9189c54275368cc"
+      },
+      "numeric_summary": {
+        "demo_images_count": 3,
+        "empty_upload_status": 400,
+        "http_latency_p50_ms": 383.8246855000307,
+        "http_latency_p95_ms": 430.7872206000411,
+        "http_latency_p99_ms": 690.0890408002077,
+        "independent_new_test": false,
+        "non_image_status": 415,
+        "passed_service_check": true,
+        "publication_guards_passed_requests": 300,
+        "requests": 300,
+        "startup_s": 4.927852726000083,
+        "succeeded": 300,
+        "success_rate": 1,
+        "timing_includes_demo": false,
+        "warmup": 5
+      }
+    },
+    {
+      "id": "37ft6v21",
+      "display_name": "phase2-submission-handoff",
+      "state": "finished",
+      "config": {
+        "source_revision": "051bd2cff8c362aabdca82b3a9189c54275368cc"
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "f8manl0i",
+      "display_name": "phase2-release-validation-20261031T144932Z",
+      "state": "finished",
+      "config": {
+        "device": "CPU",
+        "weights_sha256": {
+          "detector": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+          "segmenter": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+          "classifier": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba"
+        },
+        "source_revision": "051bd2cff8c362aabdca82b3a9189c54275368cc"
+      },
+      "numeric_summary": {
+        "accuracy": 0.9674185463659148,
+        "all_publication_guards_passed": true,
+        "classification_n": 399,
+        "independent_new_test": false,
+        "multi_animal_ready": 17,
+        "n": 401,
+        "referrals": 81
+      }
+    },
+    {
+      "id": "f2eslc7t",
+      "display_name": "prepare-release-validation-colab",
+      "state": "finished",
+      "config": {
+        "source_revision": "051bd2cff8c362aabdca82b3a9189c54275368cc"
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "i8giv0x1",
+      "display_name": "deploy-benchmark-evidence",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "djvgektr",
+      "display_name": "deploy-benchmark-evidence",
+      "state": "failed",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "2gtl2du8",
+      "display_name": "deploy-benchmark-evidence",
+      "state": "failed",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "s6snj5qv",
+      "display_name": "deploy-benchmark-evidence",
+      "state": "failed",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "f166xpj4",
+      "display_name": "deploy-benchmark-evidence",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "2ptjc52f",
+      "display_name": "retrain-finetune-20261029-122331",
+      "state": "finished",
+      "config": {
+        "lr": 0.0001,
+        "kind": "finetune",
+        "seed": 42,
+        "epochs": 10,
+        "batch_size": 64,
+        "image_size": 224,
+        "weight_decay": 0.0001,
+        "source_revision": "0f9debb8b6e15873409e6dc5590cd0e22350f97e"
+      },
+      "numeric_summary": {
+        "epoch": 10,
+        "epoch_sec": 33.88032102584839,
+        "reproduction/ece_calibrated": 0.000904159132007254,
+        "reproduction/ece_raw": 0.00145436691332467,
+        "reproduction/test_accuracy": 0.9990958408679927,
+        "reproduction/test_macro_f1": 0.9989651820241076,
+        "train_acc": 0.998828811243412,
+        "train_loss": 0.0035079901260997364,
+        "val_acc": 0.9990958408679927,
+        "val_loss": 0.0034616515040397644,
+        "val_macro_f1": 0.9989651820241076
+      }
+    },
+    {
+      "id": "qlzja26v",
+      "display_name": "retrain-frozen-20261029-122331",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "frozen",
+        "seed": 42,
+        "epochs": 8,
+        "batch_size": 64,
+        "image_size": 224,
+        "weight_decay": 0.0001,
+        "source_revision": "0f9debb8b6e15873409e6dc5590cd0e22350f97e"
+      },
+      "numeric_summary": {
+        "epoch": 8,
+        "epoch_sec": 33.76405453681946,
+        "reproduction/ece_calibrated": 0.0012126884020689814,
+        "reproduction/ece_raw": 0.010966942603506188,
+        "reproduction/test_accuracy": 0.9990958408679927,
+        "reproduction/test_macro_f1": 0.9989651820241076,
+        "train_acc": 0.9980480187390202,
+        "train_loss": 0.013648554866001111,
+        "val_acc": 0.9981916817359856,
+        "val_loss": 0.013316437602043152,
+        "val_macro_f1": 0.9979288389513108
+      }
+    },
+    {
+      "id": "9fay48ne",
+      "display_name": "retrain-scratch-20261029-122331",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "scratch",
+        "seed": 42,
+        "epochs": 25,
+        "batch_size": 64,
+        "image_size": 224,
+        "weight_decay": 0.0001,
+        "source_revision": "0f9debb8b6e15873409e6dc5590cd0e22350f97e"
+      },
+      "numeric_summary": {
+        "epoch": 25,
+        "epoch_sec": 33.84910845756531,
+        "reproduction/ece_calibrated": 0.0247622818886479,
+        "reproduction/ece_raw": 0.01358538106164712,
+        "reproduction/test_accuracy": 0.9059674502712476,
+        "reproduction/test_macro_f1": 0.8922996254681648,
+        "train_acc": 0.9141128245168848,
+        "train_loss": 0.2038949513584288,
+        "val_acc": 0.9276672694394212,
+        "val_loss": 0.193096786737442,
+        "val_macro_f1": 0.917515931879794
+      }
+    },
+    {
+      "id": "b3t0emrs",
+      "display_name": "curves-finetune-2026-10-28",
+      "state": "finished",
+      "config": {
+        "lr": 0.0001,
+        "kind": "finetune",
+        "epochs": 10,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "4ixtdkiq",
+      "display_name": "curves-frozen-2026-10-28",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "frozen",
+        "epochs": 8,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "bvns5vir",
+      "display_name": "curves-scratch-2026-10-28",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "scratch",
+        "epochs": 25,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "dmaqcs74",
+      "display_name": "cls-finetune",
+      "state": "finished",
+      "config": {
+        "lr": 0.0001,
+        "kind": "finetune",
+        "epochs": 10,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "ib01etqe",
+      "display_name": "cls-frozen",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "frozen",
+        "epochs": 8,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "wworz0pp",
+      "display_name": "cls-scratch",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "scratch",
+        "epochs": 25,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "fqow5ly7",
+      "display_name": "deploy-benchmark-team",
+      "state": "finished",
+      "config": {
+        "device": "Tesla T4"
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "1jb5y453",
+      "display_name": "seg-sam2.1-baseline",
+      "state": "finished",
+      "config": {
+        "n": 300,
+        "model": "sam2.1_b"
+      },
+      "numeric_summary": {
+        "sam_baseline_test_metrics.by_species.cat.dice": 0.9018498554919316,
+        "sam_baseline_test_metrics.by_species.cat.iou": 0.828340875341246,
+        "sam_baseline_test_metrics.by_species.dog.dice": 0.8731263016937376,
+        "sam_baseline_test_metrics.by_species.dog.iou": 0.8033097615380382,
+        "sam_baseline_test_metrics.mIoU": 0.811570029093097,
+        "sam_baseline_test_metrics.mIoU_no_border": 0.9476023531675032,
+        "sam_baseline_test_metrics.mean_dice": 0.8826050744471414,
+        "sam_baseline_test_metrics.mean_dice_no_border": 0.9561348573890412,
+        "sam_baseline_test_metrics.n": 300,
+        "sam_baseline_test_metrics.worst_breeds.abyssinian": 0.7177683319152626,
+        "sam_baseline_test_metrics.worst_breeds.american_bulldog": 0.7165523713552716,
+        "sam_baseline_test_metrics.worst_breeds.leonberger": 0.5506694955350392,
+        "sam_baseline_test_metrics.worst_breeds.saint_bernard": 0.6439226004840769,
+        "sam_baseline_test_metrics.worst_breeds.staffordshire_bull_terrier": 0.698616700825148
+      }
+    },
+    {
+      "id": "3ztpz2tc",
+      "display_name": "seg-yolo11s-seg",
+      "state": "finished",
+      "config": {
+        "imgsz": 640,
+        "model": "yolo11s-seg",
+        "epochs": 40
+      },
+      "numeric_summary": {
+        "epoch": 40,
+        "lr/pg0": 5.79283e-05,
+        "lr/pg1": 5.79283e-05,
+        "lr/pg2": 5.79283e-05,
+        "metrics/mAP50(B)": 0.99286,
+        "metrics/mAP50(M)": 0.99326,
+        "metrics/mAP50-95(B)": 0.91357,
+        "metrics/mAP50-95(M)": 0.87804,
+        "metrics/precision(B)": 0.989,
+        "metrics/precision(M)": 0.99173,
+        "metrics/recall(B)": 0.98873,
+        "metrics/recall(M)": 0.99126,
+        "time": 4633.16,
+        "train/box_loss": 0.30427,
+        "train/cls_loss": 0.18305,
+        "train/dfl_loss": 0.9832,
+        "train/seg_loss": 0.69205,
+        "train/sem_loss": 0,
+        "val/box_loss": 0.40212,
+        "val/cls_loss": 0.23248,
+        "val/dfl_loss": 0.98653,
+        "val/seg_loss": 0.83737,
+        "val/sem_loss": 0,
+        "yolo_seg_coco.box_mAP50": 0.9921933063075128,
+        "yolo_seg_coco.mask_mAP50": 0.9931178547973412,
+        "yolo_seg_coco.mask_mAP50_95": 0.8745493935724123,
+        "yolo_seg_test_metrics.by_species.cat.dice": 0.9619351308893128,
+        "yolo_seg_test_metrics.by_species.cat.iou": 0.9285108809975312,
+        "yolo_seg_test_metrics.by_species.dog.dice": 0.9570400568375472,
+        "yolo_seg_test_metrics.by_species.dog.iou": 0.920313065827706,
+        "yolo_seg_test_metrics.mIoU": 0.9229591960407508,
+        "yolo_seg_test_metrics.mIoU_no_border": 0.9303493920902308,
+        "yolo_seg_test_metrics.mean_dice": 0.958620112385902,
+        "yolo_seg_test_metrics.mean_dice_no_border": 0.9618084877830462,
+        "yolo_seg_test_metrics.n": 1106,
+        "yolo_seg_test_metrics.worst_breeds.american_bulldog": 0.8991525051831029,
+        "yolo_seg_test_metrics.worst_breeds.beagle": 0.8885861964299799,
+        "yolo_seg_test_metrics.worst_breeds.chihuahua": 0.9001056361781933,
+        "yolo_seg_test_metrics.worst_breeds.miniature_pinscher": 0.8911474427050321,
+        "yolo_seg_test_metrics.worst_breeds.siamese": 0.8989393855866011
+      }
+    },
+    {
+      "id": "2seovilv",
+      "display_name": "det-yolo11s",
+      "state": "finished",
+      "config": {
+        "imgsz": 640,
+        "model": "yolo11s",
+        "epochs": 40
+      },
+      "numeric_summary": {
+        "detection_test_metrics.coco.AP50_per_class.cat": 0.99409922610363,
+        "detection_test_metrics.coco.AP50_per_class.dog": 0.9730372016870832,
+        "detection_test_metrics.coco.mAP50": 0.9835682138953564,
+        "detection_test_metrics.coco.mAP50_95": 0.8500022452233958,
+        "detection_test_metrics.coco.precision": 0.9673977807028956,
+        "detection_test_metrics.coco.recall": 0.965351794619282,
+        "detection_test_metrics.galleries.false_negatives": 45,
+        "detection_test_metrics.galleries.false_positives": 46,
+        "detection_test_metrics.operating_point.conf": 0.4,
+        "detection_test_metrics.operating_point.nms_iou": 0.5,
+        "detection_test_metrics.operating_point.recall_floor_met": true,
+        "detection_test_metrics.operating_point.val_f1": 0.9578995020371208,
+        "detection_test_metrics.operating_point.val_precision": 0.9592021758839528,
+        "detection_test_metrics.operating_point.val_recall": 0.9566003616636528,
+        "detection_test_metrics.test_at_operating_point.f1": 0.9588793492995932,
+        "detection_test_metrics.test_at_operating_point.fn": 45,
+        "detection_test_metrics.test_at_operating_point.fp": 46,
+        "detection_test_metrics.test_at_operating_point.precision": 0.958446251129178,
+        "detection_test_metrics.test_at_operating_point.recall": 0.9593128390596743,
+        "detection_test_metrics.test_at_operating_point.tp": 1061,
+        "epoch": 40,
+        "lr/pg0": 5.79283e-05,
+        "lr/pg1": 5.79283e-05,
+        "lr/pg2": 5.79283e-05,
+        "metrics/mAP50(B)": 0.97943,
+        "metrics/mAP50-95(B)": 0.84435,
+        "metrics/precision(B)": 0.96206,
+        "metrics/recall(B)": 0.95781,
+        "operating_point.conf": 0.4,
+        "operating_point.nms_iou": 0.5,
+        "operating_point.recall_floor_met": true,
+        "operating_point.val_f1": 0.9578995020371208,
+        "operating_point.val_precision": 0.9592021758839528,
+        "operating_point.val_recall": 0.9566003616636528,
+        "time": 3422.52,
+        "train/box_loss": 0.41457,
+        "train/cls_loss": 0.34683,
+        "train/dfl_loss": 1.12156,
+        "val/box_loss": 0.52712,
+        "val/cls_loss": 0.41748,
+        "val/dfl_loss": 1.09655
+      }
+    },
+    {
+      "id": "8nvxbsn2",
+      "display_name": "cls-finetune",
+      "state": "finished",
+      "config": {
+        "lr": 0.0001,
+        "kind": "finetune",
+        "epochs": 10,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {
+        "epoch": 10,
+        "epoch_sec": 54.70602631568909,
+        "train_loss": 0.0035079901260997364,
+        "val_acc": 0.9990958408679927,
+        "val_macro_f1": 0.9989651820241076
+      }
+    },
+    {
+      "id": "xsz5afr9",
+      "display_name": "cls-frozen",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "frozen",
+        "epochs": 8,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {
+        "epoch": 8,
+        "epoch_sec": 50.82903718948364,
+        "train_loss": 0.013648554866001111,
+        "val_acc": 0.9981916817359856,
+        "val_macro_f1": 0.9979288389513108
+      }
+    },
+    {
+      "id": "gh7ayx6h",
+      "display_name": "cls-scratch",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "scratch",
+        "epochs": 25,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {
+        "epoch": 25,
+        "epoch_sec": 52.95794177055359,
+        "train_loss": 0.2038949513584288,
+        "val_acc": 0.9276672694394212,
+        "val_macro_f1": 0.917515931879794
+      }
+    },
+    {
+      "id": "jf4lw0jq",
+      "display_name": "cls-finetune",
+      "state": "crashed",
+      "config": {
+        "lr": 0.0001,
+        "kind": "finetune",
+        "epochs": 10,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "l12p78xu",
+      "display_name": "cls-frozen",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "frozen",
+        "epochs": 8,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "y3tjmq95",
+      "display_name": "cls-scratch",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "scratch",
+        "epochs": 25,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "dtxws2bx",
+      "display_name": "system-acceptance",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "1rjebv86",
+      "display_name": "seg-sam-baseline",
+      "state": "finished",
+      "config": {
+        "prompt": "ground-truth box",
+        "n_images": 300
+      },
+      "numeric_summary": {
+        "test/by_species/cat/dice": 0.9018498554919316,
+        "test/by_species/cat/iou": 0.828340875341246,
+        "test/by_species/dog/dice": 0.8731263016937376,
+        "test/by_species/dog/iou": 0.8033097615380382,
+        "test/mIoU": 0.811570029093097,
+        "test/mIoU_no_border": 0.9476023531675032,
+        "test/mean_dice": 0.8826050744471414,
+        "test/mean_dice_no_border": 0.9561348573890412,
+        "test/n": 300,
+        "test/worst_breeds/abyssinian": 0.7177683319152626,
+        "test/worst_breeds/american_bulldog": 0.7165523713552716,
+        "test/worst_breeds/leonberger": 0.5506694955350392,
+        "test/worst_breeds/saint_bernard": 0.6439226004840769,
+        "test/worst_breeds/staffordshire_bull_terrier": 0.698616700825148
+      }
+    },
+    {
+      "id": "kd5ksgt3",
+      "display_name": "seg-yolo11s-seg",
+      "state": "finished",
+      "config": {
+        "seed": 42,
+        "batch": 16,
+        "imgsz": 640,
+        "model": "yolo11s-seg.pt",
+        "device": "",
+        "epochs": 40,
+        "optimizer": "auto",
+        "weight_decay": 0.0005
+      },
+      "numeric_summary": {
+        "lr/pg0": 5.79283e-05,
+        "lr/pg1": 5.79283e-05,
+        "lr/pg2": 5.79283e-05,
+        "metrics/mAP50(B)": 0.99286,
+        "metrics/mAP50(M)": 0.99326,
+        "metrics/mAP50-95(B)": 0.91357,
+        "metrics/mAP50-95(M)": 0.87804,
+        "metrics/precision(B)": 0.989,
+        "metrics/precision(M)": 0.99173,
+        "metrics/recall(B)": 0.98873,
+        "metrics/recall(M)": 0.99126,
+        "test/box_mAP50": 0.9921933063075128,
+        "test/by_species/cat/dice": 0.9619351308893128,
+        "test/by_species/cat/iou": 0.9285108809975312,
+        "test/by_species/dog/dice": 0.9570400568375472,
+        "test/by_species/dog/iou": 0.920313065827706,
+        "test/mIoU": 0.9229591960407508,
+        "test/mIoU_no_border": 0.9303493920902308,
+        "test/mask_mAP50": 0.9931178547973412,
+        "test/mask_mAP50_95": 0.8745493935724123,
+        "test/mean_dice": 0.958620112385902,
+        "test/mean_dice_no_border": 0.9618084877830462,
+        "test/n": 1106,
+        "test/worst_breeds/american_bulldog": 0.8991525051831029,
+        "test/worst_breeds/beagle": 0.8885861964299799,
+        "test/worst_breeds/chihuahua": 0.9001056361781933,
+        "test/worst_breeds/miniature_pinscher": 0.8911474427050321,
+        "test/worst_breeds/siamese": 0.8989393855866011,
+        "time": 4835.01,
+        "train/box_loss": 0.30427,
+        "train/cls_loss": 0.18305,
+        "train/dfl_loss": 0.9832,
+        "train/seg_loss": 0.69205,
+        "train/sem_loss": 0,
+        "val/box_loss": 0.40212,
+        "val/cls_loss": 0.23248,
+        "val/dfl_loss": 0.98653,
+        "val/seg_loss": 0.83737,
+        "val/sem_loss": 0
+      }
+    },
+    {
+      "id": "48vh56vh",
+      "display_name": "det-yolo11s",
+      "state": "finished",
+      "config": {
+        "seed": 42,
+        "batch": 16,
+        "imgsz": 640,
+        "model": "yolo11s.pt",
+        "device": "",
+        "epochs": 40,
+        "optimizer": "auto",
+        "weight_decay": 0.0005
+      },
+      "numeric_summary": {
+        "lr/pg0": 5.79283e-05,
+        "lr/pg1": 5.79283e-05,
+        "lr/pg2": 5.79283e-05,
+        "metrics/mAP50(B)": 0.97943,
+        "metrics/mAP50-95(B)": 0.84435,
+        "metrics/precision(B)": 0.96206,
+        "metrics/recall(B)": 0.95781,
+        "operating_point/conf": 0.4,
+        "operating_point/nms_iou": 0.5,
+        "operating_point/recall_floor_met": true,
+        "operating_point/val_f1": 0.9578995020371208,
+        "operating_point/val_precision": 0.9592021758839528,
+        "operating_point/val_recall": 0.9566003616636528,
+        "test/coco/AP50_per_class/cat": 0.99409922610363,
+        "test/coco/AP50_per_class/dog": 0.9730372016870832,
+        "test/coco/mAP50": 0.9835682138953564,
+        "test/coco/mAP50_95": 0.8500022452233958,
+        "test/coco/precision": 0.9673977807028956,
+        "test/coco/recall": 0.965351794619282,
+        "test/galleries/false_negatives": 45,
+        "test/galleries/false_positives": 46,
+        "test/operating_point/conf": 0.4,
+        "test/operating_point/nms_iou": 0.5,
+        "test/operating_point/recall_floor_met": true,
+        "test/operating_point/val_f1": 0.9578995020371208,
+        "test/operating_point/val_precision": 0.9592021758839528,
+        "test/operating_point/val_recall": 0.9566003616636528,
+        "test/test_at_operating_point/f1": 0.9588793492995932,
+        "test/test_at_operating_point/fn": 45,
+        "test/test_at_operating_point/fp": 46,
+        "test/test_at_operating_point/precision": 0.958446251129178,
+        "test/test_at_operating_point/recall": 0.9593128390596743,
+        "test/test_at_operating_point/tp": 1061,
+        "time": 3494.79,
+        "train/box_loss": 0.41457,
+        "train/cls_loss": 0.34683,
+        "train/dfl_loss": 1.12156,
+        "val/box_loss": 0.52712,
+        "val/cls_loss": 0.41748,
+        "val/dfl_loss": 1.09655
+      }
+    },
+    {
+      "id": "allez66m",
+      "display_name": "cls-evaluation",
+      "state": "finished",
+      "config": {},
+      "numeric_summary": {}
+    },
+    {
+      "id": "su35qerd",
+      "display_name": "cls-frozen",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "frozen",
+        "epochs": 8,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "mic3rz6r",
+      "display_name": "cls-finetune",
+      "state": "finished",
+      "config": {
+        "lr": 0.0001,
+        "kind": "finetune",
+        "epochs": 10,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    },
+    {
+      "id": "a9aqeqft",
+      "display_name": "cls-scratch",
+      "state": "finished",
+      "config": {
+        "lr": 0.001,
+        "kind": "scratch",
+        "epochs": 25,
+        "weight_decay": 0.0001
+      },
+      "numeric_summary": {}
+    }
+  ],
+  "limits": [
+    "Public config and summary read directly; this is not a fresh training/evaluation or an authenticated account-settings audit.",
+    "No API-key revocation was performed or verified.",
+    "Training config optimizer=auto does not by itself identify the instantiated optimizer.",
+    "Original classifier summaries are last-epoch metrics; selected-checkpoint metrics use saved histories and predictions.",
+    "Several benchmark-evidence runs repeat imported measurements; do not count them as independent repeated benchmarks."
+  ],
+  "checks": [
+    {
+      "run": "2seovilv",
+      "metric": "detection_test_metrics.coco.mAP50",
+      "saved_file": "M4_detection_test_metrics.json",
+      "live_value": 0.9835682138953564,
+      "saved_value": 0.9835682138953565,
+      "difference": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "run": "3ztpz2tc",
+      "metric": "yolo_seg_test_metrics.mIoU",
+      "saved_file": "M5_yolo_seg_test_metrics.json",
+      "live_value": 0.9229591960407508,
+      "saved_value": 0.9229591960407509,
+      "difference": 1.1102230246251565e-16,
+      "passed": true
+    },
+    {
+      "run": "3ztpz2tc",
+      "metric": "yolo_seg_test_metrics.mean_dice",
+      "saved_file": "M5_yolo_seg_test_metrics.json",
+      "live_value": 0.958620112385902,
+      "saved_value": 0.958620112385902,
+      "difference": 0.0,
+      "passed": true
+    }
+  ]
+}

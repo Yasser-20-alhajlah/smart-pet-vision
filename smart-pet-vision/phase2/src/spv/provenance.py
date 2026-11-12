@@ -55,7 +55,10 @@ def record(root: Path = PHASE2, extra: dict | None = None) -> dict:
                     "branch": _git(["rev-parse", "--abbrev-ref", "HEAD"], root),
                     "dirty": bool(status), "dirty_files": status.splitlines()[:50] if status else []})
     else:
-        candidates = (root / "CODE_ARCHIVE_INDEX.json", root.parent / "CODE_ARCHIVE_INDEX.json")
+        # Delivered archive layout: code/CODE_ARCHIVE_INDEX.json beside
+        # code/smart-pet-vision/phase2, two parents above this module's root.
+        candidates = tuple(parent / "CODE_ARCHIVE_INDEX.json"
+                           for parent in (root, root.parent, root.parent.parent))
         index = next((p for p in candidates if p.exists()), None)
         if index is not None:
             d = json.loads(index.read_text())

@@ -1,0 +1,216 @@
+/private/tmp/spv11/deps/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+test_all_project_notebooks_parse (test_check_notebooks.CheckNotebooksTest.test_all_project_notebooks_parse) ... ok
+test_cli_exit_status (test_check_notebooks.CheckNotebooksTest.test_cli_exit_status) ... ok
+test_strip_ipython_keeps_indentation (test_check_notebooks.CheckNotebooksTest.test_strip_ipython_keeps_indentation) ... ok
+test_syntax_error_is_reported (test_check_notebooks.CheckNotebooksTest.test_syntax_error_is_reported) ... ok
+test_api_contract_unchanged (test_demo_page.DemoPage.test_api_contract_unchanged) ... ok
+test_no_external_resources (test_demo_page.DemoPage.test_no_external_resources) ... ok
+test_served_as_html_without_loading_models (test_demo_page.DemoPage.test_served_as_html_without_loading_models) ... ok
+test_static_display_rules_present (test_demo_page.DemoPage.test_static_display_rules_present) ... ok
+test_browser_side_limits_block_empty_and_oversized_files (test_demo_ui_browser.DemoPageInBrowser.test_browser_side_limits_block_empty_and_oversized_files) ... ok
+test_duplicate_submission_sends_one_request (test_demo_ui_browser.DemoPageInBrowser.test_duplicate_submission_sends_one_request) ... ok
+test_invalid_model_output_is_shown_as_503_without_a_result (test_demo_ui_browser.DemoPageInBrowser.test_invalid_model_output_is_shown_as_503_without_a_result) ... ok
+test_invalid_upload_after_success_leaves_no_stale_result (test_demo_ui_browser.DemoPageInBrowser.test_invalid_upload_after_success_leaves_no_stale_result) ... ok
+test_keyboard_only_flow (test_demo_ui_browser.DemoPageInBrowser.test_keyboard_only_flow) ... ok
+test_narrow_screen_has_no_horizontal_scroll (test_demo_ui_browser.DemoPageInBrowser.test_narrow_screen_has_no_horizontal_scroll) ... ok
+test_new_image_during_a_request_discards_the_old_answer (test_demo_ui_browser.DemoPageInBrowser.test_new_image_during_a_request_discards_the_old_answer) ... ok
+test_no_animal_hides_identification (test_demo_ui_browser.DemoPageInBrowser.test_no_animal_hides_identification) ... ok
+test_over_dimensioned_image_is_refused_by_the_service (test_demo_ui_browser.DemoPageInBrowser.test_over_dimensioned_image_is_refused_by_the_service) ... ok
+test_page_loads_without_models_and_without_external_requests (test_demo_ui_browser.DemoPageInBrowser.test_page_loads_without_models_and_without_external_requests) ... ok
+test_ready_result (test_demo_ui_browser.DemoPageInBrowser.test_ready_result) ... ok
+test_referral_with_multiple_reasons_marks_species_provisional (test_demo_ui_browser.DemoPageInBrowser.test_referral_with_multiple_reasons_marks_species_provisional) ... ok
+test_reset_and_repeated_uploads (test_demo_ui_browser.DemoPageInBrowser.test_reset_and_repeated_uploads) ... ok
+test_service_unreachable_after_a_result_hides_the_old_result (test_demo_ui_browser.DemoPageInBrowser.test_service_unreachable_after_a_result_hides_the_old_result) ... ok
+test_unexpected_policy_flags_raise_an_alert (test_demo_ui_browser.DemoPageInBrowser.test_unexpected_policy_flags_raise_an_alert) ... ok
+test_changed_input_or_invalid_rectangle_requires_review (test_evidence_redaction.EvidenceRedaction.test_changed_input_or_invalid_rectangle_requires_review) ... ok
+test_only_requested_pixels_change_and_prior_output_is_preserved (test_evidence_redaction.EvidenceRedaction.test_only_requested_pixels_change_and_prior_output_is_preserved) ... ok
+test_candidate_cannot_be_reused_for_two_references (test_execution_review.DetectionParityAssociation.test_candidate_cannot_be_reused_for_two_references) ... ok
+test_empty_sets (test_execution_review.DetectionParityAssociation.test_empty_sets) ... ok
+test_invalid_shapes_or_coordinates_are_not_parity (test_execution_review.DetectionParityAssociation.test_invalid_shapes_or_coordinates_are_not_parity) ... ok
+test_reordered_identical_boxes_have_zero_displacement (test_execution_review.DetectionParityAssociation.test_reordered_identical_boxes_have_zero_displacement) ... ok
+test_body_fraction_differs_from_box_area (test_execution_review.EvaluationIntegrity.test_body_fraction_differs_from_box_area) ... ok
+test_mask_alignment_error_is_not_resized_into_a_score (test_execution_review.EvaluationIntegrity.test_mask_alignment_error_is_not_resized_into_a_score) ... ok
+test_missing_or_duplicate_records_fail_explicitly (test_execution_review.EvaluationIntegrity.test_missing_or_duplicate_records_fail_explicitly) ... ok
+test_release_cohort_must_cover_every_image_exactly_once (test_execution_review.EvaluationIntegrity.test_release_cohort_must_cover_every_image_exactly_once) ... ok
+test_release_cohort_rejects_invalid_truth_schema (test_execution_review.EvaluationIntegrity.test_release_cohort_rejects_invalid_truth_schema) ... ok
+test_actual_asgi_validation_statuses (test_execution_review.HTTPIntegrity.test_actual_asgi_validation_statuses) ... ok
+test_decoding_preserves_exif_for_pipeline_orientation (test_execution_review.HTTPIntegrity.test_decoding_preserves_exif_for_pipeline_orientation) ... ok
+test_inference_does_not_block_event_loop_and_shared_models_are_serial (test_execution_review.HTTPIntegrity.test_inference_does_not_block_event_loop_and_shared_models_are_serial) ... ok
+test_lock_released_after_model_failure (test_execution_review.HTTPIntegrity.test_lock_released_after_model_failure) ... ok
+test_legacy_defaults_and_new_explicit_values (test_execution_review.ManifestIntegrity.test_legacy_defaults_and_new_explicit_values) ... ok
+test_min_mask_fraction_counts_matched_only (test_gap_experiments.Records.test_min_mask_fraction_counts_matched_only) ... ok
+test_referral_summary (test_gap_experiments.Records.test_referral_summary) ... ok
+test_stage_percentiles (test_gap_experiments.Records.test_stage_percentiles) ... ok
+test_sweep_uses_project_scoring (test_gap_experiments.Records.test_sweep_uses_project_scoring) ... ok
+test_empty_source_refused (test_gap_experiments.Remap.test_empty_source_refused) ... ok
+test_labels_are_mapped_and_images_linked (test_gap_experiments.Remap.test_labels_are_mapped_and_images_linked) ... ok
+test_unknown_class_and_existing_output_refused (test_gap_experiments.Remap.test_unknown_class_and_existing_output_refused) ... ok
+test_largest_within_limit (test_gap_experiments.Selection.test_largest_within_limit) ... ok
+test_seg_conf_choice_prefers_higher_iou_then_higher_conf (test_gap_experiments.Selection.test_seg_conf_choice_prefers_higher_iou_then_higher_conf) ... ok
+test_empty_masks_none (test_instance_alignment.InstanceAlignment.test_empty_masks_none) ... ok
+test_fallback_different_class_when_only_overlap (test_instance_alignment.InstanceAlignment.test_fallback_different_class_when_only_overlap) ... ok
+test_mask_and_box_instance_count_mismatch_is_referred (test_instance_alignment.InstanceAlignment.test_mask_and_box_instance_count_mismatch_is_referred) ... ok
+test_matched_mask_species_conflict_is_referred (test_instance_alignment.InstanceAlignment.test_matched_mask_species_conflict_is_referred) ... ok
+test_mismatched_mask_shape_referred (test_instance_alignment.InstanceAlignment.test_mismatched_mask_shape_referred) ... ok
+test_missing_instance_referred (test_instance_alignment.InstanceAlignment.test_missing_instance_referred) ... ok
+test_no_animal_returns_no_animal (test_instance_alignment.InstanceAlignment.test_no_animal_returns_no_animal) ... ok
+test_nonoverlap_none (test_instance_alignment.InstanceAlignment.test_nonoverlap_none) ... ok
+test_same_class_preferred_with_overlap (test_instance_alignment.InstanceAlignment.test_same_class_preferred_with_overlap) ... ok
+test_same_species_second_animal_is_also_referred (test_instance_alignment.InstanceAlignment.test_same_species_second_animal_is_also_referred) ... ok
+test_selects_correct_instance_not_union (test_instance_alignment.InstanceAlignment.test_selects_correct_instance_not_union) ... ok
+test_single_matched_instance_is_provisionally_ready (test_instance_alignment.InstanceAlignment.test_single_matched_instance_is_provisionally_ready) ... ok
+test_classifier_existing_export_is_preserved (test_model_repair.ModelRepair.test_classifier_existing_export_is_preserved) ... ok
+test_detector_existing_export_is_preserved (test_model_repair.ModelRepair.test_detector_existing_export_is_preserved) ... ok
+test_yolo_extra_mask_pixels_are_not_silently_cropped (test_model_repair.ModelRepair.test_yolo_extra_mask_pixels_are_not_silently_cropped) ... ok
+test_yolo_missing_batch_results_fail_explicitly (test_model_repair.ModelRepair.test_yolo_missing_batch_results_fail_explicitly) ... ok
+test_complete_cohort (test_multi_animal_evaluator.MultiAnimalEvaluator.test_complete_cohort) ... ok
+test_paired_safety_and_referral_cost (test_multi_animal_evaluator.MultiAnimalEvaluator.test_paired_safety_and_referral_cost) ... ok
+test_both_experimental_manifests_keep_the_release_hold (test_multi_animal_review.CandidateManifestHold.test_both_experimental_manifests_keep_the_release_hold) ... ok
+test_clear_second_animal_is_cue_independent_of_species (test_multi_animal_review.ProposalGeometry.test_clear_second_animal_is_cue_independent_of_species) ... ok
+test_confidence_floor (test_multi_animal_review.ProposalGeometry.test_confidence_floor) ... ok
+test_duplicate_from_second_model_is_not_extra_animal (test_multi_animal_review.ProposalGeometry.test_duplicate_from_second_model_is_not_extra_animal) ... ok
+test_invalid_coordinate_and_scores_are_fail_closed (test_multi_animal_review.ProposalGeometry.test_invalid_coordinate_and_scores_are_fail_closed) ... ok
+test_proposal_overflow_fails_closed (test_multi_animal_review.ProposalGeometry.test_proposal_overflow_fails_closed) ... ok
+test_secondary_dedup_but_cross_source_evidence_preserved (test_multi_animal_review.ProposalGeometry.test_secondary_dedup_but_cross_source_evidence_preserved) ... ok
+test_tiled_coordinates_and_overlap_are_deterministic (test_multi_animal_review.ProposalGeometry.test_tiled_coordinates_and_overlap_are_deterministic) ... ok
+test_audit_failure_reported_without_changing_decision (test_multi_animal_review.ReviewFlow.test_audit_failure_reported_without_changing_decision) ... ok
+test_audit_mode_records_but_does_not_change_verdict (test_multi_animal_review.ReviewFlow.test_audit_mode_records_but_does_not_change_verdict) ... ok
+test_detector_proposal_refers_without_changing_species (test_multi_animal_review.ReviewFlow.test_detector_proposal_refers_without_changing_species) ... ok
+test_no_repeat_inference_when_previously_referred (test_multi_animal_review.ReviewFlow.test_no_repeat_inference_when_previously_referred) ... ok
+test_probe_failure_refers_conservatively_in_enforce (test_multi_animal_review.ReviewFlow.test_probe_failure_refers_conservatively_in_enforce) ... ok
+test_segmenter_only_secondary_proposal_refers (test_multi_animal_review.ReviewFlow.test_segmenter_only_secondary_proposal_refers) ... ok
+test_single_animal_remains_ready (test_multi_animal_review.ReviewFlow.test_single_animal_remains_ready) ... ok
+test_tile_secondary_is_translated_and_referred (test_multi_animal_review.ReviewFlow.test_tile_secondary_is_translated_and_referred) ... ok
+test_candidate_load_and_invalid_controls (test_multi_animal_review.ReviewManifest.test_candidate_load_and_invalid_controls) ... ok
+test_cohort_refuses_overwriting (test_onnx_parity_diagnostics.ParityDiagnostics.test_cohort_refuses_overwriting) ... ok
+test_cohort_rejects_duplicates_and_changed_image (test_onnx_parity_diagnostics.ParityDiagnostics.test_cohort_rejects_duplicates_and_changed_image) ... ok
+test_frozen_source_blocks_mutation (test_onnx_parity_diagnostics.ParityDiagnostics.test_frozen_source_blocks_mutation) ... ok
+test_gate_fails_closed_without_dependencies_without_mutating_checkpoint (test_onnx_parity_diagnostics.ParityDiagnostics.test_gate_fails_closed_without_dependencies_without_mutating_checkpoint) ... usage: python3 -m unittest [-h] --repo REPO --weights WEIGHTS --onnx ONNX
+                           --image-root IMAGE_ROOT --cohort COHORT --baseline
+                           BASELINE --output OUTPUT
+                           [--random-inputs RANDOM_INPUTS] [--seed SEED]
+                           [--min-images MIN_IMAGES]
+python3 -m unittest: error: Output directory exists. Previous evidence must never be overwritten
+ok
+test_original_tolerance_unchanged (test_onnx_parity_diagnostics.ParityDiagnostics.test_original_tolerance_unchanged) ... ok
+test_pass_and_same_size (test_onnx_parity_diagnostics.ParityDiagnostics.test_pass_and_same_size) ... ok
+test_per_channel_box_vs_class_error (test_onnx_parity_diagnostics.ParityDiagnostics.test_per_channel_box_vs_class_error) ... ok
+test_reject_nonfinite_or_bad_shapes (test_onnx_parity_diagnostics.ParityDiagnostics.test_reject_nonfinite_or_bad_shapes) ... ok
+test_count_or_class_mismatch_fails (test_onnx_repair_core.ParityGateTests.test_count_or_class_mismatch_fails) ... ok
+test_invalid_counter_fails (test_onnx_repair_core.ParityGateTests.test_invalid_counter_fails) ... ok
+test_missing_detections_rejected_even_if_zero_displacement (test_onnx_repair_core.ParityGateTests.test_missing_detections_rejected_even_if_zero_displacement) ... ok
+test_no_partial_or_blocked_claim_as_pass (test_onnx_repair_core.ParityGateTests.test_no_partial_or_blocked_claim_as_pass) ... ok
+test_no_posthoc_tolerance_inflation (test_onnx_repair_core.ParityGateTests.test_no_posthoc_tolerance_inflation) ... ok
+test_nonfinite_rejected (test_onnx_repair_core.ParityGateTests.test_nonfinite_rejected) ... ok
+test_original_raw_failure_not_overridden_by_final_parity (test_onnx_repair_core.ParityGateTests.test_original_raw_failure_not_overridden_by_final_parity) ... ok
+test_pass_still_never_allows_auto_deploy (test_onnx_repair_core.ParityGateTests.test_pass_still_never_allows_auto_deploy) ... ok
+test_http_invalid_output_returns_503_without_internal_message (test_output_safety.OutputSafety.test_http_invalid_output_returns_503_without_internal_message) ... ok
+test_invalid_detector_output_is_rejected (test_output_safety.OutputSafety.test_invalid_detector_output_is_rejected) ... ok
+test_invalid_masks_refer_instead_of_becoming_foreground (test_output_safety.OutputSafety.test_invalid_masks_refer_instead_of_becoming_foreground) ... ok
+test_invalid_probabilities_never_produce_ready (test_output_safety.OutputSafety.test_invalid_probabilities_never_produce_ready) ... ok
+test_subpixel_crop_and_cutout_are_nonempty (test_output_safety.OutputSafety.test_subpixel_crop_and_cutout_are_nonempty) ... ok
+test_total_is_direct_wall_time_including_encoding (test_output_safety.OutputSafety.test_total_is_direct_wall_time_including_encoding) ... ok
+test_hold_preserves_technical_verdict_and_refers (test_pipeline_release_policy.SafetyContract.test_hold_preserves_technical_verdict_and_refers) ... ok
+test_multi_detected_refers (test_pipeline_release_policy.SafetyContract.test_multi_detected_refers) ... ok
+test_ready_never_auto_publishes (test_pipeline_release_policy.SafetyContract.test_ready_never_auto_publishes) ... ok
+test_referred_never_auto_publishes (test_pipeline_release_policy.SafetyContract.test_referred_never_auto_publishes) ... ok
+test_cli_prints_json (test_provenance.ProvenanceTest.test_cli_prints_json) ... ok
+test_fingerprint_changes_when_source_changes (test_provenance.ProvenanceTest.test_fingerprint_changes_when_source_changes) ... ok
+test_record_in_git_checkout_names_commit (test_provenance.ProvenanceTest.test_record_in_git_checkout_names_commit) ... ok
+test_record_outside_git_uses_archive_index_or_fingerprint (test_provenance.ProvenanceTest.test_record_outside_git_uses_archive_index_or_fingerprint) ... ok
+test_bad_temperature_and_threshold (test_release_inputs.ReleaseInputs.test_bad_temperature_and_threshold) ... ok
+test_class_count_and_iou_validation (test_release_inputs.ReleaseInputs.test_class_count_and_iou_validation) ... ok
+test_invalid_boxes_do_not_match (test_release_inputs.ReleaseInputs.test_invalid_boxes_do_not_match) ... ok
+test_invalid_classifier_is_rejected (test_release_inputs.ReleaseInputs.test_invalid_classifier_is_rejected) ... ok
+test_manifest_independent_of_cwd (test_release_inputs.ReleaseInputs.test_manifest_independent_of_cwd) ... ok
+test_code_archive_is_byte_reproducible (test_release_packaging.CodeArchive.test_code_archive_is_byte_reproducible) ... ok
+test_pdfs_are_excluded_and_listed (test_release_packaging.CodeArchive.test_pdfs_are_excluded_and_listed) ... ok
+test_private_ids_parsed_and_detected_as_whole_tokens_only (test_release_packaging.CodeArchive.test_private_ids_parsed_and_detected_as_whole_tokens_only) ... ok
+test_source_zip_code_folder_is_identical_to_code_archive (test_release_packaging.CodeArchive.test_source_zip_code_folder_is_identical_to_code_archive) ... ok
+test_empty_comparison_has_no_verdict (test_reproduce_phase2_eval.ReproduceEvalTest.test_empty_comparison_has_no_verdict) ... ok
+test_originals_match_reported_numbers (test_reproduce_phase2_eval.ReproduceEvalTest.test_originals_match_reported_numbers) ... ok
+test_side_by_side_verdicts (test_reproduce_phase2_eval.ReproduceEvalTest.test_side_by_side_verdicts) ... ok
+test_invalid_run_configuration (test_review_regressions.BenchmarkInputs.test_invalid_run_configuration) ... ok
+test_rss_units_are_portable (test_review_regressions.BenchmarkInputs.test_rss_units_are_portable) ... ok
+test_ignore_alignment (test_review_regressions.MaskEvaluation.test_ignore_alignment) ... ok
+test_ignored_image_cannot_score_perfect (test_review_regressions.MaskEvaluation.test_ignored_image_cannot_score_perfect) ... ok
+test_invalid_alignment_cannot_broadcast (test_review_regressions.MaskEvaluation.test_invalid_alignment_cannot_broadcast) ... ok
+test_known_overlap_and_ignore (test_review_regressions.MaskEvaluation.test_known_overlap_and_ignore) ... ok
+test_empty_and_unreadable (test_review_regressions.ServiceInputs.test_empty_and_unreadable) ... BLOCKED: evidence at /var/folders/pd/8btqpjtj4j7c7km78wkyzrnm0000gn/T/tmpvskzlueg/result/onnx_stage2_gate.json
+[31m[1mrequirements:[0m Ultralytics requirement ['pi-heif'] not found, attempting AutoUpdate...
+Collecting pi-heif
+  Downloading pi_heif-1.4.0-cp312-cp312-macosx_11_0_arm64.whl.metadata (6.3 kB)
+Requirement already satisfied: pillow>=11.1.0 in /private/tmp/spv11/ml-deps (from pi-heif) (13.0.0)
+Downloading pi_heif-1.4.0-cp312-cp312-macosx_11_0_arm64.whl (959 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 959.6/959.6 kB 5.2 MB/s  0:00:00
+Installing collected packages: pi-heif
+Successfully installed pi-heif-1.4.0
+
+[notice] A new release of pip is available: 26.2.2 -> 26.3
+[notice] To update, run: /Users/mohammedmac/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 -m pip install --upgrade pip
+
+[31m[1mrequirements:[0m AutoUpdate success ✅ 2.2s
+WARNING ⚠️ [31m[1mrequirements:[0m [1mRestart runtime or rerun command for updates to take effect[0m
+
+ok
+test_upload_limit_is_enforced_before_decode (test_review_regressions.ServiceInputs.test_upload_limit_is_enforced_before_decode) ... ok
+test_valid_image_reaches_pipeline (test_review_regressions.ServiceInputs.test_valid_image_reaches_pipeline) ... ok
+test_missing_manifest_stops_before_start (test_run_service.Launcher.test_missing_manifest_stops_before_start) ... ok
+test_never_installs_or_downloads (test_run_service.Launcher.test_never_installs_or_downloads) ... ok
+test_public_address_is_refused (test_run_service.Launcher.test_public_address_is_refused) ... ok
+test_cli_precomputed_features_split_check_and_new_split (test_same_animal_groups.IdentityGroupsTest.test_cli_precomputed_features_split_check_and_new_split) ... ok
+test_cross_partition_check (test_same_animal_groups.IdentityGroupsTest.test_cross_partition_check) ... ok
+test_length_mismatch_raises (test_same_animal_groups.IdentityGroupsTest.test_length_mismatch_raises) ... ok
+test_links_duplicates_and_similar_within_breed_only (test_same_animal_groups.IdentityGroupsTest.test_links_duplicates_and_similar_within_breed_only) ... ok
+test_overrides_link_and_unlink (test_same_animal_groups.IdentityGroupsTest.test_overrides_link_and_unlink) ... ok
+test_resnet_path_runs_without_downloaded_weights (test_same_animal_groups.IdentityGroupsTest.test_resnet_path_runs_without_downloaded_weights) ... ok
+test_allow_drift_still_stops_on_other_preflight_failure (test_smoke_preflight_failure.SmokePreflightFailure.test_allow_drift_still_stops_on_other_preflight_failure) ... $ /Users/mohammedmac/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 tools/preflight_release.py --manifest /var/folders/pd/8btqpjtj4j7c7km78wkyzrnm0000gn/T/tmp0jvpxjob/manifest.json --requirements ../requirements.txt
+PREFLIGHT FAILED: missing weights
+(exit 1)
+
+ok
+test_default_preflight_failure_stops_before_http (test_smoke_preflight_failure.SmokePreflightFailure.test_default_preflight_failure_stops_before_http) ... $ /Users/mohammedmac/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 tools/preflight_release.py --manifest /var/folders/pd/8btqpjtj4j7c7km78wkyzrnm0000gn/T/tmplouyb4ym/manifest.json --requirements ../requirements.txt --strict-versions
+PREFLIGHT FAILED: missing weights
+(exit 1)
+
+ok
+test_changed_latency_in_report_is_caught (test_submission_preflight.EvidenceConsistency.test_changed_latency_in_report_is_caught) ... /private/tmp/spv12/github-release/smart-pet-vision/phase2/tools/verify_submission_evidence.py:38: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/pd/8btqpjtj4j7c7km78wkyzrnm0000gn/T/tmpbn0wderu/report/evidence/M8_acceptance.csv' mode='r' encoding='UTF-8'>
+  acc = {r["id"]: r for r in csv.DictReader(open(root / "report" / "evidence" / "M8_acceptance.csv"))}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_claiming_onnx_pass_is_caught (test_submission_preflight.EvidenceConsistency.test_claiming_onnx_pass_is_caught) ... /private/tmp/spv12/github-release/smart-pet-vision/phase2/tools/verify_submission_evidence.py:38: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/pd/8btqpjtj4j7c7km78wkyzrnm0000gn/T/tmpkwid_vbk/report/evidence/M8_acceptance.csv' mode='r' encoding='UTF-8'>
+  acc = {r["id"]: r for r in csv.DictReader(open(root / "report" / "evidence" / "M8_acceptance.csv"))}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_demo_included_in_timing_is_caught (test_submission_preflight.EvidenceConsistency.test_demo_included_in_timing_is_caught) ... /private/tmp/spv12/github-release/smart-pet-vision/phase2/tools/verify_submission_evidence.py:38: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/pd/8btqpjtj4j7c7km78wkyzrnm0000gn/T/tmppikjg_0o/report/evidence/M8_acceptance.csv' mode='r' encoding='UTF-8'>
+  acc = {r["id"]: r for r in csv.DictReader(open(root / "report" / "evidence" / "M8_acceptance.csv"))}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_relaxed_onnx_tolerance_is_caught (test_submission_preflight.EvidenceConsistency.test_relaxed_onnx_tolerance_is_caught) ... /private/tmp/spv12/github-release/smart-pet-vision/phase2/tools/verify_submission_evidence.py:38: ResourceWarning: unclosed file <_io.TextIOWrapper name='/var/folders/pd/8btqpjtj4j7c7km78wkyzrnm0000gn/T/tmpui09htnd/report/evidence/M8_acceptance.csv' mode='r' encoding='UTF-8'>
+  acc = {r["id"]: r for r in csv.DictReader(open(root / "report" / "evidence" / "M8_acceptance.csv"))}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_repository_evidence_is_consistent (test_submission_preflight.EvidenceConsistency.test_repository_evidence_is_consistent) ... /private/tmp/spv12/github-release/smart-pet-vision/phase2/tools/verify_submission_evidence.py:38: ResourceWarning: unclosed file <_io.TextIOWrapper name='/private/tmp/spv12/github-release/smart-pet-vision/phase2/report/evidence/M8_acceptance.csv' mode='r' encoding='UTF-8'>
+  acc = {r["id"]: r for r in csv.DictReader(open(root / "report" / "evidence" / "M8_acceptance.csv"))}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_box_and_score_groups_are_separated (test_submission_preflight.OnnxChannelSplit.test_box_and_score_groups_are_separated) ... ok
+test_shape_mismatch_rejected (test_submission_preflight.OnnxChannelSplit.test_shape_mismatch_rejected) ... ok
+test_empty_image_folder (test_submission_preflight.Preflight.test_empty_image_folder) ... ok
+test_existing_output_refused (test_submission_preflight.Preflight.test_existing_output_refused) ... ok
+test_invalid_manifest_value (test_submission_preflight.Preflight.test_invalid_manifest_value) ... ok
+test_label_mismatch (test_submission_preflight.Preflight.test_label_mismatch) ... ok
+test_missing_manifest (test_submission_preflight.Preflight.test_missing_manifest) ... ok
+test_missing_weights_fail_before_loading (test_submission_preflight.Preflight.test_missing_weights_fail_before_loading) ... ok
+test_onnx_detector_rejected (test_submission_preflight.Preflight.test_onnx_detector_rejected) ... ok
+test_operating_point_cannot_drift (test_submission_preflight.Preflight.test_operating_point_cannot_drift) ... ok
+test_review_mode_must_be_off (test_submission_preflight.Preflight.test_review_mode_must_be_off) ... ok
+test_valid_setup_passes (test_submission_preflight.Preflight.test_valid_setup_passes) ... ok
+test_version_check_reports_mismatch (test_submission_preflight.Preflight.test_version_check_reports_mismatch) ... ok
+test_wrong_weights_hash (test_submission_preflight.Preflight.test_wrong_weights_hash) ... ok
+
+----------------------------------------------------------------------
+Ran 164 tests in 16.253s
+
+OK

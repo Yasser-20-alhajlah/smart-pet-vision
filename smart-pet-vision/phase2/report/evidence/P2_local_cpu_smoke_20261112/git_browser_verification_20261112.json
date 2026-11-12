@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-12",
+  "scope": "Local regression suite from a Git checkout, including 15 headless Chromium UI tests with a stand-in pipeline. No real-weight browser accuracy or GPU benchmark is claimed.",
+  "base_commit": "e885c729c52da17a551b36fda00ad4117e021679",
+  "working_tree": "staged local changes prior to publication",
+  "result": {
+    "total": 164,
+    "passed": 164,
+    "skipped": 0,
+    "failed": 0
+  },
+  "evidence_consistency": "49/49",
+  "environment_note": "Local unpinned Python/library environment. Real-weight CPU functional evidence and explicit version differences are preserved separately.",
+  "browser": "Playwright 1.65.1 with its downloaded Chromium Headless Shell",
+  "log_sha256": "906169d4a0a1237475e8f8ced340cb41318dd8cff99a4367add7ecfe895e432f",
+  "runtime_file_sha256": {
+    "smart-pet-vision/phase2/src/spv/serve.py": "3b5652d6d50e578f6cbdcaa3e0564c3c9ecb3bb77798a4e34319a90814416833",
+    "smart-pet-vision/phase2/src/spv/pipeline.py": "b27947de45331f337cdfbf3d3caa08fe6168cbc9642f042bc872f57e1a315439",
+    "smart-pet-vision/phase2/tools/smoke_test_http.py": "758f0e7bed2020b6af7f60e52f08897d67284ae7e06cdf06adee886a7cafb4c5"
+  }
+}

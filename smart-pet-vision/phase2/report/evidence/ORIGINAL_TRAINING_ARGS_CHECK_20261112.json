@@ -1,0 +1,24 @@
+{
+  "scope": "Original args.yaml records, not a new training run and not inferred from current defaults",
+  "sources": {
+    "detector": {
+      "drive_id": "1zxd2KtG2BKN8vcZjQfsPwfSqZ4kZ3b0Z",
+      "sha256": "9f0ab2d06626c6eb8033d096350ed9d486add0792b9201d7d9b0e913fe8b82c5"
+    },
+    "segmenter": {
+      "drive_id": "1BYvvhg9_BtTI0P8RdWMG7J7dIn70fYwh",
+      "sha256": "8ef40764750bb32c570cbb8603395049bcb0d8b7e5ad70402b03271e1cc2f003"
+    }
+  },
+  "shared_recorded_settings": {
+    "epochs": 40,
+    "batch": 16,
+    "imgsz": 640,
+    "seed": 42,
+    "optimizer": "auto",
+    "conf": null,
+    "iou": 0.7
+  },
+  "interpretation": "External args.yaml records the original optimizer=auto request. Literal train_args metadata in both SHA-256-verified served checkpoints directly stores optimizer=AdamW and lr0=0.001667, matching executed stdout. W&B source-run association remains bounded as described in the report; no missing original run commit is invented.",
+  "followup_checkpoint_metadata": "CHECKPOINT_TRAIN_ARGS_LITERAL_VERIFIED_20261112.json"
+}

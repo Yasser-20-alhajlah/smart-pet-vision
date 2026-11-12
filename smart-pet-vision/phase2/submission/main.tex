@@ -1,22 +1,3 @@
-% =====================================================================
-%  AI251P Applied Computer Vision -- Capstone Project
-%  Phase 2 Report Template (M4, M5, M8, 45 points, due 15 November 2026)
-%
-%  How to use:
-%   * Fill in the team details in the "TEAM DETAILS" block below.
-%   * Replace every grey italic prompt (\prompt{...}) with your own text.
-%   * Adapt the methods to your problem: the prompts say what must be
-%     shown, and the "e.g." hints are examples, not required steps.
-%   * Fill every table. Add, remove or rename rows and columns to fit
-%     your task, and say why when something does not apply.
-%   * Put your figures in the figures/ folder and replace
-%     figures/placeholder.png with your own file names.
-%   * Every reported figure must state the data split, the input
-%     resolution and the thresholds used.
-%   * "Optional extras" are not required for full credit.
-%   * Teams of 5 must also complete Section 5 (Open-world extension).
-%     Teams of 3 or 4 delete Section 5.
-% =====================================================================
 \documentclass[11pt,a4paper]{article}
 
 \usepackage[T1]{fontenc}
@@ -35,7 +16,6 @@
 \usepackage[colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
 
 % ---------------------------------------------------------------------
-%  TEAM DETAILS -- edit these
 % ---------------------------------------------------------------------
 \newcommand{\teamname}{Smart Pet Vision}
 \newcommand{\projecttitle}{Smart Pet Vision: Pet Photo Review Assistant for Shelters}
@@ -43,7 +23,6 @@
 % ---------------------------------------------------------------------
 %  Helpers
 % ---------------------------------------------------------------------
-% Grey italic prompt: delete it and write your own text in its place.
 \newcommand{\prompt}[1]{\leavevmode{\color{gray!80!black}\itshape #1}}
 % Blank line for short answers
 \newcommand{\blank}{\rule{0pt}{2.2ex}}
@@ -63,6 +42,7 @@
 \renewcommand{\arraystretch}{1.25}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{4pt}
+\setlength{\emergencystretch}{1em}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -98,11 +78,14 @@
 \vspace{4pt}
 
 \noindent\fcolorbox{gray!60}{gray!6}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\small
-\textbf{Summary.} Shelter staff check every adoption-listing photo before it is published. Smart Pet Vision gives them a technical pre-check for one photo of a cat or a dog: a fine-tuned YOLO11s detector (640\,px, \tconf{} 0.40, \tnms{} 0.50, chosen on validation) counts the animals and selects one, the Phase 1 ResNet-50 classifier (224\,px crop) confirms its species, and a fine-tuned YOLO11s-seg model (640\,px, \tconf{} 0.25) outlines it. Any doubt refers the photo to staff, and every photo, ready or referred, still needs staff approval. \textbf{Results:} nine of the ten acceptance criteria fixed in advance are met. On the Oxford-IIIT Pet test split (1,106 images, evaluated once), detection reaches mAP50 0.984 (mAP50--95 0.850) and recall 0.959 at the operating point, segmentation a mean IoU of 0.923 and a Dice of 0.959, classification an accuracy of 0.999, and the service answers 300 of 300 requests with a p95 latency of 61.4\,ms on a T4. A re-evaluation from the delivered package by a second team member reproduced all six detection and segmentation metrics exactly, and a retraining on a split without same-animal groups across partitions gave close values (mAP50 0.978, mean IoU 0.921; Section~\ref{sec:suppf}). \textbf{Limits:} on 401 previously inspected team photos detection recall falls to 0.732, and 17 of 52 multi-animal photos are wrongly marked ready; the exported ONNX detector misses its parity criterion (A9b); 135 of the 1,106 test images have a same-animal near-duplicate in training or validation. \textbf{Decision:} GO for a staff-supervised PyTorch service; NO-GO for the ONNX detector.}}
+\textbf{Summary.} Shelter staff check every adoption-listing photo before it is published. Smart Pet Vision gives them a technical pre-check for one photo of a cat or a dog: a fine-tuned YOLO11s detector (640\,px, \tconf{} 0.40, \tnms{} 0.50, chosen on validation) counts the animals and selects one, the Phase 1 ResNet-50 classifier (224\,px crop) confirms its species, and a fine-tuned YOLO11s-seg model (640\,px, \tconf{} 0.25) outlines it. Any doubt refers the photo to staff, and every photo, ready or referred, still needs staff approval. \textbf{Results:} nine of the ten acceptance criteria fixed in advance are met. On the Oxford-IIIT Pet test split (1,106 images, evaluated once), detection reaches mAP50 0.984 (mAP50--95 0.850) and recall 0.959 at the operating point, segmentation a mean IoU of 0.923 and a Dice of 0.959, classification an accuracy of 0.999, and the T4 HTTP service answers 300 of 300 requests with p95 latency 135.3\,ms; the separate in-process T4 benchmark has p95 61.4\,ms. A re-evaluation from the 6 November package (commit 609c0c5), attributed to a second team member reproduced all six detection and segmentation metrics exactly, and a retraining on a split without same-animal groups across partitions gave close values (mAP50 0.978, mean IoU 0.921; Section~\ref{sec:suppf}). \textbf{Limits:} on 401 previously inspected team photos detection recall falls to 0.732, and 17 of 52 multi-animal photos are wrongly marked ready; the exported ONNX detector misses its parity criterion (A9b); 135 of the 1,106 test images belong to cross-partition similarity groups reviewed by the owner. \textbf{Decision:} GO for a staff-supervised PyTorch service; NO-GO for the ONNX detector.}}
 \vspace{2pt}
 
 % =====================================================================
 \section{Team and system}
+
+\noindent\textit{Evidence availability check (12 November 2026).} The public W\&B API returned 44 run records. The live detection mAP50 and segmentation mIoU/Dice match the saved evidence; this read-only check created no new experiment. Original classifier summaries show last-epoch values, while the tables below report validation-selected checkpoints. See \ev{P2_wandb_live_read_20261112.json}.
+
 
 \begin{xltabular}{\linewidth}{@{}l Y@{}}
 \toprule
@@ -116,7 +99,7 @@ Field & Our answer \\
 Team name & Smart Pet Vision \\
 Team size & 4 (Section 5, open-world extension, is therefore omitted) \\
 Topic & Original topic, approved by the instructor (19 October 2026): pet photo review for shelter adoption listings \\
-Code repository and commit hash & \url{https://github.com/Yasser-20-alhajlah/smart-pet-vision} (Phase 2 code in \texttt{smart-pet-vision/phase2/}). \textbf{Delivered commit:} \texttt{\deliverycommit} (this PDF and the source archive were built from it; the archive's \texttt{CODE\_ARCHIVE\_INDEX.json} records the same hash). \textbf{Results commit:} \texttt{879b0e8} (part of \texttt{main}), the code that produced every reported number; the delivered commit adds output validation, tests, the demo page, release tools and the tools and records of the Phase 1 feedback response (grouping, reproduction) without changing weights, thresholds or results (Section~\ref{sec:release}). Links in this report are pinned to a commit, not to a branch, so they stay valid whether or not the delivered commit has been merged into \texttt{main} \\
+Code repository and commit hash & \url{https://github.com/Yasser-20-alhajlah/smart-pet-vision}. Code under \texttt{smart-pet-vision/phase2/}. Delivered commit: \texttt{\deliverycommit}. The 12 November revision updates Phase 1 data/evaluation guards, source provenance, documentation, experimental review holds, the fail-fast HTTP smoke tool and regression tests. The matching code archive records this commit, its tree and every file hash in \texttt{CODE\_ARCHIVE\_INDEX.json}. Historical split-v1 results are associated with \texttt{879b0e8}; supplementary runs have separate provenance in Sections 4.8--4.11. \\
 W\&B project & \url{https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision} \\
 Deployed service / demo & Run locally (no public hosting) from \texttt{smart-pet-vision/phase2}: \texttt{python tools/run\_service.py} checks the weights and packages and serves on 127.0.0.1 only (or \texttt{SPV\_MANIFEST=runs/manifest.json PYTHONPATH=src uvicorn spv.serve:app -{}-port 8000}); browser demo page at \texttt{http://127.0.0.1:8000/demo}; steps in \texttt{phase2/docs/QUICKSTART.md} and \texttt{TROUBLESHOOTING.md}; Colab: notebook \texttt{06\_release\_validation\_v2.ipynb} \\
 Data and code availability & Code: public repository above. Oxford-IIIT Pet: public (CC BY-SA 4.0), downloaded from the official page and not redistributed. Team photos (401): private to the four team members (Phase 1 report) because they were given with their owners' consent, are used only for evaluation and can show people and homes; consent and provenance are in the team's collection records; only aggregate results are published (\texttt{report/evidence/}). Trained weights (three files, 134\,MB): team Drive, not in Git; their SHA-256 values are in \texttt{QUICKSTART.md} \\
@@ -157,7 +140,7 @@ Open-world extension (two topics, 5 points each) & -- & 10 \\
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.82\linewidth]{figures/pipeline_flow.png}
-  \caption{End-to-end pipeline for one uploaded photo: detection (640\,px, \tconf{} 0.40, \tnms{} 0.50), classification of the selected crop (224\,px, temperature 0.05, verification threshold 0.90), segmentation (640\,px) and the referral rule. Every verdict, ready or referred, goes to a staff member for approval.}
+  \caption{End-to-end pipeline schematic (no evaluation split): detection (640\,px, \tconf{} 0.40, \tnms{} 0.50), classification of the selected crop (224\,px, temperature 0.05, verification threshold 0.90), segmentation (640\,px; mask confidence 0.25) and the referral rule. Every verdict, ready or referred, goes to a staff member for approval.}
 \end{figure}
 
 {\small
@@ -212,7 +195,7 @@ Detection P / R / F1 & 0.958 / 0.959 / 0.959 & Oxford test, 1,106 & Operating po
 Detection recall, team photos & 0.732 & 401 team photos, 503 animals & Same operating point & \ev{M4_team_detection_metrics} \\
 Mask mIoU / Dice / mask mAP50--95 & 0.923 / 0.959 / 0.875 & Oxford test, 1,106 & 640\,px, mask \tconf{} 0.25; per-image union mask vs trimap body mask; instance mask AP & \ev{M5_yolo_seg_test_metrics}, \ev{M5_yolo_seg_coco}; \run{3ztpz2tc} \\
 SAM 2.1-B reference vs ours (mIoU) & 0.812 vs 0.925 & 300 sampled Oxford test images & SAM prompted with the ground-truth box (oracle), native resolution; not a controlled comparison & \ev{M5_same_subset_comparison}; \run{1jb5y453} \\
-Classification accuracy & 0.999 & Oxford test (Phase 1) & 224\,px crop, argmax & Phase 1 report \\
+Classification accuracy & 0.999 & Oxford test (Phase 1) & 224\,px whole-image centre crop, argmax & Phase 1 report \\
 Multi-animal photos marked ready & 17 of 52 & Team photos with $\geq2$ animals & Full pipeline, CPU & \ev{P2_cpu_release_validation_f8manl0i}; \run{f8manl0i} \\
 p95 latency (A8) & 61.4\,ms & First 50 Oxford test images, cycled & T4, PyTorch, in-process, batch 1, 10 warm-up, 200 calls & \ev{M8_benchmark_pytorch} \\
 p95 latency over HTTP & 430.8\,ms & 300 team photos & CPU only, uvicorn, one worker, 5 warm-up & \ev{P2_cpu_http_validation_mu2tolkg}; \run{mu2tolkg} \\
@@ -228,14 +211,17 @@ Reproduction from the delivered package & 6 of 6 metrics identical & Oxford test
 \toprule
 Planned action (Phase 1) & Done? & Measured effect \\
 \midrule
-Collect harder images (puppies, curled-up, clothed, multiple, small animals) & No & No new photos were collected in Phase 2. The 401 team photos stay an evaluation-only set. Their detector results (Section~\ref{sec:team}) confirm the need: recall 0.732, small-animal bin 0/10 found \\
-Rebalance cats and dogs; add hairless and colour-point cats & No & Not done; the split is still about 1:2. Siamese is among the five weakest breeds for masks (IoU 0.899) \\
-Fit the temperature on a harder calibration set & No & Needs the new photos above. The service keeps $T=0.05$ from Phase 1, so its confidence is not claimed as calibrated on new photos \\
+Collect harder images (puppies, curled-up, clothed, multiple, small animals) & Supplementary & No fresh shelter photos were collected. The 5 November Phase 1 study froze a new-to-project COCO cohort (145 single-pet calibration, 149 single-pet test, 55 multi-pet images); it does not establish pretraining independence for YOLO. The 401 team photos stay an evaluation-only set. Their detector results (Section~\ref{sec:team}) confirm the need: recall 0.732, small-animal bin 0/10 found \\
+Rebalance cats and dogs; add hairless and colour-point cats & Supplementary & The served models keep the original roughly 1:2 split and recipe. The Phase 1 study compares train-only weighting for all three classifiers on a whole-breed split; Phase 2 cat oversampling is validation-only (Section~\ref{sec:supp}). Neither change was promoted. Siamese remains among the weaker mask breeds (IoU 0.899) \\
+Fit the temperature on a harder calibration set & Supplementary & The Phase 1 study fitted temperature on 145 separate COCO calibration images and evaluated 149 held-out images. Those research calibrations were not promoted into the integrated pipeline; the service keeps $T=0.05$ and is not certified as shelter-calibrated \\
 Re-derive the four loose body boxes; add a box-quality check & Partly & Round-trip check on all 7,335 YOLO labels (0 missing, 0 class mismatches). The four loose training boxes were corrected in a separate training-label set (3 November): coordinates proposed from the images, team visual review attested by the project representative (no individual sign-off recorded), exactly 4 train labels changed, validation and test labels unchanged, structural checks pass. The served detector was not retrained on it, so the metrics of Sections 2.3--2.6 do not reflect the correction; a candidate trained on the corrected labels is reported in Section~\ref{sec:kaggle} (no gain on validation; not promoted) \\
 \bottomrule
 \end{tabularx}}
 
 \subsection*{Response to the Phase 1 feedback (38/40)}
+
+The original one-page feedback and Phase 2 Overleaf template were checked on 12 November 2026. The PCB reports are illustrative examples. The feedback requests grouping likely same-animal photos before splitting, numerical reproduction with source/execution identifiers and a committed log, dated criteria, and source commits. It does not prescribe a personal signature or a new classifier-training run. The awarded Phase 1 grade remains 38/40.
+
 
 The Phase 1 assessment deducted one point for the leakage-safe split (only near-identical images were grouped, so different photos of the same pet can cross train and test) and one for the independent reproduction (no reproduced numbers or run IDs next to the originals; empty \texttt{REPRODUCTION\_LOG.txt}), and asked for a dated record that the acceptance criteria were fixed before testing, the commit hash in every run, a harder independent test set, class balancing with per-class recall. The status of each point at the delivered commit:
 
@@ -249,20 +235,39 @@ Point & What was done and what remains & Status \\
 \endfoot
 \bottomrule
 \endlastfoot
-Part 2: same-animal grouping before splitting & Tool \texttt{tools/same\_animal\_groups.py}: within each breed, ImageNet ResNet-50 features (the features of the Phase 1 sensitivity check), links at cosine similarity $\geq 0.90$ (the lower cutoff of the instructor's check), merged with the MD5/pHash groups, review band 0.85--0.90 for visual review, recorded review decisions, cross-partition test and split v2 with the Phase 1 splitter (seed 42). Rules frozen in \texttt{docs/LEAKAGE\_SAME\_ANIMAL\_PROTOCOL.md} before any run; six unit tests. \textbf{Executed once on the 7,335 images on 6 November 2026} (Colab T4, code taken from the delivered package; record \texttt{P2\_same\_animal\_}\allowbreak\texttt{grouping\_run\_20261106.json}): 6,541 similarity groups; under the frozen rule, 86 groups (771 images: 135 test, 127 validation, 509 train) cross the partitions of split v1, so split v1 is not free of cross-partition similarity groups. The 13 largest groups (10--114 images, chains inside homogeneous breeds with links at the 0.90 floor) hold 574 of the 771 images; at a diagnostic threshold of 0.95 the count falls to 18 groups and 115 images. A repeat on the delivered code (same day, no review decisions) gave identical groups and counts. \textbf{Owner review (7 November 2026):} the project owner reviewed the 86 groups against their contact sheets and recorded every group as a clear duplicate (record \texttt{P2\_same\_animal\_}\allowbreak\texttt{review\_owner\_20261107.json}); under this review 135 of the 1,106 test images (12.2\%) have a duplicate in training or validation, so the test results on split v1 may be optimistic. A split v2 (4,903 / 1,382 / 1,050, no crossing group) was built with the same splitter; it is not approved as the delivered split, every headline number in this report rests on split v1 and all delivered checkpoints were trained on v1. On 7 November the three models were retrained once on split v2 as a supplementary experiment (Section~\ref{sec:suppf}): on the v2 test split the metrics stay within 0.006 mAP50 and 0.003 mean IoU of the reported ones, and mAP50--95 is 0.029 lower & Partial; supplementary v2 run \\
-Part 13: independent reproduction & \texttt{tools/reproduce\_phase2\_eval.py} re-evaluates the delivered checkpoints on the test split exactly as Section 2.4 and 3.4 were produced and writes original vs reproduced side by side with tolerances fixed in advance (0.005 absolute); procedure in \texttt{docs/INDEPENDENT\_REPRODUCTION\_PROCEDURE.md}. \textbf{Executed on 6 November 2026} from the delivered package (Colab T4; record \texttt{P2\_reproduction\_}\allowbreak\texttt{run\_20261106.json}, output in \texttt{report/evidence/reproduction/}, block 1 of \texttt{REPRODUCTION\_LOG.txt}): all six metrics are identical to the originals (box mAP50 0.984 and mAP50--95 0.850, mask mAP50 0.993 and mAP50--95 0.875, mean IoU 0.923, Dice 0.959; difference 0.0 against a tolerance of 0.005). The run was carried out by a second team member, Mohammed Adeeb Alrashdi (segmentation workstream), who followed it from start to end and agrees with the recorded result; this is the statement of the project owner (11 November 2026), and the Colab record shows the owner's computer and account. Mohammed confirmed his agreement in writing on 11 November 2026 (quoted in block 1 of \texttt{REPRODUCTION\_LOG.txt}); his own signed declaration will be added by him. The run re-evaluates the delivered checkpoints; no training run was reproduced & Executed by a second team member; 6 of 6 identical \\
+Part 2: same-animal grouping before splitting & Tool \texttt{tools/same\_animal\_groups.py}: within each breed, ImageNet ResNet-50 features (the features of the Phase 1 sensitivity check), links at cosine similarity $\geq 0.90$ (the lower cutoff of the instructor's check), merged with the MD5/pHash groups, review band 0.85--0.90 for visual review, recorded review decisions, cross-partition test and split v2 with the Phase 1 splitter (seed 42). Rules frozen in \texttt{docs/LEAKAGE\_SAME\_ANIMAL\_PROTOCOL.md} before any run; six unit tests. \textbf{Executed once on the 7,335 images on 6 November 2026} (Colab T4, code taken from the delivered package; record \texttt{P2\_same\_animal\_}\allowbreak\texttt{grouping\_run\_20261106.json}): 6,541 similarity groups; under the frozen rule, 86 groups (771 images: 135 test, 127 validation, 509 train) cross the partitions of split v1, so split v1 is not free of cross-partition similarity groups. Similarity groups are a proxy for likely repeated animals, not verified individual identities. The 13 largest groups (10--114 images, chains inside homogeneous breeds with links at the 0.90 floor) hold 574 of the 771 images; at a diagnostic threshold of 0.95 the count falls to 18 groups and 115 images. A repeat on the delivered code (same day, no review decisions) gave identical groups and counts. \textbf{Owner review (7 November 2026):} the project owner reviewed the 86 groups against their contact sheets and recorded every group as a clear duplicate (record \texttt{P2\_same\_animal\_}\allowbreak\texttt{review\_owner\_20261107.json}); under this review 135 of the 1,106 test images (12.2\%) belong to groups crossing training or validation, so the test results on split v1 may be optimistic. A split v2 (4,903 / 1,382 / 1,050, no crossing group) was built with the same splitter; it is not approved as the delivered split, every headline number in this report rests on split v1 and all delivered checkpoints were trained on v1. On 7 November the three models were retrained once on split v2 as a supplementary experiment (Section~\ref{sec:suppf}): on the v2 test split the metrics stay within 0.006 mAP50 and 0.003 mean IoU of the reported ones, and mAP50--95 is 0.029 lower & v2 done; v1 retained \\
+Part 13: independent reproduction & \texttt{tools/reproduce\_phase2\_eval.py} re-evaluates the delivered checkpoints on the test split exactly as Section 2.4 and 3.4 were produced and writes original vs reproduced side by side with tolerances fixed in advance (0.005 absolute); procedure in \texttt{docs/INDEPENDENT\_REPRODUCTION\_PROCEDURE.md}. \textbf{Executed on 6 November 2026} from the delivered package (Colab T4; record \texttt{P2\_reproduction\_}\allowbreak\texttt{run\_20261106.json}, output in \texttt{report/evidence/reproduction/}, block 1 of \texttt{REPRODUCTION\_LOG.txt}): all six metrics are identical to the originals (box mAP50 0.984 and mAP50--95 0.850, mask mAP50 0.993 and mAP50--95 0.875, mean IoU 0.923, Dice 0.959; difference 0.0 against a tolerance of 0.005). The run was carried out by a second team member, Mohammed Adeeb Alrashdi (segmentation workstream), who followed it from start to end and agrees with the recorded result; this is the statement of the project owner (11 November 2026), and the Colab record shows the owner's computer and account. Mohammed confirmed his agreement in writing on 11 November 2026 (quoted in block 1 of \texttt{REPRODUCTION\_LOG.txt}); the saved statement and execution records establish the documented attribution, while the account metadata alone does not independently identify the physical operator. The source runs are detector \run{2seovilv} and segmenter \run{3ztpz2tc}; the reproduced execution is identified by \nolinkurl{2026-11-06T15:24:03Z} and its saved JSON/notebook (no W\&B run was created for this evaluation). The run re-evaluates checkpoints; no training run was reproduced. The official feedback asks for this comparison and committed log, not a further classifier-training run or signature & 6/6 match; log stored \\
 Dated acceptance criteria & Earliest dated copy of the criteria text: 18 October 2026, 11:19 UTC, before the test runs of 19 October (above) & Reported with its limits \\
 Commit hash in every run & The runs of 2 and 5 November record the code commit (\texttt{source\_commit} in their evidence files); the runs of 17--19 October did not; \texttt{spv.provenance.record()} now writes commit, branch, dirty state or source fingerprint, environment and input hashes for every new run; the delivered commit is printed on page 1 & Done for new runs \\
-Harder independent test set & Not collected. The 401 team photos were already used for evaluation and cannot serve as a new independent set; a collection, screening and annotation protocol is fixed in \texttt{docs/INDEPENDENT\_TEST\_SET\_PROTOCOL.md} (not started) & Open \\
+Harder independent test set & The Phase 1 whole-breed and new-to-project COCO studies are reported separately; neither is a newly collected shelter cohort or a pretraining-independent YOLO test. The 401 team photos were already evaluated. A future shelter collection, screening and annotation protocol is fixed in \path{docs/INDEPENDENT_TEST_SET_PROTOCOL.md} (not started) & Open \\
 Class imbalance and per-class recall & Per-class precision, recall and F1 at the operating point are in Section 2.4 (cat recall 0.983, dog 0.948) and per-species IoU/Dice in Section 3.4. No class weights or balanced sampling were applied to the delivered detector. A controlled comparison was run on 6 November (Section~\ref{sec:supp}, experiment E): with cat images oversampled and everything else unchanged, validation mAP50--95 rose from 0.844 to 0.854 and dog recall at the operating point from 0.940 to 0.955; the test split was not used and the delivered detector was kept & Done on validation; not promoted \\
 \end{xltabular}}
+
+\subsection*{Reproduction numbers and identifiers (Part 13)}
+Original source runs: detector \run{2seovilv}, segmenter \run{3ztpz2tc}. Reproduced execution: 6 November 2026, 15:24:03 UTC. Its notebook and the nonempty committed log are linked in the feedback response above.\par
+Saved output: \path{reproduction_eval_mohammed_20261106.json}. No W\&B run was created for the reproduction.
+
+{\small
+\begin{tabularx}{\linewidth}{@{}Y l r r r@{}}
+\toprule
+Oxford test, 1,106; 640 px & Source run & Original & Reproduced & $|\Delta|$\\
+\midrule
+Box mAP50 & \run{2seovilv} & 0.983568 & 0.983568 & 0\\
+Box mAP50--95 & \run{2seovilv} & 0.850002 & 0.850002 & 0\\
+Mask mAP50 & \run{3ztpz2tc} & 0.993118 & 0.993118 & 0\\
+Mask mAP50--95 & \run{3ztpz2tc} & 0.874549 & 0.874549 & 0\\
+Mean IoU & \run{3ztpz2tc} & 0.922959 & 0.922959 & 0\\
+Mean Dice & \run{3ztpz2tc} & 0.958620 & 0.958620 & 0\\
+\bottomrule
+\end{tabularx}}
+The absolute tolerance was fixed at 0.005; all six differences are zero. mAP uses confidence 0.001; mask overlap uses confidence 0.25. This is evaluation of the delivered checkpoints, not a training reproduction.
 
 % =====================================================================
 \section{Object detection (M4)\pts{15}{12}}
 
 \textbf{Task:} detect the whole body of each cat and dog in the photo (two classes). The detections give the animal count (none or several $\rightarrow$ referral), the box for the classifier crop and a species label that the classifier must confirm.
 
-Models, thresholds and settings were chosen on the validation split; the test split was evaluated once.
+Models, thresholds and settings were chosen on validation. The original final test evaluation was frozen; later verification runs and supplementary studies are identified separately and were not used to choose new deployment settings.
 
 \subsection{Annotation conversion and verification}
 
@@ -328,12 +333,12 @@ Baseline (nb.\ 11) & YOLO11s, COCO, used as is (cat and dog classes) & 640\,px &
 \end{tabularx}}
 
 \smallskip
-\textbf{Selected model and why:} the \run{2seovilv} checkpoint (the rerun reproduced every metric of the first run). Fine-tuning raises validation mAP50 from 0.929 to 0.979 and mAP50--95 from 0.715 to 0.844 over the same model used as is, mostly through tighter whole-body boxes (COCO boxes follow that dataset's own annotation style). The delivered detector comes from one recipe. Two further recipes were trained after the results freeze and compared with it on validation only: cat oversampling (Section~\ref{sec:supp}, experiment E) and the smaller YOLO11n (Section~\ref{sec:suppg}); the input resolution was not varied. Augmentations: horizontal flips and scale changes match pets photographed from either side at different distances; vertical flips are off because pets are rarely upside down; mosaic is switched off for the last 10 epochs so the model ends on whole images like the deployment input. \textbf{Optimiser (recorded, not configured):} the training call sets no optimiser, so Ultralytics 8.4.182 applied \texttt{optimizer=auto}; with $\lceil 5{,}123/64\rceil \times 40 = 3{,}240$ iterations (below its 10,000 threshold) this selects AdamW with lr0 $= 0.002\cdot 5/(4+2) = 0.001667$, $\beta_1 = 0.9$ and weight decay $5\times10^{-4}$, three warm-up epochs and a linear decay to $0.01\cdot$lr0. The checkpoint's saved training arguments record AdamW and 0.001667, and the learning rate logged to W\&B for \run{2seovilv} and \run{3ztpz2tc} follows this schedule exactly (e.g.\ 0.0015432 at epoch 4 and 0.0000579 at epoch 40). The segmenter was trained by the same call pattern and logs the same schedule. Direct records: the executed training notebooks kept in the team Drive (\texttt{03\_detection\_executed.ipynb}, \texttt{04\_segmentation\_executed.ipynb}; Ultralytics 8.4.182, 40 epochs, batch 16, 640\,px, seed 42) print ``\texttt{optimizer=auto} found, ignoring lr0=0.01'' followed by ``AdamW(lr=0.001667, momentum=0.9)''. The notebooks do not print a W\&B run id, so their link to \run{2seovilv} and \run{3ztpz2tc} is inferred from the identical settings and learning-rate schedule (evidence \texttt{P2\_training\_optimizer\_direct\_log\_}\allowbreak\texttt{20261104.json}).
+\textbf{Selected model and why:} the \run{2seovilv} checkpoint (the rerun reproduced every metric of the first run). Fine-tuning raises validation mAP50 from 0.929 to 0.979 and mAP50--95 from 0.715 to 0.844 over the same model used as is, mostly through tighter whole-body boxes (COCO boxes follow that dataset's own annotation style). The delivered detector comes from one recipe. Two further recipes were trained after the results freeze and compared with it on validation only: cat oversampling (Section~\ref{sec:supp}, experiment E) and the smaller YOLO11n (Section~\ref{sec:suppg}); the input resolution was not varied. Augmentations: horizontal flips and scale changes match pets photographed from either side at different distances; vertical flips are off because pets are rarely upside down; mosaic is switched off for the last 10 epochs so the model ends on whole images like the deployment input. \textbf{Optimiser (recorded, not configured):} the training call sets no optimiser, so Ultralytics 8.4.182 applied \texttt{optimizer=auto}; with $\lceil 5{,}123/64\rceil \times 40 = 3{,}240$ iterations (below its 10,000 threshold) this selects AdamW with lr0 $= 0.002\cdot 5/(4+2) = 0.001667$, $\beta_1 = 0.9$ and weight decay $5\times10^{-4}$, three warm-up epochs and a linear decay to $0.01\cdot$lr0. The original external args.yaml files retain optimizer=auto. Separately, the stored train\_args in both delivered checkpoints directly record AdamW and lr0 0.001667: a 12 November ZIP/pickle-opcode inspection verified these literal fields and their memo references without loading or executing a model (\texttt{CHECKPOINT\_TRAIN\_ARGS\_LITERAL\_VERIFIED\_20261112.json}). The executed notebook logs also print AdamW with lr 0.001667; the learning rate logged to W\&B for \run{2seovilv} and \run{3ztpz2tc} follows this schedule exactly (e.g.\ 0.0015432 at epoch 4 and 0.0000579 at epoch 40). The segmenter was trained by the same call pattern and logs the same schedule. Direct records: the executed training notebooks kept in the team Drive (\texttt{03\_detection\_executed.ipynb}, \texttt{04\_segmentation\_executed.ipynb}; Ultralytics 8.4.182, 40 epochs, batch 16, 640\,px, seed 42) print ``\texttt{optimizer=auto} found, ignoring lr0=0.01'' followed by ``AdamW(lr=0.001667, momentum=0.9)''. The notebooks do not print a W\&B run id, so their link to \run{2seovilv} and \run{3ztpz2tc} is inferred from the identical settings and learning-rate schedule (evidence \texttt{P2\_training\_optimizer\_direct\_log\_}\allowbreak\texttt{20261104.json}).
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\linewidth]{figures/M4_training_curves.png}
-  \caption{Run \run{2seovilv}: box loss (train and validation) and validation mAP (Oxford train/validation splits, 640\,px, evaluation \tconf{} 0.001). Validation loss still falls at epoch 40, so there is no sign of over-fitting; the drop at epoch 31 is mosaic being switched off. The kept checkpoint (\texttt{best.pt}, Ultralytics fitness $0.1\,\text{mAP50}+0.9\,\text{mAP50--95}$) is epoch 40.}
+  \caption{Run \run{2seovilv}: box loss (train and validation) and validation mAP (Oxford train/validation splits, 640\,px, evaluation \tconf{} 0.001, \tnms{} 0.70). Validation loss still falls at epoch 40, so there is no sign of over-fitting; the drop at epoch 31 is mosaic being switched off. The kept checkpoint (\texttt{best.pt}, Ultralytics fitness $0.1\,\text{mAP50}+0.9\,\text{mAP50--95}$) is epoch 40.}
 \end{figure}
 
 \subsection{Threshold sweep and operating point}
@@ -401,7 +406,7 @@ Large ($\geq10\%$) & 1,102 & 0.959 & 404 & 0.874 \\
 
 \subsection{Error analysis}
 
-Oxford test split, operating point (\tconf{} 0.40, \tnms{} 0.50), matching IoU 0.50. Types follow \texttt{detect.py}: a false positive is classed by its best IoU with any ground-truth box.
+Oxford test split at the operating point (\tconf{} 0.40, \tnms{} 0.50); matching IoU 0.50. False positives follow \texttt{detect.py}: each is classified by its best IoU with any ground-truth box.
 
 \begin{tabularx}{\linewidth}{@{}l Y r r@{}}
 \toprule
@@ -426,13 +431,13 @@ Missed (FN) & 45 animals: 34 with a displaced box, 4 with the wrong species, 7 w
 
 \textbf{Main causes of false negatives:} 38 of the 45 are in images that also have a false positive: the box was found but displaced, mostly for curled-up or partly hidden animals and loose trimap boundaries. Only 7 animals had no detection at all.
 
-\textbf{Failure case:} a dark Chihuahua wearing clothing (\texttt{chihuahua\_156}) was detected as a cat. The clothing hides the body outline that separates small dogs from cats. In the system the classifier returned ``dog'', so the photo was referred for disagreement; more clothed-pet training images would fix the detector itself.
+\textbf{Failure case:} a dark Chihuahua wearing clothing (\texttt{chihuahua\_156}) was detected as a cat. The clothing hides the body outline that separates small dogs from cats. In the system the classifier returned ``dog'', so the photo was referred for disagreement; clothed-pet training images are a development hypothesis to test on validation before any new held-out evaluation.
 
 \textbf{Next fix:} localisation (34 of 46 false positives and 34 of 45 misses). Re-deriving loose body boxes and adding curled-up and occluded animals to training addresses the largest error source; on shelter photos the larger gap is in small and secondary animals (recall 0.000 and 0.169 in the small and medium bins).
 
 \subsection{Inference on images and video}\label{sec:team}
 
-\textbf{Team photos.} The 401 team photos (503 annotated animals, never used for training or selection) were run at the same operating point: mAP50 0.771, mAP50--95 0.653; precision 0.885, recall 0.732, F1 0.801; cat recall 0.854, dog recall 0.651. The animal count was correct on 339 of 401 photos, and in only 11 of 52 multi-animal photos were all animals found.
+\textbf{Team photos.} The 401 team photos (503 annotated animals, not used to train or select the original served models; later exploratory probes are labelled separately) were run at the same operating point: mAP50 0.771, mAP50--95 0.653; precision 0.885, recall 0.732, F1 0.801; cat recall 0.854, dog recall 0.651. The animal count was correct on 339 of 401 photos, and in only 11 of 52 multi-animal photos were all animals found.
 
 \begin{figure}[H]
   \centering
@@ -472,7 +477,7 @@ The checkpoint was chosen on validation; the mask confidence and matching settin
 \toprule
 Item & Our answer \\
 \midrule
-Source of masks & Oxford-IIIT Pet pixel trimaps: body mask = foreground plus the ambiguous border class. SAM 2.1-B, prompted with the ground-truth box, produced a second set of 300 test masks used as the baseline. The dataset provides a hand-annotated trimap for every image, so SAM was not needed to create training targets; its generated masks were checked visually and scored against the trimaps to show what a promptable model gives without training (Section~3.4, Figure~\ref{fig:samfail}) \\
+Source of masks & Oxford-IIIT Pet pixel trimaps: body mask = foreground plus the ambiguous border class. SAM 2.1-B, prompted with the ground-truth box, produced a second set of 300 test masks used as the baseline. The dataset provides a hand-annotated trimap for every image, so SAM was not needed to create training targets; its generated masks were checked visually and scored against the trimaps to show what a promptable model gives without training (Section~3.4) \\
 Images with masks (train / val / test) & 5,123 / 1,106 / 1,106 \\
 Class distribution & One animal per image: cat 1,652 / 357 / 357; dog 3,471 / 749 / 749 \\
 How masks were checked & Automatic: images without a usable trimap removed in cleaning; visual: a gallery of test masks overlaid on the images (Figure~\ref{fig:gtmask}) and the 300 SAM masks, by the segmentation workstream \\
@@ -492,7 +497,7 @@ Label format & YOLO segmentation polygons from the binary body mask. Border pixe
 Two baselines show what fine-tuning adds: the same YOLO11s-seg architecture with its COCO weights used as is (cat and dog classes only), and SAM 2.1-B prompted with the ground-truth box. SAM's prompt is an oracle, so it is a reference for mask quality, not an alternative that could run without labels. The fine-tuned YOLO11s-seg finds the animal by itself.
 
 {\small
-\begin{tabularx}{\linewidth}{@{}P{2.0cm} P{2.2cm} P{1.4cm} Y P{0.9cm} P{2.9cm}@{}}
+\begin{tabularx}{\linewidth}{@{}P{2.0cm} P{2.2cm} P{1.4cm} Y P{1.15cm} P{2.65cm}@{}}
 \toprule
 Run (W\&B) & Model and initial weights & Train / eval res. & Training setup (loss, augmentation, optimiser) & Epochs & Val.\ metric \\
 \midrule
@@ -509,7 +514,7 @@ Baseline B \run{1jb5y453} & SAM 2.1-B, released weights & -- / native & No train
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\linewidth]{figures/M5_training_curves.png}
-  \caption{Run \run{3ztpz2tc}: mask loss (train and validation) and validation mask mAP (Oxford train/validation splits; 640\,px; evaluation \tconf{} 0.001). Validation loss flattens after epoch 32 without rising; the drop at epoch 31 is mosaic being switched off. The kept checkpoint (\texttt{best.pt}) is epoch 40.}
+  \caption{Run \run{3ztpz2tc}: mask loss (train and validation) and validation mask mAP (Oxford train/validation splits; 640\,px; evaluation \tconf{} 0.001, \tnms{} 0.70). Validation loss flattens after epoch 32 without rising; the drop at epoch 31 is mosaic being switched off. The kept checkpoint (\texttt{best.pt}) is epoch 40.}
 \end{figure}
 
 \subsection{Thresholds and post-processing}
@@ -531,6 +536,7 @@ Mask resolution & \texttt{retina\_masks=True} (full resolution) & -- & on \\
 \smallskip
 All rows use the 1,106 validation images (T4, 640\,px). The minimum mask share served (0.05) is the validated choice. \emph{Match IoU:} the full pipeline was run at each value with the other served settings; 0.05, 0.10 and 0.25 give the same counts (7 unmatched, 35 referred), but only counts were saved, so whether the same images are affected cannot be confirmed. \emph{Mask confidence:} only the mask metric was compared (mean IoU 0.92240 at 0.10 vs 0.92216 at 0.25); referrals and other safety behaviour at 0.10 were not evaluated through the pipeline. The release manifest was therefore left unchanged rather than re-released without that check. At the validated confidence 0.10 the test split gives mIoU 0.922 and Dice 0.958, against 0.923 and 0.959 at the served 0.25.
 
+\newpage
 \subsection{Test results}
 
 Mean IoU and Dice are the means of per-image binary scores on the union of all predicted instances versus the ground-truth body mask; ``no border'' excludes the trimap border pixels. Mask mAP50--95 is the class-aware Ultralytics instance metric (\tconf{} 0.001). Oxford test split, 640\,px, mask \tconf{} 0.25.
@@ -563,38 +569,30 @@ Dog (749) & 0.920 & 0.957 & 0.870 \\
 \smallskip
 The original test run did not save mask AP50--95 per class; the two values come from the re-evaluation of the same weights on 5 November (Section~\ref{sec:kaggle}), which reproduced the overall 0.875.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.85\linewidth]{figures/M5_paired_metrics.png}
-  \caption{Mean IoU and Dice on the same 300 test images for the SAM 2.1-B baseline (native resolution, ground-truth box prompt) and YOLO11s-seg (640\,px, \tconf{} 0.25), with and without trimap border pixels.}
-\end{figure}
 
-\textbf{Application measure:} on the 401 team photos (CPU run \run{f8manl0i}, 640\,px, \tconf{} 0.25), mask-based checks (animal too small, species disagreement between mask and classifier, no matching mask) contribute to the 81 referrals; the per-photo results of that run are kept in its private run folder (they name team photos) and not in \texttt{report/evidence/}, and segmentation agreement counts were not computed for this report. On the Oxford test split, the fine-tuned model reaches a mean IoU of 0.923 against 0.830 for the same architecture as is, and 0.925 against 0.812 for SAM with an oracle box on the same 300 images; with border pixels ignored SAM is higher (0.948 vs 0.934), so most of SAM's gap is the trimap border convention rather than wrong masks.
+
+\textbf{Application measure:} for foreground cut-out agreement on all 1,106 Oxford test images, the mean per-image foreground disagreement as a fraction of the mask union is $1-\mathrm{IoU}=0.07704$ (7.704\%), derived directly from the saved mean IoU 0.922959. It is an overlap-derived measure, not a new area-error experiment. On the 401 team photos (CPU run \run{f8manl0i}, 640\,px, \tconf{} 0.25), mask-based checks (animal too small, species disagreement between segmenter and detector, no matching mask) contribute to the 81 referrals; the per-photo results of that run are kept in its private run folder (they name team photos) and not in \texttt{report/evidence/}, and segmentation agreement counts were not computed for this report. On the Oxford test split, the fine-tuned model reaches a mean IoU of 0.923 against 0.830 for the same architecture as is, and 0.925 against 0.812 for SAM with an oracle box on the same 300 images; with border pixels ignored SAM is higher (0.948 vs 0.934), so most of SAM's gap is the trimap border convention rather than wrong masks.
 
 \subsection{Error analysis}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.95\linewidth]{figures/M5_yolo_seg_failures.jpg}
-  \caption{The 18 lowest-IoU YOLO11s-seg predictions on the Oxford test split (640\,px, \tconf{} 0.25). Yellow: prediction and ground truth agree; red: prediction only; green: ground truth only.}
+  \caption{The 18 lowest-IoU YOLO11s-seg predictions on the Oxford test split (640\,px, \tconf{} 0.25, \tnms{} 0.70). Yellow: prediction and ground truth agree; red: prediction only; green: ground truth only.}
 \end{figure}
 
-\begin{tabularx}{\linewidth}{@{}Y l Y@{}}
+\begin{tabularx}{\linewidth}{@{}Y P{3.4cm} Y@{}}
 \toprule
 Error pattern & Examples & Likely cause \\
 \midrule
 Mask spreads into a blanket, cushion or clothing of similar colour & british\_shorthair 0.59, havanese 0.62, chihuahua 0.66 & Weak colour boundary; trimap border included in training targets \\
 Part of the body missed (green) & beagle 0.36, american\_pit\_bull 0.47 & Occlusion by furniture or a person; dark fur on dark background \\
 Mask covers a person or a second object & wheaten\_terrier 0.56, siamese 0.52 & Person holding or standing next to the animal \\
-SAM baseline masks the background & Close-ups where the box fills the frame (Figure~\ref{fig:samfail}) & Oracle box gives no inside/outside cue; 12 of 300 SAM masks have IoU $<0.5$ \\
+SAM baseline masks the background & Close-ups where the box fills the frame (historical 300-image SAM subset) & Oracle box gives no inside/outside cue; 12 of 300 SAM masks have IoU $<0.5$ \\
 \bottomrule
 \end{tabularx}
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.78\linewidth]{figures/M5_sam_baseline_failures.jpg}
-  \caption{Lowest-IoU SAM 2.1-B baseline masks (Oxford test, 300 sampled; native resolution; ground-truth box prompt).}\label{fig:samfail}
-\end{figure}
+
 
 \textbf{Failure case:} in the pug image (IoU 0.35), the model masked the dog but also a large patch of sky (red), probably because the bright sky and the fawn coat have similar contrast to the grass. More outdoor training images and a check that the mask lies inside the detector box (the integration rule already matches masks to the box) would limit the effect on the verdict.
 
@@ -618,7 +616,7 @@ Model inference: classifier & ResNet-50, PyTorch CUDA, 224\,px crop & 10.1 & 11.
 Model inference: segmenter & YOLO11s-seg, PyTorch CUDA, 640\,px, with mask matching & 22.1 & 23.4 \\
 Post-processing and decision & Referral rule & \multicolumn{2}{r}{$<0.1$ (inside the total)} \\
 \midrule
-\textbf{End to end, (a)} & Sum of timed stages per image & 48.6 & 51.3 \\
+\textbf{Instrumented stages, (a)} & Sum of timed stages per image & 48.6 & 51.3 \\
 \textbf{End to end, (b) A8} & Measured directly per call & 38.5 & 61.4 \\
 \bottomrule
 \end{tabularx}}
@@ -628,7 +626,7 @@ Post-processing and decision & Referral rule & \multicolumn{2}{r}{$<0.1$ (inside
 
 \subsection{Release and manifest}\label{sec:release}
 
-The service reads every path and threshold from \texttt{runs/manifest.json}; \texttt{Manifest.load} rejects out-of-range values, and \texttt{tools/preflight\_release.py} checks the weight checksums before a run. Every result in this report was produced by the code at commit \texttt{879b0e8}. The release candidate adds output validation (finite and in-range boxes, scores, class probabilities and masks; an invalid model output returns HTTP 503 and never a \texttt{ready} verdict; 6 fault-injection tests) and a browser page for the demonstration (\texttt{GET /demo}, Section~4.5), which only calls \texttt{POST /analyze}. It also crops with floor/ceil instead of rounding, which can move a crop edge by one pixel, and its \texttt{total\_ms} field is direct wall time including image encoding (\texttt{stages\_sum\_ms} keeps the earlier sum). The timings and team-photo results above were not re-measured on the candidate. The submitted source archive contains the candidate code in folder \texttt{code/} (the same files as the separate code archive; PDFs excluded). Its functional checks (unit tests on synthetic inputs, report-versus-evidence checks and a real-weight CPU smoke test over HTTP) are listed in the release manifest delivered with this report; they test behaviour, not accuracy or speed.
+The service reads every path and threshold from \texttt{runs/manifest.json}; \texttt{Manifest.load} rejects out-of-range values, and \texttt{tools/preflight\_release.py} checks the weight checksums before a run. The historical split-v1 evidence is associated with commit \texttt{879b0e8}; this is not the source identity of every later experiment. Sections 4.8--4.11 and their evidence records retain the separate revisions and dates of subsequent runs. The release candidate adds output validation (finite and in-range boxes, scores, class probabilities and masks; an invalid model output returns HTTP 503 and never a \texttt{ready} verdict; 6 fault-injection tests) and a browser page for the demonstration (\texttt{GET /demo}, Section~4.5), which only calls \texttt{POST /analyze}. It also crops with floor/ceil instead of rounding, which can move a crop edge by one pixel, and its \texttt{total\_ms} field is direct wall time including image encoding (\texttt{stages\_sum\_ms} keeps the earlier sum). The timings and team-photo results above were not re-measured on the candidate. The submitted source archive contains the candidate code in folder \texttt{code/} (the same files as the separate code archive; PDFs excluded). Its functional checks (unit tests on synthetic inputs, report-versus-evidence checks and a real-weight CPU smoke test over HTTP) are listed in the release manifest delivered with this report; they test behaviour, not accuracy or speed.
 
 \begin{tabularx}{\linewidth}{@{}l Y@{}}
 \toprule
@@ -651,7 +649,7 @@ Contract & Our answer \\
 \midrule
 Input & \texttt{POST /analyze}, multipart field \texttt{file}: one image readable by PIL (JPEG, PNG, \ldots), any size up to 15\,MB and 25\,MP; converted to RGB; batch 1. Query \texttt{images=false} omits the annotated PNG \\
 Output & JSON: \texttt{verdict} (\texttt{ready} / \texttt{refer\_to\_staff}), \texttt{reasons} (code and message), \texttt{species}, \texttt{confidence}, \texttt{probabilities}, \texttt{detections} (\texttt{box\_xyxy} in original-image pixels, species, score), \texttt{mask\_fraction}, \texttt{segmentation\_matched}, \texttt{timings} (ms); always \texttt{staff\_approval\_required: true} and \texttt{automatic\_publication\_allowed: false} \\
-Thresholds served & Those of the manifest (above), reported by \texttt{GET /health} through the model names \\
+Thresholds served & Those of the manifest (above). \texttt{GET /health} reports status and model names; it does not return numerical thresholds \\
 Invalid input & Empty upload $\rightarrow$ HTTP 400; not an image $\rightarrow$ 415; over 15\,MB or 25\,MP $\rightarrow$ 413; no animal $\rightarrow$ 200 with \texttt{refer\_to\_staff} and reason \texttt{no\_animal} \\
 \bottomrule
 \end{tabularx}
@@ -695,10 +693,12 @@ Example request & \texttt{curl -X POST -F "file=@img.jpg" "http://127.0.0.1:8000
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\linewidth]{figures/M8_service_session.png}
-  \caption{The running service, rendered from the saved logs of the T4 HTTP check (\texttt{evidence/M8\_service\_http.json}): start command, health response, 300 analysis requests and the two invalid uploads. Not a screenshot.}
+  \caption{The running service, rendered from the saved logs of the T4 HTTP check (\texttt{evidence/M8\_service\_http.json}): start command, health response, 300 analysis requests and two invalid uploads (Oxford test; detector/segmenter 640\,px, classifier 224\,px; detector confidence/NMS 0.40/0.50, mask confidence 0.25, verification threshold 0.90). Reconstructed from the logs.}
 \end{figure}
 
 \textbf{Demo page check.} On 4 November the release candidate was run with real weights in a CPU-only cloud container (not the presentation host) and its demo page was driven in Chromium (evidence \ev{P2_demo_page_check_20261104.json}): a CC0 cat photo was returned \texttt{ready}; a synthetic image of the same cat twice and a synthetic blank image were referred (\texttt{multiple\_animals}, \texttt{no\_animal}; the page showed no species for the latter); a text file gave the 415 message; empty and oversized files were stopped in the browser; both policy flags were correct on every response. A CC0 photo of a coffee cup produced one false box (cat, score 0.495) and a classifier output of ``dog'' with confidence 1.000, and was referred for disagreement, no matching mask and too small an animal. These seven inputs test behaviour, not accuracy or speed. On 5 November the page wording was made explicit (``Ready for staff review --- not approved for publication'', ``Staff review required --- see reasons''; the species of a referred photo is marked provisional and a score of 1.000 is described as a model score, not proof), a Clear button was added and earlier results are removed after an error or a new selection; 15 browser tests with a stand-in model check these behaviours and the release manifest lists their result. The real-weight page check was repeated on the new page (\ev{P2_demo_page_check_20261105.json}). The API, thresholds and decision rule did not change.
+
+\textbf{Local functional check (12 November).} With the three delivered weight files verified by SHA-256, a supplementary CPU-only loopback check on macOS (Python 3.12.14, PyTorch 2.15.0, Ultralytics 8.4.210; explicit \texttt{--allow-version-drift}) returned 200 for health, demo HTML and four image-analysis requests, decoded all three output PNGs, and returned 415/400/413 for text, empty and oversized uploads. Staff approval was required and automatic publication disabled on every analysis. A public CC0 cat photo, its synthetic two-copy composite and a blank image were used; the last two were referred. Evidence is in \texttt{report/evidence/P2\_local\_cpu\_smoke\_20261112/}. This checks function only, not accuracy, pinned-environment compatibility, T4 latency or independent Multi-Pet performance. The smoke tool now stops on failed preflight by default; version differences require the explicit recorded option, while weight and manifest checks remain mandatory.
 
 \subsection{Benchmark}
 
@@ -725,7 +725,7 @@ The HTTP throughput of 15.6 requests per second is derived from the recorded mea
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{figures/M8_latency_by_backend.png}
-  \caption{Latency percentiles per backend and path (batch 1, FP32; conditions as in the table). CPU and T4 numbers are separate measurements and are not compared; only the in-process T4 PyTorch row is used for A8.}
+  \caption{Latency percentiles (Oxford test for T4; external team evaluation set for CPU HTTP; detector/segmenter 640\,px, classifier 224\,px; detector confidence/NMS 0.40/0.50, mask confidence 0.25; batch 1, FP32). CPU and T4 numbers are separate measurements and are not compared; only the in-process T4 PyTorch row is used for A8.}
 \end{figure}
 
 \subsection{Verdict against the acceptance criteria}\label{sec:verdict}
@@ -802,7 +802,7 @@ Candidate & test & 0.980 & 0.851 & 0.950 & 0.953 \\
 \bottomrule
 \end{tabularx}
 
-mAP rows: Ultralytics curve conditions (\tconf{} 0.001, \tnms{} 0.70); operating-point columns: \tconf{} 0.40, \tnms{} 0.50, matching IoU 0.50, counts rescored from the per-image predictions (candidate TP/FP/FN 1,051/49/55 against 1,061/46/45). The candidate's validation mAP50--95 is lower (0.8387 vs 0.8436), so the served detector is kept; its slightly higher test mAP50--95 is disclosed but not used for selection, because the test split is not used to choose models. Correcting four labels and retraining did not demonstrate a quality gain. The candidate's ONNX export passes the four-random-input check (0.00073) and fails the same 0.001 bound on 50 real validation images (0.0073; served detector 0.0045 on the same images), with identical counts and classes and final boxes within 0.0002\,px; A9b for the served detector is unchanged. On a frozen cohort of 349 public COCO cat/dog images (175-image test portion, 26 with several animals) the two detectors inside the same pipeline were equally weak on counting: 12 of 26 (served) and 11 of 26 (candidate) multi-animal images were marked technically ready; this cohort is not independent of COCO pre-training and no threshold was chosen on it. Both pipelines answered 300 of 300 loopback HTTP requests on the T4 (p95 95.8 and 95.7\,ms in-process, 50 validation images cycled; a different cohort from the acceptance benchmark, not combined with it).
+mAP rows: Ultralytics curve conditions (\tconf{} 0.001, \tnms{} 0.70); operating-point columns: \tconf{} 0.40, \tnms{} 0.50, matching IoU 0.50, counts rescored from the per-image predictions (candidate TP/FP/FN 1,051/49/55 against 1,061/46/45). The candidate's validation mAP50--95 is lower (0.8387 vs 0.8436), so the served detector is kept; its slightly higher test mAP50--95 is disclosed but not used for selection, because the test split is not used to choose models. Correcting four labels and retraining did not demonstrate a quality gain. The candidate's ONNX export passes the four-random-input check (0.00073) and fails the same 0.001 bound on 50 real validation images (0.0073; served detector 0.0045 on the same images), with identical counts and classes and final boxes within 0.0002\,px; A9b for the served detector is unchanged. On a frozen cohort of 349 public COCO cat/dog images (175-image test portion, 26 with several animals) the two detectors inside the same pipeline were equally weak on counting: 12 of 26 (served) and 11 of 26 (candidate) multi-animal images were marked technically ready; this cohort is not independent of COCO pre-training and no threshold was chosen on it. Both pipelines answered 300 of 300 loopback HTTP requests on the T4. Separately, the in-process benchmark on 50 cycled validation images recorded p95 95.8 and 95.7\,ms; this is a different cohort from the acceptance benchmark and the measurements are not combined.
 
 \textbf{What these runs do not show:} generalisation to new shelter photos, dependable counting of small or secondary animals, or an independent human reproduction; they reuse the historical test split, which had already informed development.
 
@@ -856,7 +856,9 @@ Mean IoU / Dice (\tconf{} 0.25) & 0.923 / 0.959 & 0.921 / 0.957 \\
 \bottomrule
 \end{tabularx}
 
-With the crossing groups removed, detection mAP50--95 is 0.029 lower and mAP50 0.006 lower; every other figure moves by at most 0.007, and the thresholds of criteria A1 to A6 are still met with a wide margin. The two test sets are not the same images, so the table bounds the optimism of split v1 and does not measure it exactly. Limits of this run: one seed and no repeat; PyTorch 2.14.1 on the Colab runtime instead of the pinned 2.11.0; not logged to W\&B; the v2 labels reuse the v1 boxes, so the four corrected training boxes are not included; no team-photo, multi-animal or T4 latency evaluation exists for the v2 checkpoints. They are therefore not promoted and the served models remain the v1 checkpoints.
+With the crossing groups removed, detection mAP50--95 is 0.029 lower and mAP50 0.006 lower; every other figure moves by at most 0.007, and the thresholds of criteria A1 to A6 are still met with a wide margin. The two test sets are not the same images, so the table provides a supplementary sensitivity comparison; the change cannot be attributed solely to leakage. Limits of this run: one seed and no repeat; PyTorch 2.14.1 on the Colab runtime instead of the pinned 2.11.0; not logged to W\&B; the v2 labels reuse the v1 boxes, so the four approved corrected boxes (two in v2 training and two in v2 validation; none in test) are not included; no team-photo or multi-animal accuracy evaluation exists for the v2 checkpoints; the separate hybrid HTTP timing record below does not establish PyTorch-only T4 latency or current-release performance. They are therefore not promoted and the served models remain the v1 checkpoints.
+
+\textbf{Saved hybrid-service measurement of 8 November.} The retained receipt and notebook cell 52 agree on 10 warm-up and 200 measured sequential HTTP requests (all 200 successful), p50, p95 and p99 of 310.3, 434.9 and 466.3\,ms and 2.96 requests/s (\ev{P2_v2_http_saved_20261108}). Inputs are 200 distinct images from the torchvision Oxford official test partition, not verified as the project v2 test cohort; native JPEG sizes, 640-pixel detector/segmenter inputs and 224-pixel classifier crops. The manifest uses detector confidence/NMS 0.30/0.50, mask confidence/NMS 0.25/0.70, temperature 0.05 and verification threshold 0.90. ONNX detection used the CPU provider in a T4 session (PyTorch 2.14.1); every response was held for staff review. This is latency evidence, not an accuracy, parity or promotion result, and it is not the A8 in-process benchmark. Memory and exact HTTP code revision were not recorded. The saved notebook retains a budget-stop error and a setup syntax error with later outputs; it is not a clean top-to-bottom run. Fresh downloads of the three v2 checkpoints and three historical Phase 1 classifiers matched their recorded SHA-256 values and passed ZIP CRC checks (\ev{P2_weights_recheck_20261112}); the separate 5 November research checkpoints remain unrecovered.
 
 \textbf{ONNX export of the v2 detector.} On the four random inputs of the parity protocol (seed 0, CPU) the v2 export differs from PyTorch by at most 0.00049, below the 0.001 bound; on 50 real validation images the largest raw difference is 0.0042, above the bound, for every export setting tried (0.0024 to 0.0042), while the final detections agree (same count and class on all 50 images, boxes within 0.0006\,px). A re-run of the four-input check on 11 November with the pinned versions (PyTorch 2.11.0, ONNX Runtime 1.31.0, CPU; files matched to the recorded SHA-256 values) gave the same 0.00049 with one thread and 0.00047 to 0.00075 over seeds 0 to 2 with one, two and four threads (\ev{P2_supplementary_F_onnx_v2_rerun_20261111}). Because the difference on real images exceeds the bound, this is not treated as parity: the verdict of Section~\ref{sec:verdict} concerns the delivered detector and is unchanged, and the service keeps the PyTorch detector.
 
@@ -893,11 +895,11 @@ Segmenter latency on the T4, batch 1, p50 / p95 (ms) & 16.4 / 27.0 & 15.0 / 25.9
 \bottomrule
 \end{tabularx}
 
-With 3.5 times fewer parameters the smaller segmenter matches the delivered one on every mask metric to within 0.002 and is about 1\,ms faster per image. On this dataset, with one large animal per image, the mask quality is therefore set by the data and the trimap convention rather than by the model size. The delivered YOLO11s-seg is kept because it is the model with test, team-photo and end-to-end results; YOLO11n-seg is a candidate for a lighter deployment once it has been evaluated in the full pipeline.
+With 3.5 times fewer parameters the smaller segmenter matches the delivered one on every mask metric to within 0.002 and is about 1\,ms faster per image. This single-seed validation comparison shows little sensitivity to the tested model sizes on these images; it does not isolate the effects of the data or trimap convention. The delivered YOLO11s-seg is kept because it is the model with test, team-photo and end-to-end results; YOLO11n-seg is a candidate for a lighter deployment once it has been evaluated in the full pipeline.
 
 \subsection{Conclusion}
 
-\textbf{Outcome:} the system does what it was designed for. It pre-checks one pet photo end to end (p50 38.5\,ms, p95 61.4\,ms on a T4), meets nine of the ten acceptance criteria fixed in advance, and keeps the staff-approval guard on every response. \textbf{Demonstrated:} on Oxford-IIIT Pet test images with one large animal, the fine-tuned detector and segmenter clearly improve on the same models used as is (mAP50 0.939 $\rightarrow$ 0.984; mean IoU 0.830 $\rightarrow$ 0.923), the service meets every acceptance criterion except detector ONNX parity, and every response keeps the staff-approval guard; the 5 November Kaggle runs reproduce the segmentation results with the delivered weights (Section~\ref{sec:kaggle}), and a re-evaluation from the delivered package on 6 November reproduces the six detection and segmentation test metrics exactly (Section~1, Part 13). \textbf{Not demonstrated:} reliable counting of several or small animals (17 of 52 multi-animal team photos wrongly ready; small-animal recall 0 of 10), accuracy on a fresh shelter holdout (the team photos had been inspected), a passing ONNX detector, and T4 timings of the release-candidate code. \textbf{Next steps:} collect new multi-animal shelter photos as an untouched test set, retrain the detector with more small and secondary animals (the corrected boxes alone gave no validation gain, Section~\ref{sec:kaggle}; selection on validation, one final test), and define an ONNX parity test on decisions before running it. Two supplementary runs after the freeze (Section~\ref{sec:supp}) support this plan: oversampling cats improved every validation figure of the detector, and a second detection pass cut the false-ready multi-animal photos from 17 to 10 of 52 at the cost of 82 more referrals. A third (Section~\ref{sec:suppf}) retrained the three models on split v2, which has no crossing group, and found the test metrics within 0.006 mAP50 and 0.003 mean IoU of the reported ones. Until then the system is a staff-supervised assistant, not an automatic gatekeeper.
+\textbf{Outcome:} the system supports staff review of one pet photo. The historical in-process T4 measurement was p50 38.5\,ms and p95 61.4\,ms; the separate HTTP measurement was p95 135.3\,ms. It meets nine of the ten acceptance criteria fixed in advance, and keeps the staff-approval guard on every response. \textbf{Demonstrated:} on Oxford-IIIT Pet test images with one large animal, the fine-tuned detector and segmenter clearly improve on the same models used as is (mAP50 0.939 $\rightarrow$ 0.984; mean IoU 0.830 $\rightarrow$ 0.923), the service meets every acceptance criterion except detector ONNX parity, and every response keeps the staff-approval guard; the 5 November Kaggle runs reproduce the segmentation results with the delivered weights (Section~\ref{sec:kaggle}), and a re-evaluation from the delivered package on 6 November reproduces the six detection and segmentation test metrics exactly (Section~1, Part 13). \textbf{Not demonstrated:} reliable counting of several or small animals (17 of 52 multi-animal team photos wrongly ready; small-animal recall 0 of 10), accuracy on a fresh shelter holdout (the team photos had been inspected), a passing ONNX detector, and T4 timings of the release-candidate code. \textbf{Next steps:} collect new multi-animal shelter photos as an untouched test set, retrain the detector with more small and secondary animals (the corrected boxes alone gave no validation gain, Section~\ref{sec:kaggle}; selection on validation, one final test), and define an ONNX parity test on decisions before running it. Two supplementary runs after the freeze (Section~\ref{sec:supp}) support this plan: oversampling cats improved every validation figure of the detector, and a second detection pass cut the false-ready multi-animal photos from 17 to 10 of 52 at the cost of 82 more referrals. A third (Section~\ref{sec:suppf}) retrained the three models on split v2, which has no crossing group, and found the test metrics within 0.006 mAP50 and 0.003 mean IoU of the reported ones. Until then the system is a staff-supervised assistant, not an automatic gatekeeper.
 
 % =====================================================================
 \section{Obstacles and how they were addressed}
@@ -935,10 +937,10 @@ Weights over 100\,MB and private photos cannot go into Git & M8 & The repository
   \item[$\checkmark$] p50/p95/p99 latency, throughput and memory measured with warm-up and stated conditions (\S4.6)
   \item[$\checkmark$] Verdict reported against the acceptance criteria (\S\ref{sec:verdict})
   \item[$\checkmark$] Failure cases of the integrated system listed with explicit failure statements (\S\ref{sec:verdict})
-  \item[$\checkmark$] Every figure states split, input resolution and thresholds
-  \item[$\checkmark$] No data or personal information committed to the repository (weights, Oxford images and team photos stay in private Drive)
+  \item Every displayed figure states its split, resolution and applicable thresholds. The historical SAM table identifies its incomplete settings separately from the documented repeat.
+  \item[$\checkmark$] Current code-archive privacy checks exclude private identifiers, weights and raw team photos; historical Git objects were not rewritten or certified by this review
   \item[$\checkmark$] Delivered commit named in Section 1 and recorded in the source archive; repository links pinned to commits, not branches
-  \item[$\checkmark$] Model card with failure modes and out-of-scope uses (\S4.7; \texttt{docs/model\_card.md}); go/no-go decision against criteria fixed in Phase 1
+  \item[$\checkmark$] Model card with failure modes and out-of-scope uses (\S4.7; \texttt{docs/model\_card.md}); go/no-go decision against the criteria and their documented timing limits in Section 1
   \item[$\checkmark$] Phase 1 feedback on the split answered with evidence: grouping run, owner review, and one supplementary retraining on a split without crossing groups (\S1, \S\ref{sec:suppf})
   \item[$\checkmark$] Notebooks statically checked (15 of 15 parse; \texttt{tools/check\_notebooks.py}); the executed runs they document are cited by W\&B run and evidence file
 \end{itemize}

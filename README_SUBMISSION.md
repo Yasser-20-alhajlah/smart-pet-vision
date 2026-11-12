@@ -163,11 +163,9 @@ The inspected public repository and release do not currently provide:
 
 These files must not be described as publicly included until uploaded.
 
-REPRODUCTION_LOG.txt is currently empty.
+The saved `smart-pet-vision/REPRODUCTION_LOG.txt` is populated. Its 6 November record compares six detection/segmentation checkpoint-evaluation metrics with the originals; it is checkpoint evaluation, with source runs and the reproduced execution ID reported beside the numbers. The original feedback does not require an additional classification-training run. Physical operator identity cannot be established from the account alone. No personal signature form is an instructor submission condition.
 
-A PDF-editing script exists at tools/build_report.py, but its required
-tools/assets/base_report.pdf is absent. Rebuilding the PDF from a clean
-checkout is therefore not currently supported.
+The legacy Phase 1 PDF-editing script at tools/build_report.py requires the absent tools/assets/base_report.pdf. The current Phase 1 LaTeX source is retained separately in the team Drive, with its matching PDF: https://drive.google.com/drive/folders/1M7frAxmWt-eJO2p2FxHP5Yc3Ejn8J4FO. Phase 2 has its own LaTeX project under smart-pet-vision/phase2/submission; the absence of the legacy Phase 1 asset does not describe the Phase 2 build.
 
 Historical references to a local Drive submission package do not establish
 that all of that package's files are available in this public repository.
@@ -179,7 +177,8 @@ that all of that package's files are available in this public repository.
   on leakage.
 - Calibration improvements do not establish reliable confidence on
   shelter-domain photographs.
-- Any 40/40 in the PDF is the team's self-assessment, not an awarded grade.
+- The team records instructor topic approval on 19 October 2026; the original approval message is retained by the team and is not reproduced in this repository. Bonus eligibility is the instructor's decision.
+- The recorded Phase 1 instructor grade is 38/40, as documented in the saved feedback review. Any historical 40/40 is the team's earlier self-assessment.
 
 ## Privacy and submission
 

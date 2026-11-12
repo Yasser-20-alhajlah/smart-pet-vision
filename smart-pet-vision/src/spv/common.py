@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import subprocess
 import os
 import random
 from pathlib import Path
@@ -49,16 +51,44 @@ def load_json(path: str | Path):
         return json.load(f)
 
 
+def source_provenance(root: Path = ROOT) -> dict:
+    """Record the current code snapshot without inferring historical provenance."""
+    paths = sorted(p for folder in ("src", "configs", "notebooks", "tools")
+                   for p in (root / folder).rglob("*")
+                   if p.is_file() and p.suffix in (".py", ".yaml", ".yml", ".ipynb"))
+    paths += [p for p in (root / "requirements.txt",) if p.is_file()]
+    digest = hashlib.sha256()
+    for path in paths:
+        digest.update(path.relative_to(root).as_posix().encode() + b"\0")
+        digest.update(hashlib.sha256(path.read_bytes()).digest())
+    result = {"git_commit": None, "git_dirty": None,
+              "source_sha256": digest.hexdigest(), "source_file_count": len(paths)}
+    def git(*args):
+        return subprocess.check_output(["git", "-C", str(root), *args],
+                                       stderr=subprocess.DEVNULL, text=True, timeout=5).strip()
+    try:
+        # Avoid attaching the revision of an unrelated enclosing repository.
+        git("ls-files", "--error-unmatch", "src/spv/common.py")
+        result["git_commit"] = git("rev-parse", "HEAD")
+        result["git_dirty"] = bool(git("status", "--porcelain"))
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return result
+
+
 class Tracker:
     """Thin wrapper so every stage logs the same way with or without W&B."""
 
     def __init__(self, cfg: dict, name: str, config: dict | None = None):
         self.run = None
+        run_config = dict(config or {})
+        self.provenance = source_provenance()
+        run_config["source_provenance"] = self.provenance
         if cfg["wandb"]["enabled"]:
             import wandb
 
             self.run = wandb.init(
-                project=cfg["wandb"]["project"], name=name, config=config or {}, reinit=True
+                entity=cfg["wandb"].get("entity"), project=cfg["wandb"]["project"], name=name, config=run_config, reinit=True
             )
 
     def log(self, data: dict, step: int | None = None) -> None:

@@ -1,25 +1,18 @@
-# Independent reproduction procedure (Phase 1 feedback, Part 13) — Level 1 executed 6 Nov 2026; operator confirmation pending
+# Independent reproduction procedure (Phase 1 feedback, Part 13) — Level 1 executed 6 Nov 2026; operator attribution documented
 
 **Update 6 Nov 2026 (15:24 UTC):** Level 1 was executed from the delivered package (`06_Team_Actions/COLAB_B…`,
 commit `609c0c5`): all six metrics identical to the originals (record `report/evidence/P2_reproduction_run_20261106.json`,
 block 1 of `REPRODUCTION_LOG.txt`). The run's operator field is "mohammed"; the owner states that Mohammed Adeeb
-Alrashdi ran it on the owner's computer; the Colab record shows the owner's account. Until Mohammed writes his own
-statement and signature in the log, it is not recorded as a confirmed independent reproduction. Level 2 has not been run.
-The text below describes the state before that run.
+Alrashdi ran it on the owner's computer; the Colab record shows the owner's account. The saved execution and attribution are assessed together; account metadata alone does not establish the physical operator's identity. No personal signature form is imposed as a submission condition. Level 2 has not been run.
+The instructions below explain how to inspect or extend that saved result without claiming another execution.
 
 **What the instructor said:** "Yasser's reproduction is said to match, but no reproduced numbers or
 run IDs are shown next to the originals, and `REPRODUCTION_LOG.txt` is empty." Required: show the
 reproduced numbers and run IDs next to the originals, and commit the log.
 
-**Current state (6 Nov 2026):** `REPRODUCTION_LOG.txt` at the repository root holds no executed
-reproduction. The only recorded reproduction is Yasser's own Phase 1 rerun of 23 Oct
-(`docs/REPRODUCE.md`); it is not independent because he authored the original runs, and no
-numbers were placed beside the originals. **No team member other than the author has executed
-a reproduction of the Phase 1 or Phase 2 results.** The procedure below is ready; executing it
-is a human action for Abdulrahman, Mohammed or Musaad. Nothing below may be filled in by anyone
-else, and an automated rerun is not an independent reproduction.
+**Current evidence:** the 6 November Level 1 output and the owner-attributed operator record are preserved in Block 1. The earlier 23 October Phase 1 rerun was performed by the original author. Evaluate the saved numerical comparison, source and model identity, and operator attribution together. No new execution should be claimed from a documentation update.
 
-## Level 1 — evaluation reproduction (about 15 minutes on a T4; required)
+## Level 1 — documented checkpoint evaluation and instructions for a further run
 Re-evaluates the delivered checkpoints on the Oxford test split exactly as the reported numbers
 were produced, and writes original vs reproduced side by side with predefined tolerances
 (`tools/reproduce_phase2_eval.py`; tolerances 0.005 absolute, fixed before any run).
@@ -31,6 +24,8 @@ git checkout <delivered commit>
 # 2. pinned environment
 python -m venv .venv && . .venv/bin/activate
 pip install -r smart-pet-vision/requirements.txt
+# Run subsequent commands from the actual phase2 directory.
+cd smart-pet-vision/phase2
 # 3. assets: Oxford-IIIT Pet (torchvision download, notebook 01 cell 2) and the three weight files
 #    from Drive MyDrive/capstone /smart-pet-vision/runs/ at the paths in phase2/runs/manifest.json
 sha256sum runs/detect/yolo11s_det/weights/best.pt      # f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4
@@ -38,7 +33,6 @@ sha256sum runs/segment/yolo11s_seg/weights/best.pt     # 868f3842bf0e05c8b936d3e
 sha256sum runs/classification/finetune.pt              # 22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba
 # 4. the split v1 artefacts: runs/data/metadata.csv (Drive runs/) and data/processed/ (rebuilt by notebook 01 from the same metadata, or copied from Drive)
 # 5. run (your own name; nobody else's)
-cd smart-pet-vision/phase2
 PYTHONPATH=src python tools/reproduce_phase2_eval.py --operator "<Full Name>" \
   --det-weights runs/detect/yolo11s_det/weights/best.pt --seg-weights runs/segment/yolo11s_seg/weights/best.pt \
   --det-yaml ../data/processed/yolo_detect/data.yaml --seg-yaml ../data/processed/yolo_segment/data.yaml \
@@ -48,22 +42,21 @@ PYTHONPATH=src python tools/reproduce_phase2_eval.py --operator "<Full Name>" \
 Exit status 0 means every metric is within tolerance; the JSON holds operator, date, command,
 commit, dirty state, weight hashes, environment, originals, reproduced values and differences.
 
-## Level 2 — training reproduction (about 1 T4 hour per model; recommended)
+## Level 2 — training reproduction (about 1 T4 hour per model; optional; not prescribed by the official feedback)
 Run notebooks `03_detection.ipynb` and `04_segmentation.ipynb` on a copy of the repository
 without `runs/` (`SPV_REPO` set to the copy, as in `docs/REPRODUCE.md`), with W&B logging on,
 then run Level 1 on the new checkpoints. Record the new W&B run ids. Training is not bit-exact
 on GPU; the comparison uses the same tolerances and reports the differences as they are.
 
 ## What to commit afterwards
-1. The JSON from Level 1 (and Level 2) under `report/evidence/reproduction/`.
+1. The JSON from Level 1 (and Level 2 only if it is actually performed) under `report/evidence/reproduction/`.
 2. `REPRODUCTION_LOG.txt`: one block per execution — operator, date, commit, environment
    (`pip freeze` path), seed, weight hashes, W&B run ids, the side-by-side table (original /
    reproduced / difference / tolerance / verdict), and the operator's statement that they ran it.
 3. The table also goes into Section 1 of the Phase 2 report ("Response to the Phase 1
    feedback") and into the model card.
 
-Until these exist, every document that mentions reproduction must say that the independent
-reproduction has **not** been executed.
+The saved 6 November record documents checkpoint evaluation. A further run must add its own genuine record without overwriting that evidence. Physical operator identity cannot be inferred solely from the account used.
 
 ## Original numbers and run ids to compare against
 | Metric | Original | Run / evidence |
@@ -72,3 +65,5 @@ reproduction has **not** been executed.
 | Segmenter mask mAP50 / mAP50–95 | 0.9931 / 0.8745 | W&B `3ztpz2tc`; `M5_yolo_seg_coco.json` |
 | Segmenter mIoU / Dice (test, conf 0.25) | 0.9230 / 0.9586 | `M5_yolo_seg_test_metrics.json` |
 | Classifier test accuracy (Phase 1) | see Phase 1 report | W&B `8nvxbsn2` |
+
+Original feedback checked on 12 November: the two requested Phase 2 repairs are grouping likely same-animal photos before splitting and reporting original/reproduced numbers with identifiers and a committed log. A further independent Phase 1 classifier-training run and a signature are not added submission gates.
