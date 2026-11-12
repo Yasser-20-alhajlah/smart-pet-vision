@@ -32,6 +32,17 @@ class Phase2NotebookDiscovery(unittest.TestCase):
                 self.assertEqual(resolve(ROOT, str(ROOT.parent)), ROOT)
                 self.assertEqual(resolve(ROOT.parent.parent, str(ROOT.parent.parent)), ROOT)
 
+    def test_cached_phase1_module_requires_runtime_restart(self):
+        d=json.loads((ROOT/'notebooks/03_detection.ipynb').read_text())
+        source=''.join(d['cells'][1]['source'])
+        start=source.index('for _module_name in (')
+        end=source.index('from spv.common', start)
+        env={'Path':Path,'REPO':ROOT,'sys':types.SimpleNamespace(modules={'spv.common':types.SimpleNamespace(__file__=str(ROOT.parent/'src/spv/common.py'))})}
+        with self.assertRaisesRegex(RuntimeError, 'Restart'):
+            exec(compile(source[start:end], '<bootstrap>', 'exec'), env)
+        env['sys'].modules={'spv.common':types.SimpleNamespace(__file__=str(ROOT/'src/spv/common.py'))}
+        exec(compile(source[start:end], '<bootstrap>', 'exec'), env)
+
     def test_missing_or_ambiguous_sources_are_rejected(self):
         resolve = resolver_from_notebook('03_detection.ipynb')
         with tempfile.TemporaryDirectory() as td:
