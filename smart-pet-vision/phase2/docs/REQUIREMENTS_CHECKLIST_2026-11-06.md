@@ -137,19 +137,18 @@ Delivered archives (two different files; each name is tied to its own size and S
 | Four loose training boxes (M3 audit) | report Section 1, "Follow-up on the Phase 1 data-improvement plan", row "Re-derive the four loose body boxes": 4 train labels corrected on 3 Nov in a separate label set; the served detector was **not** retrained on them; the candidate trained on the corrected labels gave no validation gain and was not promoted (Section 4.8, "Regression runs of 5 November") | `[~]` corrected labels exist; served metrics do not reflect them |
 | 17 of 52 multi-animal team photos marked `ready` | report summary (page 1), Section 1 "Results at a glance", Section 2.6 (team photos) and Section 4.7 "Verdict against the acceptance criteria"; evidence `P2_cpu_release_validation_f8manl0i` | `[!]` open limitation; staff approval remains mandatory Supplementary run of 6 Nov (report §4.9, experiment D): the opt-in second detection pass gives 10 of 52 at the cost of 82 more single-animal referrals (45 → 127 of 349); post-hoc on the same photos, review stays off. |
 | A9b detector ONNX parity 0.0018–0.0023 vs bound 0.001 | report Section 1 (criteria table), Section 4.4 "ONNX export and parity", Section 4.7 verdict table; `M8_onnx_parity_recheck_A9b_20261105.json` | `[!]` **not met**; bound unchanged; PyTorch served |
-| Same-animal grouping tool: tests prove the algorithm on a toy set; on the images it ran twice with identical results (6 Nov, `bcc5337` and `609c0c5`) | A1 above; `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` (review band, transitive links to be audited) | `[~]` until the pair review exists |
+| Same-animal grouping tool: tests prove the algorithm on a toy set; on the images it ran twice with identical results (6 Nov, `bcc5337` and `609c0c5`) | A1 above; `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md` (review band, transitive links to be audited) | `[x]` grouping implemented for v2; certified identities are not an added requirement |
 
 ## I. Current next actions and scope
 1. Presenters: test the real service on the presentation computer, record fallback video and hold a timed rehearsal; every member explains their own work. These are future team actions, not executions claimed by this review.
 2. One member: submit the two report files through Blackboard within the official deadline. No Blackboard upload was performed here.
 3. Account owner: identify and revoke the exposed W&B key. This security action is unverified and separate from the official report requirements.
 4. Retain the disclosed ONNX A9b failure, multi-animal limitations, split-v1 leakage and missing historical SAM settings. Further research is distinct from correcting documentation.
-5. Original official template and original Phase 1 assessment are still needed for literal first-source matching; the available assignment text and secondary assessment record remain the current basis.
+5. The original Phase 1 and Phase 2 templates and original 38/40 assessment were opened; their source hashes and literal requirement mapping are in OFFICIAL_REQUIREMENTS_RECONCILIATION_20261112.md. PCB examples remain illustrative.
 
-## K. Latest verification scope
-- PR #20 was merged into main on 12 November (merge `2fea2231626a7b27f4b19f384decaedbacf45e2c`); later delivery corrections, if any, are identified by the exact PDF/archive commit.
-- Last full local Phase 2 suite: 164 passed, zero skipped, including 15 stand-in-model Chromium UI tests. CI: 149 passed and 15 skipped, total 164; counts describe separate executions.
-- Saved-evidence rules: 49/49; notebook syntax checker: 15/15 selected notebooks, not 15 executed training notebooks.
-- Real-weight CPU HTTP functional check passed with explicitly allowed version drift. It establishes neither T4 timing nor final presentation-host readiness.
-- Public W&B read: 44 run configs/summaries returned; selected live numeric values match stored evidence. `P2_wandb_live_read_20261112.json` records exact scope. No authentication, new run, key reuse or key revocation occurred.
-- Original section G software results and S3 publication chronology above are historical 6 November receipts; do not present their old counts or pointers as the latest release.
+## K. Verification scope
+- Prior published f30264d baseline: local Phase 2 165 passed; CI 150 passed and 15 browser skips. These are separate executions.
+- This official-source revision adds five focused bootstrap/provenance regressions, all passed locally without training. The current full CI result is recorded in the release metadata; do not infer a GPU accuracy run from unit tests.
+- Saved evidence checks pass 49/49; all 15 selected notebooks parse. Historical saved outputs are preserved.
+- Public W&B read returned 44 runs; 84 shared numeric summary fields of the three selected runs matched the saved snapshot. No API key, new run or historical edit was used.
+- The real-weight CPU functional receipt and all T4 measurements retain their original environments and source identities; actual presentation-host testing remains the presenters' task.

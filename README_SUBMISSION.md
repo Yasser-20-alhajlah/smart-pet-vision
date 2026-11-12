@@ -163,7 +163,7 @@ The inspected public repository and release do not currently provide:
 
 These files must not be described as publicly included until uploaded.
 
-The saved `smart-pet-vision/REPRODUCTION_LOG.txt` is populated. Its 6 November record compares six detection/segmentation checkpoint-evaluation metrics with the originals; it is not independent classification-training reproduction. Physical operator identity cannot be established from the account alone. No personal signature form is an instructor submission condition.
+The saved `smart-pet-vision/REPRODUCTION_LOG.txt` is populated. Its 6 November record compares six detection/segmentation checkpoint-evaluation metrics with the originals; it is checkpoint evaluation, with source runs and the reproduced execution ID reported beside the numbers. The original feedback does not require an additional classification-training run. Physical operator identity cannot be established from the account alone. No personal signature form is an instructor submission condition.
 
 The legacy Phase 1 PDF-editing script at tools/build_report.py requires the absent tools/assets/base_report.pdf. The current Phase 1 LaTeX source is retained separately in the team Drive, with its matching PDF: https://drive.google.com/drive/folders/1M7frAxmWt-eJO2p2FxHP5Yc3Ejn8J4FO. Phase 2 has its own LaTeX project under smart-pet-vision/phase2/submission; the absence of the legacy Phase 1 asset does not describe the Phase 2 build.
 

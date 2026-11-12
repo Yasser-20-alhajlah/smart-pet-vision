@@ -2,7 +2,7 @@
 
 This is a team coordination aid, not an instructor-required signature form or a condition for report submission. No teammate acknowledgement is completed on someone else’s behalf.
 
-Each member reads the final Phase 2 report (`06_Final_Submission/SmartPetVision_Phase2.pdf`) and the slides they will present, then writes their own line below. Nothing here is filled in on anyone's behalf.
+Each member reads the final Phase 2 report (`FINAL PHASE_2/SmartPetVision_Phase2.pdf`) and the slides they will present, then writes their own line below. Nothing here is filled in on anyone's behalf.
 
 | Member | Workstream | Read the whole report (yes/no) | My line in the Team members table is correct (yes/no) | Corrections needed (page, sentence) | Date |
 |---|---|---|---|---|---|
