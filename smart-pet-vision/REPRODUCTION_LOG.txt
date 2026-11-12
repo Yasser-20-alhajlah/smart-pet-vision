@@ -2,8 +2,8 @@
 #
 # One block per execution: operator, date, commit, environment, seed, weight hashes, run ids,
 # original vs reproduced table with differences and tolerances, and the operator's own statement.
-# Nothing may be written here on behalf of someone who did not run it; the statement and signature
-# lines are filled in only by the operator.
+# Preserve the recorded executor attribution. Optional personal declarations are written only by
+# their author; a signature is not an instructor submission requirement.
 #
 # Earlier rerun, not independent: 23 Oct 2026, Phase 1, Colab T4, by Yasser Alhajlah, the author of
 # the original runs (docs/REPRODUCE.md).
@@ -20,6 +20,11 @@ Seed / split: split v1 (runs/data/metadata.csv, SHA-256 f7c6771b…), 5,123 / 1,
 Weights (SHA-256 checked before use): detector f48e4d8e…1cd4, segmenter 868f3842…d8ee, classifier 22dd58d4…81ba
 W&B run id: none (the evaluation script does not log to W&B; the output file is the record)
 Output: phase2/report/evidence/reproduction/reproduction_eval_mohammed_20261106.json (SHA-256 fa1e7f72…025c)
+
+Original W&B source runs: detector 2seovilv; segmenter 3ztpz2tc.
+Reproduction execution identifier: 2026-11-06T15:24:03Z / reproduction_eval_mohammed_20261106.json.
+Executed notebook: https://drive.google.com/file/d/1lm1bYAEOyOoElDb-c3ui25VJYai5-GKw/view
+The reproduction has no W&B run ID because that evaluation was not logged to W&B; its saved execution ID is reported instead of inventing a run.
 
 | Metric (Oxford test, 640 px) | Original | Reproduced | Difference | Tolerance | Verdict |
 |---|---|---|---|---|---|

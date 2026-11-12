@@ -17,6 +17,8 @@ def train(cfg: dict, data_yaml: Path, name: str = "yolo11s_det") -> Path:
 
     dc = cfg["detection"]
     model = YOLO(dc["model"])
+    from .training_provenance import attach_training_provenance
+    attach_training_provenance(model, cfg, data_yaml, name, task="detect")
     model.train(data=str(data_yaml), epochs=dc["epochs"], imgsz=dc["imgsz"], batch=dc["batch"],
                 seed=cfg["seed"], deterministic=True, project=str(Path(cfg["paths"]["runs"]) / "detect"),
                 name=name, exist_ok=True, plots=True, verbose=False)
