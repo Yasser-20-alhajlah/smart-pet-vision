@@ -1,0 +1,436 @@
+{
+  "review_date": "2026-11-14",
+  "scope": "Fresh downloads and saved-output arithmetic; no training, model inference, GPU execution or independent human reproduction in this review. W&B training validation summaries are not test metrics.",
+  "checks": [
+    "seed 42 classifier weight hash",
+    "seed 42 classifier checkpoint CRC",
+    "seed 42 detector weight hash",
+    "seed 42 detector checkpoint CRC",
+    "seed 42 segmenter weight hash",
+    "seed 42 segmenter checkpoint CRC",
+    "seed 42 detector published hash",
+    "seed 42 split fingerprint/counts",
+    "seed 42 detector mAP50",
+    "seed 42 detector mAP50_95",
+    "seed 42 operating point",
+    "seed 42 classification test",
+    "seed 42 classifier W&B full history and epoch times",
+    "seed 42 classifier W&B source/finished",
+    "seed 42 detector W&B source/finished",
+    "seed 42 detector W&B seed/split",
+    "seed 42 segmenter W&B source/finished",
+    "seed 42 segmenter W&B seed/split",
+    "seed 43 classifier weight hash",
+    "seed 43 classifier checkpoint CRC",
+    "seed 43 detector weight hash",
+    "seed 43 detector checkpoint CRC",
+    "seed 43 segmenter weight hash",
+    "seed 43 segmenter checkpoint CRC",
+    "seed 43 detector published hash",
+    "seed 43 split fingerprint/counts",
+    "seed 43 detector mAP50",
+    "seed 43 detector mAP50_95",
+    "seed 43 operating point",
+    "seed 43 classification test",
+    "seed 43 classifier W&B full history and epoch times",
+    "seed 43 classifier W&B source/finished",
+    "seed 43 detector W&B source/finished",
+    "seed 43 detector W&B seed/split",
+    "seed 43 segmenter W&B source/finished",
+    "seed 43 segmenter W&B seed/split",
+    "seed 44 classifier weight hash",
+    "seed 44 classifier checkpoint CRC",
+    "seed 44 detector weight hash",
+    "seed 44 detector checkpoint CRC",
+    "seed 44 segmenter weight hash",
+    "seed 44 segmenter checkpoint CRC",
+    "seed 44 detector published hash",
+    "seed 44 split fingerprint/counts",
+    "seed 44 detector mAP50",
+    "seed 44 detector mAP50_95",
+    "seed 44 operating point",
+    "seed 44 classification test",
+    "seed 44 classifier W&B full history and epoch times",
+    "seed 44 classifier W&B source/finished",
+    "seed 44 detector W&B source/finished",
+    "seed 44 detector W&B seed/split",
+    "seed 44 segmenter W&B source/finished",
+    "seed 44 segmenter W&B seed/split",
+    "system weight hashes",
+    "system all ten acceptance metrics/targets/verdicts",
+    "system raw matches published benchmark_pytorch_T4",
+    "system raw matches published http_service_pytorch",
+    "system W&B summary p95/HTTP"
+  ],
+  "sources": [
+    {
+      "id": "1KK_0Z32tNS-4Lg4kVdjs2xF63ZoHPrZD",
+      "sha256": "2d679849714d44e7e03d4b06f37290856c7f885aa258264d3c61b132e2f80d76",
+      "bytes": 1896,
+      "relative_file": "s42/P2_v2_headline_onnx.json"
+    },
+    {
+      "id": "1gXK_y7_5gbh1K8s2gL1ZWtw0aU-CJjj9",
+      "sha256": "9225f982e2aee18876da4b3c406833895d98b14db817915c236e069afd1288d2",
+      "bytes": 36116,
+      "relative_file": "s42/P2_v2_headline_record.json"
+    },
+    {
+      "id": "1t7FZSX2VuGeG7-FJNDSxJcu8A7lPIkNf",
+      "sha256": "a857a43389c483a8eea1e5125229d7b6e8e1d0d7d8a0f15a51e425a9ce93662f",
+      "bytes": 152365,
+      "relative_file": "s42/seg_per_image_test_v2.csv"
+    },
+    {
+      "id": "16BAKfvawnrZQoVC2M_bUU94sJBfsXSLX",
+      "sha256": "6bd93e3b0efba8aa73d3453ae8eb5364061d7637424572cc493dddc93dd650ae",
+      "bytes": 1869,
+      "relative_file": "s42/det_threshold_sweep_val_v2.csv"
+    },
+    {
+      "id": "10Xd4cycTcg2HRTjMwzxQsixoytQK95C7",
+      "sha256": "89f811ed0c8fda3993037eab3c648d66b160f980e38702ed0507c7b205cea0d2",
+      "bytes": 1898,
+      "relative_file": "s43/P2_v2_headline_onnx.json"
+    },
+    {
+      "id": "1iVGYXcCp8GmT0ceU7K8MiKdHPw2SFfgx",
+      "sha256": "0e9877e78d27f4a17d21f305c4d6e4c29e2fc7300ab7482450f69f3f6f99b0d0",
+      "bytes": 33203,
+      "relative_file": "s43/P2_v2_headline_record.json"
+    },
+    {
+      "id": "1TZOzyOs4IWDweZo0WNtMT4zRsuJHTUqw",
+      "sha256": "283e7da56d78fdcef9aff75f07c1a4bcd578064d41165f88dfa4cedcd59156ce",
+      "bytes": 152306,
+      "relative_file": "s43/seg_per_image_test_v2.csv"
+    },
+    {
+      "id": "1ffqy90pWZ5OU7khXjBUyIw06hN_ZTAzW",
+      "sha256": "228de467b0ea54d79fb864f34f510e55a3322d1fe35c224e3ad1e27278564afe",
+      "bytes": 1869,
+      "relative_file": "s43/det_threshold_sweep_val_v2.csv"
+    },
+    {
+      "id": "1YbYBGLHX4W8lUDq4kM2l3p_ggqtyCs4O",
+      "sha256": "aebeadc6d2a64006f7b62088c84d28f5f3e5457ce85120df835e6bb87541b58c",
+      "bytes": 1893,
+      "relative_file": "s44/P2_v2_headline_onnx.json"
+    },
+    {
+      "id": "1uqYaG5PNQzunjUc5teauGvV2hrrpp6QQ",
+      "sha256": "22a9bb60c28529cbf7ee56cafb51dd1cbdcc0a74f98575df2a7a768ccdcccea6",
+      "bytes": 37289,
+      "relative_file": "s44/P2_v2_headline_record.json"
+    },
+    {
+      "id": "19VZm3uLZ0hQFbvuB7lqbeKbL5fnsLxuh",
+      "sha256": "cd56dc485bd0e43ad6ef968ce809786f2fabba353923fd0684b3d8355e81a908",
+      "bytes": 152296,
+      "relative_file": "s44/seg_per_image_test_v2.csv"
+    },
+    {
+      "id": "15yeqeomUbGfUBHQtGPYmMGteIX2gIr1e",
+      "sha256": "49aaaf36a79b61c638c8a08d1efeacb4344e0f2100ee09de8dee7ef78467e50d",
+      "bytes": 1872,
+      "relative_file": "s44/det_threshold_sweep_val_v2.csv"
+    },
+    {
+      "id": "1Z2CgT-VRuQ3DM3fbSnaI9eV3nCXo57pV",
+      "sha256": "816eadebbeae22fc19f2a70677e43eb03a6c8ac1dbefa52df7296d987110b571",
+      "bytes": 9617,
+      "relative_file": "system/P2_v2_system_eval.json"
+    },
+    {
+      "id": "1rFUiqWNxAF_8oG7695zsvRpqsLHUnyBs",
+      "sha256": "03df575eed36ff6bcc9bb1aa444f1509468352b562ea52a978f4d00fb295a926",
+      "bytes": 1678,
+      "relative_file": "system/benchmark_onnx_detector.json"
+    },
+    {
+      "id": "17vIotiQZ5NIHWflEGAtFHFH6rmrQpHu8",
+      "sha256": "8151d8afc9d9be45fe0eb5f66aa014b5eaf891b3f44aab3070e31c953a5d24be",
+      "bytes": 1667,
+      "relative_file": "system/benchmark_pytorch.json"
+    },
+    {
+      "id": "1m4ATPHj5ckgyV-kTPwksXC-U0CDqlT4-",
+      "sha256": "69917149223e3e29ec936b7ce49117f81366444cea2297a1e53a54490b594380",
+      "bytes": 20741,
+      "relative_file": "scripts/run_seed_r5.py"
+    },
+    {
+      "id": "1BJHz0xCqpSD3tdH-VOMHz2ZGaiVkmG4e",
+      "sha256": "99d2969b8fe903b13063db07ecde71a1035c9451ee273e7a121c83fa2d1d0218",
+      "bytes": 20625,
+      "relative_file": "scripts/run_seed_r4.py"
+    },
+    {
+      "id": "1jOkQRFslChUlqdsrClEeR8-Y5JDDMIuT",
+      "sha256": "524736a9619c4612c0774e0834e6bdbfced443e10305c5f0d3f172feb51c6971",
+      "bytes": 20492708,
+      "relative_file": "s42/seg_v2/best.pt"
+    },
+    {
+      "id": "1G66ArDUXzQZXa_uCLNSYDDyu0ZmIIy0x",
+      "sha256": "c39e889b91f2933721c38b13079f036bdb2e8180a693c0c748c69439b69177ae",
+      "bytes": 7349,
+      "relative_file": "s42/seg_v2/results.csv"
+    },
+    {
+      "id": "1M0mpdfP8vrcDgd2I8OR5A5-JEJtGZFCv",
+      "sha256": "67ebb8ef725cdb47a82608c69030cb28418f5fdef0d1f081f55f555dbf0c6214",
+      "bytes": 1724,
+      "relative_file": "s42/seg_v2/args.yaml"
+    },
+    {
+      "id": "1NRf3Aa8YyFA5oVbqhKYJwyTzYXTgIOY4",
+      "sha256": "17aada90cb4f86916ee14467d0919b37d62bfaea6d112ab6af7acd3bdaf62122",
+      "bytes": 19156442,
+      "relative_file": "s42/det_v2/best.pt"
+    },
+    {
+      "id": "1xiPlR-MJtZF74JnU0Xo5G99xRNNgQ7vI",
+      "sha256": "3a5a80d2729f1989a185d2494aa3d39095a90d1b9b414484c4202b955832bd08",
+      "bytes": 5157,
+      "relative_file": "s42/det_v2/results.csv"
+    },
+    {
+      "id": "1yyTaAT1yLZkuieYtWq1JKynEQEGzqdHh",
+      "sha256": "b1c91acac8ada2423e3452aeb7469067cc434152ea0d40fe8400cd747fc9971b",
+      "bytes": 1716,
+      "relative_file": "s42/det_v2/args.yaml"
+    },
+    {
+      "id": "11nbCOvv9ezvalGPoD_Xsq3iCVZuXK1Lu",
+      "sha256": "47c5ced3c8fbd703a3ab5d3d2bc46efb4b8375c8fb2b884bb5238f14a9ff9ab2",
+      "bytes": 846,
+      "relative_file": "s42/classification/finetune_history.csv"
+    },
+    {
+      "id": "1hpreHrLivZrl--thF8PNmQ_qXgr1xT9T",
+      "sha256": "253012d33d67c52df9651fc950b84c91a3737e264ed35437e724f0d44f85c589",
+      "bytes": 94366917,
+      "relative_file": "s42/classification/finetune.pt"
+    },
+    {
+      "id": "1WU5kAJGrVH6hv32J_yRjqZanPlqiFaNw",
+      "sha256": "e562b418b8df2907c8db38ff2cc48a52e76db0d1fefd7066ea1eb10594a99c2c",
+      "bytes": 20493412,
+      "relative_file": "s43/seg_v2/best.pt"
+    },
+    {
+      "id": "1k3I0LqfFw2IEF-U2OxD_g_eriFdlnQ9N",
+      "sha256": "07005fbf308dbb6d50196bd05d15bcf7bddf794991b265e485411ba31e0d9e79",
+      "bytes": 7314,
+      "relative_file": "s43/seg_v2/results.csv"
+    },
+    {
+      "id": "172yu-WmHCYs8FaID8uqin_Xuf4tLldI_",
+      "sha256": "75e29724d3d3e80e5176838f8aea0c9d8e96790c4740faafb242235ee0bb04f5",
+      "bytes": 1724,
+      "relative_file": "s43/seg_v2/args.yaml"
+    },
+    {
+      "id": "114bNAWcYKe6imoaVMxAUZR1uUP5at9uB",
+      "sha256": "dc432178e59967761d1dd84911fbf712af9c71b66fc92cd3d9abfe04f79db0c0",
+      "bytes": 19156442,
+      "relative_file": "s43/det_v2/best.pt"
+    },
+    {
+      "id": "1B-sx9m2H8tAVL2YTkmeZ8GnhxBonuZha",
+      "sha256": "ad1cc0af845509419fa55715319ddb7c21955d9fc90d3e5585ad38e32c8732cf",
+      "bytes": 5147,
+      "relative_file": "s43/det_v2/results.csv"
+    },
+    {
+      "id": "1pyN475eBwYE6NNH-vn0_ARpvKvIyMK9E",
+      "sha256": "1a4060cd0aa7c4b28954678f47afffc9fb89509aa285ced547245c7a9e0f1d6f",
+      "bytes": 1716,
+      "relative_file": "s43/det_v2/args.yaml"
+    },
+    {
+      "id": "1LoAF9cAkLxxi04jnzUrXii8DAUp2ejv1",
+      "sha256": "8292de45258878cf9784f549852901056101eb020180697c45f63b1a5997fa92",
+      "bytes": 781,
+      "relative_file": "s43/classification/finetune_history.csv"
+    },
+    {
+      "id": "1ZpJSNI7VAe97cnKJ9knYpztxrtpP-98v",
+      "sha256": "bb4430eae0d29dcfa30f5f8be28a44e2ecab360dddd6f61dff36da92776ccddd",
+      "bytes": 94366917,
+      "relative_file": "s43/classification/finetune.pt"
+    },
+    {
+      "id": "13vETSe7psY6j3c0HjngQ56RH3b7fWLVi",
+      "sha256": "47f2e2412d8e3109bd2bcd4fcb5bdbb3a5bb250e78a8d112a22f720381ae7a08",
+      "bytes": 20492708,
+      "relative_file": "s44/seg_v2/best.pt"
+    },
+    {
+      "id": "1giTRkRYjepp_kClHKyFCwzWCFAa5TxfY",
+      "sha256": "900c4a24c6d94a28d9662cc6702aadf8a6ed44d43aed1db191ecd65920654251",
+      "bytes": 7344,
+      "relative_file": "s44/seg_v2/results.csv"
+    },
+    {
+      "id": "16LxA9xltFaj8CjWMFWqq13ZbTAZjWpgt",
+      "sha256": "9e7379bf6b386ae31b08626ac36dcdc0708d5c0efbbdda85ed961c320734d9a2",
+      "bytes": 1724,
+      "relative_file": "s44/seg_v2/args.yaml"
+    },
+    {
+      "id": "1pY-fLj7OqE95eLHeBvPHecfVu1guYi9U",
+      "sha256": "92548b78d3d04491d3ba8573c8139bfb04b587b96aed5bd0ed3e2923bdb9ac08",
+      "bytes": 19156442,
+      "relative_file": "s44/det_v2/best.pt"
+    },
+    {
+      "id": "1YMStE6r8ejFU8alidPA7lbEz_kpeRFAC",
+      "sha256": "e2afbf31e9246ac3e22d529bbbb676d683c2a05a422eac3404039ffd9c6efafc",
+      "bytes": 5152,
+      "relative_file": "s44/det_v2/results.csv"
+    },
+    {
+      "id": "1BFFJ038qmgM0OmcdrJEgPLcfkvx5dpWO",
+      "sha256": "d393ada5745d7f583ecc222f4b0eac0a162cbba3f3b8f2594e487b440c319af7",
+      "bytes": 1716,
+      "relative_file": "s44/det_v2/args.yaml"
+    },
+    {
+      "id": "1aLl6AAJMMiqLW5vdtOLFHctXvxKJ2TEP",
+      "sha256": "4049aabc3c488c4a85be81c661efd93320c41e00be77713a89cd683c8f95c89d",
+      "bytes": 840,
+      "relative_file": "s44/classification/finetune_history.csv"
+    },
+    {
+      "id": "1f9MdMJhMmb8K6aAChsrDkOXecctuwAgJ",
+      "sha256": "98eb8956c27ffa1d439aaa98ec3a4d8156489e5b1541ee1debe26b75c633040c",
+      "bytes": 94366917,
+      "relative_file": "s44/classification/finetune.pt"
+    },
+    {
+      "id": "1eYMUZAyii5yqDJTGk1wS46CDazBXCpDF",
+      "sha256": "73d748c9be1217a8328869f086b3412d105a84e8b5a6cfae8830ca8244e7468f",
+      "bytes": 4699545,
+      "relative_file": "s43/run.log"
+    },
+    {
+      "id": "1XqlU-DTzTnxElie7Y1cysKS66JVL5zMv",
+      "sha256": "295514f395232382a6354b7c40caff73315ddea7eb21a0b05df4c2a8e156099d",
+      "bytes": 2562381,
+      "relative_file": "s42/run.log"
+    },
+    {
+      "id": "1SgCSCaWkmFf3dodzcpNQPLjZdUZXt8Pm",
+      "sha256": "94a4ecde126497bf022712ac4be089ef16cad988ebc04bac0b8a4fc8009a6676",
+      "bytes": 2550393,
+      "relative_file": "s44/run.log"
+    }
+  ],
+  "seeds": {
+    "42": {
+      "weights_sha256": {
+        "classifier": "253012d33d67c52df9651fc950b84c91a3737e264ed35437e724f0d44f85c589",
+        "detector": "17aada90cb4f86916ee14467d0919b37d62bfaea6d112ab6af7acd3bdaf62122",
+        "segmenter": "524736a9619c4612c0774e0834e6bdbfced443e10305c5f0d3f172feb51c6971"
+      },
+      "wandb": {
+        "classifier": {
+          "run_id": "goc4nfwp",
+          "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/goc4nfwp",
+          "actual_group": null,
+          "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+          "basis": "ten-epoch CSV matches W&B history including epoch times; seed absent in classifier config"
+        },
+        "detector": {
+          "run_id": "tzky06md",
+          "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/tzky06md",
+          "actual_group": null,
+          "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+          "basis": "seed, split hash and source commit in live config"
+        },
+        "segmenter": {
+          "run_id": "kgoegnkp",
+          "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/kgoegnkp",
+          "actual_group": null,
+          "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+          "basis": "seed, split hash and source commit in live config"
+        }
+      },
+      "classifier_history_matched_epochs": 10
+    },
+    "43": {
+      "weights_sha256": {
+        "classifier": "bb4430eae0d29dcfa30f5f8be28a44e2ecab360dddd6f61dff36da92776ccddd",
+        "detector": "dc432178e59967761d1dd84911fbf712af9c71b66fc92cd3d9abfe04f79db0c0",
+        "segmenter": "e562b418b8df2907c8db38ff2cc48a52e76db0d1fefd7066ea1eb10594a99c2c"
+      },
+      "wandb": {
+        "classifier": {
+          "run_id": "fzwxjpbu",
+          "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/fzwxjpbu",
+          "actual_group": null,
+          "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+          "basis": "ten-epoch CSV matches W&B history including epoch times; seed absent in classifier config"
+        },
+        "detector": {
+          "run_id": "e8vkgz1h",
+          "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/e8vkgz1h",
+          "actual_group": null,
+          "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+          "basis": "seed, split hash and source commit in live config"
+        },
+        "segmenter": {
+          "run_id": "w6zpaste",
+          "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/w6zpaste",
+          "actual_group": null,
+          "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+          "basis": "seed, split hash and source commit in live config"
+        }
+      },
+      "classifier_history_matched_epochs": 10
+    },
+    "44": {
+      "weights_sha256": {
+        "classifier": "98eb8956c27ffa1d439aaa98ec3a4d8156489e5b1541ee1debe26b75c633040c",
+        "detector": "92548b78d3d04491d3ba8573c8139bfb04b587b96aed5bd0ed3e2923bdb9ac08",
+        "segmenter": "47f2e2412d8e3109bd2bcd4fcb5bdbb3a5bb250e78a8d112a22f720381ae7a08"
+      },
+      "wandb": {
+        "classifier": {
+          "run_id": "8hqrsxu1",
+          "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/8hqrsxu1",
+          "actual_group": null,
+          "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+          "basis": "ten-epoch CSV matches W&B history including epoch times; seed absent in classifier config"
+        },
+        "detector": {
+          "run_id": "kmtk2r87",
+          "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/kmtk2r87",
+          "actual_group": null,
+          "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+          "basis": "seed, split hash and source commit in live config"
+        },
+        "segmenter": {
+          "run_id": "f91gi3k5",
+          "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/f91gi3k5",
+          "actual_group": null,
+          "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+          "basis": "seed, split hash and source commit in live config"
+        }
+      },
+      "classifier_history_matched_epochs": 10
+    }
+  },
+  "metadata_reconstruction": {
+    "original_v1_metadata_sha256": "f7c6771be2f521bceb169ec4ea35f3855958de5ca03f73d992bee7d54163c993",
+    "split_v2_csv_sha256": "a8846b0fa0969069c85763ab1f31d0cf594e37fd2839e474d1e1fa6737f9f86b",
+    "reconstructed_metadata_sha256": "c06f4d9e5dd4e333b4d5e17f1b07c115209dd5b9da8a6e99b4d48db8316db13f",
+    "matches_all_three_original_seed_records": true,
+    "pandas": "2.2.3",
+    "numpy": "2.1.3",
+    "method": "Exactly the retained run_seed_r4/r5 merge plus only the two approved training corrections, with recorded package versions. No split regenerated; zero crossing similarity groups in original split_v2.csv.",
+    "initial_mismatching_environment": "NumPy 2.2.6 produced different CSV bytes; not accepted or used."
+  }
+}

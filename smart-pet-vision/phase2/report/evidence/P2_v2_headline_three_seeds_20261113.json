@@ -39,7 +39,7 @@
    "onnxruntime": "1.31.0",
    "wandb": "0.28.1"
   },
-  "wandb": "project yasser-alhajlah-kaust/smart-pet-vision, group v2_headline_20261112"
+  "wandb": "Project yasser-alhajlah-kaust/smart-pet-vision; system run 0aw5pvjc has group v2_headline_20261112. Training runs have group null in the live API; use the explicit per-seed IDs."
  },
  "corrected_training_boxes": {
   "applied": [
@@ -93,10 +93,18 @@
    },
    "wandb_run_ids": {
     "classifier": "goc4nfwp",
+    "detector": "tzky06md",
     "segmenter": "kgoegnkp"
    },
    "sessions": "classifier and detector in the session of 12 Nov 18:59 UTC; that Colab runtime was lost during segmenter training; segmenter retrained from the start (same seed, recipe, data) in the session of 12 Nov 22:39 UTC",
-   "drive_folder": "runs/v2_headline_20261112/seed42_20261112T1859Z"
+   "drive_folder": "runs/v2_headline_20261112/seed42_20261112T1859Z",
+   "wandb_ids_review_20261114": {
+    "previous_recorded_ids": {
+     "classifier": "goc4nfwp",
+     "segmenter": "kgoegnkp"
+    },
+    "note": "Recovered/corrected using live configs and full classifier histories; original private records unchanged."
+   }
   },
   "43": {
    "classifier": {
@@ -137,12 +145,20 @@
     "final_box_max_abs_diff_px": 9.5367431640625e-05
    },
    "wandb_run_ids": {
-    "classifier": "wvwh0vi2",
+    "classifier": "fzwxjpbu",
     "detector": "e8vkgz1h",
     "segmenter": "w6zpaste"
    },
    "sessions": "one session, 13 Nov 00:13 UTC",
-   "drive_folder": "runs/v2_headline_20261112/seed43_20261113T0013Z"
+   "drive_folder": "runs/v2_headline_20261112/seed43_20261113T0013Z",
+   "wandb_ids_review_20261114": {
+    "previous_recorded_ids": {
+     "classifier": "wvwh0vi2",
+     "detector": "e8vkgz1h",
+     "segmenter": "w6zpaste"
+    },
+    "note": "Recovered/corrected using live configs and full classifier histories; original private records unchanged."
+   }
   },
   "44": {
    "classifier": {
@@ -183,10 +199,18 @@
     "final_box_max_abs_diff_px": 0.00042724609375
    },
    "wandb_run_ids": {
+    "classifier": "8hqrsxu1",
+    "detector": "kmtk2r87",
     "segmenter": "f91gi3k5"
    },
    "sessions": "classifier and detector in the session of 13 Nov 02:59 UTC; that Colab runtime was lost during segmenter training; segmenter retrained from the start (same seed, recipe, data) in the session of 13 Nov 06:54 UTC",
-   "drive_folder": "runs/v2_headline_20261112/seed44_20261113T0259Z"
+   "drive_folder": "runs/v2_headline_20261112/seed44_20261113T0259Z",
+   "wandb_ids_review_20261114": {
+    "previous_recorded_ids": {
+     "segmenter": "f91gi3k5"
+    },
+    "note": "Recovered/corrected using live configs and full classifier histories; original private records unchanged."
+   }
   }
  },
  "summary_over_seeds": {
@@ -251,8 +275,8 @@
  "caveats": [
   "the v2 test split had already been evaluated once on 7 November (seed 42, no W&B); recipes, thresholds and rules were not changed after that look",
   "the seed-42 segmenter metrics equal the 7 November values to the last recorded digit (same seed and segmentation labels); deterministic training is the likely reason and was not verified independently",
-  "the W&B run ids of the seed-42 detector and of the seed-44 classifier and detector are not in the records (the lookup at resume returned nothing); the runs exist in the W&B group",
   "v1 and v2 test sets are not the same images (1,106 vs 1,050)",
-  "A9b is met by one of the three detector exports and not by the other two, with identical final detections in all three; it is not a selection criterion"
+  "A9b is met by one of the three detector exports and not by the other two, with identical final detections in all three; it is not a selection criterion",
+  "14 November review recovered all nine training run IDs; the seed-43 classifier ID in the earlier summary was wrong. Live source configs and all ten classifier history rows match the Drive histories; no historical run metadata was edited."
  ]
 }

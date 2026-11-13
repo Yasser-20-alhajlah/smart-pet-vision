@@ -30,11 +30,11 @@ Oxford-IIIT Pet (CC BY-SA 4.0), 7,335 images after cleaning, group-aware split 5
 | End-to-end p95 latency | 61 ms (T4, in-process); 431 ms (CPU HTTP, W&B mu2tolkg) | batch 1 |
 | Per-stage p50 / p95 (validation, notebook 11) | detect 16.2/17.2, classify 10.1/11.7, segment 22.1/23.4, total 48.6/51.3 ms | T4, in-process, 1,106 val images, code 879b0e8; separate run from the A8 benchmark |
 
-### Leakage-safe evaluation on split v2 (12-13 November 2026)
+### Primary three-seed evaluation on similarity-grouped split v2 (12-13 November 2026)
 
-Split v1 has same-animal groups across partitions (135 of its 1,106 test images), so the figures above can be optimistic. The same three recipes were retrained on split v2, which has no such group, with seeds 42, 43 and 44; each seed was evaluated once on the v2 test split (1,050 images). Source: `report/evidence/P2_v2_headline_three_seeds_20261113.json` and `P2_v2_system_eval_seed44_20261113.json`; report Section 4.12.
+Split v1 has same-animal groups across partitions (135 of its 1,106 test images), so the figures above can be optimistic. The same three recipes were retrained on split v2, which has no crossing group under the recorded similarity/owner-review rule (not verified identity labels), with seeds 42, 43 and 44; each seed was evaluated once on the v2 test split (1,050 images). Source: `report/evidence/P2_v2_headline_three_seeds_20261113.json` and `P2_v2_system_eval_seed44_20261113.json`; report Section 4.12.
 
-| Metric (split-v2 test) | Mean ± sd over three seeds |
+| Metric (split-v2 test; detector/masks 640 px, classifier 224 px) | Mean ± sd over three seeds |
 |---|---|
 | Classification accuracy | 0.999 ± 0.001 |
 | Detection mAP50 / mAP50-95 | 0.981 ± 0.001 / 0.836 ± 0.002 |
@@ -43,8 +43,8 @@ Split v1 has same-animal groups across partitions (135 of its 1,106 test images)
 
 System level, checkpoints of the seed selected on validation (seed 44; detector confidence 0.40, NMS 0.50), Tesla T4: nine of the ten acceptance criteria are met; in-process latency p50 41.0 / p95 63.5 / p99 71.3 ms at 22.0 img/s; HTTP 300 of 300 requests, p95 71.9 ms; classifier ONNX difference 1.9e-7. Detector ONNX parity (A9b) is not met (0.0038 against 0.001), although the final detections equal those of PyTorch on 50 validation images. On the 401 team photos: 395 of 399 single-species photos labelled correctly, no wrong label marked ready, detection recall 0.712, and 22 of 52 multi-animal photos wrongly marked ready (delivered build: 0.732 and 17 of 52). These checkpoints are not the served weights: `runs/manifest.json` and the packaged service still use the delivered split-v1 build.
 
-### Baselines (not fine-tuned, COCO-pretrained weights used as is; notebook 11)
-| Measure | Baseline | Fine-tuned (above) |
+### Matched split-v1 baselines (COCO-pretrained weights used as is; notebook 11)
+| Measure | Baseline | Fine-tuned split-v1 service |
 |---|---|---|
 | Detection mAP50 / mAP50-95, test | 0.939 / 0.728 | 0.984 / 0.850 |
 | Detection P / R / F1 at conf 0.40, NMS 0.50, test | 0.937 / 0.919 / 0.928 | 0.958 / 0.959 / 0.959 |
@@ -78,3 +78,8 @@ This used Python 3.12.14 and explicitly recorded `--allow-version-drift` (PyTorc
 A retained 8 November receipt matches notebook cell 52: 10 warm-up and 200 measured sequential requests; 200/200 HTTP 200; p50/p95/p99 310.3/434.9/466.3 ms and 2.96 requests/s. The ONNX detector used CPUExecutionProvider inside a T4 session; classifier/segmenter used the available T4. These are torchvision Oxford official-test images, not established as the project's split-v2 test cohort. All responses were held for review. No accuracy, Multi-Pet improvement, ONNX-parity pass or promotion is established. Exact HTTP code revision and memory were not recorded. The resumed notebook retains two errors and later outputs; it is not a clean top-to-bottom execution.
 
 The three v2 checkpoints and three historical Phase 1 classifiers were freshly downloaded and matched to recorded SHA-256 values, with ZIP CRC checks. This does not recover the separate 5 November research checkpoints or establish a new classifier-training execution. A further classifier-training run is not required by the original feedback. See `report/evidence/P2_v2_http_saved_20261108.json` and `P2_weights_recheck_20261112.json`. Served weights and thresholds remain unchanged.
+
+### Verification and interpretation, 14 November 2026
+All nine three-seed weights were freshly downloaded and matched to the original records, with ZIP CRC checks. Thirty classifier epoch rows match the corresponding live W&B histories, including epoch times. Explicit IDs and original source-file hashes are in `report/evidence/v2_saved_review_20261114/SOURCE_REVIEW.json`; training runs have null group fields, so the group label alone does not locate them. The seed-43 classifier ID is `fzwxjpbu`; the older summary's `wvwh0vi2` was incorrect.
+
+The included `tools/verify_v2_saved_results.py` passed 57 arithmetic checks on retained Oxford outputs. It does not rerun checkpoint inference, establish human operator identity, or replace a second member's evaluation. Split-v1 and split-v2 test cohorts differ; their score gap cannot quantify leakage bias. Split v2 was evaluated on 7 November before the later three-seed runs. The unchanged recipes and validation-only operating-point rule are documented, but v2 is not a never-inspected holdout. The rounded Dice SD 0.000 represents 0.000385, not zero. A9b passed for seed 42's export and failed for seeds 43/44, so no claim of universal numerical impossibility is supported; seed selection remains based on validation, and the served backend stays PyTorch.

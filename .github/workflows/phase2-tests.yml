@@ -41,3 +41,5 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Report numbers match saved evidence
         run: python tools/verify_submission_evidence.py
+      - name: Split-v2 saved-output arithmetic (not checkpoint inference)
+        run: python tools/verify_v2_saved_results.py

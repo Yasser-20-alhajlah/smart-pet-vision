@@ -4,7 +4,11 @@ This folder holds the Phase 2 code. It is kept separate from the Phase 1 code in
 
 ## Version
 
-The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json` (30 files, 30 October 2026) were committed unchanged in the first Phase 2 commit (SHA-256 match 30/30). The current version differs in two of them: `src/spv/pipeline.py` (opt-in v0.4 multi-animal review, `review_mode` off by default) and `notebooks/01_data_preparation.ipynb` (one wording change in a markdown cell). The later multi-animal development work (v0.4) is added in a separate commit so the two versions can be told apart.
+The current report source is `submission/main.tex`, on the official Phase 2 template. The published commit is printed in the delivered PDF and in `CODE_ARCHIVE_INDEX.json` inside the source ZIP. Historical measurements retain their original code identities; a new documentation commit is not a new GPU run.
+
+The headline evaluation is split v2, seeds 42/43/44, 1,050 test images (12–13 November, training source `f62ded8`). The served manifest and live demo retain split-v1 weights because the v2 candidate did not improve the previously inspected team-photo results. See report Section 4.12 and [model card](docs/model_card.md). No crossing group under the recorded similarity rule is different from verified separation of every animal identity; the v2 test set had already been evaluated on 7 November.
+
+Current report PDF and matching source ZIP only: [Final Phase 2](https://drive.google.com/drive/folders/1FVTCMi8HK3EqSMURGccTiOHBABO4Iful). Presentation v16 and supporting files: [supporting folder](https://drive.google.com/drive/folders/1UPSRS6uE_J3Wki7s9xnvBtQi7HIdMR03). Training run IDs and verified checkpoint hashes: `report/evidence/v2_saved_review_20261114/SOURCE_REVIEW.json`.
 
 ## Layout
 
@@ -27,7 +31,7 @@ The files listed in the Phase 2 report's `evidence/verified_source_snapshot.json
 | `docs/ONNX_EVIDENCE_INDEX.md`, `tools/a9b_root_cause.py` | The four ONNX measurements kept apart (raw head A9b, final detections, task mAP, speed), their evidence files and reproduction; re-run of A9b with a stage-by-stage diagnosis of the gap |
 | `docs/PRESENTATION_QA.md`, `docs/REHEARSAL_CHECKLIST_ONE_PAGE.md`, `docs/TEAM_READTHROUGH_SIGNOFF.md` | Technical Q&A; one-page rehearsal checklist; blank read-through sheet for the four members |
 | `docs/AUDIT_TRACKER_2026-11-04.md` | Release-candidate audit (issues, evidence, state), change log and verification log |
-| `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md`, `tools/same_animal_groups.py`; `docs/INDEPENDENT_REPRODUCTION_PROCEDURE.md`, `tools/reproduce_phase2_eval.py`; `src/spv/provenance.py`; `docs/INDEPENDENT_TEST_SET_PROTOCOL.md` | Response to the Phase 1 feedback: same-animal grouping before splitting (frozen rules, not yet run on the images), independent reproduction procedure (not yet executed by a teammate), run provenance (commit, dirty state), shelter-style test-set protocol (not started) |
+| `docs/LEAKAGE_SAME_ANIMAL_PROTOCOL.md`, `tools/same_animal_groups.py`; `docs/INDEPENDENT_REPRODUCTION_PROCEDURE.md`, `tools/reproduce_phase2_eval.py`; `src/spv/provenance.py`; `docs/INDEPENDENT_TEST_SET_PROTOCOL.md` | Response to the Phase 1 feedback: similarity grouping executed on 6 November; v2 three-seed retraining completed 12–13 November; split-v1 checkpoint reproduction recorded on 6 November, while independent v2 checkpoint reproduction is not established; run provenance (commit, dirty state), shelter-style test-set protocol (not started) |
 | `docs/REQUIREMENTS_CHECKLIST_2026-11-06.md`, `docs/NOTEBOOK_EXECUTION_PLAN.md`, `tools/check_notebooks.py` | Every requirement of the guidelines, the rubric and the example report with its status and owner; notebook inventory (needs, executed runs, evidence) and the static check of all 15 notebooks |
 | `runs/manifest.json` | Model paths, thresholds, classifier temperature |
 | `tests/` | Unit tests |
@@ -42,7 +46,7 @@ pip install -r ../requirements.txt pytest
 PYTHONPATH=src:. python -m pytest -q tests
 ```
 
-Result on 31 Oct 2026 (CPU, Python 3.13): snapshot version 49 passed; with the v0.4 multi-animal commit, 83 passed; with the submission checks, 102 passed. `python tools/verify_submission_evidence.py` checks that the report's numbers match `report/evidence/`. The report builds with `cd report && pdflatex main.tex` (twice).
+Result on 31 Oct 2026 (CPU, Python 3.13): snapshot version 49 passed; with the v0.4 multi-animal commit, 83 passed; with the submission checks, 102 passed. `python tools/verify_submission_evidence.py` checks that the report's numbers match `report/evidence/`. The final report builds with `cd submission && ./build.sh`; `report/main.tex` is superseded. For the saved v2 results, run `python tools/verify_v2_saved_results.py` (57 arithmetic checks, no inference).
 
 ## Running the service and the demo page
 
@@ -59,11 +63,14 @@ python tools/run_service.py      # checks again, then serves on 127.0.0.1:8000 o
 
 Send one photo before the audience arrives: the first request loads the three models. Demo steps, expected results and recovery: `docs/DEMO_AND_REHEARSAL_CHECKLIST.md`.
 
-## Acceptance status (criteria set before the Phase 2 runs)
+## Acceptance status and timing evidence
 
-Thresholds A1–A8 and A9a are in the team's code snapshot of 15 Oct 2026, before the first Phase 2 run (17 Oct); A9b (the same bound for the detector) was added no later than the first integration run. A1–A8 and A9a are met. **A9b, detector ONNX parity, is not met** (0.0018–0.0020 > 0.001). Notebook 09 (31 Oct) re-checked six export/runtime settings: 0.00198–0.00201, none within the limit (`report/evidence/M8_onnx_parity_recheck_variants.json`). The bound is not changed. The service therefore uses the PyTorch detector; the ONNX detector is not used. See the Phase 2 report, section "Acceptance criteria and go/no-go decision".
+The earliest retained dated Phase 2 criteria record is 18 October: before the 19 October test runs but after the first detector training on 17 October. No earlier freeze is asserted. This timing limitation is disclosed in report Section 1; the criteria are unchanged. A1–A8 and A9a are met. **A9b, detector ONNX parity, is not met** (0.0018–0.0020 > 0.001). Notebook 09 (31 Oct) re-checked six export/runtime settings: 0.00198–0.00201, none within the limit (`report/evidence/M8_onnx_parity_recheck_variants.json`). The bound is not changed. The service therefore uses the PyTorch detector; the ONNX detector is not used. See the Phase 2 report, section "Acceptance criteria and go/no-go decision".
 
 ## CPU regression, 31 Oct 2026 (source `051bd2c`, same model code)
 
 - W&B [f8manl0i](https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/f8manl0i): 401 team photos, 386/399 single-species correct, 81 referrals, 17/52 multi-animal photos technically ready; publication guards on every photo. A regression on previously inspected photos, not a new test.
 - W&B [mu2tolkg](https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/mu2tolkg): local HTTP on CPU, one worker, 300/300 HTTP 200, guards 300/300, p50/p95/p99 383.8/430.8/690.1 ms. CPU figures; not comparable with the T4 figures used for A8.
+
+## Second-member v2 verification
+The exact input links, hashes, free-T4 setup and required output files are in [V2_REPRODUCTION_HANDOFF.md](docs/V2_REPRODUCTION_HANDOFF.md). The dedicated tool never trains or refits temperature and checks the frozen cohort/weight hashes before inference. Saved-output arithmetic is already verified; independent v2 checkpoint evaluation is a separate, unexecuted team action.
