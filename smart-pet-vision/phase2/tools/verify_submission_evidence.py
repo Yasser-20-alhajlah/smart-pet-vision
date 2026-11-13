@@ -312,6 +312,21 @@ def submission_checks(root):
           and f"recall {f3(sd['at_operating_point']['recall'])}" in body
           and f"{sr['multi_animal_accepted_ready']} of {sr['multi_animal_photos']} multi-animal photos are marked ready, against 17 of 52" in body
           and sv["figures_check"]["detector_counts_equal_record"] and sv["figures_check"]["segmenter_mIoU_equals_record"])
+    pm = lambda key: f"{f3(va[key]['mean'])} $\\pm$ {f3(va[key]['sd'])}"
+    card = (Path(__file__).resolve().parent.parent / "docs" / "model_card.md").read_text()
+    pmc = lambda key: f"{f3(va[key]['mean'])} ± {f3(va[key]['sd'])}"
+    check("Headline front matter and model card quote the split-v2 means as recorded and say which build is served",
+          f"detection mAP50 {pm('detector_mAP50')} (mAP50--95 {pm('detector_mAP50_95')}) and F1 {pm('detector_f1_at_operating_point')}" in body
+          and f"segmentation mean IoU {pm('mIoU')}, classification accuracy {pm('classifier_accuracy')}" in body
+          and f"{pm('detector_mAP50')} / {pm('detector_mAP50_95')}" in body and f"{pm('mIoU')} / {pm('mask_mAP50_95')}" in body
+          and f"({f3(sd['at_operating_point']['recall'])} for the split-v2 checkpoints)" in body
+          and f"({sr['multi_animal_accepted_ready']} of {sr['multi_animal_photos']})" in body
+          and "the packaged service and demonstration use this build" in body
+          and "nine are met and A9b is not" in body
+          and f"{pmc('detector_mAP50')} / {pmc('detector_mAP50_95')}" in card and pmc("classifier_accuracy") in card
+          and f"{pmc('mask_mAP50_95')} / {pmc('mIoU')} / {pmc('dice')}" in card
+          and "These checkpoints are not the served weights" in card
+          and f"{sr['multi_animal_accepted_ready']} of {sr['multi_animal_photos']} multi-animal photos wrongly marked ready" in card)
     return out
 
 
