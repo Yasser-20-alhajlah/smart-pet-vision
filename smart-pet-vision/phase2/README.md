@@ -46,7 +46,7 @@ pip install -r ../requirements.txt pytest
 PYTHONPATH=src:. python -m pytest -q tests
 ```
 
-Result on 31 Oct 2026 (CPU, Python 3.13): snapshot version 49 passed; with the v0.4 multi-animal commit, 83 passed; with the submission checks, 102 passed. `python tools/verify_submission_evidence.py` checks that the report's numbers match `report/evidence/`. The final report builds with `cd submission && ./build.sh`; `report/main.tex` is superseded. For the saved v2 results, run `python tools/verify_v2_saved_results.py` (57 arithmetic checks, no inference).
+Result on 31 Oct 2026 (CPU, Python 3.13): snapshot version 49 passed; with the v0.4 multi-animal commit, 83 passed; with the submission checks, 102 passed. `python tools/verify_submission_evidence.py` checks that the report's numbers match `report/evidence/`. The final report builds with `cd submission && ./build.sh`; `report/main.tex` is superseded. For the saved v2 results, run `python tools/verify_v2_saved_results.py` (69 arithmetic checks, no inference).
 
 ## Running the service and the demo page
 
