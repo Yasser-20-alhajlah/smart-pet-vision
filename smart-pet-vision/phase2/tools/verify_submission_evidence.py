@@ -266,6 +266,29 @@ def submission_checks(root):
           and f"{f3(ss['val_masks']['mIoU_no_border'])} / {f3(ss['val_masks']['mean_dice_no_border'])} & {f3(sn['val_masks']['mIoU_no_border'])} / {f3(sn['val_masks']['mean_dice_no_border'])}" in body
           and f"{ss['segmenter_latency_ms_T4']['p50']:.1f} / {ss['segmenter_latency_ms_T4']['p95']:.1f} & {sn['segmenter_latency_ms_T4']['p50']:.1f} / {sn['segmenter_latency_ms_T4']['p95']:.1f}" in body
           and f"{ss['parameters'] / sn['parameters']:.1f} times fewer parameters" in body)
+    v2 = load(root, "P2_v2_headline_three_seeds_20261113.json")
+    vs, va = v2["seeds"], v2["summary_over_seeds"]
+    import statistics as _st
+    def _row(get, key):
+        vals = [get(vs[k]) for k in ("42", "43", "44")]
+        return (abs(_st.mean(vals) - va[key]["mean"]) < 1e-12 and abs(_st.stdev(vals) - va[key]["sd"]) < 1e-12
+                and " & ".join(f3(x) for x in vals) + f" & {f3(va[key]['mean'])} $\\pm$ {f3(va[key]['sd'])}" in body)
+    check("Split-v2 three-seed run quoted as recorded (per-seed values, mean and sd, checkpoint rule, ONNX not claimed as parity, nothing served)",
+          sum(v2["frozen_before_the_run"]["split_v2_counts"].values()) == 7335
+          and all(abs(s["detector"]["test_at_operating_point"]["tp"] / (s["detector"]["test_at_operating_point"]["tp"] + s["detector"]["test_at_operating_point"]["fp"])
+                      - s["detector"]["test_at_operating_point"]["precision"]) < 1e-9 for s in vs.values())
+          and _row(lambda s: s["classifier"]["accuracy"], "classifier_accuracy")
+          and _row(lambda s: s["detector"]["mAP50"], "detector_mAP50") and _row(lambda s: s["detector"]["mAP50_95"], "detector_mAP50_95")
+          and _row(lambda s: s["detector"]["test_at_operating_point"]["f1"], "detector_f1_at_operating_point")
+          and _row(lambda s: s["segmenter"]["mask_mAP50_95"], "mask_mAP50_95") and _row(lambda s: s["segmenter"]["mIoU"], "mIoU")
+          and _row(lambda s: s["segmenter"]["dice"], "dice")
+          and " & ".join(f"{vs[k]['onnx']['a9b_max_abs_diff']:.5f}" for k in ("42", "43", "44")) in body
+          and " & ".join(f"{vs[k]['onnx']['real_50_raw_head_max_abs_diff']:.4f}" for k in ("42", "43", "44")) in body
+          and [vs[k]["onnx"]["a9b_met"] for k in ("42", "43", "44")] == [True, False, False]
+          and all(s["onnx"]["same_count_fraction"] == 1.0 and s["onnx"]["same_class_fraction"] == 1.0 for s in vs.values())
+          and v2["served_checkpoint_by_rule"]["seed"] == int(max(vs, key=lambda k: vs[k]["detector"]["best_val_mAP50_95"]))
+          and "points to seed 44" in body and "is not a parity claim" in body and "nothing is served from them yet" in body
+          and "had already been evaluated once on 7 November" in body)
     return out
 
 
