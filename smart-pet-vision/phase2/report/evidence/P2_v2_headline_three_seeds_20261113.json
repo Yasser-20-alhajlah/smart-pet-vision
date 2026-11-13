@@ -1,6 +1,6 @@
 {
  "experiment": "Split-v2 three-seed run of 12-13 November 2026: the three delivered recipes retrained on split v2 with seeds 42, 43 and 44; one evaluation on the v2 test split per seed",
- "status": "training results only; the served weights, thresholds, manifest and acceptance verdicts of this report are unchanged; team-photo, multi-animal and latency evaluations of these checkpoints do not exist yet",
+ "status": "training results; the served weights, thresholds, manifest and acceptance verdicts of this report are unchanged; the system-level evaluation of the seed-44 checkpoints is in P2_v2_system_eval_seed44_20261113.json",
  "owner_decisions": [
   "2026-11-12 (chat): the split-v2 results become the headline of the Phase 2 report once the system-level evaluations exist; this replaces the decision of 2026-11-11 for future revisions",
   "2026-11-12 (chat): GPU cap 13 T4-hours for the three seeds"

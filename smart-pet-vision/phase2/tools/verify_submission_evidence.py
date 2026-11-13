@@ -289,6 +289,29 @@ def submission_checks(root):
           and v2["served_checkpoint_by_rule"]["seed"] == int(max(vs, key=lambda k: vs[k]["detector"]["best_val_mAP50_95"]))
           and "points to seed 44" in body and "is not a parity claim" in body and "nothing is served from them yet" in body
           and "had already been evaluated once on 7 November" in body)
+    sv = load(root, "P2_v2_system_eval_seed44_20261113.json")
+    sb, sh, st_, sd, sr = (sv["benchmark_pytorch_T4"], sv["http_service_pytorch"], sv["team_photos_system"],
+                           sv["team_photos_detection"], sv["team_photos_system"]["referral_analysis"])
+    f1_ = lambda x: f"{x:.1f}"
+    acc = {r["id"]: r for r in sv["acceptance_table"]}
+    check("Split-v2 system evaluation of seed 44 quoted as recorded (acceptance rows, T4 latency, HTTP, team photos, what did not improve)",
+          sv["weights_sha256"]["detector"] == v2["seeds"]["44"]["detector"]["weights_sha256"]
+          and sv["manifest"]["detector_conf"] == vs["44"]["detector"]["operating_point"]["conf"]
+          and [acc[i]["met"] for i in ("A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9a", "A9b")] == [True] * 9 + [False]
+          and abs(acc["A3"]["value"] - vs["44"]["detector"]["mAP50"]) < 1e-12 and abs(acc["A5"]["value"] - vs["44"]["segmenter"]["mIoU"]) < 1e-12
+          and abs(acc["A9b"]["value"] - vs["44"]["onnx"]["a9b_max_abs_diff"]) < 1e-12
+          and f"{f3(acc['A1']['value'])} / {f3(acc['A2']['value'])} & Pass" in body and f"{f3(acc['A4']['value'])} & Pass" in body
+          and f"{sh['succeeded']}/{sh['requests']} & Pass" in body and sh["succeeded"] == sh["requests"] == 300
+          and f"{f1_(sb['latency_ms']['p95'])}\\,ms & Pass" in body and "0.0038 & Not met" in body
+          and f"{f1_(sb['latency_ms']['p50'])} / {f1_(sb['latency_ms']['p95'])} / {f1_(sb['latency_ms']['p99'])}" in body
+          and f"{f1_(sh['http_latency_ms']['p50'])} / {f1_(sh['http_latency_ms']['p95'])} / {f1_(sh['http_latency_ms']['p99'])}" in body
+          and sr["single_species_correct"] + sr["classification_errors"] == sr["single_species_photos"]
+          and f"{sr['single_species_correct']} of {sr['single_species_photos']} single-species photos" in body
+          and st_["errors_escaping_review"] == 0 and "lets no wrong label through as ready" in body
+          and abs(sd["at_operating_point"]["tp"] / (sd["at_operating_point"]["tp"] + sd["at_operating_point"]["fn"]) - sd["at_operating_point"]["recall"]) < 1e-12
+          and f"recall {f3(sd['at_operating_point']['recall'])}" in body
+          and f"{sr['multi_animal_accepted_ready']} of {sr['multi_animal_photos']} multi-animal photos are marked ready, against 17 of 52" in body
+          and sv["figures_check"]["detector_counts_equal_record"] and sv["figures_check"]["segmenter_mIoU_equals_record"])
     return out
 
 

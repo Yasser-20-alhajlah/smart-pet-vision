@@ -1,0 +1,263 @@
+{
+ "experiment": "System-level evaluation of the split-v2 checkpoints of seed 44 (selected by the validation rule fixed before the run), 13 November 2026; no training and no threshold change",
+ "status": "evaluation only; the served weights, thresholds, manifest and acceptance verdicts of this report are unchanged",
+ "source_record": {
+  "note": "values copied on 2026-11-13 from P2_v2_system_eval.json written by the run in the owner's private Drive (runs/v2_headline_20261112/system_eval_seed44_20261113T1042Z); per-photo predictions and galleries of the team photos stay private",
+  "run_script_sha256": "e6edfa907be989cc244ea4572f422f31aa8350aa480599d496e2e30378aecca7",
+  "wandb_run_id": "0aw5pvjc",
+  "run_utc": "20261113T1042Z"
+ },
+ "environment": {
+  "code_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+  "gpu": "Tesla T4 (Colab)",
+  "cpu_model": "Intel(R) Xeon(R) CPU @ 2.00GHz",
+  "logical_cpus": 2,
+  "python": "3.13.16",
+  "versions": {
+   "torch": "2.11.0",
+   "torchvision": "0.26.0",
+   "ultralytics": "8.4.182",
+   "numpy": "2.1.3",
+   "onnx": "1.23.2",
+   "onnxruntime": "1.31.0",
+   "fastapi": "0.141.1",
+   "uvicorn": "0.54.0"
+  }
+ },
+ "weights_sha256": {
+  "detector": "92548b78d3d04491d3ba8573c8139bfb04b587b96aed5bd0ed3e2923bdb9ac08",
+  "segmenter": "47f2e2412d8e3109bd2bcd4fcb5bdbb3a5bb250e78a8d112a22f720381ae7a08",
+  "classifier": "98eb8956c27ffa1d439aaa98ec3a4d8156489e5b1541ee1debe26b75c633040c",
+  "detector_onnx": "61744095ff291f76cebb8e6d89b4a775405c32bf7d0d2c88759fb96b90f1e283"
+ },
+ "manifest": {
+  "classifier_kind": "finetune",
+  "temperature": 0.3334091603755951,
+  "detector_conf": 0.4,
+  "detector_iou": 0.5,
+  "verify_threshold": 0.9,
+  "min_mask_fraction": 0.05,
+  "image_size": 224,
+  "imgsz": 640,
+  "segmenter_conf": 0.25,
+  "segmenter_iou": 0.7,
+  "mask_match_iou": 0.1,
+  "review_mode": "off",
+  "note": "detector operating point and temperature come from the seed-44 record (chosen and fitted on validation); the other values are the unchanged pipeline configuration"
+ },
+ "onnx_classifier_parity": {
+  "max_abs_diff": 1.9371509552001953e-07,
+  "argmax_agreement": 1.0,
+  "passed_A9": true
+ },
+ "benchmark_pytorch_T4": {
+  "runs": 200,
+  "warmup": 10,
+  "batch_size": 1,
+  "inputs": "first 50 images of the v2 test split, cycled",
+  "latency_ms": {
+   "p50": 40.97404399999505,
+   "p95": 63.45681615001978,
+   "p99": 71.2639942699826,
+   "mean": 45.41987124000201
+  },
+  "stage_mean_ms": {
+   "detect_ms": 14.007666479998875,
+   "classify_ms": 11.42771836499918,
+   "segment_ms": 19.463539649997017
+  },
+  "throughput_img_per_s": 22.01596541054417,
+  "peak_gpu_mem_mb": 252.98095703125,
+  "peak_process_rss_mb": 1688.54296875,
+  "timing_scope": "in-process analyze with_images=false; preloaded RGB images; direct wall time; fresh process",
+  "detector_execution_provider": "PyTorch CUDA",
+  "passed_A8": true
+ },
+ "benchmark_onnx_detector_T4": {
+  "runs": 200,
+  "warmup": 10,
+  "batch_size": 1,
+  "latency_ms": {
+   "p50": 294.1490820000183,
+   "p95": 417.07933480000173,
+   "p99": 445.71591266999917,
+   "mean": 320.1596306450003
+  },
+  "throughput_img_per_s": 3.1234223524884692,
+  "peak_gpu_mem_mb": 216.94775390625,
+  "peak_process_rss_mb": 1867.09375,
+  "detector_execution_provider": "CPUExecutionProvider",
+  "passed_A8": true
+ },
+ "http_service_pytorch": {
+  "server": "uvicorn, separate process, 127.0.0.1, 1 worker",
+  "warmup_requests": 5,
+  "requests": 300,
+  "succeeded": 300,
+  "success_rate": 1.0,
+  "status_codes": {
+   "200": 300
+  },
+  "http_latency_ms": {
+   "p50": 49.55426149996356,
+   "p95": 71.93130945003077,
+   "p99": 79.52190729001472,
+   "mean": 54.136857253336075
+  },
+  "non_image_upload_status": 415,
+  "empty_upload_status": 400,
+  "startup_s": 5.073032379150391,
+  "inputs": "first 300 images of the v2 test split, native JPEG sizes, sequential requests",
+  "passed_A7": true
+ },
+ "team_photos_system": {
+  "n": 401,
+  "accuracy": 0.9899749373433584,
+  "macro_f1": 0.9898782343987824,
+  "referral_rate": 0.22194513715710723,
+  "errors_escaping_review": 0,
+  "accuracy_on_accepted": 1.0,
+  "mIoU": 0.8197372385925453,
+  "mean_dice": 0.8613513932581982,
+  "referral_analysis": {
+   "photos": 401,
+   "referred": 89,
+   "reason_counts": {
+    "multiple_animals": 46,
+    "no_animal": 22,
+    "disagreement": 14,
+    "animal_too_small": 14,
+    "segmentation_disagreement": 10,
+    "low_confidence": 9,
+    "segmentation_unmatched": 4
+   },
+   "multi_animal_photos": 52,
+   "multi_animal_flagged_multiple": 27,
+   "multi_animal_accepted_ready": 22,
+   "multi_animal_all_found": 11,
+   "single_animal_flagged_multiple": 19,
+   "no_animal_referrals": 22,
+   "classification_errors": 4,
+   "single_species_correct": 395,
+   "single_species_photos": 399
+  }
+ },
+ "team_photos_detection": {
+  "images": 401,
+  "boxes": 503,
+  "imgsz": 640,
+  "conf": 0.4,
+  "nms_iou": 0.5,
+  "coco": {
+   "mAP50": 0.7739993195925583,
+   "mAP50_95": 0.648881551907061
+  },
+  "at_operating_point": {
+   "tp": 358,
+   "fp": 41,
+   "fn": 145,
+   "precision": 0.8972431077694235,
+   "recall": 0.7117296222664016,
+   "f1": 0.7937915742793791
+  },
+  "per_class_recall": {
+   "cat": 0.7989949748743719,
+   "dog": 0.6546052631578947
+  },
+  "recall_by_relative_size": [
+   {
+    "bucket": "large (>=10%)",
+    "n": 404,
+    "recall": 0.8415841584158416
+   },
+   {
+    "bucket": "medium (1-10%)",
+    "n": 89,
+    "recall": 0.20224719101123595
+   },
+   {
+    "bucket": "small (<1%)",
+    "n": 10,
+    "recall": 0.0
+   }
+  ]
+ },
+ "figures_check": {
+  "note": "failure galleries were regenerated from the same checkpoints and operating point; the recomputed counts equal the seed record",
+  "detector_counts": {
+   "tp": 994,
+   "fp": 46,
+   "fn": 56
+  },
+  "detector_counts_equal_record": true,
+  "segmenter_mIoU": 0.9212606183871425,
+  "segmenter_mIoU_equals_record": true
+ },
+ "acceptance_table": [
+  {
+   "id": "A1",
+   "value": 0.9980952380952381,
+   "target": ">= 0.90",
+   "met": true
+  },
+  {
+   "id": "A2",
+   "value": 0.997863213076322,
+   "target": ">= 0.90",
+   "met": true
+  },
+  {
+   "id": "A3",
+   "value": 0.9814176440956374,
+   "target": ">= 0.75",
+   "met": true
+  },
+  {
+   "id": "A4",
+   "value": 0.9466666666666667,
+   "target": ">= 0.80",
+   "met": true
+  },
+  {
+   "id": "A5",
+   "value": 0.9212606183871425,
+   "target": ">= 0.75",
+   "met": true
+  },
+  {
+   "id": "A6",
+   "value": 0.9576030585779628,
+   "target": ">= 0.85",
+   "met": true
+  },
+  {
+   "id": "A7",
+   "value": 1.0,
+   "target": ">= 0.99",
+   "met": true
+  },
+  {
+   "id": "A8",
+   "value": 63.45681615001978,
+   "target": "<= 2000",
+   "met": true
+  },
+  {
+   "id": "A9a",
+   "value": 1.9371509552001953e-07,
+   "target": "<= 0.001",
+   "met": true
+  },
+  {
+   "id": "A9b",
+   "value": 0.0037841796875,
+   "target": "<= 0.001",
+   "met": false
+  }
+ ],
+ "caveats": [
+  "the team photos were also used for exploratory probes of the delivered system; they were not used to train or to choose a threshold for these checkpoints",
+  "multi-animal photos marked ready rose from 17 (delivered split-v1 system, same operating confidence 0.40) to 22 of 52; team detection recall is 0.712 against 0.732",
+  "the HTTP figures are for one sequential client on the Colab host; they are not a load test"
+ ]
+}
