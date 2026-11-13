@@ -1,0 +1,234 @@
+{
+  "scope": "Replay saved split-v2 arithmetic. No inference, training, network or data-split edits.\n\nThis checks retained summaries against per-image masks, validation sweeps and\nconfusion matrices. It does not independently reproduce mAP from checkpoints.",
+  "checks": [
+    {
+      "check": "42: 1050 unique test images",
+      "passed": true
+    },
+    {
+      "check": "42: iou values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "42: recompute mIoU",
+      "passed": true
+    },
+    {
+      "check": "42: dice values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "42: recompute mean_dice",
+      "passed": true
+    },
+    {
+      "check": "42: iou_no_border values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "42: recompute mIoU_no_border",
+      "passed": true
+    },
+    {
+      "check": "42: dice_no_border values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "42: recompute mean_dice_no_border",
+      "passed": true
+    },
+    {
+      "check": "42: classification accuracy from confusion matrix",
+      "passed": true
+    },
+    {
+      "check": "42: classification macro-F1 from confusion matrix",
+      "passed": true
+    },
+    {
+      "check": "42: detector precision from counts",
+      "passed": true
+    },
+    {
+      "check": "42: detector recall from counts",
+      "passed": true
+    },
+    {
+      "check": "42: detector f1 from counts",
+      "passed": true
+    },
+    {
+      "check": "42: operating point from validation only",
+      "passed": true
+    },
+    {
+      "check": "42: detector selection score from training CSV",
+      "passed": true
+    },
+    {
+      "check": "43: 1050 unique test images",
+      "passed": true
+    },
+    {
+      "check": "43: iou values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "43: recompute mIoU",
+      "passed": true
+    },
+    {
+      "check": "43: dice values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "43: recompute mean_dice",
+      "passed": true
+    },
+    {
+      "check": "43: iou_no_border values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "43: recompute mIoU_no_border",
+      "passed": true
+    },
+    {
+      "check": "43: dice_no_border values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "43: recompute mean_dice_no_border",
+      "passed": true
+    },
+    {
+      "check": "43: classification accuracy from confusion matrix",
+      "passed": true
+    },
+    {
+      "check": "43: classification macro-F1 from confusion matrix",
+      "passed": true
+    },
+    {
+      "check": "43: detector precision from counts",
+      "passed": true
+    },
+    {
+      "check": "43: detector recall from counts",
+      "passed": true
+    },
+    {
+      "check": "43: detector f1 from counts",
+      "passed": true
+    },
+    {
+      "check": "43: operating point from validation only",
+      "passed": true
+    },
+    {
+      "check": "43: detector selection score from training CSV",
+      "passed": true
+    },
+    {
+      "check": "44: 1050 unique test images",
+      "passed": true
+    },
+    {
+      "check": "44: iou values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "44: recompute mIoU",
+      "passed": true
+    },
+    {
+      "check": "44: dice values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "44: recompute mean_dice",
+      "passed": true
+    },
+    {
+      "check": "44: iou_no_border values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "44: recompute mIoU_no_border",
+      "passed": true
+    },
+    {
+      "check": "44: dice_no_border values finite and within bounds",
+      "passed": true
+    },
+    {
+      "check": "44: recompute mean_dice_no_border",
+      "passed": true
+    },
+    {
+      "check": "44: classification accuracy from confusion matrix",
+      "passed": true
+    },
+    {
+      "check": "44: classification macro-F1 from confusion matrix",
+      "passed": true
+    },
+    {
+      "check": "44: detector precision from counts",
+      "passed": true
+    },
+    {
+      "check": "44: detector recall from counts",
+      "passed": true
+    },
+    {
+      "check": "44: detector f1 from counts",
+      "passed": true
+    },
+    {
+      "check": "44: operating point from validation only",
+      "passed": true
+    },
+    {
+      "check": "44: detector selection score from training CSV",
+      "passed": true
+    },
+    {
+      "check": "all seeds use the same recorded test cohort",
+      "passed": true
+    },
+    {
+      "check": "classifier_accuracy: mean and sample SD",
+      "passed": true
+    },
+    {
+      "check": "detector_mAP50: mean and sample SD",
+      "passed": true
+    },
+    {
+      "check": "detector_mAP50_95: mean and sample SD",
+      "passed": true
+    },
+    {
+      "check": "detector_f1_at_operating_point: mean and sample SD",
+      "passed": true
+    },
+    {
+      "check": "mask_mAP50_95: mean and sample SD",
+      "passed": true
+    },
+    {
+      "check": "mIoU: mean and sample SD",
+      "passed": true
+    },
+    {
+      "check": "dice: mean and sample SD",
+      "passed": true
+    },
+    {
+      "check": "seed selected on validation, not ONNX/test",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

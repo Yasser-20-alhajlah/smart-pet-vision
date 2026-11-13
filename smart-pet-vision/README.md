@@ -84,3 +84,6 @@ Due to GitHub file size limits, the model weights (`.pt` files) and raw result f
 They have been uploaded to **GitHub Releases**.
 
 Download them from the [release page](https://github.com/Yasser-20-alhajlah/smart-pet-vision/releases).
+
+## Phase 2 headline evaluation (12–13 November 2026)
+Phase 1 results above remain historical. Phase 2 retrained the three recipes on similarity-grouped split v2 (4,903/1,382/1,050), seeds 42/43/44: detection mAP50 0.981 ± 0.001; mask mIoU 0.921 ± 0.001; classification accuracy 0.999 ± 0.001 (sample SD). Split v2 has no crossing group under the recorded proxy rule, not verified animal identity labels, and its test cohort had already been evaluated on 7 November. These are not a paired comparison with the different split-v1 test images. The served weights remain v1. See [Phase 2](phase2/README.md), [model card](phase2/docs/model_card.md) and [source verification](phase2/report/evidence/v2_saved_review_20261114/SOURCE_REVIEW.json). No dataset split or served threshold was changed in the 14 November review.

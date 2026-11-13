@@ -1,0 +1,116 @@
+{
+  "seed": 42,
+  "code_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+  "split_v2_sha256": "a8846b0fa0969069c85763ab1f31d0cf594e37fd2839e474d1e1fa6737f9f86b",
+  "split_v2_metadata_sha256": "c06f4d9e5dd4e333b4d5e17f1b07c115209dd5b9da8a6e99b4d48db8316db13f",
+  "split_v2_counts": {
+    "train": 4903,
+    "val": 1382,
+    "test": 1050
+  },
+  "weights_sha256": {
+    "classifier": "253012d33d67c52df9651fc950b84c91a3737e264ed35437e724f0d44f85c589",
+    "detector": "17aada90cb4f86916ee14467d0919b37d62bfaea6d112ab6af7acd3bdaf62122",
+    "segmenter": "524736a9619c4612c0774e0834e6bdbfced443e10305c5f0d3f172feb51c6971"
+  },
+  "classifier": {
+    "temperature": 0.6570117473602295,
+    "test": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "confusion_matrix": [
+        [
+          352,
+          0
+        ],
+        [
+          0,
+          698
+        ]
+      ],
+      "n": 1050
+    }
+  },
+  "detector": {
+    "coco": {
+      "mAP50": 0.9798481791507847,
+      "mAP50_95": 0.8379308210305882,
+      "precision": 0.953717485991034,
+      "recall": 0.9558822088724117,
+      "AP50_per_class": {
+        "cat": 0.9924223906381708,
+        "dog": 0.9672739676633986
+      }
+    },
+    "operating_point": {
+      "conf": 0.3,
+      "nms_iou": 0.5,
+      "val_precision": 0.9776334776334776,
+      "val_recall": 0.9804630969609262,
+      "val_f1": 0.9790462427745664,
+      "recall_floor_met": true
+    },
+    "test_at_operating_point": {
+      "tp": 1006,
+      "fp": 51,
+      "fn": 44,
+      "precision": 0.9517502365184485,
+      "recall": 0.9580952380952381,
+      "f1": 0.9549121974371144
+    }
+  },
+  "segmenter": {
+    "coco": {
+      "mask_mAP50": 0.9930190633738836,
+      "mask_mAP50_95": 0.8683640047676494,
+      "box_mAP50": 0.9935317931760361
+    },
+    "test_metrics": {
+      "mIoU": 0.9205404535466603,
+      "mean_dice": 0.9570993045580002,
+      "mIoU_no_border": 0.924770885859212,
+      "mean_dice_no_border": 0.9584882610719299,
+      "by_species": {
+        "cat": {
+          "iou": 0.9205423340373458,
+          "dice": 0.9560974615679243
+        },
+        "dog": {
+          "iou": 0.9205395052189794,
+          "dice": 0.9576045319684683
+        }
+      },
+      "worst_breeds": {
+        "sphynx": 0.8836611479264155,
+        "miniature_pinscher": 0.8871010907605767,
+        "japanese_chin": 0.8965184193326193,
+        "chihuahua": 0.9035192274086269,
+        "pug": 0.9035533820676382
+      },
+      "n": 1050
+    }
+  },
+  "wandb": {
+    "classifier": {
+      "run_id": "goc4nfwp",
+      "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/goc4nfwp",
+      "actual_group": null,
+      "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+      "basis": "ten-epoch CSV matches W&B history including epoch times; seed absent in classifier config"
+    },
+    "detector": {
+      "run_id": "tzky06md",
+      "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/tzky06md",
+      "actual_group": null,
+      "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+      "basis": "seed, split hash and source commit in live config"
+    },
+    "segmenter": {
+      "run_id": "kgoegnkp",
+      "url": "https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/runs/kgoegnkp",
+      "actual_group": null,
+      "source_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+      "basis": "seed, split hash and source commit in live config"
+    }
+  }
+}
