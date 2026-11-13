@@ -29,9 +29,28 @@ def verify(root):
         checks.append({'check': name, 'passed': bool(passed)})
 
     cohorts = []
+    records = {}
     for seed in ('42', '43', '44'):
         r = json.loads((saved / f'seed{seed}_record.json').read_text())
         s = headline['seeds'][seed]
+        records[seed] = r
+        check(f'{seed}: recorded seed and split counts', r['seed'] == int(seed) and r['split_v2_counts']['test'] == 1050)
+        bindings = [
+            (s['classifier']['accuracy'], r['classifier']['test']['accuracy']),
+            (s['classifier']['macro_f1'], r['classifier']['test']['macro_f1']),
+            (s['classifier']['errors'], 1050 * (1-r['classifier']['test']['accuracy'])),
+            *[(s['detector'][k], r['detector']['coco'][k]) for k in ('mAP50', 'mAP50_95')],
+            *[(s['detector']['test_at_operating_point'][k], r['detector']['test_at_operating_point'][k])
+              for k in ('tp', 'fp', 'fn', 'precision', 'recall', 'f1')],
+            *[(s['detector']['operating_point'][k], r['detector']['operating_point'][k])
+              for k in ('conf', 'nms_iou', 'val_f1')],
+            (s['segmenter']['mask_mAP50_95'], r['segmenter']['coco']['mask_mAP50_95']),
+            (s['segmenter']['mIoU'], r['segmenter']['test_metrics']['mIoU']),
+            (s['segmenter']['dice'], r['segmenter']['test_metrics']['mean_dice']),
+        ]
+        check(f'{seed}: headline bound to retained seed record', all(abs(a-b) < 1e-12 for a,b in bindings))
+        check(f'{seed}: headline detector checkpoint hash', s['detector']['weights_sha256'] == r['weights_sha256']['detector'])
+        check(f'{seed}: headline W&B identifiers', all(s['wandb_run_ids'][k] == r['wandb'][k]['run_id'] for k in ('classifier', 'detector', 'segmenter')))
         masks = read_csv(saved / f'seed{seed}_seg_per_image.csv')
         ids = [v['image'] for v in masks]
         check(f'{seed}: 1050 unique test images', len(ids) == len(set(ids)) == 1050)
@@ -45,7 +64,7 @@ def verify(root):
         cm = r['classifier']['test']['confusion_matrix']
         total = sum(sum(v) for v in cm)
         check(f'{seed}: classification accuracy from confusion matrix', total == 1050 and
-              abs((cm[0][0] + cm[1][1]) / total - s['classifier']['accuracy']) < 1e-12)
+              abs((cm[0][0] + cm[1][1]) / total - r['classifier']['test']['accuracy']) < 1e-12)
         f1 = [2*cm[i][i] / (sum(cm[i]) + sum(row[i] for row in cm)) for i in range(2)]
         check(f'{seed}: classification macro-F1 from confusion matrix',
               abs(statistics.mean(f1) - r['classifier']['test']['macro_f1']) < 1e-12)
@@ -55,11 +74,13 @@ def verify(root):
             check(f'{seed}: detector {key} from counts', abs(val-counts[key]) < 1e-12)
         sweep = read_csv(saved / f'seed{seed}_det_val_sweep.csv')
         candidates = [v for v in sweep if float(v['recall']) >= .80]
-        best = max(candidates, key=lambda v: float(v['f1']))
+        best = max(candidates or sweep, key=lambda v: (float(v['f1']), float(v['conf'])))
         op = r['detector']['operating_point']
         check(f'{seed}: operating point from validation only',
               all(abs(float(best[k])-op[k]) < 1e-12 for k in ['conf', 'nms_iou']) and
-              abs(float(best['f1'])-op['val_f1']) < 1e-12)
+              abs(float(best['f1'])-op['val_f1']) < 1e-12 and
+              all(abs(float(best['val_'+k] if 'val_'+k in best else best[k])-op['val_'+k]) < 1e-12 for k in ('precision', 'recall')) and
+              op['recall_floor_met'] == bool(candidates))
         curve = read_csv(saved / f'seed{seed}_det_train_val.csv')
         best_val = max(float(v['metrics/mAP50-95(B)']) for v in curve)
         check(f'{seed}: detector selection score from training CSV', abs(best_val-s['detector']['best_val_mAP50_95']) < 1e-12)
@@ -77,7 +98,8 @@ def verify(root):
         values = [get(s) for s in headline['seeds'].values()]
         recorded = headline['summary_over_seeds'][key]
         check(key + ': mean and sample SD', abs(statistics.mean(values)-recorded['mean']) < 1e-12 and
-              abs(statistics.stdev(values)-recorded['sd']) < 1e-12)
+              abs(statistics.stdev(values)-recorded['sd']) < 1e-12 and
+              abs(min(values)-recorded['min']) < 1e-12 and abs(max(values)-recorded['max']) < 1e-12)
     selected = max(headline['seeds'], key=lambda k: headline['seeds'][k]['detector']['best_val_mAP50_95'])
     check('seed selected on validation, not ONNX/test', int(selected) == headline['served_checkpoint_by_rule']['seed'] == 44)
     return checks

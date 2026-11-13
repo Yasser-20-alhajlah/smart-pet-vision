@@ -1,0 +1,1279 @@
+{
+  "scope": "Existing served-v1 weights; CPU loopback HTTP benchmark; no accuracy evaluation, training, GPU or threshold selection.",
+  "source_commit": "6f97aa2cb91a65077573ec8a6bf80d633b02f7bb",
+  "source_dirty": true,
+  "runtime_code_sha256": {
+    "pipeline.py": "b27947de45331f337cdfbf3d3caa08fe6168cbc9642f042bc872f57e1a315439",
+    "serve.py": "3b5652d6d50e578f6cbdcaa3e0564c3c9ecb3bb77798a4e34319a90814416833",
+    "classify.py": "a0b4ca3a944bdae9bd46e44de201f137bf45bb4d3de74c6d8abde28e0d8cabad",
+    "instance_alignment.py": "f86940a606cc56868a8799447700fff5219ea6db6984e99b61f25d276ead02ae",
+    "multi_animal_review.py": "e2c35c554892752e6259e7a3d0259e6bdc9ec94a6348c67a3387ba153f72493b"
+  },
+  "platform": "macOS-27.2.1-arm64-arm-64bit",
+  "machine": "arm64",
+  "python": "3.12.14",
+  "cpu": "Apple M5",
+  "versions": {
+    "torch": "2.11.0",
+    "torchvision": "0.26.0",
+    "ultralytics": "8.4.182",
+    "numpy": "2.3.5",
+    "psutil": "7.2.2",
+    "fastapi": "0.141.1",
+    "uvicorn": "0.54.0",
+    "requests": "2.34.2"
+  },
+  "thread_environment": {
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2",
+    "OPENBLAS_NUM_THREADS": "2"
+  },
+  "manifest_settings": {
+    "classifier_kind": "finetune",
+    "temperature": 0.05,
+    "detector_conf": 0.4,
+    "detector_iou": 0.5,
+    "verify_threshold": 0.9,
+    "min_mask_fraction": 0.05,
+    "image_size": 224,
+    "imgsz": 640,
+    "segmenter_conf": 0.25,
+    "segmenter_iou": 0.7,
+    "mask_match_iou": 0.1,
+    "review_mode": "off"
+  },
+  "weights_sha256": {
+    "detector": "f48e4d8ea5c925c18a4b43744c2f697bfc01a0a473492275f000848125da1cd4",
+    "segmenter": "868f3842bf0e05c8b936d3e51e6e81b7f44fdcf12f7b666e5041bf1d47a5d8ee",
+    "classifier": "22dd58d471f2dbb39eef10331f208d668a569b1feae378171df8074fbe2081ba"
+  },
+  "input_sequence": [
+    {
+      "image": "Abyssinian_104.jpg",
+      "sha256": "da3954b8d2e647ac91a8800ea1f30d62288bd67c51e8dafb727c3c1da87b0215"
+    },
+    {
+      "image": "Abyssinian_108.jpg",
+      "sha256": "de0bb21b0f898a24311dd8205343cbf280f4df3bda5d96c787bce7cda8a701ee"
+    },
+    {
+      "image": "Abyssinian_110.jpg",
+      "sha256": "90b9ae514272c6dfbeea310951b28935e1ee7a33b064fd2572d31a22abd57221"
+    },
+    {
+      "image": "Abyssinian_117.jpg",
+      "sha256": "c8ecbb90066b277a371bb0fcfa98f4b0ccbe6826885c5fbf50178a44eb8c048c"
+    },
+    {
+      "image": "Abyssinian_122.jpg",
+      "sha256": "a9e38e201a7aa3943521dbaacf628d276e844540ad87b76cd6e0113be00c09eb"
+    },
+    {
+      "image": "Abyssinian_123.jpg",
+      "sha256": "49e352d3df5f7312964d6aeff1353836767054594deb4d9e1cc10aa9e4dc9204"
+    },
+    {
+      "image": "Abyssinian_124.jpg",
+      "sha256": "6c27600b9fa7d6547624ed6ed17ddb475c97e9198ddc5999147036e87249b69c"
+    },
+    {
+      "image": "Abyssinian_125.jpg",
+      "sha256": "935b32590637d067d19f5e568d3de30840ae96578f9756535efa5fc8edfe4040"
+    },
+    {
+      "image": "Abyssinian_129.jpg",
+      "sha256": "6bc455ea9538293766d21bd4d9274698698b1a5b23fb6a8e4f893c7d7fd0d0a8"
+    },
+    {
+      "image": "Abyssinian_132.jpg",
+      "sha256": "8d812e4c986e5f3c186925396a5bce28990c46cbb8da9ca9b60eb333c3464acf"
+    },
+    {
+      "image": "Abyssinian_137.jpg",
+      "sha256": "1a67cdd6db07950879c74455aea53463ff167c002c19d946dff8f2187fbb8469"
+    },
+    {
+      "image": "Abyssinian_139.jpg",
+      "sha256": "fd4485e05df6b4746b1b0126af07765195bb98493fbbad3218f6efc30b06cc0c"
+    },
+    {
+      "image": "Abyssinian_143.jpg",
+      "sha256": "c032e39c47cdd43e5c6e534323f899d2e8fa881debb3288765fabc287af1438e"
+    },
+    {
+      "image": "Abyssinian_144.jpg",
+      "sha256": "985c6395b1ebd008032c596d650697aa482a5c0c77a6471367161b1fdf7ddc64"
+    },
+    {
+      "image": "Bengal_101.jpg",
+      "sha256": "a45beacc9252f1061ba909174f8019e932008c7befd9a68546d05dfab45f428f"
+    },
+    {
+      "image": "Bengal_11.jpg",
+      "sha256": "8e5edbaa935de77a9651cf3a20b472b357830ef902ea7bb2e8e1a7eacdf5b2fe"
+    },
+    {
+      "image": "Bengal_115.jpg",
+      "sha256": "372ce09232843aeb819c4ef5f84666d698d2ce080998b0d5c1094a716a1ee06b"
+    },
+    {
+      "image": "Bengal_117.jpg",
+      "sha256": "a3f55d828c652c648732b29d3c29789dc722568cd34097d8e92a5c1cd68f8a5c"
+    },
+    {
+      "image": "Bengal_118.jpg",
+      "sha256": "5ba26ff5d2da20046e2789d8feb5619433c833a5e4d7eed1a41d9db889630625"
+    },
+    {
+      "image": "Bengal_131.jpg",
+      "sha256": "5005ae91d4fc2c6d8c5c7c5bfdff5a7b86d993761e7a66197884017690263112"
+    },
+    {
+      "image": "american_bulldog_117.jpg",
+      "sha256": "f0e7657cc59e7ef2ed1c395a80a76dfa4fe1abfdb1d6e9c192e0e72b19e0cbf4"
+    },
+    {
+      "image": "american_bulldog_118.jpg",
+      "sha256": "a3af129db89e125c996847db4d01379eca77eb75ebeecc5098e233cd9c0e2be3"
+    },
+    {
+      "image": "american_bulldog_12.jpg",
+      "sha256": "e6cf3ab12ee9950c6cf38aeb7e7b90cb5a34d8aa9e3a66af447e668b2e89b1b9"
+    },
+    {
+      "image": "american_bulldog_120.jpg",
+      "sha256": "665cc9fecdb2b86e8faf77c4330046f4482145cbc100d96dda0cad540553819b"
+    },
+    {
+      "image": "american_bulldog_126.jpg",
+      "sha256": "7577b8abd0646048be01dbf81c34a9a70e0c4fa9e2be8dc58b1011af58cd4b49"
+    },
+    {
+      "image": "american_bulldog_132.jpg",
+      "sha256": "1e0823d7d6c176a15f5dbc001cee52c4afeaad34b74931fce0ef4f3bb096f71b"
+    },
+    {
+      "image": "american_pit_bull_terrier_100.jpg",
+      "sha256": "da9c0852b5a994aafaef8f778f64f1c12bb96628a73d78808c4737a8b201b670"
+    },
+    {
+      "image": "american_pit_bull_terrier_101.jpg",
+      "sha256": "5ca5668d9a21b349a77d8e0155b1af30f9e93922b25209caf615ba8eb582be5d"
+    },
+    {
+      "image": "american_pit_bull_terrier_102.jpg",
+      "sha256": "88545fb44e17949901afeb3e87d6a1dab6b9118ea57be9ae497f643e7a88e595"
+    },
+    {
+      "image": "american_pit_bull_terrier_104.jpg",
+      "sha256": "63a0584d7f0ba0f2c36fedbd573a7f4ad368115c9a21b329c71cce162395f938"
+    },
+    {
+      "image": "american_pit_bull_terrier_111.jpg",
+      "sha256": "4c182bd0bf6658a48373c2527492ee95ca023cfe2662fa5c716b464adab70d69"
+    },
+    {
+      "image": "american_pit_bull_terrier_113.jpg",
+      "sha256": "c1bdc941b3f741c5e9800ccf6204c3af5b6ff9a80257829ee4e00dbca9424be5"
+    },
+    {
+      "image": "american_pit_bull_terrier_120.jpg",
+      "sha256": "3eab243f1d6bed9c4ec667c1a19516d154366d525f2a2a8d985391c548ded00f"
+    },
+    {
+      "image": "american_pit_bull_terrier_129.jpg",
+      "sha256": "12e2420b62989c716357374b8382a295a4387d857e9868525073e3b76d354a51"
+    },
+    {
+      "image": "american_pit_bull_terrier_133.jpg",
+      "sha256": "b27f695bbdf1581c39cd3ed72a09b14e0dd2663aa03f329b5e42eed77e906eca"
+    },
+    {
+      "image": "american_pit_bull_terrier_135.jpg",
+      "sha256": "b818a8273aa30f70a627d815e091271eae16cf93ae360f85bccd3e0d1fec3003"
+    },
+    {
+      "image": "american_pit_bull_terrier_142.jpg",
+      "sha256": "bd49aa5cec1660320a5ff0d69fb74a7325ea317efeab921a822d58bbccd7299a"
+    },
+    {
+      "image": "basset_hound_115.jpg",
+      "sha256": "2af6c56bbf5fd3388687379a6fa6389f33a6a2b45b226adea17068c2b880221c"
+    },
+    {
+      "image": "basset_hound_119.jpg",
+      "sha256": "263024f59384911814e17e1679f16804cce67b6cebb1526d8cca6fc43ce3a106"
+    },
+    {
+      "image": "basset_hound_123.jpg",
+      "sha256": "4d5edcecd96f224483be2a723110b3e632787b7baeff05de7900d3cec0d6edd7"
+    },
+    {
+      "image": "basset_hound_133.jpg",
+      "sha256": "b388858e1c2101270219b7bdb4000265d092f50d7aa0c831508d2b21855a8f43"
+    },
+    {
+      "image": "basset_hound_137.jpg",
+      "sha256": "024e7041f6e9866dbbebe7233747f6a2ce5ffdc34c94a767dd149629042e2ebd"
+    },
+    {
+      "image": "basset_hound_138.jpg",
+      "sha256": "648901aec68a25e24933108c07e69b76813bf35596e6b5e86143d81e7e460cdf"
+    },
+    {
+      "image": "basset_hound_140.jpg",
+      "sha256": "19aa6cdff1fed9af59bb5c424f5fb93e872679c474a07eb37ebba9257a9ac78a"
+    },
+    {
+      "image": "beagle_10.jpg",
+      "sha256": "e62a947726d309e2d042c441ec3265644f0f124bc9a4cd84363d592a8a49a7cc"
+    },
+    {
+      "image": "beagle_100.jpg",
+      "sha256": "adb80c22aa0468a31e8ee59901c75e9a5840ee02f92149c1405f0e0d4d6f6b68"
+    },
+    {
+      "image": "beagle_108.jpg",
+      "sha256": "e3aa7c322a812e7299d542de21819a49f1c38897a02bf98439b58da46b6e8350"
+    },
+    {
+      "image": "beagle_125.jpg",
+      "sha256": "ef68567e4d68bd21ae2dfdae99a1f58d6b715bc187f82697027f11b22c586bdb"
+    },
+    {
+      "image": "beagle_13.jpg",
+      "sha256": "8bff423a43eece55a0bf4f6b3c5debc2c275ff5258f8690d92f3a6f1f1dfff4e"
+    },
+    {
+      "image": "beagle_146.jpg",
+      "sha256": "7a4ab3058b4e48c466c33e6a6f06d40c83abf267d21c4292b09a70138806f2d0"
+    },
+    {
+      "image": "Abyssinian_104.jpg",
+      "sha256": "da3954b8d2e647ac91a8800ea1f30d62288bd67c51e8dafb727c3c1da87b0215"
+    },
+    {
+      "image": "Abyssinian_108.jpg",
+      "sha256": "de0bb21b0f898a24311dd8205343cbf280f4df3bda5d96c787bce7cda8a701ee"
+    },
+    {
+      "image": "Abyssinian_110.jpg",
+      "sha256": "90b9ae514272c6dfbeea310951b28935e1ee7a33b064fd2572d31a22abd57221"
+    },
+    {
+      "image": "Abyssinian_117.jpg",
+      "sha256": "c8ecbb90066b277a371bb0fcfa98f4b0ccbe6826885c5fbf50178a44eb8c048c"
+    },
+    {
+      "image": "Abyssinian_122.jpg",
+      "sha256": "a9e38e201a7aa3943521dbaacf628d276e844540ad87b76cd6e0113be00c09eb"
+    },
+    {
+      "image": "Abyssinian_123.jpg",
+      "sha256": "49e352d3df5f7312964d6aeff1353836767054594deb4d9e1cc10aa9e4dc9204"
+    },
+    {
+      "image": "Abyssinian_124.jpg",
+      "sha256": "6c27600b9fa7d6547624ed6ed17ddb475c97e9198ddc5999147036e87249b69c"
+    },
+    {
+      "image": "Abyssinian_125.jpg",
+      "sha256": "935b32590637d067d19f5e568d3de30840ae96578f9756535efa5fc8edfe4040"
+    },
+    {
+      "image": "Abyssinian_129.jpg",
+      "sha256": "6bc455ea9538293766d21bd4d9274698698b1a5b23fb6a8e4f893c7d7fd0d0a8"
+    },
+    {
+      "image": "Abyssinian_132.jpg",
+      "sha256": "8d812e4c986e5f3c186925396a5bce28990c46cbb8da9ca9b60eb333c3464acf"
+    },
+    {
+      "image": "Abyssinian_137.jpg",
+      "sha256": "1a67cdd6db07950879c74455aea53463ff167c002c19d946dff8f2187fbb8469"
+    },
+    {
+      "image": "Abyssinian_139.jpg",
+      "sha256": "fd4485e05df6b4746b1b0126af07765195bb98493fbbad3218f6efc30b06cc0c"
+    },
+    {
+      "image": "Abyssinian_143.jpg",
+      "sha256": "c032e39c47cdd43e5c6e534323f899d2e8fa881debb3288765fabc287af1438e"
+    },
+    {
+      "image": "Abyssinian_144.jpg",
+      "sha256": "985c6395b1ebd008032c596d650697aa482a5c0c77a6471367161b1fdf7ddc64"
+    },
+    {
+      "image": "Bengal_101.jpg",
+      "sha256": "a45beacc9252f1061ba909174f8019e932008c7befd9a68546d05dfab45f428f"
+    },
+    {
+      "image": "Bengal_11.jpg",
+      "sha256": "8e5edbaa935de77a9651cf3a20b472b357830ef902ea7bb2e8e1a7eacdf5b2fe"
+    },
+    {
+      "image": "Bengal_115.jpg",
+      "sha256": "372ce09232843aeb819c4ef5f84666d698d2ce080998b0d5c1094a716a1ee06b"
+    },
+    {
+      "image": "Bengal_117.jpg",
+      "sha256": "a3f55d828c652c648732b29d3c29789dc722568cd34097d8e92a5c1cd68f8a5c"
+    },
+    {
+      "image": "Bengal_118.jpg",
+      "sha256": "5ba26ff5d2da20046e2789d8feb5619433c833a5e4d7eed1a41d9db889630625"
+    },
+    {
+      "image": "Bengal_131.jpg",
+      "sha256": "5005ae91d4fc2c6d8c5c7c5bfdff5a7b86d993761e7a66197884017690263112"
+    },
+    {
+      "image": "american_bulldog_117.jpg",
+      "sha256": "f0e7657cc59e7ef2ed1c395a80a76dfa4fe1abfdb1d6e9c192e0e72b19e0cbf4"
+    },
+    {
+      "image": "american_bulldog_118.jpg",
+      "sha256": "a3af129db89e125c996847db4d01379eca77eb75ebeecc5098e233cd9c0e2be3"
+    },
+    {
+      "image": "american_bulldog_12.jpg",
+      "sha256": "e6cf3ab12ee9950c6cf38aeb7e7b90cb5a34d8aa9e3a66af447e668b2e89b1b9"
+    },
+    {
+      "image": "american_bulldog_120.jpg",
+      "sha256": "665cc9fecdb2b86e8faf77c4330046f4482145cbc100d96dda0cad540553819b"
+    },
+    {
+      "image": "american_bulldog_126.jpg",
+      "sha256": "7577b8abd0646048be01dbf81c34a9a70e0c4fa9e2be8dc58b1011af58cd4b49"
+    },
+    {
+      "image": "american_bulldog_132.jpg",
+      "sha256": "1e0823d7d6c176a15f5dbc001cee52c4afeaad34b74931fce0ef4f3bb096f71b"
+    },
+    {
+      "image": "american_pit_bull_terrier_100.jpg",
+      "sha256": "da9c0852b5a994aafaef8f778f64f1c12bb96628a73d78808c4737a8b201b670"
+    },
+    {
+      "image": "american_pit_bull_terrier_101.jpg",
+      "sha256": "5ca5668d9a21b349a77d8e0155b1af30f9e93922b25209caf615ba8eb582be5d"
+    },
+    {
+      "image": "american_pit_bull_terrier_102.jpg",
+      "sha256": "88545fb44e17949901afeb3e87d6a1dab6b9118ea57be9ae497f643e7a88e595"
+    },
+    {
+      "image": "american_pit_bull_terrier_104.jpg",
+      "sha256": "63a0584d7f0ba0f2c36fedbd573a7f4ad368115c9a21b329c71cce162395f938"
+    },
+    {
+      "image": "american_pit_bull_terrier_111.jpg",
+      "sha256": "4c182bd0bf6658a48373c2527492ee95ca023cfe2662fa5c716b464adab70d69"
+    },
+    {
+      "image": "american_pit_bull_terrier_113.jpg",
+      "sha256": "c1bdc941b3f741c5e9800ccf6204c3af5b6ff9a80257829ee4e00dbca9424be5"
+    },
+    {
+      "image": "american_pit_bull_terrier_120.jpg",
+      "sha256": "3eab243f1d6bed9c4ec667c1a19516d154366d525f2a2a8d985391c548ded00f"
+    },
+    {
+      "image": "american_pit_bull_terrier_129.jpg",
+      "sha256": "12e2420b62989c716357374b8382a295a4387d857e9868525073e3b76d354a51"
+    },
+    {
+      "image": "american_pit_bull_terrier_133.jpg",
+      "sha256": "b27f695bbdf1581c39cd3ed72a09b14e0dd2663aa03f329b5e42eed77e906eca"
+    },
+    {
+      "image": "american_pit_bull_terrier_135.jpg",
+      "sha256": "b818a8273aa30f70a627d815e091271eae16cf93ae360f85bccd3e0d1fec3003"
+    },
+    {
+      "image": "american_pit_bull_terrier_142.jpg",
+      "sha256": "bd49aa5cec1660320a5ff0d69fb74a7325ea317efeab921a822d58bbccd7299a"
+    },
+    {
+      "image": "basset_hound_115.jpg",
+      "sha256": "2af6c56bbf5fd3388687379a6fa6389f33a6a2b45b226adea17068c2b880221c"
+    },
+    {
+      "image": "basset_hound_119.jpg",
+      "sha256": "263024f59384911814e17e1679f16804cce67b6cebb1526d8cca6fc43ce3a106"
+    },
+    {
+      "image": "basset_hound_123.jpg",
+      "sha256": "4d5edcecd96f224483be2a723110b3e632787b7baeff05de7900d3cec0d6edd7"
+    },
+    {
+      "image": "basset_hound_133.jpg",
+      "sha256": "b388858e1c2101270219b7bdb4000265d092f50d7aa0c831508d2b21855a8f43"
+    },
+    {
+      "image": "basset_hound_137.jpg",
+      "sha256": "024e7041f6e9866dbbebe7233747f6a2ce5ffdc34c94a767dd149629042e2ebd"
+    },
+    {
+      "image": "basset_hound_138.jpg",
+      "sha256": "648901aec68a25e24933108c07e69b76813bf35596e6b5e86143d81e7e460cdf"
+    },
+    {
+      "image": "basset_hound_140.jpg",
+      "sha256": "19aa6cdff1fed9af59bb5c424f5fb93e872679c474a07eb37ebba9257a9ac78a"
+    },
+    {
+      "image": "beagle_10.jpg",
+      "sha256": "e62a947726d309e2d042c441ec3265644f0f124bc9a4cd84363d592a8a49a7cc"
+    },
+    {
+      "image": "beagle_100.jpg",
+      "sha256": "adb80c22aa0468a31e8ee59901c75e9a5840ee02f92149c1405f0e0d4d6f6b68"
+    },
+    {
+      "image": "beagle_108.jpg",
+      "sha256": "e3aa7c322a812e7299d542de21819a49f1c38897a02bf98439b58da46b6e8350"
+    },
+    {
+      "image": "beagle_125.jpg",
+      "sha256": "ef68567e4d68bd21ae2dfdae99a1f58d6b715bc187f82697027f11b22c586bdb"
+    },
+    {
+      "image": "beagle_13.jpg",
+      "sha256": "8bff423a43eece55a0bf4f6b3c5debc2c275ff5258f8690d92f3a6f1f1dfff4e"
+    },
+    {
+      "image": "beagle_146.jpg",
+      "sha256": "7a4ab3058b4e48c466c33e6a6f06d40c83abf267d21c4292b09a70138806f2d0"
+    },
+    {
+      "image": "Abyssinian_104.jpg",
+      "sha256": "da3954b8d2e647ac91a8800ea1f30d62288bd67c51e8dafb727c3c1da87b0215"
+    },
+    {
+      "image": "Abyssinian_108.jpg",
+      "sha256": "de0bb21b0f898a24311dd8205343cbf280f4df3bda5d96c787bce7cda8a701ee"
+    },
+    {
+      "image": "Abyssinian_110.jpg",
+      "sha256": "90b9ae514272c6dfbeea310951b28935e1ee7a33b064fd2572d31a22abd57221"
+    },
+    {
+      "image": "Abyssinian_117.jpg",
+      "sha256": "c8ecbb90066b277a371bb0fcfa98f4b0ccbe6826885c5fbf50178a44eb8c048c"
+    },
+    {
+      "image": "Abyssinian_122.jpg",
+      "sha256": "a9e38e201a7aa3943521dbaacf628d276e844540ad87b76cd6e0113be00c09eb"
+    },
+    {
+      "image": "Abyssinian_123.jpg",
+      "sha256": "49e352d3df5f7312964d6aeff1353836767054594deb4d9e1cc10aa9e4dc9204"
+    },
+    {
+      "image": "Abyssinian_124.jpg",
+      "sha256": "6c27600b9fa7d6547624ed6ed17ddb475c97e9198ddc5999147036e87249b69c"
+    },
+    {
+      "image": "Abyssinian_125.jpg",
+      "sha256": "935b32590637d067d19f5e568d3de30840ae96578f9756535efa5fc8edfe4040"
+    },
+    {
+      "image": "Abyssinian_129.jpg",
+      "sha256": "6bc455ea9538293766d21bd4d9274698698b1a5b23fb6a8e4f893c7d7fd0d0a8"
+    },
+    {
+      "image": "Abyssinian_132.jpg",
+      "sha256": "8d812e4c986e5f3c186925396a5bce28990c46cbb8da9ca9b60eb333c3464acf"
+    },
+    {
+      "image": "Abyssinian_137.jpg",
+      "sha256": "1a67cdd6db07950879c74455aea53463ff167c002c19d946dff8f2187fbb8469"
+    },
+    {
+      "image": "Abyssinian_139.jpg",
+      "sha256": "fd4485e05df6b4746b1b0126af07765195bb98493fbbad3218f6efc30b06cc0c"
+    },
+    {
+      "image": "Abyssinian_143.jpg",
+      "sha256": "c032e39c47cdd43e5c6e534323f899d2e8fa881debb3288765fabc287af1438e"
+    },
+    {
+      "image": "Abyssinian_144.jpg",
+      "sha256": "985c6395b1ebd008032c596d650697aa482a5c0c77a6471367161b1fdf7ddc64"
+    },
+    {
+      "image": "Bengal_101.jpg",
+      "sha256": "a45beacc9252f1061ba909174f8019e932008c7befd9a68546d05dfab45f428f"
+    },
+    {
+      "image": "Bengal_11.jpg",
+      "sha256": "8e5edbaa935de77a9651cf3a20b472b357830ef902ea7bb2e8e1a7eacdf5b2fe"
+    },
+    {
+      "image": "Bengal_115.jpg",
+      "sha256": "372ce09232843aeb819c4ef5f84666d698d2ce080998b0d5c1094a716a1ee06b"
+    },
+    {
+      "image": "Bengal_117.jpg",
+      "sha256": "a3f55d828c652c648732b29d3c29789dc722568cd34097d8e92a5c1cd68f8a5c"
+    },
+    {
+      "image": "Bengal_118.jpg",
+      "sha256": "5ba26ff5d2da20046e2789d8feb5619433c833a5e4d7eed1a41d9db889630625"
+    },
+    {
+      "image": "Bengal_131.jpg",
+      "sha256": "5005ae91d4fc2c6d8c5c7c5bfdff5a7b86d993761e7a66197884017690263112"
+    },
+    {
+      "image": "american_bulldog_117.jpg",
+      "sha256": "f0e7657cc59e7ef2ed1c395a80a76dfa4fe1abfdb1d6e9c192e0e72b19e0cbf4"
+    },
+    {
+      "image": "american_bulldog_118.jpg",
+      "sha256": "a3af129db89e125c996847db4d01379eca77eb75ebeecc5098e233cd9c0e2be3"
+    },
+    {
+      "image": "american_bulldog_12.jpg",
+      "sha256": "e6cf3ab12ee9950c6cf38aeb7e7b90cb5a34d8aa9e3a66af447e668b2e89b1b9"
+    },
+    {
+      "image": "american_bulldog_120.jpg",
+      "sha256": "665cc9fecdb2b86e8faf77c4330046f4482145cbc100d96dda0cad540553819b"
+    },
+    {
+      "image": "american_bulldog_126.jpg",
+      "sha256": "7577b8abd0646048be01dbf81c34a9a70e0c4fa9e2be8dc58b1011af58cd4b49"
+    },
+    {
+      "image": "american_bulldog_132.jpg",
+      "sha256": "1e0823d7d6c176a15f5dbc001cee52c4afeaad34b74931fce0ef4f3bb096f71b"
+    },
+    {
+      "image": "american_pit_bull_terrier_100.jpg",
+      "sha256": "da9c0852b5a994aafaef8f778f64f1c12bb96628a73d78808c4737a8b201b670"
+    },
+    {
+      "image": "american_pit_bull_terrier_101.jpg",
+      "sha256": "5ca5668d9a21b349a77d8e0155b1af30f9e93922b25209caf615ba8eb582be5d"
+    },
+    {
+      "image": "american_pit_bull_terrier_102.jpg",
+      "sha256": "88545fb44e17949901afeb3e87d6a1dab6b9118ea57be9ae497f643e7a88e595"
+    },
+    {
+      "image": "american_pit_bull_terrier_104.jpg",
+      "sha256": "63a0584d7f0ba0f2c36fedbd573a7f4ad368115c9a21b329c71cce162395f938"
+    },
+    {
+      "image": "american_pit_bull_terrier_111.jpg",
+      "sha256": "4c182bd0bf6658a48373c2527492ee95ca023cfe2662fa5c716b464adab70d69"
+    },
+    {
+      "image": "american_pit_bull_terrier_113.jpg",
+      "sha256": "c1bdc941b3f741c5e9800ccf6204c3af5b6ff9a80257829ee4e00dbca9424be5"
+    },
+    {
+      "image": "american_pit_bull_terrier_120.jpg",
+      "sha256": "3eab243f1d6bed9c4ec667c1a19516d154366d525f2a2a8d985391c548ded00f"
+    },
+    {
+      "image": "american_pit_bull_terrier_129.jpg",
+      "sha256": "12e2420b62989c716357374b8382a295a4387d857e9868525073e3b76d354a51"
+    },
+    {
+      "image": "american_pit_bull_terrier_133.jpg",
+      "sha256": "b27f695bbdf1581c39cd3ed72a09b14e0dd2663aa03f329b5e42eed77e906eca"
+    },
+    {
+      "image": "american_pit_bull_terrier_135.jpg",
+      "sha256": "b818a8273aa30f70a627d815e091271eae16cf93ae360f85bccd3e0d1fec3003"
+    },
+    {
+      "image": "american_pit_bull_terrier_142.jpg",
+      "sha256": "bd49aa5cec1660320a5ff0d69fb74a7325ea317efeab921a822d58bbccd7299a"
+    },
+    {
+      "image": "basset_hound_115.jpg",
+      "sha256": "2af6c56bbf5fd3388687379a6fa6389f33a6a2b45b226adea17068c2b880221c"
+    },
+    {
+      "image": "basset_hound_119.jpg",
+      "sha256": "263024f59384911814e17e1679f16804cce67b6cebb1526d8cca6fc43ce3a106"
+    },
+    {
+      "image": "basset_hound_123.jpg",
+      "sha256": "4d5edcecd96f224483be2a723110b3e632787b7baeff05de7900d3cec0d6edd7"
+    },
+    {
+      "image": "basset_hound_133.jpg",
+      "sha256": "b388858e1c2101270219b7bdb4000265d092f50d7aa0c831508d2b21855a8f43"
+    },
+    {
+      "image": "basset_hound_137.jpg",
+      "sha256": "024e7041f6e9866dbbebe7233747f6a2ce5ffdc34c94a767dd149629042e2ebd"
+    },
+    {
+      "image": "basset_hound_138.jpg",
+      "sha256": "648901aec68a25e24933108c07e69b76813bf35596e6b5e86143d81e7e460cdf"
+    },
+    {
+      "image": "basset_hound_140.jpg",
+      "sha256": "19aa6cdff1fed9af59bb5c424f5fb93e872679c474a07eb37ebba9257a9ac78a"
+    },
+    {
+      "image": "beagle_10.jpg",
+      "sha256": "e62a947726d309e2d042c441ec3265644f0f124bc9a4cd84363d592a8a49a7cc"
+    },
+    {
+      "image": "beagle_100.jpg",
+      "sha256": "adb80c22aa0468a31e8ee59901c75e9a5840ee02f92149c1405f0e0d4d6f6b68"
+    },
+    {
+      "image": "beagle_108.jpg",
+      "sha256": "e3aa7c322a812e7299d542de21819a49f1c38897a02bf98439b58da46b6e8350"
+    },
+    {
+      "image": "beagle_125.jpg",
+      "sha256": "ef68567e4d68bd21ae2dfdae99a1f58d6b715bc187f82697027f11b22c586bdb"
+    },
+    {
+      "image": "beagle_13.jpg",
+      "sha256": "8bff423a43eece55a0bf4f6b3c5debc2c275ff5258f8690d92f3a6f1f1dfff4e"
+    },
+    {
+      "image": "beagle_146.jpg",
+      "sha256": "7a4ab3058b4e48c466c33e6a6f06d40c83abf267d21c4292b09a70138806f2d0"
+    },
+    {
+      "image": "Abyssinian_104.jpg",
+      "sha256": "da3954b8d2e647ac91a8800ea1f30d62288bd67c51e8dafb727c3c1da87b0215"
+    },
+    {
+      "image": "Abyssinian_108.jpg",
+      "sha256": "de0bb21b0f898a24311dd8205343cbf280f4df3bda5d96c787bce7cda8a701ee"
+    },
+    {
+      "image": "Abyssinian_110.jpg",
+      "sha256": "90b9ae514272c6dfbeea310951b28935e1ee7a33b064fd2572d31a22abd57221"
+    },
+    {
+      "image": "Abyssinian_117.jpg",
+      "sha256": "c8ecbb90066b277a371bb0fcfa98f4b0ccbe6826885c5fbf50178a44eb8c048c"
+    },
+    {
+      "image": "Abyssinian_122.jpg",
+      "sha256": "a9e38e201a7aa3943521dbaacf628d276e844540ad87b76cd6e0113be00c09eb"
+    },
+    {
+      "image": "Abyssinian_123.jpg",
+      "sha256": "49e352d3df5f7312964d6aeff1353836767054594deb4d9e1cc10aa9e4dc9204"
+    },
+    {
+      "image": "Abyssinian_124.jpg",
+      "sha256": "6c27600b9fa7d6547624ed6ed17ddb475c97e9198ddc5999147036e87249b69c"
+    },
+    {
+      "image": "Abyssinian_125.jpg",
+      "sha256": "935b32590637d067d19f5e568d3de30840ae96578f9756535efa5fc8edfe4040"
+    },
+    {
+      "image": "Abyssinian_129.jpg",
+      "sha256": "6bc455ea9538293766d21bd4d9274698698b1a5b23fb6a8e4f893c7d7fd0d0a8"
+    },
+    {
+      "image": "Abyssinian_132.jpg",
+      "sha256": "8d812e4c986e5f3c186925396a5bce28990c46cbb8da9ca9b60eb333c3464acf"
+    },
+    {
+      "image": "Abyssinian_137.jpg",
+      "sha256": "1a67cdd6db07950879c74455aea53463ff167c002c19d946dff8f2187fbb8469"
+    },
+    {
+      "image": "Abyssinian_139.jpg",
+      "sha256": "fd4485e05df6b4746b1b0126af07765195bb98493fbbad3218f6efc30b06cc0c"
+    },
+    {
+      "image": "Abyssinian_143.jpg",
+      "sha256": "c032e39c47cdd43e5c6e534323f899d2e8fa881debb3288765fabc287af1438e"
+    },
+    {
+      "image": "Abyssinian_144.jpg",
+      "sha256": "985c6395b1ebd008032c596d650697aa482a5c0c77a6471367161b1fdf7ddc64"
+    },
+    {
+      "image": "Bengal_101.jpg",
+      "sha256": "a45beacc9252f1061ba909174f8019e932008c7befd9a68546d05dfab45f428f"
+    },
+    {
+      "image": "Bengal_11.jpg",
+      "sha256": "8e5edbaa935de77a9651cf3a20b472b357830ef902ea7bb2e8e1a7eacdf5b2fe"
+    },
+    {
+      "image": "Bengal_115.jpg",
+      "sha256": "372ce09232843aeb819c4ef5f84666d698d2ce080998b0d5c1094a716a1ee06b"
+    },
+    {
+      "image": "Bengal_117.jpg",
+      "sha256": "a3f55d828c652c648732b29d3c29789dc722568cd34097d8e92a5c1cd68f8a5c"
+    },
+    {
+      "image": "Bengal_118.jpg",
+      "sha256": "5ba26ff5d2da20046e2789d8feb5619433c833a5e4d7eed1a41d9db889630625"
+    },
+    {
+      "image": "Bengal_131.jpg",
+      "sha256": "5005ae91d4fc2c6d8c5c7c5bfdff5a7b86d993761e7a66197884017690263112"
+    },
+    {
+      "image": "american_bulldog_117.jpg",
+      "sha256": "f0e7657cc59e7ef2ed1c395a80a76dfa4fe1abfdb1d6e9c192e0e72b19e0cbf4"
+    },
+    {
+      "image": "american_bulldog_118.jpg",
+      "sha256": "a3af129db89e125c996847db4d01379eca77eb75ebeecc5098e233cd9c0e2be3"
+    },
+    {
+      "image": "american_bulldog_12.jpg",
+      "sha256": "e6cf3ab12ee9950c6cf38aeb7e7b90cb5a34d8aa9e3a66af447e668b2e89b1b9"
+    },
+    {
+      "image": "american_bulldog_120.jpg",
+      "sha256": "665cc9fecdb2b86e8faf77c4330046f4482145cbc100d96dda0cad540553819b"
+    },
+    {
+      "image": "american_bulldog_126.jpg",
+      "sha256": "7577b8abd0646048be01dbf81c34a9a70e0c4fa9e2be8dc58b1011af58cd4b49"
+    },
+    {
+      "image": "american_bulldog_132.jpg",
+      "sha256": "1e0823d7d6c176a15f5dbc001cee52c4afeaad34b74931fce0ef4f3bb096f71b"
+    },
+    {
+      "image": "american_pit_bull_terrier_100.jpg",
+      "sha256": "da9c0852b5a994aafaef8f778f64f1c12bb96628a73d78808c4737a8b201b670"
+    },
+    {
+      "image": "american_pit_bull_terrier_101.jpg",
+      "sha256": "5ca5668d9a21b349a77d8e0155b1af30f9e93922b25209caf615ba8eb582be5d"
+    },
+    {
+      "image": "american_pit_bull_terrier_102.jpg",
+      "sha256": "88545fb44e17949901afeb3e87d6a1dab6b9118ea57be9ae497f643e7a88e595"
+    },
+    {
+      "image": "american_pit_bull_terrier_104.jpg",
+      "sha256": "63a0584d7f0ba0f2c36fedbd573a7f4ad368115c9a21b329c71cce162395f938"
+    },
+    {
+      "image": "american_pit_bull_terrier_111.jpg",
+      "sha256": "4c182bd0bf6658a48373c2527492ee95ca023cfe2662fa5c716b464adab70d69"
+    },
+    {
+      "image": "american_pit_bull_terrier_113.jpg",
+      "sha256": "c1bdc941b3f741c5e9800ccf6204c3af5b6ff9a80257829ee4e00dbca9424be5"
+    },
+    {
+      "image": "american_pit_bull_terrier_120.jpg",
+      "sha256": "3eab243f1d6bed9c4ec667c1a19516d154366d525f2a2a8d985391c548ded00f"
+    },
+    {
+      "image": "american_pit_bull_terrier_129.jpg",
+      "sha256": "12e2420b62989c716357374b8382a295a4387d857e9868525073e3b76d354a51"
+    },
+    {
+      "image": "american_pit_bull_terrier_133.jpg",
+      "sha256": "b27f695bbdf1581c39cd3ed72a09b14e0dd2663aa03f329b5e42eed77e906eca"
+    },
+    {
+      "image": "american_pit_bull_terrier_135.jpg",
+      "sha256": "b818a8273aa30f70a627d815e091271eae16cf93ae360f85bccd3e0d1fec3003"
+    },
+    {
+      "image": "american_pit_bull_terrier_142.jpg",
+      "sha256": "bd49aa5cec1660320a5ff0d69fb74a7325ea317efeab921a822d58bbccd7299a"
+    },
+    {
+      "image": "basset_hound_115.jpg",
+      "sha256": "2af6c56bbf5fd3388687379a6fa6389f33a6a2b45b226adea17068c2b880221c"
+    },
+    {
+      "image": "basset_hound_119.jpg",
+      "sha256": "263024f59384911814e17e1679f16804cce67b6cebb1526d8cca6fc43ce3a106"
+    },
+    {
+      "image": "basset_hound_123.jpg",
+      "sha256": "4d5edcecd96f224483be2a723110b3e632787b7baeff05de7900d3cec0d6edd7"
+    },
+    {
+      "image": "basset_hound_133.jpg",
+      "sha256": "b388858e1c2101270219b7bdb4000265d092f50d7aa0c831508d2b21855a8f43"
+    },
+    {
+      "image": "basset_hound_137.jpg",
+      "sha256": "024e7041f6e9866dbbebe7233747f6a2ce5ffdc34c94a767dd149629042e2ebd"
+    },
+    {
+      "image": "basset_hound_138.jpg",
+      "sha256": "648901aec68a25e24933108c07e69b76813bf35596e6b5e86143d81e7e460cdf"
+    },
+    {
+      "image": "basset_hound_140.jpg",
+      "sha256": "19aa6cdff1fed9af59bb5c424f5fb93e872679c474a07eb37ebba9257a9ac78a"
+    },
+    {
+      "image": "beagle_10.jpg",
+      "sha256": "e62a947726d309e2d042c441ec3265644f0f124bc9a4cd84363d592a8a49a7cc"
+    },
+    {
+      "image": "beagle_100.jpg",
+      "sha256": "adb80c22aa0468a31e8ee59901c75e9a5840ee02f92149c1405f0e0d4d6f6b68"
+    },
+    {
+      "image": "beagle_108.jpg",
+      "sha256": "e3aa7c322a812e7299d542de21819a49f1c38897a02bf98439b58da46b6e8350"
+    },
+    {
+      "image": "beagle_125.jpg",
+      "sha256": "ef68567e4d68bd21ae2dfdae99a1f58d6b715bc187f82697027f11b22c586bdb"
+    },
+    {
+      "image": "beagle_13.jpg",
+      "sha256": "8bff423a43eece55a0bf4f6b3c5debc2c275ff5258f8690d92f3a6f1f1dfff4e"
+    },
+    {
+      "image": "beagle_146.jpg",
+      "sha256": "7a4ab3058b4e48c466c33e6a6f06d40c83abf267d21c4292b09a70138806f2d0"
+    },
+    {
+      "image": "Abyssinian_104.jpg",
+      "sha256": "da3954b8d2e647ac91a8800ea1f30d62288bd67c51e8dafb727c3c1da87b0215"
+    },
+    {
+      "image": "Abyssinian_108.jpg",
+      "sha256": "de0bb21b0f898a24311dd8205343cbf280f4df3bda5d96c787bce7cda8a701ee"
+    },
+    {
+      "image": "Abyssinian_110.jpg",
+      "sha256": "90b9ae514272c6dfbeea310951b28935e1ee7a33b064fd2572d31a22abd57221"
+    },
+    {
+      "image": "Abyssinian_117.jpg",
+      "sha256": "c8ecbb90066b277a371bb0fcfa98f4b0ccbe6826885c5fbf50178a44eb8c048c"
+    },
+    {
+      "image": "Abyssinian_122.jpg",
+      "sha256": "a9e38e201a7aa3943521dbaacf628d276e844540ad87b76cd6e0113be00c09eb"
+    },
+    {
+      "image": "Abyssinian_123.jpg",
+      "sha256": "49e352d3df5f7312964d6aeff1353836767054594deb4d9e1cc10aa9e4dc9204"
+    },
+    {
+      "image": "Abyssinian_124.jpg",
+      "sha256": "6c27600b9fa7d6547624ed6ed17ddb475c97e9198ddc5999147036e87249b69c"
+    },
+    {
+      "image": "Abyssinian_125.jpg",
+      "sha256": "935b32590637d067d19f5e568d3de30840ae96578f9756535efa5fc8edfe4040"
+    },
+    {
+      "image": "Abyssinian_129.jpg",
+      "sha256": "6bc455ea9538293766d21bd4d9274698698b1a5b23fb6a8e4f893c7d7fd0d0a8"
+    },
+    {
+      "image": "Abyssinian_132.jpg",
+      "sha256": "8d812e4c986e5f3c186925396a5bce28990c46cbb8da9ca9b60eb333c3464acf"
+    },
+    {
+      "image": "Abyssinian_137.jpg",
+      "sha256": "1a67cdd6db07950879c74455aea53463ff167c002c19d946dff8f2187fbb8469"
+    },
+    {
+      "image": "Abyssinian_139.jpg",
+      "sha256": "fd4485e05df6b4746b1b0126af07765195bb98493fbbad3218f6efc30b06cc0c"
+    },
+    {
+      "image": "Abyssinian_143.jpg",
+      "sha256": "c032e39c47cdd43e5c6e534323f899d2e8fa881debb3288765fabc287af1438e"
+    },
+    {
+      "image": "Abyssinian_144.jpg",
+      "sha256": "985c6395b1ebd008032c596d650697aa482a5c0c77a6471367161b1fdf7ddc64"
+    },
+    {
+      "image": "Bengal_101.jpg",
+      "sha256": "a45beacc9252f1061ba909174f8019e932008c7befd9a68546d05dfab45f428f"
+    },
+    {
+      "image": "Bengal_11.jpg",
+      "sha256": "8e5edbaa935de77a9651cf3a20b472b357830ef902ea7bb2e8e1a7eacdf5b2fe"
+    },
+    {
+      "image": "Bengal_115.jpg",
+      "sha256": "372ce09232843aeb819c4ef5f84666d698d2ce080998b0d5c1094a716a1ee06b"
+    },
+    {
+      "image": "Bengal_117.jpg",
+      "sha256": "a3f55d828c652c648732b29d3c29789dc722568cd34097d8e92a5c1cd68f8a5c"
+    },
+    {
+      "image": "Bengal_118.jpg",
+      "sha256": "5ba26ff5d2da20046e2789d8feb5619433c833a5e4d7eed1a41d9db889630625"
+    },
+    {
+      "image": "Bengal_131.jpg",
+      "sha256": "5005ae91d4fc2c6d8c5c7c5bfdff5a7b86d993761e7a66197884017690263112"
+    },
+    {
+      "image": "american_bulldog_117.jpg",
+      "sha256": "f0e7657cc59e7ef2ed1c395a80a76dfa4fe1abfdb1d6e9c192e0e72b19e0cbf4"
+    },
+    {
+      "image": "american_bulldog_118.jpg",
+      "sha256": "a3af129db89e125c996847db4d01379eca77eb75ebeecc5098e233cd9c0e2be3"
+    },
+    {
+      "image": "american_bulldog_12.jpg",
+      "sha256": "e6cf3ab12ee9950c6cf38aeb7e7b90cb5a34d8aa9e3a66af447e668b2e89b1b9"
+    },
+    {
+      "image": "american_bulldog_120.jpg",
+      "sha256": "665cc9fecdb2b86e8faf77c4330046f4482145cbc100d96dda0cad540553819b"
+    },
+    {
+      "image": "american_bulldog_126.jpg",
+      "sha256": "7577b8abd0646048be01dbf81c34a9a70e0c4fa9e2be8dc58b1011af58cd4b49"
+    },
+    {
+      "image": "american_bulldog_132.jpg",
+      "sha256": "1e0823d7d6c176a15f5dbc001cee52c4afeaad34b74931fce0ef4f3bb096f71b"
+    },
+    {
+      "image": "american_pit_bull_terrier_100.jpg",
+      "sha256": "da9c0852b5a994aafaef8f778f64f1c12bb96628a73d78808c4737a8b201b670"
+    },
+    {
+      "image": "american_pit_bull_terrier_101.jpg",
+      "sha256": "5ca5668d9a21b349a77d8e0155b1af30f9e93922b25209caf615ba8eb582be5d"
+    },
+    {
+      "image": "american_pit_bull_terrier_102.jpg",
+      "sha256": "88545fb44e17949901afeb3e87d6a1dab6b9118ea57be9ae497f643e7a88e595"
+    },
+    {
+      "image": "american_pit_bull_terrier_104.jpg",
+      "sha256": "63a0584d7f0ba0f2c36fedbd573a7f4ad368115c9a21b329c71cce162395f938"
+    },
+    {
+      "image": "american_pit_bull_terrier_111.jpg",
+      "sha256": "4c182bd0bf6658a48373c2527492ee95ca023cfe2662fa5c716b464adab70d69"
+    },
+    {
+      "image": "american_pit_bull_terrier_113.jpg",
+      "sha256": "c1bdc941b3f741c5e9800ccf6204c3af5b6ff9a80257829ee4e00dbca9424be5"
+    },
+    {
+      "image": "american_pit_bull_terrier_120.jpg",
+      "sha256": "3eab243f1d6bed9c4ec667c1a19516d154366d525f2a2a8d985391c548ded00f"
+    },
+    {
+      "image": "american_pit_bull_terrier_129.jpg",
+      "sha256": "12e2420b62989c716357374b8382a295a4387d857e9868525073e3b76d354a51"
+    },
+    {
+      "image": "american_pit_bull_terrier_133.jpg",
+      "sha256": "b27f695bbdf1581c39cd3ed72a09b14e0dd2663aa03f329b5e42eed77e906eca"
+    },
+    {
+      "image": "american_pit_bull_terrier_135.jpg",
+      "sha256": "b818a8273aa30f70a627d815e091271eae16cf93ae360f85bccd3e0d1fec3003"
+    },
+    {
+      "image": "american_pit_bull_terrier_142.jpg",
+      "sha256": "bd49aa5cec1660320a5ff0d69fb74a7325ea317efeab921a822d58bbccd7299a"
+    },
+    {
+      "image": "basset_hound_115.jpg",
+      "sha256": "2af6c56bbf5fd3388687379a6fa6389f33a6a2b45b226adea17068c2b880221c"
+    },
+    {
+      "image": "basset_hound_119.jpg",
+      "sha256": "263024f59384911814e17e1679f16804cce67b6cebb1526d8cca6fc43ce3a106"
+    },
+    {
+      "image": "basset_hound_123.jpg",
+      "sha256": "4d5edcecd96f224483be2a723110b3e632787b7baeff05de7900d3cec0d6edd7"
+    },
+    {
+      "image": "basset_hound_133.jpg",
+      "sha256": "b388858e1c2101270219b7bdb4000265d092f50d7aa0c831508d2b21855a8f43"
+    },
+    {
+      "image": "basset_hound_137.jpg",
+      "sha256": "024e7041f6e9866dbbebe7233747f6a2ce5ffdc34c94a767dd149629042e2ebd"
+    },
+    {
+      "image": "basset_hound_138.jpg",
+      "sha256": "648901aec68a25e24933108c07e69b76813bf35596e6b5e86143d81e7e460cdf"
+    },
+    {
+      "image": "basset_hound_140.jpg",
+      "sha256": "19aa6cdff1fed9af59bb5c424f5fb93e872679c474a07eb37ebba9257a9ac78a"
+    },
+    {
+      "image": "beagle_10.jpg",
+      "sha256": "e62a947726d309e2d042c441ec3265644f0f124bc9a4cd84363d592a8a49a7cc"
+    },
+    {
+      "image": "beagle_100.jpg",
+      "sha256": "adb80c22aa0468a31e8ee59901c75e9a5840ee02f92149c1405f0e0d4d6f6b68"
+    },
+    {
+      "image": "beagle_108.jpg",
+      "sha256": "e3aa7c322a812e7299d542de21819a49f1c38897a02bf98439b58da46b6e8350"
+    },
+    {
+      "image": "beagle_125.jpg",
+      "sha256": "ef68567e4d68bd21ae2dfdae99a1f58d6b715bc187f82697027f11b22c586bdb"
+    },
+    {
+      "image": "beagle_13.jpg",
+      "sha256": "8bff423a43eece55a0bf4f6b3c5debc2c275ff5258f8690d92f3a6f1f1dfff4e"
+    },
+    {
+      "image": "beagle_146.jpg",
+      "sha256": "7a4ab3058b4e48c466c33e6a6f06d40c83abf267d21c4292b09a70138806f2d0"
+    },
+    {
+      "image": "Abyssinian_104.jpg",
+      "sha256": "da3954b8d2e647ac91a8800ea1f30d62288bd67c51e8dafb727c3c1da87b0215"
+    },
+    {
+      "image": "Abyssinian_108.jpg",
+      "sha256": "de0bb21b0f898a24311dd8205343cbf280f4df3bda5d96c787bce7cda8a701ee"
+    },
+    {
+      "image": "Abyssinian_110.jpg",
+      "sha256": "90b9ae514272c6dfbeea310951b28935e1ee7a33b064fd2572d31a22abd57221"
+    },
+    {
+      "image": "Abyssinian_117.jpg",
+      "sha256": "c8ecbb90066b277a371bb0fcfa98f4b0ccbe6826885c5fbf50178a44eb8c048c"
+    },
+    {
+      "image": "Abyssinian_122.jpg",
+      "sha256": "a9e38e201a7aa3943521dbaacf628d276e844540ad87b76cd6e0113be00c09eb"
+    },
+    {
+      "image": "Abyssinian_123.jpg",
+      "sha256": "49e352d3df5f7312964d6aeff1353836767054594deb4d9e1cc10aa9e4dc9204"
+    },
+    {
+      "image": "Abyssinian_124.jpg",
+      "sha256": "6c27600b9fa7d6547624ed6ed17ddb475c97e9198ddc5999147036e87249b69c"
+    },
+    {
+      "image": "Abyssinian_125.jpg",
+      "sha256": "935b32590637d067d19f5e568d3de30840ae96578f9756535efa5fc8edfe4040"
+    },
+    {
+      "image": "Abyssinian_129.jpg",
+      "sha256": "6bc455ea9538293766d21bd4d9274698698b1a5b23fb6a8e4f893c7d7fd0d0a8"
+    },
+    {
+      "image": "Abyssinian_132.jpg",
+      "sha256": "8d812e4c986e5f3c186925396a5bce28990c46cbb8da9ca9b60eb333c3464acf"
+    },
+    {
+      "image": "Abyssinian_137.jpg",
+      "sha256": "1a67cdd6db07950879c74455aea53463ff167c002c19d946dff8f2187fbb8469"
+    },
+    {
+      "image": "Abyssinian_139.jpg",
+      "sha256": "fd4485e05df6b4746b1b0126af07765195bb98493fbbad3218f6efc30b06cc0c"
+    },
+    {
+      "image": "Abyssinian_143.jpg",
+      "sha256": "c032e39c47cdd43e5c6e534323f899d2e8fa881debb3288765fabc287af1438e"
+    },
+    {
+      "image": "Abyssinian_144.jpg",
+      "sha256": "985c6395b1ebd008032c596d650697aa482a5c0c77a6471367161b1fdf7ddc64"
+    },
+    {
+      "image": "Bengal_101.jpg",
+      "sha256": "a45beacc9252f1061ba909174f8019e932008c7befd9a68546d05dfab45f428f"
+    },
+    {
+      "image": "Bengal_11.jpg",
+      "sha256": "8e5edbaa935de77a9651cf3a20b472b357830ef902ea7bb2e8e1a7eacdf5b2fe"
+    },
+    {
+      "image": "Bengal_115.jpg",
+      "sha256": "372ce09232843aeb819c4ef5f84666d698d2ce080998b0d5c1094a716a1ee06b"
+    },
+    {
+      "image": "Bengal_117.jpg",
+      "sha256": "a3f55d828c652c648732b29d3c29789dc722568cd34097d8e92a5c1cd68f8a5c"
+    },
+    {
+      "image": "Bengal_118.jpg",
+      "sha256": "5ba26ff5d2da20046e2789d8feb5619433c833a5e4d7eed1a41d9db889630625"
+    },
+    {
+      "image": "Bengal_131.jpg",
+      "sha256": "5005ae91d4fc2c6d8c5c7c5bfdff5a7b86d993761e7a66197884017690263112"
+    },
+    {
+      "image": "american_bulldog_117.jpg",
+      "sha256": "f0e7657cc59e7ef2ed1c395a80a76dfa4fe1abfdb1d6e9c192e0e72b19e0cbf4"
+    },
+    {
+      "image": "american_bulldog_118.jpg",
+      "sha256": "a3af129db89e125c996847db4d01379eca77eb75ebeecc5098e233cd9c0e2be3"
+    },
+    {
+      "image": "american_bulldog_12.jpg",
+      "sha256": "e6cf3ab12ee9950c6cf38aeb7e7b90cb5a34d8aa9e3a66af447e668b2e89b1b9"
+    },
+    {
+      "image": "american_bulldog_120.jpg",
+      "sha256": "665cc9fecdb2b86e8faf77c4330046f4482145cbc100d96dda0cad540553819b"
+    },
+    {
+      "image": "american_bulldog_126.jpg",
+      "sha256": "7577b8abd0646048be01dbf81c34a9a70e0c4fa9e2be8dc58b1011af58cd4b49"
+    },
+    {
+      "image": "american_bulldog_132.jpg",
+      "sha256": "1e0823d7d6c176a15f5dbc001cee52c4afeaad34b74931fce0ef4f3bb096f71b"
+    },
+    {
+      "image": "american_pit_bull_terrier_100.jpg",
+      "sha256": "da9c0852b5a994aafaef8f778f64f1c12bb96628a73d78808c4737a8b201b670"
+    },
+    {
+      "image": "american_pit_bull_terrier_101.jpg",
+      "sha256": "5ca5668d9a21b349a77d8e0155b1af30f9e93922b25209caf615ba8eb582be5d"
+    },
+    {
+      "image": "american_pit_bull_terrier_102.jpg",
+      "sha256": "88545fb44e17949901afeb3e87d6a1dab6b9118ea57be9ae497f643e7a88e595"
+    },
+    {
+      "image": "american_pit_bull_terrier_104.jpg",
+      "sha256": "63a0584d7f0ba0f2c36fedbd573a7f4ad368115c9a21b329c71cce162395f938"
+    },
+    {
+      "image": "american_pit_bull_terrier_111.jpg",
+      "sha256": "4c182bd0bf6658a48373c2527492ee95ca023cfe2662fa5c716b464adab70d69"
+    },
+    {
+      "image": "american_pit_bull_terrier_113.jpg",
+      "sha256": "c1bdc941b3f741c5e9800ccf6204c3af5b6ff9a80257829ee4e00dbca9424be5"
+    },
+    {
+      "image": "american_pit_bull_terrier_120.jpg",
+      "sha256": "3eab243f1d6bed9c4ec667c1a19516d154366d525f2a2a8d985391c548ded00f"
+    },
+    {
+      "image": "american_pit_bull_terrier_129.jpg",
+      "sha256": "12e2420b62989c716357374b8382a295a4387d857e9868525073e3b76d354a51"
+    },
+    {
+      "image": "american_pit_bull_terrier_133.jpg",
+      "sha256": "b27f695bbdf1581c39cd3ed72a09b14e0dd2663aa03f329b5e42eed77e906eca"
+    },
+    {
+      "image": "american_pit_bull_terrier_135.jpg",
+      "sha256": "b818a8273aa30f70a627d815e091271eae16cf93ae360f85bccd3e0d1fec3003"
+    },
+    {
+      "image": "american_pit_bull_terrier_142.jpg",
+      "sha256": "bd49aa5cec1660320a5ff0d69fb74a7325ea317efeab921a822d58bbccd7299a"
+    },
+    {
+      "image": "basset_hound_115.jpg",
+      "sha256": "2af6c56bbf5fd3388687379a6fa6389f33a6a2b45b226adea17068c2b880221c"
+    },
+    {
+      "image": "basset_hound_119.jpg",
+      "sha256": "263024f59384911814e17e1679f16804cce67b6cebb1526d8cca6fc43ce3a106"
+    },
+    {
+      "image": "basset_hound_123.jpg",
+      "sha256": "4d5edcecd96f224483be2a723110b3e632787b7baeff05de7900d3cec0d6edd7"
+    },
+    {
+      "image": "basset_hound_133.jpg",
+      "sha256": "b388858e1c2101270219b7bdb4000265d092f50d7aa0c831508d2b21855a8f43"
+    },
+    {
+      "image": "basset_hound_137.jpg",
+      "sha256": "024e7041f6e9866dbbebe7233747f6a2ce5ffdc34c94a767dd149629042e2ebd"
+    },
+    {
+      "image": "basset_hound_138.jpg",
+      "sha256": "648901aec68a25e24933108c07e69b76813bf35596e6b5e86143d81e7e460cdf"
+    },
+    {
+      "image": "basset_hound_140.jpg",
+      "sha256": "19aa6cdff1fed9af59bb5c424f5fb93e872679c474a07eb37ebba9257a9ac78a"
+    },
+    {
+      "image": "beagle_10.jpg",
+      "sha256": "e62a947726d309e2d042c441ec3265644f0f124bc9a4cd84363d592a8a49a7cc"
+    },
+    {
+      "image": "beagle_100.jpg",
+      "sha256": "adb80c22aa0468a31e8ee59901c75e9a5840ee02f92149c1405f0e0d4d6f6b68"
+    },
+    {
+      "image": "beagle_108.jpg",
+      "sha256": "e3aa7c322a812e7299d542de21819a49f1c38897a02bf98439b58da46b6e8350"
+    },
+    {
+      "image": "beagle_125.jpg",
+      "sha256": "ef68567e4d68bd21ae2dfdae99a1f58d6b715bc187f82697027f11b22c586bdb"
+    },
+    {
+      "image": "beagle_13.jpg",
+      "sha256": "8bff423a43eece55a0bf4f6b3c5debc2c275ff5258f8690d92f3a6f1f1dfff4e"
+    },
+    {
+      "image": "beagle_146.jpg",
+      "sha256": "7a4ab3058b4e48c466c33e6a6f06d40c83abf267d21c4292b09a70138806f2d0"
+    }
+  ],
+  "distinct_images": 50,
+  "server": "uvicorn, one worker, loopback, sequential multipart POST /analyze?images=false",
+  "startup_s": 6.719541124999523,
+  "warmup_requests": 5,
+  "requests": 300,
+  "valid_responses": 300,
+  "status_codes": {
+    "200": 300
+  },
+  "http_latency_ms": {
+    "p50": 124.85970849957084,
+    "p95": 135.26428159384523,
+    "p99": 138.39764499469308
+  },
+  "measured_wall_s": 37.67171137500554,
+  "throughput_requests_s": 7.9635352111729185,
+  "server_rss_mb": {
+    "definition": "server process RSS only; decimal MB; sampled every 20 ms; sampled peak is a lower bound on instantaneous peak",
+    "samples": 1303,
+    "peak_measured": 919.38816,
+    "peak_including_startup": 921.714688
+  },
+  "non_image_status": 415,
+  "empty_image_status": 400,
+  "errors": [],
+  "passed_http_contract": true,
+  "not_a_T4_A8_remeasurement": true
+}

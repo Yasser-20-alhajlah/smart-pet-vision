@@ -15,7 +15,16 @@ rm -f SmartPetVision_Phase2_source.zip reviewed_source.zip
 # Code archive of the committed revision (no PDFs; refuses if a private ID is found), then the
 # report source ZIP = main.tex + figures + private_ids.tex + the same code members under code/.
 python3 tools/make_code_archive.py reviewed_source.zip
-python3 tools/make_code_archive.py --source-zip SmartPetVision_Phase2_source.zip reviewed_source.zip \
-  main.tex delivery_commit.tex figures/* $( [ -f private_ids.tex ] && echo private_ids.tex )
+python3 - <<'SOURCE_ZIP'
+from pathlib import Path
+import re, sys
+sys.path.insert(0, 'tools')
+from make_code_archive import write_source_zip
+figures = sorted(set(re.findall(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", Path('main.tex').read_text())))
+files = [Path('main.tex'), Path('delivery_commit.tex'), *(Path(p) for p in figures)]
+if Path('private_ids.tex').is_file():
+    files.append(Path('private_ids.tex'))
+write_source_zip(Path('SmartPetVision_Phase2_source.zip'), Path('reviewed_source.zip'), files)
+SOURCE_ZIP
 python3 tools/make_release_manifest.py "$@"   # optional: extra delivered files to fingerprint (e.g. the deck)
 echo "built SmartPetVision_Phase2.pdf, SmartPetVision_Phase2_source.zip, reviewed_source.zip and RELEASE_MANIFEST.json"

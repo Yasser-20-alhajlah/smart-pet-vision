@@ -36,7 +36,8 @@ def checks(root):
     check("report quotes the variant range",
           f"{min(diffs):.5f}"[:7] in tex and f"{max(diffs):.5f}"[:7] in tex,
           f"{min(diffs):.5f}--{max(diffs):.5f}")
-    acc = {r["id"]: r for r in csv.DictReader(open(root / "report" / "evidence" / "M8_acceptance.csv"))}
+    with (root / 'report/evidence/M8_acceptance.csv').open() as stream:
+        acc = {r['id']: r for r in csv.DictReader(stream)}
     check("A9b recorded as not met", acc["A9b"]["met"] == "False")
     forbidden = [r"A9b\W{0,3}(is\s+)?met\b", r"A9b[^.\n]{0,20}\bpass(ed|es)?\b", r"ONNX detector (passed|meets)"]
     hits = [m.group(0) for p in forbidden for m in re.finditer(p, tex, flags=re.I)
@@ -358,6 +359,25 @@ def submission_checks(root):
           and f"{pmc('mask_mAP50_95')} / {pmc('mIoU')} / {pmc('dice')}" in card
           and "These checkpoints are not the served weights" in card
           and f"{sr['multi_animal_accepted_ready']} of {sr['multi_animal_photos']} multi-animal photos wrongly marked ready" in card)
+    cpu = load(root, 'cpu_http_release_20261114/measurement.json')
+    from preflight_release import EXPECTED_SHA256
+    receipt_path = root/'report/evidence/cpu_http_release_20261114/measurement.json'
+    provenance = load(root, 'cpu_http_release_20261114/PROVENANCE.json')
+    check('Current CPU HTTP receipt is bound to unchanged served weights and runtime',
+          hashlib.sha256(receipt_path.read_bytes()).hexdigest() == provenance['original_measurement_sha256']
+          and provenance['runtime_files_match_source_commit']
+          and cpu['weights_sha256'] == EXPECTED_SHA256
+          and all(hashlib.sha256((root/'src/spv'/name).read_bytes()).hexdigest()==value
+                  for name,value in cpu['runtime_code_sha256'].items()))
+    check('Current CPU HTTP contract and 300-input sequence',
+          cpu['passed_http_contract'] and cpu['requests']==cpu['valid_responses']==len(cpu['input_sequence'])==300
+          and cpu['distinct_images']==50 and cpu['warmup_requests']==5
+          and cpu['non_image_status']==415 and cpu['empty_image_status']==400)
+    latency='/'.join(f"{cpu['http_latency_ms'][f'p{q}']:.1f}" for q in (50,95,99))
+    check('Current CPU HTTP percentiles throughput and RSS quoted without a T4 claim',
+          latency in body and f"{cpu['throughput_requests_s']:.2f} requests/s" in body
+          and f"{cpu['server_rss_mb']['peak_measured']:.1f}" in body
+          and cpu['cpu'] in body and 'does not remeasure the T4-specific A8' in body)
     return out
 
 
