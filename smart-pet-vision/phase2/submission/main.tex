@@ -963,7 +963,7 @@ Seed & Classifier & Detector & Segmenter \\
 \bottomrule
 \end{tabularx}
 
-The retained Oxford per-image mask scores, validation sweeps, confusion matrices and training curves are included in the source archive. \texttt{tools/verify\_v2\_saved\_results.py} passed 57 saved-output checks: recalculated means/sample deviations, per-image mean IoU/Dice, class accuracy/F1, count-derived detector P/R/F1, validation operating points and seed selection. This is arithmetic verification of saved outputs; it is not new inference or an independent teammate reproduction of the split-v2 checkpoints. The older six-metric reproduction concerns split v1.
+The retained Oxford per-image mask scores, validation sweeps, confusion matrices and training curves are included in the source archive. \texttt{tools/verify\_v2\_saved\_results.py} passed 69 saved-output checks: recalculated means/sample deviations, per-image mean IoU/Dice, class accuracy/F1, count-derived detector P/R/F1, validation operating points and seed selection. This is arithmetic verification of saved outputs; it is not new inference or an independent teammate reproduction of the split-v2 checkpoints. The older six-metric reproduction concerns split v1.
 
 \textbf{System-level evaluation of the seed-44 checkpoints (13 November).} The classifier, detector and segmenter of seed 44 were assembled into a pipeline manifest with the operating point and temperature of the seed record (\tconf{} 0.40, \tnms{} 0.50, temperature 0.333) and the unchanged pipeline settings, and evaluated once on a Colab T4 without any training or threshold change (\ev{P2_v2_system_eval_seed44_20261113}).
 
