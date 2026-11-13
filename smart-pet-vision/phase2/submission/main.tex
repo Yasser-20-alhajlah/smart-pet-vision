@@ -949,7 +949,31 @@ A9b detector ONNX & 4 random inputs, seed 0, bound 0.001 & 0.0038 & Not met \\
 
 On the T4 the in-process latency is 41.0 / 63.5 / 71.3\,ms (p50 / p95 / p99) at 22.0\,img/s, with 253\,MB peak GPU memory (PyTorch allocator) and 1,689\,MB peak RSS; over HTTP with one sequential client it is 49.6 / 71.9 / 79.5\,ms. With the ONNX detector, which ran on the CPU execution provider, it is 294.1 / 417.1 / 445.7\,ms at 3.1\,img/s, so PyTorch remains the backend. \textbf{Team photos.} On the 401 team photos (503 animals) the system labels 395 of 399 single-species photos correctly, refers 89 photos (22.2\%) and lets no wrong label through as ready; mask mean IoU is 0.820. Detection at the operating point has recall 0.712 (cat 0.799, dog 0.655) and precision 0.897; recall is 0.842 for animals covering at least 10\% of the image and 0.202 for those covering 1--10\%. \textbf{What did not improve.} 22 of 52 multi-animal photos are marked ready, against 17 of 52 for the delivered system at the same confidence, and team detection recall is slightly below the delivered 0.732. Training on the leakage-safe split removes the optimistic bias of the test figures; it does not address missed small and secondary animals, which remain the main failure mode. The per-photo results and failure galleries of the team photos stay in private storage.
 
-\textbf{Failure galleries on the v2 test split.} At the operating point the seed-44 detector has 994 true positives, 46 false positives and 56 false negatives on the 1,050 test images (matching IoU 0.50); the galleries were regenerated from the same checkpoints and their counts equal the seed record. In the 24 highest-confidence false positives shown, the predicted box lies on the annotated animal and differs from the annotation in extent (visual inspection of the tiles), which is the displaced-box pattern of the delivered detector in Section~2.5; no count by cause was made for these checkpoints. The lowest-IoU masks show the same cases as for the delivered segmenter: bedding, clothing or furniture taken as part of the animal, and one close-up cat face where the prediction and the annotation disagree almost everywhere (IoU 0.05).
+\textbf{Error analysis on the v2 test split (13 November).} At the operating point the seed-44 detector has 994 true positives, 46 false positives and 56 false negatives on the 1,050 test images (matching IoU 0.50). Every error was classified with the function used for the delivered build in Section~2.5, on predictions recomputed from the same checkpoint; the recomputed counts equal the seed record (\ev{P2_v2_error_breakdown_seed44_20261113}, with one row per error in \ev{P2_v2_seed44_fp_breakdown_20261113} and \ev{P2_v2_seed44_fn_breakdown_20261113}). The delivered-build column is measured on the split-v1 test images, so the two columns are not a paired comparison. In the table, v2 is the seed-44 detector on the v2 test split and v1 the delivered detector on the v1 test split.
+
+\begin{tabularx}{\linewidth}{@{}l Y r r r@{}}
+\toprule
+Type & Definition & v2 & \% & v1 \\
+\midrule
+Duplicate & IoU $\geq0.5$ with an already matched box of the same class & 0 & 0.0 & 0 \\
+Classification & IoU $\geq0.5$ with a box of the other species & 12 & 26.1 & 10 \\
+Localisation & Same species, $0.1\leq$ IoU $<0.5$ & 33 & 71.7 & 34 \\
+Localisation and class & Other species, $0.1\leq$ IoU $<0.5$ & 1 & 2.2 & 1 \\
+Background & IoU $<0.1$ with every box & 0 & 0.0 & 1 \\
+\midrule
+False positives & & 46 & 100.0 & 46 \\
+\midrule
+Missed (FN): displaced box & A kept box overlaps the animal with $0.1\leq$ IoU $<0.5$ & 32 & 57.1 & 34 \\
+Missed (FN): wrong species & A kept box of the other species with IoU $\geq0.5$ & 8 & 14.3 & 4 \\
+Missed (FN): no box & No kept box with IoU $\geq0.1$ & 16 & 28.6 & 7 \\
+\midrule
+False negatives & & 56 & 100.0 & 45 \\
+\bottomrule
+\end{tabularx}
+
+\textbf{Reading.} The pattern is that of the delivered detector: 33 of the 46 false positives and 32 of the 56 false negatives are of the same kind, a box on the right animal whose extent differs from the annotation, and 40 of the 56 false negatives are in images that also have a false positive. Two things are worse than for the delivered build. Animals with no box rise from 7 to 16, and species confusions from 10 to 12; of the 12, nine are cats detected as dogs (Birman, Bengal, Sphynx, Ragdoll and Siamese images) and three are dogs detected as cats. By species, 43 of the 56 false negatives are dogs and 40 of the 46 false positives are dog predictions. The pipeline has a classifier cross-check for species confusions (the \texttt{chihuahua\_156} case of Section~2.5); how many of these twelve it refers was not measured. The lowest-IoU masks show the same cases as for the delivered segmenter: bedding, clothing or furniture taken as part of the animal, and one close-up cat face where the prediction and the annotation disagree almost everywhere (IoU 0.05).
+
+\textbf{Decision on the served build (13 November).} The owner's rule was to serve the split-v2 checkpoints only if their results are better than those of the delivered build. They are not: on the 401 team photos, the one set both builds were run on, detection recall is 0.712 against 0.732 and 22 against 17 of 52 multi-animal photos are marked ready, and the table above shows more missed animals, on different test images. The packaged service therefore keeps the delivered split-v1 weights, and split v2 remains the headline evaluation. With the system-level evaluation and this analysis, 12.5 of the 15 T4-hours approved on 13 November were used.
 
 \begin{figure}[H]
   \centering

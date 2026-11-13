@@ -1,0 +1,86 @@
+{
+ "experiment": "Error breakdown of the split-v2 seed-44 detector on the v2 test split, 13 November 2026; evaluation only, no training and no threshold change",
+ "status": "analysis only; the served weights, thresholds, manifest and acceptance verdicts of this report are unchanged",
+ "source_record": {
+  "note": "values copied on 2026-11-13 from P2_v2_error_breakdown.json written by the run in the owner's private Drive (runs/v2_headline_20261112/error_breakdown_seed44_20261113T1147Z); the two CSV files next to this file are byte copies of fp_breakdown.csv and fn_breakdown.csv of that run",
+  "run_script": "run_error_breakdown_r2.py",
+  "run_script_sha256": "eac254572f8a11d7c7dbae2c140e01646d1a50b5857fe6df8749791d8edc49c7",
+  "run_utc": "20261113T1147Z",
+  "earlier_attempt": "r1 (20261113T1146Z) computed the same predictions and wrote the same two CSV files (equal sizes), then stopped on a column-name error in the summary step; nothing was selected or changed between the attempts"
+ },
+ "code_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+ "gpu": "Tesla T4 (Colab)",
+ "function": "spv.detect.error_breakdown (same definitions as the delivered-build table in Section 2.5)",
+ "operating_point": {
+  "conf": 0.4,
+  "nms_iou": 0.5
+ },
+ "matching_iou": 0.5,
+ "test_images": 1050,
+ "counts": {
+  "tp": 994,
+  "fp": 46,
+  "fn": 56
+ },
+ "counts_equal_record": true,
+ "detector_sha256": "92548b78d3d04491d3ba8573c8139bfb04b587b96aed5bd0ed3e2923bdb9ac08",
+ "fp_by_kind": {
+  "duplicate": 0,
+  "class_confusion": 12,
+  "localisation": 33,
+  "localisation_and_class": 1,
+  "background": 0
+ },
+ "fn_by_kind": {
+  "localisation": 32,
+  "class_confusion": 8,
+  "missed": 16
+ },
+ "fp_by_predicted_class": {
+  "dog": 40,
+  "cat": 6
+ },
+ "fn_by_class": {
+  "dog": 43,
+  "cat": 13
+ },
+ "fn_in_images_with_fp": 40,
+ "fp_in_images_with_fn": 41,
+ "images_with_any_error": 61,
+ "fp_csv_sha256": "910b4efc8ce410ba89a854a9e2c3ebb221eaf13f280fc028dc090aa84e3c19f0",
+ "fn_csv_sha256": "b4d5bd786a48bdc0759230349ed79a39e2d54751d9609b474dc701acb5eadd79",
+ "delivered_build_for_comparison": {
+  "source": "M4_fp_breakdown.csv, M4_fn_breakdown.csv (split v1 test, 1,106 images, same operating confidence and matching rule)",
+  "counts": {
+   "fp": 46,
+   "fn": 45
+  },
+  "fp_by_kind": {
+   "duplicate": 0,
+   "class_confusion": 10,
+   "localisation": 34,
+   "localisation_and_class": 1,
+   "background": 1
+  },
+  "fn_by_kind": {
+   "localisation": 34,
+   "class_confusion": 4,
+   "missed": 7
+  },
+  "note": "the two test splits contain different images, so the comparison is indicative, not a paired test"
+ },
+ "owner_rule_20261113": {
+  "rule": "owner in chat, 13 Nov 2026 14:38 Riyadh: adopt the split-v2 checkpoints for the served build only if their results are better than the delivered split-v1 build",
+  "outcome": "not adopted",
+  "basis": [
+   "v2 test split: 56 false negatives on 1,050 images against 45 on 1,106 for the delivered build; 16 animals with no box against 7; 12 species confusions against 10 (different test images)",
+   "same 401 team photos: detection recall 0.712 against 0.732; 22 of 52 multi-animal photos marked ready against 17 (P2_v2_system_eval_seed44_20261113.json)"
+  ],
+  "effect": "runs/manifest.json and the packaged service keep the delivered split-v1 weights; split v2 stays the headline evaluation"
+ },
+ "gpu_hours": {
+  "ledger_total_after_this_run": 12.53,
+  "approved_cap": 15.0,
+  "note": "printed by the run from gpu_hours_ledger.json; includes training, the system-level evaluation and both attempts of this analysis"
+ }
+}

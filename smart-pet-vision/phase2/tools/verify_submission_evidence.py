@@ -5,6 +5,7 @@ Usage: python tools/verify_submission_evidence.py [--root PHASE2_DIR]
 """
 import argparse
 import csv
+import hashlib
 import json
 import re
 import sys
@@ -312,6 +313,36 @@ def submission_checks(root):
           and f"recall {f3(sd['at_operating_point']['recall'])}" in body
           and f"{sr['multi_animal_accepted_ready']} of {sr['multi_animal_photos']} multi-animal photos are marked ready, against 17 of 52" in body
           and sv["figures_check"]["detector_counts_equal_record"] and sv["figures_check"]["segmenter_mIoU_equals_record"])
+    eb = load(root, "P2_v2_error_breakdown_seed44_20261113.json")
+    ev_dir = root / "report" / "evidence"
+    def rows(name):
+        with open(ev_dir / name, newline="") as fh:
+            return list(csv.DictReader(fh))
+    ebfp, ebfn = rows("P2_v2_seed44_fp_breakdown_20261113.csv"), rows("P2_v2_seed44_fn_breakdown_20261113.csv")
+    kinds = lambda rs: {k: sum(r["kind"] == k for r in rs) for k in {r["kind"] for r in rs}}
+    nz = lambda d: {k: v for k, v in d.items() if v}
+    fpk, fnk, dl = eb["fp_by_kind"], eb["fn_by_kind"], eb["delivered_build_for_comparison"]
+    pct = lambda n, d: f"{100 * n / d:.1f}"
+    check("Split-v2 error breakdown of seed 44 quoted as recorded (counts by cause from the per-error CSV files, delivered-build column, served-build decision)",
+          hashlib.sha256((ev_dir / "P2_v2_seed44_fp_breakdown_20261113.csv").read_bytes()).hexdigest() == eb["fp_csv_sha256"]
+          and hashlib.sha256((ev_dir / "P2_v2_seed44_fn_breakdown_20261113.csv").read_bytes()).hexdigest() == eb["fn_csv_sha256"]
+          and kinds(ebfp) == nz(fpk) and kinds(ebfn) == nz(fnk)
+          and len(ebfp) == eb["counts"]["fp"] == sv["figures_check"]["detector_counts"]["fp"]
+          and len(ebfn) == eb["counts"]["fn"] == sv["figures_check"]["detector_counts"]["fn"]
+          and eb["detector_sha256"] == sv["weights_sha256"]["detector"]
+          and sum(r["image_also_has_fp"] == "True" for r in ebfn) == eb["fn_in_images_with_fp"]
+          and nz(dl["fp_by_kind"]) == kinds(rows("M4_fp_breakdown.csv")) and nz(dl["fn_by_kind"]) == kinds(rows("M4_fn_breakdown.csv"))
+          and f"& {fpk['class_confusion']} & {pct(fpk['class_confusion'], len(ebfp))} & {dl['fp_by_kind']['class_confusion']} \\\\" in body
+          and f"& {fpk['localisation']} & {pct(fpk['localisation'], len(ebfp))} & {dl['fp_by_kind']['localisation']} \\\\" in body
+          and f"& {fpk['background']} & {pct(fpk['background'], len(ebfp))} & {dl['fp_by_kind']['background']} \\\\" in body
+          and f"& {fnk['localisation']} & {pct(fnk['localisation'], len(ebfn))} & {dl['fn_by_kind']['localisation']} \\\\" in body
+          and f"& {fnk['class_confusion']} & {pct(fnk['class_confusion'], len(ebfn))} & {dl['fn_by_kind']['class_confusion']} \\\\" in body
+          and f"& {fnk['missed']} & {pct(fnk['missed'], len(ebfn))} & {dl['fn_by_kind']['missed']} \\\\" in body
+          and f"False negatives & & {len(ebfn)} & 100.0 & {dl['counts']['fn']} \\\\" in body
+          and f"{eb['fn_in_images_with_fp']} of the {len(ebfn)} false negatives are in images that also have a false positive" in body
+          and sum(r["kind"] == "class_confusion" and r["pred"] == "dog" for r in ebfp) == 9 and "nine are cats detected as dogs" in body
+          and "are not a paired comparison" in body
+          and eb["owner_rule_20261113"]["outcome"] == "not adopted" and "keeps the delivered split-v1 weights" in body)
     pm = lambda key: f"{f3(va[key]['mean'])} $\\pm$ {f3(va[key]['sd'])}"
     card = (Path(__file__).resolve().parent.parent / "docs" / "model_card.md").read_text()
     pmc = lambda key: f"{f3(va[key]['mean'])} ± {f3(va[key]['sd'])}"
