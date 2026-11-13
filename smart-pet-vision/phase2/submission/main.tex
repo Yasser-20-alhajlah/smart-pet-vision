@@ -78,7 +78,7 @@
 \vspace{4pt}
 
 \noindent\fcolorbox{gray!60}{gray!6}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\small
-\textbf{Summary.} Shelter staff check every adoption-listing photo before it is published. Smart Pet Vision gives them a technical pre-check for one photo of a cat or a dog: a fine-tuned YOLO11s detector (640\,px, \tconf{} 0.40, \tnms{} 0.50, chosen on validation) counts the animals and selects one, the Phase 1 ResNet-50 classifier (224\,px crop) confirms its species, and a fine-tuned YOLO11s-seg model (640\,px, \tconf{} 0.25) outlines it. Any doubt refers the photo to staff, and every photo, ready or referred, still needs staff approval. \textbf{Results:} nine of the ten acceptance criteria fixed in advance are met. On the Oxford-IIIT Pet test split (1,106 images, evaluated once), detection reaches mAP50 0.984 (mAP50--95 0.850) and recall 0.959 at the operating point, segmentation a mean IoU of 0.923 and a Dice of 0.959, classification an accuracy of 0.999, and the T4 HTTP service answers 300 of 300 requests with p95 latency 135.3\,ms; the separate in-process T4 benchmark has p95 61.4\,ms. A re-evaluation from the 6 November package (commit 609c0c5), attributed to a second team member reproduced all six detection and segmentation metrics exactly, and a retraining on a split without same-animal groups across partitions gave close values (mAP50 0.978, mean IoU 0.921; Section~\ref{sec:suppf}). \textbf{Limits:} on 401 previously inspected team photos detection recall falls to 0.732, and 17 of 52 multi-animal photos are wrongly marked ready; the exported ONNX detector misses its parity criterion (A9b); 135 of the 1,106 test images belong to cross-partition similarity groups reviewed by the owner. \textbf{Decision:} GO for a staff-supervised PyTorch service; NO-GO for the ONNX detector.}}
+\textbf{Summary.} Shelter staff check every adoption-listing photo before it is published. Smart Pet Vision gives them a technical pre-check for one photo of a cat or a dog: a fine-tuned YOLO11s detector (640\,px, \tconf{} 0.40, \tnms{} 0.50, chosen on validation) counts the animals and selects one, the Phase 1 ResNet-50 classifier (224\,px crop) confirms its species, and a fine-tuned YOLO11s-seg model (640\,px, \tconf{} 0.25) outlines it. Any doubt refers the photo to staff, and every photo, ready or referred, still needs staff approval. \textbf{Headline results (split v2, no same-animal group across partitions; 1,050 test images; seeds 42, 43, 44, each evaluated once; Section~\ref{sec:v2seeds}):} detection mAP50 0.981 $\pm$ 0.001 (mAP50--95 0.836 $\pm$ 0.002) and F1 0.956 $\pm$ 0.005 at the operating point, segmentation mean IoU 0.921 $\pm$ 0.001, classification accuracy 0.999 $\pm$ 0.001. The checkpoints of the seed selected on validation meet nine of the ten acceptance criteria at system level (T4 in-process p95 63.5\,ms; 300 of 300 HTTP requests). \textbf{Delivered build (split v1):} nine of the ten acceptance criteria fixed in advance are met. On the Oxford-IIIT Pet test split (1,106 images, evaluated once), detection reaches mAP50 0.984 (mAP50--95 0.850) and recall 0.959 at the operating point, segmentation a mean IoU of 0.923 and a Dice of 0.959, classification an accuracy of 0.999, and the T4 HTTP service answers 300 of 300 requests with p95 latency 135.3\,ms; the separate in-process T4 benchmark has p95 61.4\,ms. A re-evaluation from the 6 November package (commit 609c0c5), attributed to a second team member reproduced all six detection and segmentation metrics exactly, Its test figures are read with the split-v2 figures above, because 135 of its 1,106 test images belong to cross-partition similarity groups reviewed by the owner; the packaged service and demonstration use this build. \textbf{Limits:} on 401 previously inspected team photos detection recall falls to 0.732 (0.712 for the split-v2 checkpoints), and 17 of 52 multi-animal photos are wrongly marked ready (22 of 52); the exported ONNX detector misses its parity criterion (A9b) in both builds. \textbf{Decision:} GO for a staff-supervised PyTorch service; NO-GO for the ONNX detector.}}
 \vspace{2pt}
 
 % =====================================================================
@@ -178,7 +178,7 @@ A9b (added) & Detector export & Max abs diff & $\leq 0.001$ & PyTorch vs ONNX ra
 
 \subsection*{Results at a glance}
 
-Each headline result with the population it was measured on, its settings and its source. Oxford results use the test split once; the team photos are an evaluation-only set that the team had already inspected, not a fresh holdout. Evidence files are in \texttt{report/evidence/}.
+Each headline result with the population it was measured on, its settings and its source. The first five rows are the headline evaluation on split v2 (Section~\ref{sec:v2seeds}); the rows after them describe the delivered split-v1 build. Oxford results use the test split once per run; the team photos are an evaluation-only set that the team had already inspected, not a fresh holdout. Evidence files are in \texttt{report/evidence/}.
 
 {\small
 \begin{xltabular}{\linewidth}{@{}P{2.7cm} P{1.9cm} P{2.7cm} Y P{3.3cm}@{}}
@@ -190,6 +190,11 @@ Result & Value & Population & Setting and metric & Source \\
 \endfoot
 \bottomrule
 \endlastfoot
+Split v2: detection mAP50 / mAP50--95 & 0.981 $\pm$ 0.001 / 0.836 $\pm$ 0.002 & Split-v2 test, 1,050 images & Seeds 42, 43, 44 (mean $\pm$ sd); 640\,px; evaluation \tconf{} 0.001 & \ev{P2_v2_headline_three_seeds_20261113} \\
+Split v2: detection F1 at the operating point & 0.956 $\pm$ 0.005 & Split-v2 test, 1,050 & Operating point chosen on validation per seed (\tconf{} 0.30 or 0.40, \tnms{} 0.50) & \ev{P2_v2_headline_three_seeds_20261113} \\
+Split v2: mask mIoU / mask mAP50--95 & 0.921 $\pm$ 0.001 / 0.869 $\pm$ 0.002 & Split-v2 test, 1,050 & 640\,px, mask \tconf{} 0.25 & \ev{P2_v2_headline_three_seeds_20261113} \\
+Split v2: classification accuracy & 0.999 $\pm$ 0.001 & Split-v2 test, 1,050 & 224\,px, argmax & \ev{P2_v2_headline_three_seeds_20261113} \\
+Split v2, seed 44: p95 latency; HTTP success; team-photo recall & 63.5\,ms; 300/300; 0.712 & 50 and 300 split-v2 test images; 401 team photos & T4, PyTorch, batch 1, 10 warm-up, 200 calls; uvicorn; operating point \tconf{} 0.40 & \ev{P2_v2_system_eval_seed44_20261113} \\
 Detection mAP50 / mAP50--95 & 0.984 / 0.850 & Oxford test, 1,106 images & 640\,px; box AP over all thresholds (evaluation \tconf{} 0.001) & \ev{M4_detection_test_metrics}; \run{2seovilv} \\
 Detection P / R / F1 & 0.958 / 0.959 / 0.959 & Oxford test, 1,106 & Operating point \tconf{} 0.40, \tnms{} 0.50 (chosen on validation); matching IoU 0.50 & \ev{M4_detection_test_metrics} \\
 Detection recall, team photos & 0.732 & 401 team photos, 503 animals & Same operating point & \ev{M4_team_detection_metrics} \\
@@ -200,7 +205,7 @@ Multi-animal photos marked ready & 17 of 52 & Team photos with $\geq2$ animals &
 p95 latency (A8) & 61.4\,ms & First 50 Oxford test images, cycled & T4, PyTorch, in-process, batch 1, 10 warm-up, 200 calls & \ev{M8_benchmark_pytorch} \\
 p95 latency over HTTP & 430.8\,ms & 300 team photos & CPU only, uvicorn, one worker, 5 warm-up & \ev{P2_cpu_http_validation_mu2tolkg}; \run{mu2tolkg} \\
 Detector ONNX parity (A9b) & 0.0018 (bound 0.001); 0.0018--0.0023 on re-runs & 4 random inputs, seed 0 & Max abs difference of the raw head, CPU & \ev{M8_onnx_parity}, \ev{M8_onnx_parity_recheck_A9b_20261105} \\
-Supplementary retraining on split v2 (no same-animal group across partitions) & mAP50 0.978 / mAP50--95 0.821; mIoU 0.921 & Split-v2 test, 1,050 images (not the same images as split v1) & Same recipes, one run, seed 42; 640\,px; not promoted (Section~\ref{sec:suppf}) & \ev{P2_supplementary_F_split_v2_retrain_20261107} \\
+First retraining on split v2, 7 November & mAP50 0.978 / mAP50--95 0.821; mIoU 0.921 & Split-v2 test, 1,050 images (not the same images as split v1) & Same recipes, one run, seed 42; 640\,px; superseded by the three-seed run above (Section~\ref{sec:suppf}) & \ev{P2_supplementary_F_split_v2_retrain_20261107} \\
 Reproduction from the delivered package & 6 of 6 metrics identical & Oxford test, 1,106 & Re-evaluation of the delivered checkpoints (box and mask mAP, mIoU, Dice), Colab T4, tolerance 0.005; run by a second team member (Mohammed Adeeb Alrashdi), as stated by the project owner & \ev{P2_reproduction_run_20261106} \\
 \end{xltabular}}
 
@@ -750,6 +755,9 @@ A9b ONNX parity, detector & $\leq0.001$ & 0.0018 & \textbf{Fail} \\
 \end{tabularx}
 
 \smallskip
+\textbf{Split-v2 checkpoints.} The same ten criteria were evaluated for the seed-44 checkpoints trained on split v2: nine are met and A9b is not (Section~\ref{sec:v2seeds}). The table above is the verdict for the delivered build, which the packaged service uses.
+
+\smallskip
 \textbf{For each FAIL:} A9b: the exported detector's raw head differs from PyTorch by 0.0018--0.0023 against a bound of 0.001. \emph{Why (diagnosis on four random inputs):} the difference is in the pixel-unit box channels and is of the size of float32 rounding: against a float64 run of the same model, float32 PyTorch is off by 0.0018 and ONNX by 0.00096 (Section 4.4). At task level the reported values are close but not identical (Oxford test, 1,106 images, 640\,px, Ultralytics validation): mAP50 0.98252 (ONNX) vs 0.98357 (PyTorch), mAP50--95 0.85176 vs 0.85000. \emph{Fix and cost:} serving the PyTorch detector costs nothing. The criterion is not relaxed after the fact; a parity criterion on decisions or relative to the output scale, fixed before the run, would be the right test for a future export. (The ONNX benchmark row ran the detector on the CPU execution provider while PyTorch used the T4, so it is not a like-for-like speed comparison.) Decision: GO for a staff-supervised service with PyTorch; NO-GO for serving the ONNX detector until a parity test fixed in advance is passed.
 
 Main failure modes for the model card: missed small and secondary animals (team photos: recall 0.732; 17 of 52 multi-animal photos marked technically ready because one animal was missed); dark dogs wearing clothing detected as cats; masks spreading into similar-coloured backgrounds. Out of scope: automatic publication, identifying individual animals or people, veterinary use, species other than cats and dogs. Every photo is approved by staff, whatever the verdict.
@@ -897,9 +905,92 @@ Segmenter latency on the T4, batch 1, p50 / p95 (ms) & 16.4 / 27.0 & 15.0 / 25.9
 
 With 3.5 times fewer parameters the smaller segmenter matches the delivered one on every mask metric to within 0.002 and is about 1\,ms faster per image. This single-seed validation comparison shows little sensitivity to the tested model sizes on these images; it does not isolate the effects of the data or trimap convention. The delivered YOLO11s-seg is kept because it is the model with test, team-photo and end-to-end results; YOLO11n-seg is a candidate for a lighter deployment once it has been evaluated in the full pipeline.
 
+\subsection{Headline evaluation on split v2: three seeds and system level (12--13 November)}\label{sec:v2seeds}
+
+On 12 November the project owner decided that the split-v2 results are the headline evaluation of this report, replacing the decision of 11 November (Section~\ref{sec:suppf}). The reason is the one stated there: split v1 has same-animal groups across partitions, so its test figures can be optimistic, while split v2 has none. The three delivered recipes were retrained on split v2 with seeds 42, 43 and 44 on a Colab T4 from \texttt{main} at \texttt{f62ded8} with the pinned requirements (PyTorch 2.11.0, Ultralytics 8.4.182), logged to W\&B (group \texttt{v2\_headline\_20261112}), and each seed was evaluated once on the v2 test split (\ev{P2_v2_headline_three_seeds_20261113}). Split v2, the recipes, the operating-point rule (highest F1 with recall of at least 0.80 on validation), the segmenter confidence of 0.25 and the A9b bound were fixed before the run and are those of Section~\ref{sec:suppf}. Of the four corrected boxes, the two that fall in the v2 training partition were applied; the two in v2 validation were left unchanged, because validation and test labels are never edited. This run changes no served weight, threshold, manifest or acceptance verdict of this report.
+
+\begin{tabularx}{\linewidth}{@{}Y r r r r@{}}
+\toprule
+v2 test split (1,050 images), 640\,px (224\,px for the classifier) & Seed 42 & Seed 43 & Seed 44 & Mean $\pm$ sd \\
+\midrule
+Classifier accuracy & 1.000 & 0.999 & 0.998 & 0.999 $\pm$ 0.001 \\
+Detection mAP50 (\tconf{} 0.001, \tnms{} 0.70) & 0.980 & 0.982 & 0.981 & 0.981 $\pm$ 0.001 \\
+Detection mAP50--95 & 0.838 & 0.836 & 0.835 & 0.836 $\pm$ 0.002 \\
+Operating point chosen on validation (\tconf{} / \tnms{}) & 0.30 / 0.50 & 0.30 / 0.50 & 0.40 / 0.50 & -- \\
+Detection precision / recall at that point & 0.952 / 0.958 & 0.959 / 0.964 & 0.956 / 0.947 & -- \\
+Detection F1 at that point & 0.955 & 0.962 & 0.951 & 0.956 $\pm$ 0.005 \\
+Mask mAP50--95 & 0.868 & 0.867 & 0.872 & 0.869 $\pm$ 0.002 \\
+Mean IoU (\tconf{} 0.25) & 0.921 & 0.920 & 0.921 & 0.921 $\pm$ 0.001 \\
+Dice & 0.957 & 0.957 & 0.958 & 0.957 $\pm$ 0.000 \\
+Detector validation mAP50--95 (best epoch) & 0.8616 & 0.8568 & 0.8618 & -- \\
+ONNX raw-head difference, 4 random inputs (bound 0.001) & 0.00034 & 0.00253 & 0.00378 & -- \\
+ONNX raw-head difference, 50 validation images & 0.0017 & 0.0048 & 0.0331 & -- \\
+\bottomrule
+\end{tabularx}
+
+The three seeds agree closely: the sample standard deviation is at most 0.005 on every accuracy figure, so the split-v2 values of Section~\ref{sec:suppf} were not an accident of one seed. The seed-42 segmenter reproduces the 7 November mask figures to the last recorded digit (same seed and segmentation labels); seeds 43 and 44 differ, which shows that the segmenter does vary with the seed. \textbf{ONNX.} The four-input check is within the bound for one export and outside it for the other two, while on 50 validation images the final detections of all three exports equal those of PyTorch (same count and class on every image, boxes within 0.0005\,px). A9b therefore depends on the particular weights and is not used to select a checkpoint; it is reported as computed and is not a parity claim. \textbf{Checkpoint rule.} The rule fixed before the run (highest detector validation mAP50--95) points to seed 44, by a margin of 0.0002 over seed 42 that is far inside the spread between seeds. \textbf{Limits.} The v2 test split had already been evaluated once on 7 November, and no recipe, threshold or rule was changed after that look. Two Colab sessions lost their runtime during segmenter training (seeds 42 and 44); in both cases the classifier and detector, already trained and evaluated once, were kept and the segmenter was retrained from the start with the same seed. The system-level evaluation of the seed-44 checkpoints follows below; nothing is served from them yet, and the acceptance verdicts of Section~\ref{sec:verdict} still concern the delivered split-v1 models. GPU time was 12.2 of the 13 approved T4-hours, counting the two lost sessions at their upper bound.
+
+\textbf{System-level evaluation of the seed-44 checkpoints (13 November).} The classifier, detector and segmenter of seed 44 were assembled into a pipeline manifest with the operating point and temperature of the seed record (\tconf{} 0.40, \tnms{} 0.50, temperature 0.333) and the unchanged pipeline settings, and evaluated once on a Colab T4 without any training or threshold change (\ev{P2_v2_system_eval_seed44_20261113}).
+
+\begin{tabularx}{\linewidth}{@{}l Y r l@{}}
+\toprule
+Criterion & Conditions & Seed 44, split v2 & Verdict \\
+\midrule
+A1 accuracy / A2 macro-F1 & v2 test split, 224\,px & 0.998 / 0.998 & Pass \\
+A3 detection mAP50 & v2 test split, 640\,px, \tconf{} 0.001, \tnms{} 0.70 & 0.981 & Pass \\
+A4 detection recall & Operating point above & 0.947 & Pass \\
+A5 mean IoU / A6 Dice & v2 test split, 640\,px, \tconf{} 0.25 & 0.921 / 0.958 & Pass \\
+A7 service success & uvicorn over HTTP, PyTorch, 300 v2 test images, 5 warm-up requests & 300/300 & Pass \\
+A8 p95 latency & T4, PyTorch, in-process, batch 1, 10 warm-up, 200 calls on 50 v2 test images & 63.5\,ms & Pass \\
+A9a classifier ONNX & 8 random inputs, bound 0.001 & $1.9\times10^{-7}$ & Pass \\
+A9b detector ONNX & 4 random inputs, seed 0, bound 0.001 & 0.0038 & Not met \\
+\bottomrule
+\end{tabularx}
+
+On the T4 the in-process latency is 41.0 / 63.5 / 71.3\,ms (p50 / p95 / p99) at 22.0\,img/s, with 253\,MB peak GPU memory (PyTorch allocator) and 1,689\,MB peak RSS; over HTTP with one sequential client it is 49.6 / 71.9 / 79.5\,ms. With the ONNX detector, which ran on the CPU execution provider, it is 294.1 / 417.1 / 445.7\,ms at 3.1\,img/s, so PyTorch remains the backend. \textbf{Team photos.} On the 401 team photos (503 animals) the system labels 395 of 399 single-species photos correctly, refers 89 photos (22.2\%) and lets no wrong label through as ready; mask mean IoU is 0.820. Detection at the operating point has recall 0.712 (cat 0.799, dog 0.655) and precision 0.897; recall is 0.842 for animals covering at least 10\% of the image and 0.202 for those covering 1--10\%. \textbf{What did not improve.} 22 of 52 multi-animal photos are marked ready, against 17 of 52 for the delivered system at the same confidence, and team detection recall is slightly below the delivered 0.732. Training on the leakage-safe split removes the optimistic bias of the test figures; it does not address missed small and secondary animals, which remain the main failure mode. The per-photo results and failure galleries of the team photos stay in private storage.
+
+\textbf{Error analysis on the v2 test split (13 November).} At the operating point the seed-44 detector has 994 true positives, 46 false positives and 56 false negatives on the 1,050 test images (matching IoU 0.50). Every error was classified with the function used for the delivered build in Section~2.5, on predictions recomputed from the same checkpoint; the recomputed counts equal the seed record (\ev{P2_v2_error_breakdown_seed44_20261113}, with one row per error in \ev{P2_v2_seed44_fp_breakdown_20261113} and \ev{P2_v2_seed44_fn_breakdown_20261113}). The delivered-build column is measured on the split-v1 test images, so the two columns are not a paired comparison. In the table, v2 is the seed-44 detector on the v2 test split and v1 the delivered detector on the v1 test split.
+
+\begin{tabularx}{\linewidth}{@{}l Y r r r@{}}
+\toprule
+Type & Definition & v2 & \% & v1 \\
+\midrule
+Duplicate & IoU $\geq0.5$ with an already matched box of the same class & 0 & 0.0 & 0 \\
+Classification & IoU $\geq0.5$ with a box of the other species & 12 & 26.1 & 10 \\
+Localisation & Same species, $0.1\leq$ IoU $<0.5$ & 33 & 71.7 & 34 \\
+Localisation and class & Other species, $0.1\leq$ IoU $<0.5$ & 1 & 2.2 & 1 \\
+Background & IoU $<0.1$ with every box & 0 & 0.0 & 1 \\
+\midrule
+False positives & & 46 & 100.0 & 46 \\
+\midrule
+Missed (FN): displaced box & A kept box overlaps the animal with $0.1\leq$ IoU $<0.5$ & 32 & 57.1 & 34 \\
+Missed (FN): wrong species & A kept box of the other species with IoU $\geq0.5$ & 8 & 14.3 & 4 \\
+Missed (FN): no box & No kept box with IoU $\geq0.1$ & 16 & 28.6 & 7 \\
+\midrule
+False negatives & & 56 & 100.0 & 45 \\
+\bottomrule
+\end{tabularx}
+
+\textbf{Reading.} The pattern is that of the delivered detector: 33 of the 46 false positives and 32 of the 56 false negatives are of the same kind, a box on the right animal whose extent differs from the annotation, and 40 of the 56 false negatives are in images that also have a false positive. Two things are worse than for the delivered build. Animals with no box rise from 7 to 16, and species confusions from 10 to 12; of the 12, nine are cats detected as dogs (Birman, Bengal, Sphynx, Ragdoll and Siamese images) and three are dogs detected as cats. By species, 43 of the 56 false negatives are dogs and 40 of the 46 false positives are dog predictions. The pipeline has a classifier cross-check for species confusions (the \texttt{chihuahua\_156} case of Section~2.5); how many of these twelve it refers was not measured. The lowest-IoU masks show the same cases as for the delivered segmenter: bedding, clothing or furniture taken as part of the animal, and one close-up cat face where the prediction and the annotation disagree almost everywhere (IoU 0.05).
+
+\textbf{Decision on the served build (13 November).} The owner's rule was to serve the split-v2 checkpoints only if their results are better than those of the delivered build. They are not: on the 401 team photos, the one set both builds were run on, detection recall is 0.712 against 0.732 and 22 against 17 of 52 multi-animal photos are marked ready, and the table above shows more missed animals, on different test images. The packaged service therefore keeps the delivered split-v1 weights, and split v2 remains the headline evaluation. With the system-level evaluation and this analysis, 12.5 of the 15 T4-hours approved on 13 November were used.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\linewidth]{figures/P2_v2_seed44_false_positives.jpg}\hfill
+  \includegraphics[width=0.48\linewidth]{figures/P2_v2_seed44_false_negatives.jpg}
+  \caption{Seed-44 detector on the v2 test split (640\,px; \tconf{} 0.40, \tnms{} 0.50; matching IoU 0.50). (Left) the 24 highest-confidence of 46 false positives, prediction in red and annotation in green; (right) 24 of 56 false negatives, annotation in green. Faces of people who appear incidentally in two tiles were blurred for this report; the images are from Oxford-IIIT Pet.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\linewidth]{figures/P2_v2_seed44_seg_failures.jpg}
+  \caption{The 18 lowest-IoU predictions of the seed-44 segmenter on the v2 test split (640\,px, \tconf{} 0.25, \tnms{} 0.70). Yellow: prediction and ground truth agree; red: prediction only; green: ground truth only. One face of a person was blurred for this report.}
+\end{figure}
+
 \subsection{Conclusion}
 
-\textbf{Outcome:} the system supports staff review of one pet photo. The historical in-process T4 measurement was p50 38.5\,ms and p95 61.4\,ms; the separate HTTP measurement was p95 135.3\,ms. It meets nine of the ten acceptance criteria fixed in advance, and keeps the staff-approval guard on every response. \textbf{Demonstrated:} on Oxford-IIIT Pet test images with one large animal, the fine-tuned detector and segmenter clearly improve on the same models used as is (mAP50 0.939 $\rightarrow$ 0.984; mean IoU 0.830 $\rightarrow$ 0.923), the service meets every acceptance criterion except detector ONNX parity, and every response keeps the staff-approval guard; the 5 November Kaggle runs reproduce the segmentation results with the delivered weights (Section~\ref{sec:kaggle}), and a re-evaluation from the delivered package on 6 November reproduces the six detection and segmentation test metrics exactly (Section~1, Part 13). \textbf{Not demonstrated:} reliable counting of several or small animals (17 of 52 multi-animal team photos wrongly ready; small-animal recall 0 of 10), accuracy on a fresh shelter holdout (the team photos had been inspected), a passing ONNX detector, and T4 timings of the release-candidate code. \textbf{Next steps:} collect new multi-animal shelter photos as an untouched test set, retrain the detector with more small and secondary animals (the corrected boxes alone gave no validation gain, Section~\ref{sec:kaggle}; selection on validation, one final test), and define an ONNX parity test on decisions before running it. Two supplementary runs after the freeze (Section~\ref{sec:supp}) support this plan: oversampling cats improved every validation figure of the detector, and a second detection pass cut the false-ready multi-animal photos from 17 to 10 of 52 at the cost of 82 more referrals. A third (Section~\ref{sec:suppf}) retrained the three models on split v2, which has no crossing group, and found the test metrics within 0.006 mAP50 and 0.003 mean IoU of the reported ones. Until then the system is a staff-supervised assistant, not an automatic gatekeeper.
+\textbf{Outcome:} the system supports staff review of one pet photo. On the leakage-safe split v2 the recipes reach mAP50 0.981 $\pm$ 0.001, mean IoU 0.921 $\pm$ 0.001 and accuracy 0.999 $\pm$ 0.001 over three seeds, and the checkpoints selected on validation meet nine of the ten criteria at system level (Section~\ref{sec:v2seeds}); the figures of the delivered build below are within 0.003 of these on mAP50 and mean IoU. The historical in-process T4 measurement was p50 38.5\,ms and p95 61.4\,ms; the separate HTTP measurement was p95 135.3\,ms. It meets nine of the ten acceptance criteria fixed in advance, and keeps the staff-approval guard on every response. \textbf{Demonstrated:} on Oxford-IIIT Pet test images with one large animal, the fine-tuned detector and segmenter clearly improve on the same models used as is (mAP50 0.939 $\rightarrow$ 0.984; mean IoU 0.830 $\rightarrow$ 0.923), the service meets every acceptance criterion except detector ONNX parity, and every response keeps the staff-approval guard; the 5 November Kaggle runs reproduce the segmentation results with the delivered weights (Section~\ref{sec:kaggle}), and a re-evaluation from the delivered package on 6 November reproduces the six detection and segmentation test metrics exactly (Section~1, Part 13). \textbf{Not demonstrated:} reliable counting of several or small animals (17 of 52 multi-animal team photos wrongly ready; small-animal recall 0 of 10), accuracy on a fresh shelter holdout (the team photos had been inspected), a passing ONNX detector, and T4 timings of the release-candidate code. \textbf{Next steps:} collect new multi-animal shelter photos as an untouched test set, retrain the detector with more small and secondary animals (the corrected boxes alone gave no validation gain, Section~\ref{sec:kaggle}; selection on validation, one final test), and define an ONNX parity test on decisions before running it. Two supplementary runs after the freeze (Section~\ref{sec:supp}) support this plan: oversampling cats improved every validation figure of the detector, and a second detection pass cut the false-ready multi-animal photos from 17 to 10 of 52 at the cost of 82 more referrals. A third (Section~\ref{sec:suppf}) retrained the three models on split v2, which has no crossing group, and found the test metrics within 0.006 mAP50 and 0.003 mean IoU of the reported ones. Until then the system is a staff-supervised assistant, not an automatic gatekeeper.
 
 % =====================================================================
 \section{Obstacles and how they were addressed}

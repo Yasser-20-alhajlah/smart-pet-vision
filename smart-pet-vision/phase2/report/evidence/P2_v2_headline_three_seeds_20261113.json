@@ -1,0 +1,258 @@
+{
+ "experiment": "Split-v2 three-seed run of 12-13 November 2026: the three delivered recipes retrained on split v2 with seeds 42, 43 and 44; one evaluation on the v2 test split per seed",
+ "status": "training results; the served weights, thresholds, manifest and acceptance verdicts of this report are unchanged; the system-level evaluation of the seed-44 checkpoints is in P2_v2_system_eval_seed44_20261113.json",
+ "owner_decisions": [
+  "2026-11-12 (chat): the split-v2 results become the headline of the Phase 2 report once the system-level evaluations exist; this replaces the decision of 2026-11-11 for future revisions",
+  "2026-11-12 (chat): GPU cap 13 T4-hours for the three seeds"
+ ],
+ "source_records": {
+  "note": "values copied on 2026-11-13 from the per-seed records written by the runs in the owner's private Drive (P2_v2_headline_record.json, P2_v2_headline_onnx.json, det_v2/results.csv, gpu_hours_ledger.json); records and weights stay in private Drive",
+  "run_script_sha256": {
+   "run_seed_r4.py": "99d2969b8fe903b13063db07ecde71a1035c9451ee273e7a121c83fa2d1d0218",
+   "run_seed_r5.py": "69917149223e3e29ec936b7ce49117f81366444cea2297a1e53a54490b594380"
+  }
+ },
+ "frozen_before_the_run": {
+  "split_v2_sha256": "a8846b0fa0969069c85763ab1f31d0cf594e37fd2839e474d1e1fa6737f9f86b",
+  "split_v2_counts": {
+   "train": 4903,
+   "val": 1382,
+   "test": 1050
+  },
+  "recipes": "unchanged from the 7 November run (YOLO11s detect and YOLO11s-seg, 40 epochs, 640 px, batch 16; ResNet-50 fine-tune 10 epochs, lr 1e-4)",
+  "operating_point_rule": "highest F1 with recall >= 0.80 on the v2 validation split, per seed",
+  "segmenter_conf": 0.25,
+  "served_checkpoint_rule": "seed with the highest validation mAP50-95 of the detector",
+  "a9b": "bound 0.001, 4 random inputs, seed 0, CPU, unchanged",
+  "supplementary_onnx_criteria": "D1 same detection count and class on the first 50 validation images; D2 final-box difference <= 1 px; they do not replace A9b"
+ },
+ "environment": {
+  "code_commit": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+  "gpu": "Tesla T4 (Colab)",
+  "python": "3.13.16",
+  "versions": {
+   "torch": "2.11.0",
+   "torchvision": "0.26.0",
+   "ultralytics": "8.4.182",
+   "numpy": "2.1.3",
+   "onnx": "1.23.2",
+   "onnxruntime": "1.31.0",
+   "wandb": "0.28.1"
+  },
+  "wandb": "project yasser-alhajlah-kaust/smart-pet-vision, group v2_headline_20261112"
+ },
+ "corrected_training_boxes": {
+  "applied": [
+   "english_cocker_spaniel_142",
+   "beagle_189"
+  ],
+  "not_applied_in_v2_validation": [
+   "german_shorthaired_148",
+   "japanese_chin_178"
+  ],
+  "rule": "the corrected boxes of 3 November are applied only to rows of the v2 training partition; validation and test labels are never changed"
+ },
+ "seeds": {
+  "42": {
+   "classifier": {
+    "accuracy": 1.0,
+    "macro_f1": 1.0,
+    "errors": 0
+   },
+   "detector": {
+    "mAP50": 0.9798481791507847,
+    "mAP50_95": 0.8379308210305882,
+    "operating_point": {
+     "conf": 0.3,
+     "nms_iou": 0.5,
+     "val_f1": 0.9790462427745664
+    },
+    "test_at_operating_point": {
+     "tp": 1006,
+     "fp": 51,
+     "fn": 44,
+     "precision": 0.9517502365184485,
+     "recall": 0.9580952380952381,
+     "f1": 0.9549121974371144
+    },
+    "best_val_mAP50_95": 0.8616,
+    "weights_sha256": "17aada90cb4f86916ee14467d0919b37d62bfaea6d112ab6af7acd3bdaf62122"
+   },
+   "segmenter": {
+    "mask_mAP50_95": 0.8683640047676494,
+    "mIoU": 0.9205404535466603,
+    "dice": 0.9570993045580002
+   },
+   "onnx": {
+    "a9b_max_abs_diff": 0.000335693359375,
+    "a9b_met": true,
+    "real_50_raw_head_max_abs_diff": 0.001739501953125,
+    "same_count_fraction": 1.0,
+    "same_class_fraction": 1.0,
+    "final_box_max_abs_diff_px": 9.5367431640625e-05
+   },
+   "wandb_run_ids": {
+    "classifier": "goc4nfwp",
+    "segmenter": "kgoegnkp"
+   },
+   "sessions": "classifier and detector in the session of 12 Nov 18:59 UTC; that Colab runtime was lost during segmenter training; segmenter retrained from the start (same seed, recipe, data) in the session of 12 Nov 22:39 UTC",
+   "drive_folder": "runs/v2_headline_20261112/seed42_20261112T1859Z"
+  },
+  "43": {
+   "classifier": {
+    "accuracy": 0.9990476190476191,
+    "macro_f1": 0.9989308526399285,
+    "errors": 1
+   },
+   "detector": {
+    "mAP50": 0.9816993808952976,
+    "mAP50_95": 0.8359641442962822,
+    "operating_point": {
+     "conf": 0.3,
+     "nms_iou": 0.5,
+     "val_f1": 0.9750452079566003
+    },
+    "test_at_operating_point": {
+     "tp": 1012,
+     "fp": 43,
+     "fn": 38,
+     "precision": 0.9592417061611375,
+     "recall": 0.9638095238095238,
+     "f1": 0.961520190023753
+    },
+    "best_val_mAP50_95": 0.8568,
+    "weights_sha256": "dc432178e59967761d1dd84911fbf712af9c71b66fc92cd3d9abfe04f79db0c0"
+   },
+   "segmenter": {
+    "mask_mAP50_95": 0.8667149504945451,
+    "mIoU": 0.9201767432810901,
+    "dice": 0.9568467112525192
+   },
+   "onnx": {
+    "a9b_max_abs_diff": 0.002532958984375,
+    "a9b_met": false,
+    "real_50_raw_head_max_abs_diff": 0.00482177734375,
+    "same_count_fraction": 1.0,
+    "same_class_fraction": 1.0,
+    "final_box_max_abs_diff_px": 9.5367431640625e-05
+   },
+   "wandb_run_ids": {
+    "classifier": "wvwh0vi2",
+    "detector": "e8vkgz1h",
+    "segmenter": "w6zpaste"
+   },
+   "sessions": "one session, 13 Nov 00:13 UTC",
+   "drive_folder": "runs/v2_headline_20261112/seed43_20261113T0013Z"
+  },
+  "44": {
+   "classifier": {
+    "accuracy": 0.9980952380952381,
+    "macro_f1": 0.997863213076322,
+    "errors": 2
+   },
+   "detector": {
+    "mAP50": 0.9814176440956374,
+    "mAP50_95": 0.8347943540410366,
+    "operating_point": {
+     "conf": 0.4,
+     "nms_iou": 0.5,
+     "val_f1": 0.9753086419753086
+    },
+    "test_at_operating_point": {
+     "tp": 994,
+     "fp": 46,
+     "fn": 56,
+     "precision": 0.9557692307692308,
+     "recall": 0.9466666666666667,
+     "f1": 0.9511961722488038
+    },
+    "best_val_mAP50_95": 0.86179,
+    "weights_sha256": "92548b78d3d04491d3ba8573c8139bfb04b587b96aed5bd0ed3e2923bdb9ac08"
+   },
+   "segmenter": {
+    "mask_mAP50_95": 0.8715905215511748,
+    "mIoU": 0.9212606183871425,
+    "dice": 0.9576030585779628
+   },
+   "onnx": {
+    "a9b_max_abs_diff": 0.0037841796875,
+    "a9b_met": false,
+    "real_50_raw_head_max_abs_diff": 0.033050537109375,
+    "same_count_fraction": 1.0,
+    "same_class_fraction": 1.0,
+    "final_box_max_abs_diff_px": 0.00042724609375
+   },
+   "wandb_run_ids": {
+    "segmenter": "f91gi3k5"
+   },
+   "sessions": "classifier and detector in the session of 13 Nov 02:59 UTC; that Colab runtime was lost during segmenter training; segmenter retrained from the start (same seed, recipe, data) in the session of 13 Nov 06:54 UTC",
+   "drive_folder": "runs/v2_headline_20261112/seed44_20261113T0259Z"
+  }
+ },
+ "summary_over_seeds": {
+  "classifier_accuracy": {
+   "mean": 0.9990476190476191,
+   "sd": 0.0009523809523809268,
+   "min": 0.9980952380952381,
+   "max": 1.0
+  },
+  "detector_mAP50": {
+   "mean": 0.9809884013805732,
+   "sd": 0.0009974587490461156,
+   "min": 0.9798481791507847,
+   "max": 0.9816993808952976
+  },
+  "detector_mAP50_95": {
+   "mean": 0.8362297731226357,
+   "sd": 0.0015850158671695347,
+   "min": 0.8347943540410366,
+   "max": 0.8379308210305882
+  },
+  "detector_f1_at_operating_point": {
+   "mean": 0.9558761865698904,
+   "sd": 0.00522908137634607,
+   "min": 0.9511961722488038,
+   "max": 0.961520190023753
+  },
+  "mask_mAP50_95": {
+   "mean": 0.8688898256044564,
+   "sd": 0.002479952408087035,
+   "min": 0.8667149504945451,
+   "max": 0.8715905215511748
+  },
+  "mIoU": {
+   "mean": 0.9206592717382976,
+   "sd": 0.0005516200081378252,
+   "min": 0.9201767432810901,
+   "max": 0.9212606183871425
+  },
+  "dice": {
+   "mean": 0.9571830247961607,
+   "sd": 0.0003850612001807859,
+   "min": 0.9568467112525192,
+   "max": 0.9576030585779628
+  },
+  "sd_definition": "sample standard deviation over the three seeds (n - 1)"
+ },
+ "served_checkpoint_by_rule": {
+  "seed": 44,
+  "best_val_mAP50_95": {
+   "42": 0.8616,
+   "43": 0.8568,
+   "44": 0.86179
+  },
+  "note": "the margin over seed 42 is 0.0002, far inside the spread between seeds; the rule was fixed before the run and is applied as written; no checkpoint is served yet"
+ },
+ "gpu_hours": {
+  "cap": 13.0,
+  "ledger_total": 12.202,
+  "note": "two sessions lost their Colab runtime; each is counted at its wall-clock upper bound (3.4 h and 2.95 h); completed work: 1.556 h, 2.774 h and 1.522 h"
+ },
+ "caveats": [
+  "the v2 test split had already been evaluated once on 7 November (seed 42, no W&B); recipes, thresholds and rules were not changed after that look",
+  "the seed-42 segmenter metrics equal the 7 November values to the last recorded digit (same seed and segmentation labels); deterministic training is the likely reason and was not verified independently",
+  "the W&B run ids of the seed-42 detector and of the seed-44 classifier and detector are not in the records (the lookup at resume returned nothing); the runs exist in the W&B group",
+  "v1 and v2 test sets are not the same images (1,106 vs 1,050)",
+  "A9b is met by one of the three detector exports and not by the other two, with identical final detections in all three; it is not a selection criterion"
+ ]
+}

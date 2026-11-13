@@ -30,6 +30,19 @@ Oxford-IIIT Pet (CC BY-SA 4.0), 7,335 images after cleaning, group-aware split 5
 | End-to-end p95 latency | 61 ms (T4, in-process); 431 ms (CPU HTTP, W&B mu2tolkg) | batch 1 |
 | Per-stage p50 / p95 (validation, notebook 11) | detect 16.2/17.2, classify 10.1/11.7, segment 22.1/23.4, total 48.6/51.3 ms | T4, in-process, 1,106 val images, code 879b0e8; separate run from the A8 benchmark |
 
+### Leakage-safe evaluation on split v2 (12-13 November 2026)
+
+Split v1 has same-animal groups across partitions (135 of its 1,106 test images), so the figures above can be optimistic. The same three recipes were retrained on split v2, which has no such group, with seeds 42, 43 and 44; each seed was evaluated once on the v2 test split (1,050 images). Source: `report/evidence/P2_v2_headline_three_seeds_20261113.json` and `P2_v2_system_eval_seed44_20261113.json`; report Section 4.12.
+
+| Metric (split-v2 test) | Mean ± sd over three seeds |
+|---|---|
+| Classification accuracy | 0.999 ± 0.001 |
+| Detection mAP50 / mAP50-95 | 0.981 ± 0.001 / 0.836 ± 0.002 |
+| Detection F1 at the operating point (chosen on validation per seed) | 0.956 ± 0.005 |
+| Mask mAP50-95 / mean IoU / Dice | 0.869 ± 0.002 / 0.921 ± 0.001 / 0.957 ± 0.000 |
+
+System level, checkpoints of the seed selected on validation (seed 44; detector confidence 0.40, NMS 0.50), Tesla T4: nine of the ten acceptance criteria are met; in-process latency p50 41.0 / p95 63.5 / p99 71.3 ms at 22.0 img/s; HTTP 300 of 300 requests, p95 71.9 ms; classifier ONNX difference 1.9e-7. Detector ONNX parity (A9b) is not met (0.0038 against 0.001), although the final detections equal those of PyTorch on 50 validation images. On the 401 team photos: 395 of 399 single-species photos labelled correctly, no wrong label marked ready, detection recall 0.712, and 22 of 52 multi-animal photos wrongly marked ready (delivered build: 0.732 and 17 of 52). These checkpoints are not the served weights: `runs/manifest.json` and the packaged service still use the delivered split-v1 build.
+
 ### Baselines (not fine-tuned, COCO-pretrained weights used as is; notebook 11)
 | Measure | Baseline | Fine-tuned (above) |
 |---|---|---|

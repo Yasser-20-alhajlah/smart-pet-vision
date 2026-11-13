@@ -5,6 +5,7 @@ Usage: python tools/verify_submission_evidence.py [--root PHASE2_DIR]
 """
 import argparse
 import csv
+import hashlib
 import json
 import re
 import sys
@@ -266,6 +267,97 @@ def submission_checks(root):
           and f"{f3(ss['val_masks']['mIoU_no_border'])} / {f3(ss['val_masks']['mean_dice_no_border'])} & {f3(sn['val_masks']['mIoU_no_border'])} / {f3(sn['val_masks']['mean_dice_no_border'])}" in body
           and f"{ss['segmenter_latency_ms_T4']['p50']:.1f} / {ss['segmenter_latency_ms_T4']['p95']:.1f} & {sn['segmenter_latency_ms_T4']['p50']:.1f} / {sn['segmenter_latency_ms_T4']['p95']:.1f}" in body
           and f"{ss['parameters'] / sn['parameters']:.1f} times fewer parameters" in body)
+    v2 = load(root, "P2_v2_headline_three_seeds_20261113.json")
+    vs, va = v2["seeds"], v2["summary_over_seeds"]
+    import statistics as _st
+    def _row(get, key):
+        vals = [get(vs[k]) for k in ("42", "43", "44")]
+        return (abs(_st.mean(vals) - va[key]["mean"]) < 1e-12 and abs(_st.stdev(vals) - va[key]["sd"]) < 1e-12
+                and " & ".join(f3(x) for x in vals) + f" & {f3(va[key]['mean'])} $\\pm$ {f3(va[key]['sd'])}" in body)
+    check("Split-v2 three-seed run quoted as recorded (per-seed values, mean and sd, checkpoint rule, ONNX not claimed as parity, nothing served)",
+          sum(v2["frozen_before_the_run"]["split_v2_counts"].values()) == 7335
+          and all(abs(s["detector"]["test_at_operating_point"]["tp"] / (s["detector"]["test_at_operating_point"]["tp"] + s["detector"]["test_at_operating_point"]["fp"])
+                      - s["detector"]["test_at_operating_point"]["precision"]) < 1e-9 for s in vs.values())
+          and _row(lambda s: s["classifier"]["accuracy"], "classifier_accuracy")
+          and _row(lambda s: s["detector"]["mAP50"], "detector_mAP50") and _row(lambda s: s["detector"]["mAP50_95"], "detector_mAP50_95")
+          and _row(lambda s: s["detector"]["test_at_operating_point"]["f1"], "detector_f1_at_operating_point")
+          and _row(lambda s: s["segmenter"]["mask_mAP50_95"], "mask_mAP50_95") and _row(lambda s: s["segmenter"]["mIoU"], "mIoU")
+          and _row(lambda s: s["segmenter"]["dice"], "dice")
+          and " & ".join(f"{vs[k]['onnx']['a9b_max_abs_diff']:.5f}" for k in ("42", "43", "44")) in body
+          and " & ".join(f"{vs[k]['onnx']['real_50_raw_head_max_abs_diff']:.4f}" for k in ("42", "43", "44")) in body
+          and [vs[k]["onnx"]["a9b_met"] for k in ("42", "43", "44")] == [True, False, False]
+          and all(s["onnx"]["same_count_fraction"] == 1.0 and s["onnx"]["same_class_fraction"] == 1.0 for s in vs.values())
+          and v2["served_checkpoint_by_rule"]["seed"] == int(max(vs, key=lambda k: vs[k]["detector"]["best_val_mAP50_95"]))
+          and "points to seed 44" in body and "is not a parity claim" in body and "nothing is served from them yet" in body
+          and "had already been evaluated once on 7 November" in body)
+    sv = load(root, "P2_v2_system_eval_seed44_20261113.json")
+    sb, sh, st_, sd, sr = (sv["benchmark_pytorch_T4"], sv["http_service_pytorch"], sv["team_photos_system"],
+                           sv["team_photos_detection"], sv["team_photos_system"]["referral_analysis"])
+    f1_ = lambda x: f"{x:.1f}"
+    acc = {r["id"]: r for r in sv["acceptance_table"]}
+    check("Split-v2 system evaluation of seed 44 quoted as recorded (acceptance rows, T4 latency, HTTP, team photos, what did not improve)",
+          sv["weights_sha256"]["detector"] == v2["seeds"]["44"]["detector"]["weights_sha256"]
+          and sv["manifest"]["detector_conf"] == vs["44"]["detector"]["operating_point"]["conf"]
+          and [acc[i]["met"] for i in ("A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9a", "A9b")] == [True] * 9 + [False]
+          and abs(acc["A3"]["value"] - vs["44"]["detector"]["mAP50"]) < 1e-12 and abs(acc["A5"]["value"] - vs["44"]["segmenter"]["mIoU"]) < 1e-12
+          and abs(acc["A9b"]["value"] - vs["44"]["onnx"]["a9b_max_abs_diff"]) < 1e-12
+          and f"{f3(acc['A1']['value'])} / {f3(acc['A2']['value'])} & Pass" in body and f"{f3(acc['A4']['value'])} & Pass" in body
+          and f"{sh['succeeded']}/{sh['requests']} & Pass" in body and sh["succeeded"] == sh["requests"] == 300
+          and f"{f1_(sb['latency_ms']['p95'])}\\,ms & Pass" in body and "0.0038 & Not met" in body
+          and f"{f1_(sb['latency_ms']['p50'])} / {f1_(sb['latency_ms']['p95'])} / {f1_(sb['latency_ms']['p99'])}" in body
+          and f"{f1_(sh['http_latency_ms']['p50'])} / {f1_(sh['http_latency_ms']['p95'])} / {f1_(sh['http_latency_ms']['p99'])}" in body
+          and sr["single_species_correct"] + sr["classification_errors"] == sr["single_species_photos"]
+          and f"{sr['single_species_correct']} of {sr['single_species_photos']} single-species photos" in body
+          and st_["errors_escaping_review"] == 0 and "lets no wrong label through as ready" in body
+          and abs(sd["at_operating_point"]["tp"] / (sd["at_operating_point"]["tp"] + sd["at_operating_point"]["fn"]) - sd["at_operating_point"]["recall"]) < 1e-12
+          and f"recall {f3(sd['at_operating_point']['recall'])}" in body
+          and f"{sr['multi_animal_accepted_ready']} of {sr['multi_animal_photos']} multi-animal photos are marked ready, against 17 of 52" in body
+          and sv["figures_check"]["detector_counts_equal_record"] and sv["figures_check"]["segmenter_mIoU_equals_record"])
+    eb = load(root, "P2_v2_error_breakdown_seed44_20261113.json")
+    ev_dir = root / "report" / "evidence"
+    def rows(name):
+        with open(ev_dir / name, newline="") as fh:
+            return list(csv.DictReader(fh))
+    ebfp, ebfn = rows("P2_v2_seed44_fp_breakdown_20261113.csv"), rows("P2_v2_seed44_fn_breakdown_20261113.csv")
+    kinds = lambda rs: {k: sum(r["kind"] == k for r in rs) for k in {r["kind"] for r in rs}}
+    nz = lambda d: {k: v for k, v in d.items() if v}
+    fpk, fnk, dl = eb["fp_by_kind"], eb["fn_by_kind"], eb["delivered_build_for_comparison"]
+    pct = lambda n, d: f"{100 * n / d:.1f}"
+    check("Split-v2 error breakdown of seed 44 quoted as recorded (counts by cause from the per-error CSV files, delivered-build column, served-build decision)",
+          hashlib.sha256((ev_dir / "P2_v2_seed44_fp_breakdown_20261113.csv").read_bytes()).hexdigest() == eb["fp_csv_sha256"]
+          and hashlib.sha256((ev_dir / "P2_v2_seed44_fn_breakdown_20261113.csv").read_bytes()).hexdigest() == eb["fn_csv_sha256"]
+          and kinds(ebfp) == nz(fpk) and kinds(ebfn) == nz(fnk)
+          and len(ebfp) == eb["counts"]["fp"] == sv["figures_check"]["detector_counts"]["fp"]
+          and len(ebfn) == eb["counts"]["fn"] == sv["figures_check"]["detector_counts"]["fn"]
+          and eb["detector_sha256"] == sv["weights_sha256"]["detector"]
+          and sum(r["image_also_has_fp"] == "True" for r in ebfn) == eb["fn_in_images_with_fp"]
+          and nz(dl["fp_by_kind"]) == kinds(rows("M4_fp_breakdown.csv")) and nz(dl["fn_by_kind"]) == kinds(rows("M4_fn_breakdown.csv"))
+          and f"& {fpk['class_confusion']} & {pct(fpk['class_confusion'], len(ebfp))} & {dl['fp_by_kind']['class_confusion']} \\\\" in body
+          and f"& {fpk['localisation']} & {pct(fpk['localisation'], len(ebfp))} & {dl['fp_by_kind']['localisation']} \\\\" in body
+          and f"& {fpk['background']} & {pct(fpk['background'], len(ebfp))} & {dl['fp_by_kind']['background']} \\\\" in body
+          and f"& {fnk['localisation']} & {pct(fnk['localisation'], len(ebfn))} & {dl['fn_by_kind']['localisation']} \\\\" in body
+          and f"& {fnk['class_confusion']} & {pct(fnk['class_confusion'], len(ebfn))} & {dl['fn_by_kind']['class_confusion']} \\\\" in body
+          and f"& {fnk['missed']} & {pct(fnk['missed'], len(ebfn))} & {dl['fn_by_kind']['missed']} \\\\" in body
+          and f"False negatives & & {len(ebfn)} & 100.0 & {dl['counts']['fn']} \\\\" in body
+          and f"{eb['fn_in_images_with_fp']} of the {len(ebfn)} false negatives are in images that also have a false positive" in body
+          and sum(r["kind"] == "class_confusion" and r["pred"] == "dog" for r in ebfp) == 9 and "nine are cats detected as dogs" in body
+          and "are not a paired comparison" in body
+          and eb["owner_rule_20261113"]["outcome"] == "not adopted" and "keeps the delivered split-v1 weights" in body)
+    pm = lambda key: f"{f3(va[key]['mean'])} $\\pm$ {f3(va[key]['sd'])}"
+    card = (Path(__file__).resolve().parent.parent / "docs" / "model_card.md").read_text()
+    pmc = lambda key: f"{f3(va[key]['mean'])} ± {f3(va[key]['sd'])}"
+    check("Headline front matter and model card quote the split-v2 means as recorded and say which build is served",
+          f"detection mAP50 {pm('detector_mAP50')} (mAP50--95 {pm('detector_mAP50_95')}) and F1 {pm('detector_f1_at_operating_point')}" in body
+          and f"segmentation mean IoU {pm('mIoU')}, classification accuracy {pm('classifier_accuracy')}" in body
+          and f"{pm('detector_mAP50')} / {pm('detector_mAP50_95')}" in body and f"{pm('mIoU')} / {pm('mask_mAP50_95')}" in body
+          and f"({f3(sd['at_operating_point']['recall'])} for the split-v2 checkpoints)" in body
+          and f"({sr['multi_animal_accepted_ready']} of {sr['multi_animal_photos']})" in body
+          and "the packaged service and demonstration use this build" in body
+          and "nine are met and A9b is not" in body
+          and f"{pmc('detector_mAP50')} / {pmc('detector_mAP50_95')}" in card and pmc("classifier_accuracy") in card
+          and f"{pmc('mask_mAP50_95')} / {pmc('mIoU')} / {pmc('dice')}" in card
+          and "These checkpoints are not the served weights" in card
+          and f"{sr['multi_animal_accepted_ready']} of {sr['multi_animal_photos']} multi-animal photos wrongly marked ready" in card)
     return out
 
 
