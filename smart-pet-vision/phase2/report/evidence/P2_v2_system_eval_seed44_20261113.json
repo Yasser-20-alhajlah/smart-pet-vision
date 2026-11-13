@@ -191,7 +191,15 @@
   },
   "detector_counts_equal_record": true,
   "segmenter_mIoU": 0.9212606183871425,
-  "segmenter_mIoU_equals_record": true
+  "segmenter_mIoU_equals_record": true,
+  "report_figures": {
+   "note": "copies of the regenerated Oxford-IIIT galleries added to submission/figures on 2026-11-13; faces of people appearing incidentally were blurred (two tiles in the false-positive and false-negative galleries, one in the segmentation gallery); no other pixel was changed",
+   "sha256": {
+    "P2_v2_seed44_false_positives.jpg": "f42c2e3aefd4ccb1940355f2e1ec0fae8af0d4f15cb91719837efdde90678dcb",
+    "P2_v2_seed44_false_negatives.jpg": "29f171c2b5db36a53beec2bae07968b869ab9a00ec57cf9044d886960427bd8f",
+    "P2_v2_seed44_seg_failures.jpg": "e2931e06b1aaaa6339e2289189bf20b5362430f8e0aadd803616f60c1c0be23f"
+   }
+  }
  },
  "acceptance_table": [
   {
