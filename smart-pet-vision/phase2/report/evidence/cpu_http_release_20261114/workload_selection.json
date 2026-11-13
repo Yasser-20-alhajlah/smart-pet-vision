@@ -1,0 +1,306 @@
+{
+  "selection": "First 50 v1 test IDs in frozen metadata order, selected before inference; each cycled six times; benchmark only, no metric or threshold selection",
+  "images": [
+    {
+      "image": "Abyssinian_104",
+      "split": "test",
+      "species": "cat",
+      "md5": "161f6d307cce2bc08b4446ca7c9a7da1"
+    },
+    {
+      "image": "Abyssinian_108",
+      "split": "test",
+      "species": "cat",
+      "md5": "700dc7a2087bf3a7ca7c376d3f6c949e"
+    },
+    {
+      "image": "Abyssinian_110",
+      "split": "test",
+      "species": "cat",
+      "md5": "94a968d418b5c8dc2cb4582fccf6df21"
+    },
+    {
+      "image": "Abyssinian_117",
+      "split": "test",
+      "species": "cat",
+      "md5": "cbaba4714303002867ba4da45a64ab10"
+    },
+    {
+      "image": "Abyssinian_122",
+      "split": "test",
+      "species": "cat",
+      "md5": "5ffcf726628c35da8fa1e1a682c3fc50"
+    },
+    {
+      "image": "Abyssinian_123",
+      "split": "test",
+      "species": "cat",
+      "md5": "be7a36c8da0599c69a8126991857956c"
+    },
+    {
+      "image": "Abyssinian_124",
+      "split": "test",
+      "species": "cat",
+      "md5": "f106f13d6eb5d9f75ae61da84da34968"
+    },
+    {
+      "image": "Abyssinian_125",
+      "split": "test",
+      "species": "cat",
+      "md5": "9510a2de8a863ddb1ad5991921083661"
+    },
+    {
+      "image": "Abyssinian_129",
+      "split": "test",
+      "species": "cat",
+      "md5": "296b99119282d16af2a15878a7c604e8"
+    },
+    {
+      "image": "Abyssinian_132",
+      "split": "test",
+      "species": "cat",
+      "md5": "0ecd0e5883cee369e929e30a369d911f"
+    },
+    {
+      "image": "Abyssinian_137",
+      "split": "test",
+      "species": "cat",
+      "md5": "6f1e162f3bd548c0ed56af006e55b51b"
+    },
+    {
+      "image": "Abyssinian_139",
+      "split": "test",
+      "species": "cat",
+      "md5": "562239a4807b668ec780eec95bd6137f"
+    },
+    {
+      "image": "Abyssinian_143",
+      "split": "test",
+      "species": "cat",
+      "md5": "2398af961d8290b4b5d0d3de6bfc9325"
+    },
+    {
+      "image": "Abyssinian_144",
+      "split": "test",
+      "species": "cat",
+      "md5": "391da5bed82aae195510593309d89371"
+    },
+    {
+      "image": "american_bulldog_117",
+      "split": "test",
+      "species": "dog",
+      "md5": "26583c5b551dddd8454fc715b170ba2e"
+    },
+    {
+      "image": "american_bulldog_118",
+      "split": "test",
+      "species": "dog",
+      "md5": "01dec652df41673a4e55cf7db621dc78"
+    },
+    {
+      "image": "american_bulldog_120",
+      "split": "test",
+      "species": "dog",
+      "md5": "fc52447a25fea6bd3fe4c5e50f938169"
+    },
+    {
+      "image": "american_bulldog_126",
+      "split": "test",
+      "species": "dog",
+      "md5": "eb1d57703ad1fdcf510413c6c49d7cd1"
+    },
+    {
+      "image": "american_bulldog_12",
+      "split": "test",
+      "species": "dog",
+      "md5": "103764f6d4f737ea9bdee1e7b2912e2f"
+    },
+    {
+      "image": "american_bulldog_132",
+      "split": "test",
+      "species": "dog",
+      "md5": "85c31a242d3c7deb5b79cdcd36da0ab0"
+    },
+    {
+      "image": "american_pit_bull_terrier_100",
+      "split": "test",
+      "species": "dog",
+      "md5": "030ffcbe2c07438dbbfd185c0de34cb5"
+    },
+    {
+      "image": "american_pit_bull_terrier_101",
+      "split": "test",
+      "species": "dog",
+      "md5": "e214d69f3c4e53fe39fafc66aa957a9d"
+    },
+    {
+      "image": "american_pit_bull_terrier_102",
+      "split": "test",
+      "species": "dog",
+      "md5": "048a68260ccce181acf94613b1bb0f88"
+    },
+    {
+      "image": "american_pit_bull_terrier_104",
+      "split": "test",
+      "species": "dog",
+      "md5": "adc4e0f546099942585db337c15b9b7d"
+    },
+    {
+      "image": "american_pit_bull_terrier_111",
+      "split": "test",
+      "species": "dog",
+      "md5": "c755de37f1ef745d10e248781f4cc322"
+    },
+    {
+      "image": "american_pit_bull_terrier_113",
+      "split": "test",
+      "species": "dog",
+      "md5": "69527292963f5b650b2b93d909c64f18"
+    },
+    {
+      "image": "american_pit_bull_terrier_120",
+      "split": "test",
+      "species": "dog",
+      "md5": "f808cbdede01e160e0065c9b40169d4b"
+    },
+    {
+      "image": "american_pit_bull_terrier_129",
+      "split": "test",
+      "species": "dog",
+      "md5": "ecf996150b9f7115d8bafce19fbc2efe"
+    },
+    {
+      "image": "american_pit_bull_terrier_133",
+      "split": "test",
+      "species": "dog",
+      "md5": "ee05283ae03f5fb967a1b32874c3a84b"
+    },
+    {
+      "image": "american_pit_bull_terrier_135",
+      "split": "test",
+      "species": "dog",
+      "md5": "adc6569273dba285d4fe53d739e43571"
+    },
+    {
+      "image": "american_pit_bull_terrier_142",
+      "split": "test",
+      "species": "dog",
+      "md5": "f4155b82407446a25cca8f41708b1bbc"
+    },
+    {
+      "image": "basset_hound_115",
+      "split": "test",
+      "species": "dog",
+      "md5": "29da70aed7fc587256887051edbf5dea"
+    },
+    {
+      "image": "basset_hound_119",
+      "split": "test",
+      "species": "dog",
+      "md5": "e6d8341335a78df352366dd688cf681b"
+    },
+    {
+      "image": "basset_hound_123",
+      "split": "test",
+      "species": "dog",
+      "md5": "a560114d636adc3e5b8fd038c58150ee"
+    },
+    {
+      "image": "basset_hound_133",
+      "split": "test",
+      "species": "dog",
+      "md5": "8b9c42cb1b1b628b2ecae6d4d01b92d1"
+    },
+    {
+      "image": "basset_hound_137",
+      "split": "test",
+      "species": "dog",
+      "md5": "61cf52e8bd539dd802a0fa65fb983b04"
+    },
+    {
+      "image": "basset_hound_138",
+      "split": "test",
+      "species": "dog",
+      "md5": "d7f13ce56ad6d73f920e0bb6e7867d45"
+    },
+    {
+      "image": "basset_hound_140",
+      "split": "test",
+      "species": "dog",
+      "md5": "db784f2e65fd0387b670a67cc67b3229"
+    },
+    {
+      "image": "beagle_100",
+      "split": "test",
+      "species": "dog",
+      "md5": "4acca8c06d0fd272c1a6fd01cd606fc9"
+    },
+    {
+      "image": "beagle_108",
+      "split": "test",
+      "species": "dog",
+      "md5": "0e0325142c35268ed0040660ea02a381"
+    },
+    {
+      "image": "beagle_10",
+      "split": "test",
+      "species": "dog",
+      "md5": "e7125acf4b3bce4a7c27353f2a8a1097"
+    },
+    {
+      "image": "beagle_125",
+      "split": "test",
+      "species": "dog",
+      "md5": "c248ca8328f52f995435d1592b924e7d"
+    },
+    {
+      "image": "beagle_13",
+      "split": "test",
+      "species": "dog",
+      "md5": "6721b6749c7a078a70c927bf75baf8bd"
+    },
+    {
+      "image": "beagle_146",
+      "split": "test",
+      "species": "dog",
+      "md5": "76173a5c51095aba5ecb7e89feea9dcf"
+    },
+    {
+      "image": "Bengal_101",
+      "split": "test",
+      "species": "cat",
+      "md5": "a0e9da49fff5079670c0ee87af4d3746"
+    },
+    {
+      "image": "Bengal_115",
+      "split": "test",
+      "species": "cat",
+      "md5": "24af99d1dd9e3d5be8e0c32509c40c2b"
+    },
+    {
+      "image": "Bengal_117",
+      "split": "test",
+      "species": "cat",
+      "md5": "7ab73c1cdaf874b4fed0ffe754471ca3"
+    },
+    {
+      "image": "Bengal_118",
+      "split": "test",
+      "species": "cat",
+      "md5": "c676862d09c6ed3ca40e866a9eb13ee0"
+    },
+    {
+      "image": "Bengal_11",
+      "split": "test",
+      "species": "cat",
+      "md5": "58ec62673f25d0606290fe21a548a8f7"
+    },
+    {
+      "image": "Bengal_131",
+      "split": "test",
+      "species": "cat",
+      "md5": "673495627a26d24b9bec4fe86e002d3d"
+    }
+  ],
+  "source_archive_md5": "5c4f3ee8e5d25df40f4fd59a7f44e54c"
+}

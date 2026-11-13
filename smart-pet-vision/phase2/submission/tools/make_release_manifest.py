@@ -36,7 +36,11 @@ def run_checks():
     verdict = [line for line in t.stderr.splitlines() if line.startswith(("OK", "FAILED"))]  # e.g. "OK (skipped=15)"
     v = subprocess.run([sys.executable, "tools/verify_submission_evidence.py"], cwd=PHASE2,
                        capture_output=True, text=True)
-    return {"unit_tests": {"command": "PYTHONPATH=src python -m unittest discover -s tests",
+    replay = subprocess.run([sys.executable, "tools/verify_v2_saved_results.py"], cwd=PHASE2,
+                            capture_output=True, text=True)
+    return {"saved_output_checks": {"command": "python tools/verify_v2_saved_results.py",
+                                    "summary": replay.stdout.strip().splitlines()[-1] if replay.stdout.strip() else "",
+                                    "returncode": replay.returncode}, "unit_tests": {"command": "PYTHONPATH=src python -m unittest discover -s tests",
                            "summary": (ran[-1] if ran else "") + " " + (verdict[-1] if verdict else ("OK" if t.returncode == 0 else "FAILED")),
                            "returncode": t.returncode},
             "evidence_checks": {"command": "python tools/verify_submission_evidence.py",
@@ -81,7 +85,8 @@ def main():
         "checks_at_build": run_checks(),
         "model_weights_sha256_recorded": EXPECTED_SHA256,
         "service_manifest": {"path": "phase2/runs/manifest.json", "sha256": sha(PHASE2 / "runs" / "manifest.json")},
-        "evidence_files": {p.name: sha(p) for p in sorted((PHASE2 / "report" / "evidence").glob("*")) if p.is_file()},
+        "evidence_files": {str(p.relative_to(PHASE2 / "report" / "evidence")): sha(p)
+                           for p in sorted((PHASE2 / "report" / "evidence").rglob("*")) if p.is_file()},
         "documents": {str(p.relative_to(PHASE2)): sha(p) for p in (
             PHASE2 / "docs" / "model_card.md", PHASE2 / "docs" / "DEMO_AND_REHEARSAL_CHECKLIST.md",
             PHASE2 / "docs" / "AUDIT_TRACKER_2026-11-04.md", PHASE2 / "tools" / "a9b_root_cause.py",
@@ -117,6 +122,19 @@ def main():
                   "evidence_checks counts checks of two reports: the superseded free-form report (report/main.tex) and the submission report (submission/main.tex); see the summary line for the split.",
                   "Weights, team photos and private_ids.tex are private and not in Git."],
     }
+    failures = [name for name, result in out['checks_at_build'].items()
+                if isinstance(result, dict) and result.get('returncode', 0) != 0]
+    if not code_archive['identical_to_source_zip_code_folder']:
+        failures.append('source ZIP code members differ from reviewed archive')
+    if cidx['source_commit'] != out['source_commit'] or cidx['source_tree'] != git('rev-parse', 'HEAD^{tree}'):
+        failures.append('code archive source revision differs from build revision')
+    if dirty:
+        failures.append('uncommitted source changes')
+    out['release_verified'] = not failures
+    if failures:
+        out['release_verification_failures'] = failures
+        (SUB / 'RELEASE_MANIFEST.failed.json').write_text(json.dumps(out, indent=1)+'\n')
+        raise SystemExit('Release verification failed: ' + '; '.join(failures))
     (SUB / "RELEASE_MANIFEST.json").write_text(json.dumps(out, indent=1) + "\n")
     print("wrote RELEASE_MANIFEST.json" + (" (WARNING: uncommitted changes)" if dirty else ""))
 

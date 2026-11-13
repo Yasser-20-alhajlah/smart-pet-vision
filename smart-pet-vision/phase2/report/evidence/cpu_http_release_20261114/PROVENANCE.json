@@ -1,0 +1,15 @@
+{
+  "scope": "New CPU-only HTTP benchmark on 14 Nov 2026; no new training or GPU. Original measurement receipt is retained unchanged.",
+  "runtime_source_commit": "6f97aa2cb91a65077573ec8a6bf80d633b02f7bb",
+  "runtime_files_match_source_commit": true,
+  "dirty_state_explanation": "Documentation and verification tools were being improved; each of the five runtime files listed in measurement.json exactly matches this base revision. No model or serving rule was edited.",
+  "benchmark_tool_sha256": "638a9953372e3c068d93eff26892ab80df183217f61db40500b9e7f57850d7b1",
+  "measured_host": "Apple M5",
+  "versions_difference": "macOS ARM64 CPU, Python 3.12; NumPy 2.3.5 replaces original Colab 2.1.3 because Ultralytics 8.4.182 excludes NumPy 2.1.x on Darwin. Other original direct pins retained. This is not the original T4 environment.",
+  "input_source": "Oxford-IIIT Pet public archive via mirror; archive MD5 5c4f3ee8e5d25df40f4fd59a7f44e54c; each of 50 input image MD5 values matches frozen split-v1 metadata.",
+  "input_order": "The first 50 frozen-v1 test IDs were selected before inference, then sorted by filename and cycled six times. Five warm-up requests precede 300 timed requests. No metric or threshold selection.",
+  "measurement_limits": "One client/worker, loopback, batch 1; no concurrency/load test. RSS samples every 20 ms are process-only decimal MB, not total-system memory. OMP/MKL/OpenBLAS requested 2 threads; actual framework thread counts were not separately recorded. Performance is specific to this host/workload.",
+  "original_measurement_sha256": "176a0a8e9582a338a23715c9a3e0d242742800c032e711629ca069bd76bb77cc",
+  "delivery_benchmark_tool_sha256_after_formatting": "4d8d82e0bbc00979a621e69013306c785d63bf3ef6f8fa8c144e7047a0539184",
+  "tool_format_note": "Ruff formatting was applied after execution; the recorded pre-format tool hash is retained. The serving runtime was not changed."
+}

@@ -39,6 +39,52 @@ def validate_inputs(record, metadata, weights):
     return {r['image'] for r in rows if r['split'] == 'test'}
 
 
+
+def validate_yolo_test(spec, yaml_path, ids, metadata_rows, check_boxes=False, processed=None):
+    """Reject duplicate IDs, changed class mapping or missing/changed test labels."""
+    names = spec.get('names')
+    if names not in ({0: 'cat', 1: 'dog'}, ['cat', 'dog']):
+        raise ValueError(f'{yaml_path.name}: expected class order cat, dog')
+    base = Path(spec.get('path', yaml_path.parent))
+    base = base if base.is_absolute() else yaml_path.parent / base
+    part = base / spec['test']
+    images = [p for p in part.iterdir() if p.is_file() and p.suffix.lower() in ('.jpg', '.jpeg', '.png')]
+    found = [p.stem for p in images]
+    if len(found) != len(ids) or len(found) != len(set(found)) or set(found) != ids:
+        raise ValueError(f'{yaml_path.name}: YOLO test cohort differs from frozen metadata')
+    rows = {r['image']: r for r in metadata_rows if r['split'] == 'test'}
+    for image in images:
+        # The prepared export uses images/test and labels/test, as Ultralytics does.
+        parts = list(image.parts)
+        positions = [i for i, v in enumerate(parts) if v == 'images']
+        if not positions:
+            raise ValueError('Prepared YOLO layout must contain an images directory')
+        parts[positions[-1]] = 'labels'
+        label = Path(*parts).with_suffix('.txt')
+        if not label.is_file():
+            raise ValueError(f'Missing test label for {image.stem}')
+        if check_boxes:
+            row = rows[image.stem]
+            x1, y1, x2, y2, width, height = [float(row[k]) for k in ('x1', 'y1', 'x2', 'y2', 'width', 'height')]
+            expected = f"{int(row['label'])} {(x1+x2)/(2*width):.6f} {(y1+y2)/(2*height):.6f} {(x2-x1)/width:.6f} {(y2-y1)/height:.6f}"
+            if label.read_text().strip() != expected:
+                raise ValueError(f'Detector test label differs from frozen metadata: {image.stem}')
+        elif processed is not None:
+            import numpy as np
+            from PIL import Image
+            from spv.data import mask_to_polygon
+            row = rows[image.stem]
+            mask = np.array(Image.open(processed/'masks'/f'{image.stem}.png')) > 0
+            if mask.shape != (int(row['height']), int(row['width'])):
+                raise ValueError(f'Test mask dimensions differ: {image.stem}')
+            poly = mask_to_polygon(mask)
+            if poly is None:
+                raise ValueError(f'Test mask has no polygon: {image.stem}')
+            xy = np.asarray(poly).reshape(-1,2) / [float(row['width']), float(row['height'])]
+            expected = f"{int(row['label'])} " + ' '.join(f'{v:.6f}' for v in xy.flatten())
+            if label.read_text().strip() != expected:
+                raise ValueError(f'Segmenter test label differs from prepared mask: {image.stem}')
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument('--operator', required=True)
@@ -53,7 +99,7 @@ def main():
     parser.add_argument('--image-dir', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
     args = parser.parse_args()
-    if args.out.exists():
+    if args.out.exists() or args.out.with_suffix('.per_image.csv').exists():
         parser.error('Output already exists; choose a new receipt path')
     original = json.loads(args.record.read_text())
     if original.get('seed') not in (42, 43, 44):
@@ -67,14 +113,11 @@ def main():
         actual = md.version(package).split('+')[0]
         if actual != expected:
             raise ValueError(f'{package}: expected {expected}, found {actual}; use the recorded environment')
-    for path in (args.det_yaml, args.seg_yaml):
+    with args.metadata.open() as stream:
+        metadata_rows = list(csv.DictReader(stream))
+    for path, check_boxes in ((args.det_yaml, True), (args.seg_yaml, False)):
         spec = yaml.safe_load(path.read_text())
-        base = Path(spec.get('path', path.parent))
-        base = base if base.is_absolute() else path.parent / base
-        part = base / spec['test']
-        found = {p.stem for p in part.iterdir() if p.is_file() and p.suffix.lower() in ('.jpg', '.jpeg', '.png')}
-        if found != ids:
-            raise ValueError(f'{path.name}: YOLO test cohort differs from the frozen metadata')
+        validate_yolo_test(spec, path, ids, metadata_rows, check_boxes=check_boxes, processed=args.processed)
 
     import pandas as pd
     from spv import classify, detect, segment
@@ -91,6 +134,10 @@ def main():
     inputs = [args.image_dir / f'{im}.jpg' for im in test.image]
     if not all(p.is_file() for p in inputs):
         raise ValueError('Missing original Oxford test images')
+    for path, row in zip(inputs, test.itertuples()):
+        with path.open('rb') as stream:
+            if hashlib.file_digest(stream, 'md5').hexdigest() != row.md5:
+                raise ValueError(f'Original Oxford image bytes differ: {path.name}')
     box = detect.test_metrics(args.det_weights, args.det_yaml, 640)
     op = original['detector']['operating_point']
     preds = detect.predict_all(args.det_weights, inputs, conf=op['conf'], iou=op['nms_iou'], imgsz=640)
