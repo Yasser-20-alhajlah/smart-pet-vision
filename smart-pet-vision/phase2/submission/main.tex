@@ -947,7 +947,7 @@ Dog (698) & 0.971 & 0.922 & 0.958 & 0.999 / 0.999 / 0.999 \\
 \bottomrule
 \end{tabularx}
 
-Per-species box AP50--95, mask AP and detector operating-point P/R/F1 were not retained for these v2 runs; aggregate AP cannot recover them. The complete split-v1 per-species tables above remain labelled v1 and are not substituted for missing v2 values. The paired pretrained-baseline gains also concern v1 only. For segmentation, the installed Ultralytics 8.4.182 checkpoint fitness is the sum of validation box and mask mAP50--95; for detection it is validation box mAP50--95 alone.
+Per-species box AP50--95, mask AP and detector operating-point P/R/F1 were not retained in the original T4 records; aggregate AP cannot recover them. A separate 14 November CPU checkpoint verification now reports these fields below (Section~\ref{sec:v2cpu}); it does not retrospectively fill the original GPU log. The complete split-v1 per-species tables above remain labelled v1 and are not substituted for missing v2 values. The paired pretrained-baseline gains also concern v1 only. For segmentation, the installed Ultralytics 8.4.182 checkpoint fitness is the sum of validation box and mask mAP50--95; for detection it is validation box mAP50--95 alone.
 
 The sample standard deviations are small within these three runs: the largest is 0.00523 for operating-point F1. Values in the table are rounded to three decimals; Dice sd is 0.000385, not zero. Three seeds quantify this run-to-run variation, not uncertainty from unseen shelters or animal identities. The seed-42 segmenter reproduces the 7 November mask figures to the last recorded digit (same seed and segmentation labels); seeds 43 and 44 differ, which shows that the segmenter does vary with the seed. \textbf{ONNX.} The four-input check is within the bound for one export and outside it for the other two, while on 50 validation images the final detections of all three exports equal those of PyTorch (same count and class on every image, boxes within 0.0005\,px). A9b therefore depends on the particular weights and is not used to select a checkpoint; it is reported as computed and is not a parity claim. \textbf{Checkpoint rule.} The rule fixed before the run (highest detector validation mAP50--95) points to seed 44, by a margin of 0.0002 over seed 42 that is far inside the spread between seeds. \textbf{Limits.} The v2 test split had already been evaluated once on 7 November, and no recipe, threshold or rule was changed after that look. Two Colab sessions lost their runtime during segmenter training (seeds 42 and 44); in both cases the classifier and detector, already trained and evaluated once, were kept and the segmenter was retrained from the start with the same seed. The system-level evaluation of the seed-44 checkpoints follows below; nothing is served from them yet, and the acceptance verdicts of Section~\ref{sec:verdict} still concern the delivered split-v1 models. GPU time was 12.2 of the 13 approved T4-hours, counting the two lost sessions at their upper bound.
 
@@ -1022,6 +1022,38 @@ False negatives & & 56 & 100.0 & 45 \\
   \includegraphics[width=0.95\linewidth]{figures/P2_v2_seed44_seg_failures.jpg}
   \caption{The 18 lowest-IoU predictions of the seed-44 segmenter on the v2 test split (640\,px, \tconf{} 0.25, \tnms{} 0.70). Yellow: prediction and ground truth agree; red: prediction only; green: ground truth only. One face of a person was blurred for this report.}
 \end{figure}
+
+\subsection{Frozen split-v2 checkpoint verification on CPU (14 November)}\label{sec:v2cpu}
+
+The validation-selected seed-44 weights were re-evaluated on all 1,050 frozen v2 test images, with no training, model selection, temperature fit or threshold change. This was an automated CPU verification, not a second team member's claimed execution and not a new untouched test set. The metadata SHA-256 remains \texttt{c06f4d9e\ldots}; all three checkpoint hashes match the original run. Source commit \texttt{b42f76d39e204183b726ed37a88677c0a65e8cda} was clean; its recorded device is CPU with no CUDA. Images and trimaps came from the MD5-verified public Oxford archives; original test-image bytes were checked against the frozen metadata. Source, complete log, environment, 1,050 per-image mask rows and receipt are retained in \path{report/evidence/v2_cpu_reference_20261114/}.
+
+\textbf{Conditions.} Apple M5, macOS ARM64, Python 3.12.14; PyTorch 2.11.0, torchvision 0.26.0 and Ultralytics 8.4.182. NumPy 2.3.5 replaces the T4 run's 2.1.3 because that Ultralytics version excludes NumPy 2.1.x on Darwin. The original T4 used Python 3.13.16 and CUDA; this is explicitly a different environment. The strict original-environment verifier remains the default; an explicit CPU-reference option records this one NumPy exception and rejects other library-version changes. Classifier evaluation workers are zero for this CPU run. AP evaluation: 640\,px, confidence 0.001, NMS 0.70. Detector operating point: confidence 0.40, NMS 0.50, matching IoU 0.50. Mask overlap: 640\,px, confidence 0.25, NMS 0.70, border included; classifier: 224\,px, saved temperature 0.3334091604.
+
+\begin{tabularx}{\linewidth}{@{}Y r r r@{}}
+\toprule
+Metric (v2 test, seed 44) & Original T4 & CPU repeat & Absolute difference \\
+\midrule
+Box mAP50 & 0.981418 & 0.981458 & 0.000041 \\
+Box mAP50--95 & 0.834794 & 0.835258 & 0.000464 \\
+Mask mAP50 & 0.992490 & 0.992488 & 0.000002 \\
+Mask mAP50--95 & 0.871591 & 0.871933 & 0.000342 \\
+Mean mask IoU & 0.921261 & 0.921260 & 0.000001 \\
+Mean mask Dice & 0.957603 & 0.957603 & $<0.000001$ \\
+\bottomrule
+\end{tabularx}
+
+All six differences are within the existing reproduction tolerance of 0.005; the largest is 0.000463634. These are close matches, not byte-identical outputs. Classifier accuracy 0.9980952381 and macro-F1 0.9978632131 match exactly. Detector operating-point TP/FP/FN remain 994/46/56, with identical precision/recall/F1. The original three-seed headline values are retained; the CPU repeat is not used to choose a seed or improve the reported test score.
+
+\begin{tabularx}{\linewidth}{@{}l r r r r Y@{}}
+\toprule
+Species (images) & Box AP50 & Box AP50--95 & Mask AP50 & Mask AP50--95 & Detector P / R / F1 \\
+\midrule
+Cat (352) & 0.991411 & 0.863375 & 0.990936 & 0.876768 & 0.983 / 0.963 / 0.973 \\
+Dog (698) & 0.971506 & 0.807141 & 0.994039 & 0.867098 & 0.942 / 0.938 / 0.940 \\
+\bottomrule
+\end{tabularx}
+
+These per-species AP and operating-point values were newly retained by this CPU evaluation, under the conditions above. Cat TP/FP/FN are 339/6/13; dog 655/40/43, summing to the recorded aggregate counts. This closes the missing per-species reporting fields for the frozen candidate without inventing historical values. It does not resolve detector ONNX A9b, individual-animal identity uncertainty, the lack of a fresh shelter cohort, or missed secondary animals. The served weights and PyTorch backend remain unchanged. A teammate may still perform the separate prepared Colab check; no signature is added as a submission condition.
 
 \subsection{Conclusion}
 

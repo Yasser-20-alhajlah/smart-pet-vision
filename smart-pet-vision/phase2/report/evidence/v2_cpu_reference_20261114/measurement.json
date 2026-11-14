@@ -1,0 +1,208 @@
+{
+  "operator": "Automated CPU verification; no human operator attribution",
+  "executed_utc": "2026-11-14T08:54:24.116209+00:00",
+  "scope": "Checkpoint evaluation on previously evaluated split-v2 test images; no training or model/threshold selection.",
+  "seed": 44,
+  "source_record_sha256": "22a9bb60c28529cbf7ee56cafb51dd1cbdcc0a74f98575df2a7a768ccdcccea6",
+  "metadata_sha256": "c06f4d9e5dd4e333b4d5e17f1b07c115209dd5b9da8a6e99b4d48db8316db13f",
+  "test_images": 1050,
+  "weights_sha256": {
+    "classifier": "98eb8956c27ffa1d439aaa98ec3a4d8156489e5b1541ee1debe26b75c633040c",
+    "detector": "92548b78d3d04491d3ba8573c8139bfb04b587b96aed5bd0ed3e2923bdb9ac08",
+    "segmenter": "47f2e2412d8e3109bd2bcd4fcb5bdbb3a5bb250e78a8d112a22f720381ae7a08"
+  },
+  "original_temperature": 0.3334091603755951,
+  "operating_point": {
+    "conf": 0.4,
+    "nms_iou": 0.5,
+    "val_precision": 0.9788629737609329,
+    "val_recall": 0.9717800289435601,
+    "val_f1": 0.9753086419753086,
+    "recall_floor_met": true
+  },
+  "provenance": {
+    "recorded_utc": "2026-11-14T08:54:24Z",
+    "python": "3.12.14",
+    "platform": "macOS-27.2.1-arm64-arm-64bit",
+    "code_source": "git",
+    "commit": "b42f76d39e204183b726ed37a88677c0a65e8cda",
+    "branch": "verify/v2-cpu-reference-20261114",
+    "dirty": false,
+    "dirty_files": [],
+    "source_fingerprint": {
+      "sha256": "3c753da0d89907979410d9c85f109cd569e5fcc8e0d0fd2487909c28ae040e93",
+      "files": 54
+    },
+    "torch": "2.11.0",
+    "cuda": null,
+    "device": "cpu"
+  },
+  "versions": {
+    "torch": "2.11.0",
+    "torchvision": "0.26.0",
+    "ultralytics": "8.4.182",
+    "numpy": "2.3.5",
+    "onnx": "1.23.2",
+    "onnxruntime": "1.31.0",
+    "wandb": "0.28.1"
+  },
+  "verification_kind": "automated_cpu_reference",
+  "human_second_member_claimed": false,
+  "platform": "macOS-27.2.1-arm64-arm-64bit",
+  "python": "3.12.14",
+  "environment_differences": {
+    "numpy": {
+      "original": "2.1.3",
+      "actual": "2.3.5",
+      "reason": "Ultralytics 8.4.182 excludes NumPy 2.1.x on Darwin; CPU reference only"
+    }
+  },
+  "cpu_reference_inference_workers": 0,
+  "originals": {
+    "mAP50": 0.9814176440956374,
+    "mAP50_95": 0.8347943540410366,
+    "mask_mAP50": 0.9924900324676253,
+    "mask_mAP50_95": 0.8715905215511748,
+    "mIoU": 0.9212606183871425,
+    "mean_dice": 0.9576030585779628
+  },
+  "reproduced": {
+    "mAP50": 0.981458249322803,
+    "mAP50_95": 0.8352579884142852,
+    "mask_mAP50": 0.9924877251302926,
+    "mask_mAP50_95": 0.8719329048640082,
+    "mIoU": 0.921259886436835,
+    "mean_dice": 0.9576026720196833
+  },
+  "comparison": {
+    "mAP50": {
+      "original": 0.9814176440956374,
+      "reproduced": 0.981458249322803,
+      "difference": 4.060522716564652e-05,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mAP50_95": {
+      "original": 0.8347943540410366,
+      "reproduced": 0.8352579884142852,
+      "difference": 0.00046363437324858925,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mask_mAP50": {
+      "original": 0.9924900324676253,
+      "reproduced": 0.9924877251302926,
+      "difference": -2.307337332752013e-06,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mask_mAP50_95": {
+      "original": 0.8715905215511748,
+      "reproduced": 0.8719329048640082,
+      "difference": 0.0003423833128334275,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mIoU": {
+      "original": 0.9212606183871425,
+      "reproduced": 0.921259886436835,
+      "difference": -7.319503074754152e-07,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "mean_dice": {
+      "original": 0.9576030585779628,
+      "reproduced": 0.9576026720196833,
+      "difference": -3.8655827949707344e-07,
+      "tolerance": 0.005,
+      "within_tolerance": true
+    },
+    "all_within_tolerance": true
+  },
+  "per_class_from_this_evaluation": {
+    "cat": {
+      "images": 352,
+      "detector_at_operating_point": {
+        "tp": 339,
+        "fp": 6,
+        "fn": 13,
+        "precision": 0.9826086956521739,
+        "recall": 0.9630681818181818,
+        "f1": 0.9727403156384505
+      },
+      "box_AP50": 0.991410657829507,
+      "box_AP50_95": 0.8633752614769815,
+      "mask_AP50": 0.9909359704894195,
+      "mask_AP50_95": 0.8767682279859536,
+      "mask_overlap": {
+        "iou": 0.9205247584527897,
+        "dice": 0.9561290226002511
+      }
+    },
+    "dog": {
+      "images": 698,
+      "detector_at_operating_point": {
+        "tp": 655,
+        "fp": 40,
+        "fn": 43,
+        "precision": 0.9424460431654677,
+        "recall": 0.9383954154727794,
+        "f1": 0.9404163675520459
+      },
+      "box_AP50": 0.9715058408160989,
+      "box_AP50_95": 0.807140715351589,
+      "mask_AP50": 0.9940394797711657,
+      "mask_AP50_95": 0.867097581742063,
+      "mask_overlap": {
+        "iou": 0.9216306100047205,
+        "dice": 0.9583458304661593
+      }
+    }
+  },
+  "additional_metrics_no_new_acceptance_thresholds": {
+    "classifier": {
+      "accuracy": {
+        "original": 0.9980952380952381,
+        "reproduced": 0.9980952380952381,
+        "difference": 0.0
+      },
+      "macro_f1": {
+        "original": 0.997863213076322,
+        "reproduced": 0.997863213076322,
+        "difference": 0.0
+      }
+    },
+    "detector_operating_point": {
+      "tp": {
+        "original": 994,
+        "reproduced": 994,
+        "difference": 0
+      },
+      "fp": {
+        "original": 46,
+        "reproduced": 46,
+        "difference": 0
+      },
+      "fn": {
+        "original": 56,
+        "reproduced": 56,
+        "difference": 0
+      },
+      "precision": {
+        "original": 0.9557692307692308,
+        "reproduced": 0.9557692307692308,
+        "difference": 0.0
+      },
+      "recall": {
+        "original": 0.9466666666666667,
+        "reproduced": 0.9466666666666667,
+        "difference": 0.0
+      },
+      "f1": {
+        "original": 0.9511961722488038,
+        "reproduced": 0.9511961722488038,
+        "difference": 0.0
+      }
+    }
+  }
+}
