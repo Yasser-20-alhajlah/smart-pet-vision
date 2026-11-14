@@ -12,6 +12,8 @@ import argparse
 import csv
 import hashlib
 import json
+import os
+import platform
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,6 +25,22 @@ sys.path.insert(0, str(PHASE2 / 'src'))
 def sha(path):
     with Path(path).open('rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def verify_versions(expected, actual, cpu_reference=False, host_platform=None):
+    """Keep strict reproduction; permit only the documented macOS NumPy CPU probe."""
+    differences = {}
+    for package, wanted in expected.items():
+        found = actual[package].split('+')[0]
+        if found == wanted:
+            continue
+        permitted = (cpu_reference and (host_platform or sys.platform) == 'darwin'
+                     and package == 'numpy' and wanted == '2.1.3' and found == '2.3.5')
+        if not permitted:
+            raise ValueError(f'{package}: expected {wanted}, found {found}; use the recorded environment')
+        differences[package] = {'original': wanted, 'actual': found,
+                                'reason': 'Ultralytics 8.4.182 excludes NumPy 2.1.x on Darwin; CPU reference only'}
+    return differences
 
 
 def validate_inputs(record, metadata, weights):
@@ -88,6 +106,8 @@ def validate_yolo_test(spec, yaml_path, ids, metadata_rows, check_boxes=False, p
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument('--operator', required=True)
+    parser.add_argument('--cpu-reference', action='store_true',
+                        help='Automated CPU reference, not a human second-member or original-T4 reproduction claim')
     parser.add_argument('--record', type=Path, required=True)
     parser.add_argument('--metadata', type=Path, required=True)
     parser.add_argument('--det-weights', type=Path, required=True)
@@ -109,10 +129,15 @@ def main():
 
     import importlib.metadata as md
     import yaml
-    for package, expected in original['versions'].items():
-        actual = md.version(package).split('+')[0]
-        if actual != expected:
-            raise ValueError(f'{package}: expected {expected}, found {actual}; use the recorded environment')
+    actual_versions = {p: md.version(p) for p in original['versions']}
+    differences = verify_versions(original['versions'], actual_versions, args.cpu_reference)
+    if args.cpu_reference:
+        os.environ['CUDA_VISIBLE_DEVICES'] = ''
+        os.environ['WANDB_MODE'] = 'disabled'
+        import torch
+        if torch.cuda.is_available():
+            raise RuntimeError('CPU reference must not use CUDA')
+        torch.set_num_threads(2)
     with args.metadata.open() as stream:
         metadata_rows = list(csv.DictReader(stream))
     for path, check_boxes in ((args.det_yaml, True), (args.seg_yaml, False)):
@@ -127,6 +152,8 @@ def main():
     cfg = load_config()
     cfg['seed'] = original['seed']
     cfg['classification'] = original['recipes']['classification']
+    if args.cpu_reference:
+        cfg['classification'] = {**cfg['classification'], 'num_workers': 0}
     cfg['wandb']['enabled'] = False
     seed_everything(cfg['seed'])
     frame = pd.read_csv(args.metadata)
@@ -165,6 +192,19 @@ def main():
         ('detector_operating_point', original['detector']['test_at_operating_point'], at_op,
          ['tp', 'fp', 'fn', 'precision', 'recall', 'f1'])]:
         additional[kind] = {k: {'original': old[k], 'reproduced': new[k], 'difference': new[k]-old[k]} for k in keys}
+    per_class = {}
+    for index, species in enumerate(('cat', 'dog')):
+        filtered_preds = {name: (b[c == index], c[c == index], s[c == index])
+                          for name, (b, c, s) in preds.items()}
+        filtered_gts = {name: (b[c == index], c[c == index])
+                        for name, (b, c) in detect.gt_for(test).items()}
+        per_class[species] = {'images': int((test.species == species).sum()),
+                             'detector_at_operating_point': detect.score(filtered_preds, filtered_gts, op['conf']),
+                             'box_AP50': box['AP50_per_class'][species],
+                             'box_AP50_95': box['AP50_95_per_class'][species],
+                             'mask_AP50': mask_ap['mask_AP50_per_class'][species],
+                             'mask_AP50_95': mask_ap['mask_AP50_95_per_class'][species],
+                             'mask_overlap': mask['by_species'][species]}
     result = {'operator': args.operator, 'executed_utc': datetime.now(timezone.utc).isoformat(),
               'scope': 'Checkpoint evaluation on previously evaluated split-v2 test images; no training or model/threshold selection.',
               'seed': original['seed'], 'source_record_sha256': sha(args.record),
@@ -172,7 +212,13 @@ def main():
               'weights_sha256': {k: sha(v) for k, v in weights.items()},
               'original_temperature': original['classifier']['temperature'], 'operating_point': op,
               'provenance': record(PHASE2), 'versions': {p: md.version(p) for p in original['versions']},
+              'verification_kind': 'automated_cpu_reference' if args.cpu_reference else 'recorded_environment_checkpoint_evaluation',
+              'human_second_member_claimed': False,
+              'platform': platform.platform(), 'python': platform.python_version(),
+              'environment_differences': differences,
+              'cpu_reference_inference_workers': 0 if args.cpu_reference else None,
               'originals': expected, 'reproduced': measured, 'comparison': compared,
+              'per_class_from_this_evaluation': per_class,
               'additional_metrics_no_new_acceptance_thresholds': additional}
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2)+'\n')

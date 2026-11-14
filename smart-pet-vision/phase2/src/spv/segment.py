@@ -168,11 +168,14 @@ def run_test(name: str, masks: dict, test_df: pd.DataFrame, image_dir: Path, pro
 
 def yolo_coco_metrics(weights: Path, data_yaml: Path, imgsz: int) -> dict:
     from ultralytics import YOLO
+    from .constants import CLASSES
 
     m = YOLO(str(weights)).val(data=str(data_yaml), split="test", imgsz=imgsz, verbose=False,
                                plots=False)
     return {"mask_mAP50": float(m.seg.map50), "mask_mAP50_95": float(m.seg.map),
-            "box_mAP50": float(m.box.map50)}
+            "box_mAP50": float(m.box.map50),
+            "mask_AP50_per_class": {CLASSES[int(c)]: float(ap) for c, ap in zip(m.seg.ap_class_index, m.seg.ap50)},
+            "mask_AP50_95_per_class": {CLASSES[int(c)]: float(ap) for c, ap in zip(m.seg.ap_class_index, m.seg.ap)}}
 
 
 def gt_overlay_sheet(df: pd.DataFrame, image_dir: Path, processed: Path, path: Path, n: int = 24,
