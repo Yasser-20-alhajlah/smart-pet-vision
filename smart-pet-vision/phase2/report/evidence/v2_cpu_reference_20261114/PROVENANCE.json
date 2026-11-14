@@ -1,0 +1,20 @@
+{
+  "scope": "Automated frozen seed-44 checkpoint evaluation on CPU, not a second human attribution and not new training or a fresh holdout.",
+  "source_commit": "b42f76d39e204183b726ed37a88677c0a65e8cda",
+  "source_clean": true,
+  "metadata_sha256": "c06f4d9e5dd4e333b4d5e17f1b07c115209dd5b9da8a6e99b4d48db8316db13f",
+  "original_run_source": "f62ded8fc190820842f5d57d87d12556bd67d4b3",
+  "public_archive_images_md5": "5c4f3ee8e5d25df40f4fd59a7f44e54c",
+  "public_archive_annotations_md5": "95a8c909bbe2e81eed6a22bccdf3f68f",
+  "hardware": "Apple M5 CPU",
+  "original_environment": "Colab Tesla T4, Python 3.13.16, NumPy 2.1.3",
+  "actual_environment": "macOS ARM64 CPU, Python 3.12.14, NumPy 2.3.5; actual versions retained in measurement.json",
+  "data_preparation": "Rebuilt images/masks/labels from frozen full metadata; counts4903/1382/1050; metadata bytes unchanged; source test JPG MD5 values verified.",
+  "receipt_sha256": "e6c2bb69a64fca02f2a71c413b09cdd9b08c11c134b140c95f4a57c448db6295",
+  "per_image_sha256": "e1ac0f63c14d4023cc8eaf3f5d1e2dbc25f63e7053402e338be81e03def4e2a9",
+  "classifier_matches": true,
+  "detector_counts_match": true,
+  "six_metrics_within_existing_tolerance": true,
+  "maximum_absolute_six_metric_difference": 0.00046363437324858925,
+  "unchanged": "No training, seed selection, temperature refit, operating-point selection or served-weight promotion."
+}

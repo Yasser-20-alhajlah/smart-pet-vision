@@ -33,7 +33,8 @@ def test_metrics(weights: Path, data_yaml: Path, imgsz: int) -> dict:
                                plots=False)
     per_class = {NAMES[int(c)]: float(ap) for c, ap in zip(m.box.ap_class_index, m.box.ap50)}
     return {"mAP50": float(m.box.map50), "mAP50_95": float(m.box.map),
-            "precision": float(m.box.mp), "recall": float(m.box.mr), "AP50_per_class": per_class}
+            "precision": float(m.box.mp), "recall": float(m.box.mr), "AP50_per_class": per_class,
+            "AP50_95_per_class": {NAMES[int(c)]: float(ap) for c, ap in zip(m.box.ap_class_index, m.box.ap)}}
 
 
 # ------------------------------------------------------------- matching

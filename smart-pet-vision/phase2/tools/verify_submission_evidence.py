@@ -378,6 +378,43 @@ def submission_checks(root):
           latency in body and f"{cpu['throughput_requests_s']:.2f} requests/s" in body
           and f"{cpu['server_rss_mb']['peak_measured']:.1f}" in body
           and cpu['cpu'] in body and 'does not remeasure the T4-specific A8' in body)
+    ref = load(root, 'v2_cpu_reference_20261114/measurement.json')
+    meta = load(root, 'v2_cpu_reference_20261114/PROVENANCE.json')
+    base = load(root, 'v2_saved_review_20261114/seed44_record.json')
+    folder = root/'report/evidence/v2_cpu_reference_20261114'
+    check('V2 CPU receipt identity and platform limits are explicit',
+          hashlib.sha256((folder/'measurement.json').read_bytes()).hexdigest()==meta['receipt_sha256']
+          and ref['verification_kind']=='automated_cpu_reference'
+          and ref['human_second_member_claimed'] is False and ref['provenance']['device']=='cpu'
+          and ref['provenance']['dirty'] is False and ref['seed']==44
+          and ref['metadata_sha256']==base['split_v2_metadata_sha256']
+          and ref['weights_sha256']==base['weights_sha256']
+          and ref['environment_differences']['numpy']['actual']=='2.3.5')
+    expected={'mAP50':base['detector']['coco']['mAP50'],'mAP50_95':base['detector']['coco']['mAP50_95'],
+              'mask_mAP50':base['segmenter']['coco']['mask_mAP50'],'mask_mAP50_95':base['segmenter']['coco']['mask_mAP50_95'],
+              'mIoU':base['segmenter']['test_metrics']['mIoU'],'mean_dice':base['segmenter']['test_metrics']['mean_dice']}
+    check('V2 CPU six comparisons recomputed against frozen originals',
+          all(ref['originals'][k]==v and ref['comparison'][k]['tolerance']==.005
+              and abs(ref['reproduced'][k]-v)<=.005
+              and abs(ref['reproduced'][k]-v-ref['comparison'][k]['difference'])<1e-12
+              and f"{ref['reproduced'][k]:.6f}" in body for k,v in expected.items())
+          and 'automated CPU verification' in body and 'not a second team member' in body)
+    with (folder/'per_image.csv').open() as stream:
+        mask_rows=list(csv.DictReader(stream))
+    import statistics
+    check('V2 CPU overlap scores recomputed from 1050 unique images',
+          hashlib.sha256((folder/'per_image.csv').read_bytes()).hexdigest()==meta['per_image_sha256']
+          and len(mask_rows)==len({v['image'] for v in mask_rows})==1050
+          and all(abs(statistics.mean(float(v[field]) for v in mask_rows)-ref['reproduced'][metric])<1e-12
+                  for field,metric in [('iou','mIoU'),('dice','mean_dice')]))
+    by=ref['per_class_from_this_evaluation'];extra=ref['additional_metrics_no_new_acceptance_thresholds']
+    check('V2 CPU per-species AP and counts reconcile; additional classifier values unchanged',
+          all(abs(sum(by[c][field] for c in ('cat','dog'))/2-ref['reproduced'][metric])<1e-12
+              for field,metric in [('box_AP50_95','mAP50_95'),('mask_AP50_95','mask_mAP50_95')])
+          and all(sum(by[c]['detector_at_operating_point'][k] for c in ('cat','dog'))==extra['detector_operating_point'][k]['reproduced']
+                  for k in ('tp','fp','fn'))
+          and all(v['difference']==0 for v in extra['classifier'].values())
+          and all(f"{by[c][k]:.6f}" in body for c in ('cat','dog') for k in ('box_AP50_95','mask_AP50_95')))
     return out
 
 

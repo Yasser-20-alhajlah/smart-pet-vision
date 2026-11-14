@@ -92,4 +92,9 @@ The tool evaluates the classifier and the detector's frozen operating point as w
 
 ## What was already verified without GPU
 
-On 14 November all nine weights matched their source SHA-256 values and ZIP CRC checks, all thirty classifier epoch rows matched live W&B histories including epoch times, and 57 saved-output arithmetic checks passed. Those checks are not a second person's checkpoint inference. `tools/reproduce_v2_eval.py` has been reviewed and input guards tested; its full model evaluation must be executed by the teammate before that distinct claim is made.
+On 14 November all nine weights matched their source SHA-256 values and ZIP CRC checks, all thirty classifier epoch rows matched live W&B histories including epoch times, and 69 saved-output arithmetic checks passed. Those checks are not a second person's checkpoint inference. `tools/reproduce_v2_eval.py` has been reviewed and input guards tested; its full model evaluation must be executed by the teammate before that distinct claim is made.
+
+## Automated CPU check already completed
+On 14 November the validation-selected seed-44 weights were actually evaluated on all 1,050 frozen v2 test images on Apple M5 CPU, without training, threshold selection or temperature fitting. Six of six metrics matched within the existing 0.005 tolerance (maximum difference 0.000463634); classifier accuracy/macro-F1 and detector counts matched exactly. Actual receipt, per-image CSV and complete log are in `report/evidence/v2_cpu_reference_20261114/`. This explicitly uses macOS Python 3.12/NumPy 2.3.5 rather than the original T4 Python 3.13/NumPy 2.1.3.
+
+The standard tool still rejects version differences. `--cpu-reference` is a separate labelled path allowing only the reviewed NumPy substitution on macOS and records actual versions. Neither a name field nor this automated run proves an independent human operator. The prepared free-T4 notebook remains available if the team wants that additional human-executed verification. Do not present its unexecuted cells as the CPU run's notebook.
