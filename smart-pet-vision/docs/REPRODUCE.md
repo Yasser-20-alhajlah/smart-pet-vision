@@ -30,6 +30,15 @@ GPU training is not guaranteed to be bit-exact across environments, so small dif
 |---|---|---|---|
 | Yasser Alhajlah | 2026-10-23 | Clean Colab Tesla T4, repository copy without runs/; split rebuilt | Phase 1 notebooks 01 and 02 completed; saved data/split and classification comparison match the submitted results. This record covers Phase 1 only. |
 
+### Reproduced numbers and run IDs (final-epoch validation metrics, read from W&B on 18 Nov 2026)
+| Model | Original run | Reproduced run | Val accuracy (orig / repro) | Val macro-F1 (orig / repro) | Difference |
+|---|---|---|---|---|---|
+| Scratch, 25 epochs | gh7ayx6h | wworz0pp | 0.927667 / 0.927667 | 0.917516 / 0.917516 | 0.0 |
+| Frozen, 8 epochs | xsz5afr9 | ib01etqe | 0.998192 / 0.998192 | 0.997929 / 0.997929 | 0.0 |
+| Fine-tuned, 10 epochs | 8nvxbsn2 | dmaqcs74 | 0.999096 / 0.999096 | 0.998965 / 0.998965 | 0.0 |
+
+Full-precision values, tolerances, runtimes and what was not verified are in `REPRODUCTION_LOG.txt`, Block 2. This is a rerun by the author of the original runs, not an independent reproduction. The reproduced test accuracy was not re-read from the rerun's `comparison.csv`.
+
 ## Changes after the reproduction (24 Oct 2026)
 These changes follow the internal technical review. None of them changes a model, a split or a metric.
 - Setup cell of notebooks 01, 02, 03 and 05: mounts Drive before finding the project (the same cell notebook 04 already used).
