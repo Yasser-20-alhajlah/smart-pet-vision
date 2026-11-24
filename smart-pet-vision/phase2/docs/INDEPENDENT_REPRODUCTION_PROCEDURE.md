@@ -10,7 +10,7 @@ The instructions below explain how to inspect or extend that saved result withou
 run IDs are shown next to the originals, and `REPRODUCTION_LOG.txt` is empty." Required: show the
 reproduced numbers and run IDs next to the originals, and commit the log.
 
-**Current evidence:** the 6 November Level 1 output and the owner-attributed operator record are preserved in Block 1. The earlier 23 October Phase 1 rerun was performed by the original author. Evaluate the saved numerical comparison, source and model identity, and operator attribution together. No new execution should be claimed from a documentation update.
+**Current evidence:** the 6 November Level 1 output and the owner-attributed operator record are preserved in Block 1. The earlier 23 October Phase 1 rerun was performed by the original author; since 18 November 2026 its original and reproduced run IDs and validation metrics are recorded in Block 2 of `REPRODUCTION_LOG.txt` (a rerun, not an independent reproduction). Evaluate the saved numerical comparison, source and model identity, and operator attribution together. No new execution should be claimed from a documentation update.
 
 ## Level 1 — documented checkpoint evaluation and instructions for a further run
 Re-evaluates the delivered checkpoints on the Oxford test split exactly as the reported numbers

@@ -5,8 +5,8 @@
 # Preserve the recorded executor attribution. Optional personal declarations are written only by
 # their author; a signature is not an instructor submission requirement.
 #
-# Earlier rerun, not independent: 23 Oct 2026, Phase 1, Colab T4, by Yasser Alhajlah, the author of
-# the original runs (docs/REPRODUCE.md).
+# Block 2 below records the 23 Oct 2026 Phase 1 classification rerun by Yasser Alhajlah, the author of
+# the original runs. It is a rerun by the original author, not an independent reproduction.
 
 ## Block 1 — Level 1 evaluation reproduction, 6 Nov 2026 (status: executed; operator agreement received in writing 11 Nov 2026; operator attribution recorded; account metadata does not independently verify the physical operator)
 Operator (field in the run): mohammed
@@ -45,3 +45,32 @@ relayed and recorded by the project owner; quoted as received, not a signature):
   in this file according to the verified results, and will add his own declaration, date and signature himself
   after checking this log against what was actually run.
 Current evidence: the saved evaluation, the owner attribution and the relayed written agreement above. A signature form is an optional documentation format, not an established instructor submission condition. No signature is fabricated or inferred.
+
+## Block 2 — Phase 1 classification training rerun, 23 Oct 2026 (status: executed; rerun by the original author, NOT independent)
+Operator: Yasser Alhajlah (author of the original runs)
+Date (UTC): 2026-10-23, runs started 15:53:50Z (scratch), 16:17:18Z (frozen), 16:24:31Z (fine-tuned)
+Environment: Google Colab, Tesla T4 (1 GPU), Python 3.13.15, W&B CLI 0.28.1 (as shown on run dmaqcs74); repository copy without runs/, split rebuilt (docs/REPRODUCE.md)
+Seed / split: seed 42, split v1, 5,123 / 1,106 / 1,106 (docs/REPRODUCE.md); training reproduction, notebooks 01 and 02
+Delivered commit: not retrieved for this block (not read from the run metadata)
+W&B group: reproduction-2026-10-23 (https://wandb.ai/yasser-alhajlah-kaust/smart-pet-vision/groups/reproduction-2026-10-23)
+Original W&B group: full-rerun-2026-10-18
+
+Run IDs: original scratch gh7ayx6h, frozen xsz5afr9, fine-tuned 8nvxbsn2; reproduced scratch wworz0pp, frozen ib01etqe, fine-tuned dmaqcs74.
+Values below are the final-epoch summary metrics read from the W&B API on 18 Nov 2026 (validation set; these runs log no test metric).
+
+| Model | Metric | Original | Reproduced | Difference | Tolerance | Verdict |
+|---|---|---|---|---|---|---|
+| Scratch (25 ep) gh7ayx6h / wworz0pp | val accuracy | 0.9276672694394213 | 0.9276672694394213 | 0.0 | 0.03 | within |
+| Scratch | val macro-F1 | 0.9175159318797941 | 0.9175159318797941 | 0.0 | 0.03 | within |
+| Scratch | train loss | 0.2038949513584288 | 0.2038949513584288 | 0.0 | n/a | identical |
+| Frozen (8 ep) xsz5afr9 / ib01etqe | val accuracy | 0.9981916817359855 | 0.9981916817359855 | 0.0 | 0.01 | within |
+| Frozen | val macro-F1 | 0.9979288389513109 | 0.9979288389513109 | 0.0 | 0.01 | within |
+| Frozen | train loss | 0.013648554866001113 | 0.013648554866001113 | 0.0 | n/a | identical |
+| Fine-tuned (10 ep) 8nvxbsn2 / dmaqcs74 | val accuracy | 0.9990958408679927 | 0.9990958408679927 | 0.0 | 0.01 | within |
+| Fine-tuned | val macro-F1 | 0.9989651820241077 | 0.9989651820241077 | 0.0 | 0.01 | within |
+| Fine-tuned | train loss | 0.0035079901260997364 | 0.0035079901260997364 | 0.0 | n/a | identical |
+
+Tolerances are the ones in docs/REPRODUCE.md (0.01; scratch 0.03), which were written for test accuracy and are applied here to validation metrics.
+Runtimes differ between original and rerun (565/421/1,350 s original; 571/429/1,403 s rerun for fine-tuned/frozen/scratch), and run IDs and start dates differ, so these are separate executions. Metrics identical to every printed digit are consistent with a fixed seed on the same GPU type; docs/REPRODUCE.md does not promise bit-exact results, and no cause for the exact match was investigated.
+Not verified: the reproduced test accuracy (0.999 fine-tuned / 0.906 scratch in runs/classification/comparison.csv) because the rerun's comparison.csv is not in this repository; the per-epoch histories were not compared.
+Operator's statement: none recorded in this file. No signature is fabricated or inferred.
